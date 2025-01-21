@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import co.kr.tnt.home.navigation.homeNavGraph
+import co.kr.tnt.login.navigation.loginScreen
 
 @Composable
 fun TnTNavHost(
@@ -21,6 +22,10 @@ fun TnTNavHost(
             navController = navController,
             startDestination = appState.startDestination,
         ) {
+            loginScreen(
+                navigateToHome = { },
+                navigateToSignup = { },
+            )
             homeNavGraph {
             }
         }

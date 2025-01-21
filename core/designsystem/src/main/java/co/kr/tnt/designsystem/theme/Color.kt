@@ -4,6 +4,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
+val FILL_STRONG = Color(0x2970737C)
+
 // Main color
 val Red_950 = Color(0xFF450A0A)
 val Red_900 = Color(0xFF7F1D1D)

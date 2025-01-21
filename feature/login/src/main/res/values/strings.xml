@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nice_to_meet_you">만나서 반가워요!</string>
+    <string name="trainer_trainee_chemistry_boom">트레이너와 트레이니\n케미 터트리기</string>
+    <string name="continue_with_kakao">카카오로 계속하기</string>
+
+    <string name="terms_of_service">서비스 이용약관</string>
+    <string name="privacy_policy">개인정보 처리방침</string>
+    <string name="agree">동의</string>
+    <string name="required">필수</string>
+    <string name="optional">선택</string>
+    <string name="please_agree_terms">약관에 동의해주세요</string>
+    <string name="privacy_protection_promise">여러분의 개인정보와 서비스 이용 권리\n잘 지켜드릴게요</string>
+    <string name="agree_all">모두 동의</string>
+    <string name="agree_all_terms_for_service">서비스 이용을 위해 아래 약관에 모두 동의합니다.</string>
+    <string name="next">다음</string>
+    <string name="see">보기</string>
+</resources>

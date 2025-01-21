@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(projects.feature.home)
+    implementation(projects.feature.login)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
