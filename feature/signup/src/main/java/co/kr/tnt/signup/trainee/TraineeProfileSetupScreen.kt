@@ -15,9 +15,11 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,13 +30,24 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.signup.common.component.ProfileImageSection
 import co.kr.tnt.signup.trainee.component.ProgressSteps
+import co.kr.tnt.ui.extensions.moveToAppSetting
+import co.kr.tnt.ui.permission.PermissionRequestDialog
+import co.kr.tnt.ui.permission.TnTPermission
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun TraineeProfileSetupScreen() {
+    val context = LocalContext.current
+
     // TODO 상태 관리 따로 빼기
     val maxLength = 15
     var text by remember { mutableStateOf("") }
     val isWarning by remember { derivedStateOf { text.length > maxLength } }
+
+    var showPermissionRequestDialog by rememberSaveable { mutableStateOf(false) }
+    val mediaPermissions = rememberMultiplePermissionsState(TnTPermission.MEDIA_ACCESS.values)
 
     Scaffold(
         // TODO 버튼 클릭 시 트레이너/트레이니 화면으로 이동
@@ -57,7 +70,14 @@ fun TraineeProfileSetupScreen() {
                 ProfileImageSection(
                     modifier = Modifier.fillMaxWidth(),
                     defaultImage = R.drawable.img_default_profile_trainee,
-                    onImageSelected = { },
+                    onImageSelected = onImageSelected@{
+                        if (TnTPermission.MEDIA_ACCESS.isAllGranted(mediaPermissions)) {
+                            // TODO 이미지 피커 이동
+                            return@onImageSelected
+                        }
+
+                        showPermissionRequestDialog = true
+                    },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
                 TnTLabeledTextField(
@@ -82,6 +102,26 @@ fun TraineeProfileSetupScreen() {
                 enabled = text.isNotBlank() && !isWarning,
                 onClick = { },
                 modifier = Modifier.align(Alignment.BottomCenter),
+            )
+        }
+
+        if (showPermissionRequestDialog) {
+            PermissionRequestDialog(
+                permission = TnTPermission.MEDIA_ACCESS,
+                isPermanentlyDenied = mediaPermissions.shouldShowRationale,
+                onOkButtonClick = onOkButtonClick@{ isPermanentlyDenied ->
+                    showPermissionRequestDialog = false
+
+                    if (isPermanentlyDenied.not()) {
+                        mediaPermissions.launchMultiplePermissionRequest()
+                        return@onOkButtonClick
+                    }
+
+                    context.moveToAppSetting()
+                },
+                onDismissRequest = {
+                    showPermissionRequestDialog = false
+                },
             )
         }
     }

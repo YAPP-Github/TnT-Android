@@ -25,7 +25,6 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 fun ProfileImageSection(
     defaultImage: Int,
     modifier: Modifier = Modifier,
-    @Suppress("UnusedParameter")
     onImageSelected: () -> Unit,
 ) {
     Box(
@@ -46,7 +45,7 @@ fun ProfileImageSection(
         )
         // TODO 버튼 클릭 시 권한 확인 후 사진 선택
         IconButton(
-            onClick = { },
+            onClick = onImageSelected,
             modifier = Modifier
                 .size(28.dp)
                 .align(Alignment.BottomEnd),
