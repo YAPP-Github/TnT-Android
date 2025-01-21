@@ -1,4 +1,4 @@
-package co.kr.tnt.signup.trainee
+package co.kr.tnt.trainee.signup
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.clickable
@@ -30,12 +30,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.signup.trainee.component.ProgressSteps
+import co.kr.tnt.feature.trainee.signup.R
+import co.kr.tnt.trainee.signup.component.ProgressSteps
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -71,12 +71,12 @@ fun TraineeBasicInfoScreen() {
                 ProgressSteps(
                     currentStep = 2,
                     totalSteps = 4,
-                    title = stringResource(R.string.signup_set_basic_info_title),
-                    subTitle = stringResource(R.string.signup_set_basic_info_subtitle),
+                    title = stringResource(R.string.enter_your_basic_info),
+                    subTitle = stringResource(R.string.basic_info_for_pt),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 Text(
-                    text = stringResource(R.string.birthday_label),
+                    text = stringResource(R.string.birthday_placeholder),
                     color = TnTTheme.colors.neutralColors.Neutral900,
                     style = TnTTheme.typography.body1Bold,
                     modifier = Modifier.padding(start = 20.dp, bottom = 8.dp),
@@ -187,7 +187,7 @@ private fun BirthdayPicker(
     ) {
         Text(
             text = selectedDate?.format(dateFormatter)
-                ?: stringResource(R.string.signup_birthday_placeholder),
+                ?: stringResource(R.string.birthday_placeholder),
             color = if (selectedDate == null) {
                 TnTTheme.colors.neutralColors.Neutral400
             } else {

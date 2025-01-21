@@ -1,17 +1,15 @@
-package co.kr.tnt.signup.trainee
+package co.kr.tnt.trainee.signup
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,24 +19,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.core.designsystem.R
-import co.kr.tnt.designsystem.component.TnTLabeledTextField
+import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
-import co.kr.tnt.designsystem.component.image.TnTProfileImage
-import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.signup.trainee.component.ProgressSteps
+import co.kr.tnt.feature.trainee.signup.R
+import co.kr.tnt.trainee.signup.component.ProgressSteps
+
+private const val MAX_LENGTH = 100
 
 @Composable
-fun TraineeProfileSetupScreen() {
+fun TraineeNoteForTrainerScreen() {
     // TODO 상태 관리 따로 빼기
-    val maxLength = 15
     var text by remember { mutableStateOf("") }
-    val isWarning by remember { derivedStateOf { text.length > maxLength } }
 
     Scaffold(
-        // TODO 버튼 클릭 시 트레이너/트레이니 화면으로 이동
+        // TODO 버튼 클릭 시 트레이니 PT 목적 화면으로 이동
         topBar = { TnTTopBar(onBackClick = {}) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
@@ -50,55 +46,38 @@ fun TraineeProfileSetupScreen() {
                     .verticalScroll(rememberScrollState()),
             ) {
                 ProgressSteps(
-                    currentStep = 1,
+                    currentStep = 4,
                     totalSteps = 4,
-                    title = stringResource(R.string.signup_set_name_title),
+                    title = stringResource(R.string.caution_that_trainer_must_know),
+                    subTitle = stringResource(R.string.let_the_trainer_know),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
-                TnTProfileImage(
-                    modifier = Modifier.fillMaxWidth(),
-                    type = ProfileType.Trainee,
-                    onImageSelected = { },
-                )
-                Spacer(Modifier.padding(top = 60.dp))
-                TnTLabeledTextField(
-                    title = stringResource(R.string.name),
+                TnTOutlinedTextField(
                     value = text,
                     onValueChange = { newValue ->
-                        val filteredText = validateInput(newValue)
-                        text = filteredText
+                        if (newValue.length <= MAX_LENGTH) {
+                            text = newValue
+                        }
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    placeholder = stringResource(R.string.signup_set_name_placeholder),
-                    maxLength = maxLength,
-                    isSingleLine = true,
-                    showWarning = isWarning,
-                    isRequired = true,
-                    warningMessage = "$maxLength" + stringResource(R.string.signup_warning_text_length),
+                    maxLength = 100,
                 )
             }
-            // TODO 트레이니 기본 정보 입력 화면으로 이동
+            // TODO 트레이니 PT 목적 화면으로 이동
             TnTBottomButton(
                 text = stringResource(R.string.next),
-                enabled = text.isNotBlank() && !isWarning,
-                onClick = { },
                 modifier = Modifier.align(Alignment.BottomCenter),
+                enabled = text.isNotBlank(),
+                onClick = { },
             )
         }
     }
 }
 
-/**
- * 입력 값을 검사해 한글/영어/공백만 허용하고 특수문자는 제거
- */
-private fun validateInput(input: String): String {
-    return input.filter { it.isLetter() || it.isWhitespace() }
-}
-
 @Preview(showBackground = true)
 @Composable
-private fun TraineeProfileSetupScreenPreview() {
+private fun TraineeNoteForTrainerScreenPreview() {
     TnTTheme {
-        TraineeProfileSetupScreen()
+        TraineeNoteForTrainerScreen()
     }
 }

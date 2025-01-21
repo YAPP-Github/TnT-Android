@@ -1,4 +1,4 @@
-package co.kr.tnt.signup.trainee.component
+package co.kr.tnt.trainee.signup.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -1,6 +1,5 @@
-package co.kr.tnt.signup.trainee
+package co.kr.tnt.trainee.signup
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,26 +7,27 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.component.image.TnTProfileImage
+import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.feature.trainee.signup.R
 
 @Composable
 fun TraineeProfileCompleteScreen(
     modifier: Modifier = Modifier,
 ) {
-    // TODO 이름 불러오기
+    // TODO 이름, 프로필 사진 불러오기
     val name = "김헬짱"
+    val profileImage = "https://buly.kr/7FQeS5M"
 
     Box(
         modifier = modifier
@@ -42,7 +42,7 @@ fun TraineeProfileCompleteScreen(
                 .padding(bottom = 66.dp),
         ) {
             Text(
-                text = stringResource(R.string.signup_complete_trainee_title, name),
+                text = stringResource(R.string.nice_to_meet_you_trainee, name),
                 color = TnTTheme.colors.neutralColors.Neutral950,
                 style = TnTTheme.typography.h1,
                 textAlign = Center,
@@ -50,17 +50,17 @@ fun TraineeProfileCompleteScreen(
             )
             Spacer(Modifier.padding(top = 10.dp))
             Text(
-                text = stringResource(R.string.signup_complete_trainee_subtitle),
+                text = stringResource(R.string.chemistry_boom_with_trainer),
                 color = TnTTheme.colors.neutralColors.Neutral500,
                 style = TnTTheme.typography.body1Medium,
                 textAlign = Center,
             )
             Spacer(Modifier.padding(top = 28.dp))
-            // TODO 프로필 이미지 가져오기
-            Image(
-                painter = painterResource(R.drawable.img_default_profile_trainee),
-                contentDescription = null,
-                modifier = Modifier.size(200.dp),
+            TnTProfileImage(
+                type = ProfileType.Trainee,
+                image = profileImage,
+                imageSize = 200.dp,
+                showEditButton = false,
             )
         }
         // TODO 연결코드 입력 화면으로 이동

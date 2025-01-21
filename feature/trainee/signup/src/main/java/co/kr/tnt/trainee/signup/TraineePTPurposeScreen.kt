@@ -1,4 +1,4 @@
-package co.kr.tnt.signup.trainee
+package co.kr.tnt.trainee.signup
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -21,15 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.signup.trainee.component.ProgressSteps
-import co.kr.tnt.signup.trainee.model.PTPurpose
+import co.kr.tnt.feature.trainee.signup.R
+import co.kr.tnt.trainee.signup.component.ProgressSteps
+import co.kr.tnt.trainee.signup.model.PTPurpose
 
 private const val ROW_NUM = 3
 private const val COLUMNS_NUM = 2
@@ -50,8 +50,8 @@ fun TraineePTPurposeScreen() {
                 ProgressSteps(
                     currentStep = 3,
                     totalSteps = 4,
-                    title = stringResource(R.string.signup_pt_purpose_title),
-                    subTitle = stringResource(R.string.signup_pt_purpose_subtitle),
+                    title = stringResource(R.string.purpose_of_pt),
+                    subTitle = stringResource(R.string.multiple_choices_available),
                 )
                 Spacer(Modifier.padding(top = 32.dp))
                 Column(modifier = Modifier.padding(horizontal = 20.dp)) {
