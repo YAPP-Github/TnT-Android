@@ -26,14 +26,14 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.model.Role
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.signup.common.role.model.RoleState
 
 @Composable
 fun RoleSelectionScreen(
     modifier: Modifier = Modifier,
 ) {
-    var selectedRole by remember { mutableStateOf(Role.Trainer) }
+    var selectedRole by remember { mutableStateOf(UserType.Trainer) }
     val roleState = RoleState.fromDomain(selectedRole)
 
     Column(
@@ -71,15 +71,15 @@ fun RoleSelectionScreen(
                 text = stringResource(RoleState.Trainer.textResId),
                 modifier = Modifier.weight(1f),
                 size = ButtonSize.Large,
-                type = if (selectedRole == Role.Trainer) ButtonType.RedOutline else ButtonType.GrayOutline,
-                onClick = { selectedRole = Role.Trainer },
+                type = if (selectedRole == UserType.Trainer) ButtonType.RedOutline else ButtonType.GrayOutline,
+                onClick = { selectedRole = UserType.Trainer },
             )
             TnTTextButton(
                 text = stringResource(RoleState.Trainee.textResId),
                 modifier = Modifier.weight(1f),
                 size = ButtonSize.Large,
-                type = if (selectedRole == Role.Trainee) ButtonType.RedOutline else ButtonType.GrayOutline,
-                onClick = { selectedRole = Role.Trainee },
+                type = if (selectedRole == UserType.Trainee) ButtonType.RedOutline else ButtonType.GrayOutline,
+                onClick = { selectedRole = UserType.Trainee },
             )
         }
         // TODO 클릭 시 이름 입력 화면으로 이동

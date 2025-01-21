@@ -1,6 +1,6 @@
 package co.kr.tnt.domain.model
 
-enum class Role {
+enum class UserType {
     Trainer,
     Trainee,
 }

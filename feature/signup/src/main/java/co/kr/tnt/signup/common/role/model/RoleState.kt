@@ -3,7 +3,7 @@ package co.kr.tnt.signup.common.role.model
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import co.kr.tnt.core.designsystem.R
-import co.kr.tnt.domain.model.Role
+import co.kr.tnt.domain.model.UserType
 
 sealed class RoleState(
     @StringRes val textResId: Int,
@@ -20,10 +20,10 @@ sealed class RoleState(
     )
 
     companion object {
-        fun fromDomain(role: Role): RoleState {
+        fun fromDomain(role: UserType): RoleState {
             return when (role) {
-                Role.Trainer -> Trainer
-                Role.Trainee -> Trainee
+                UserType.Trainer -> Trainer
+                UserType.Trainee -> Trainee
             }
         }
     }
