@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,7 +38,7 @@ private const val COLUMNS_NUM = 2
 @Composable
 fun TraineePTPurposeScreen() {
     // TODO 리소스 id값 텍스트로 전환해 넘겨주기
-    val selectedPurposes = remember { mutableStateOf(setOf<PTPurpose>()) }
+    var selectedPurposes by remember { mutableStateOf(setOf<PTPurpose>()) }
 
     Scaffold(
         // TODO 버튼 클릭 시 트레이니 기본 정보 입력 화면으로 이동
@@ -63,9 +65,9 @@ fun TraineePTPurposeScreen() {
                         PTPurpose.entries.forEach { purpose ->
                             PurposeButton(
                                 text = stringResource(purpose.textResId),
-                                isSelected = purpose in selectedPurposes.value,
+                                isSelected = purpose in selectedPurposes,
                                 onClick = {
-                                    selectedPurposes.value = toggleSelection(selectedPurposes.value, purpose)
+                                    selectedPurposes = toggleSelection(selectedPurposes, purpose)
                                 },
                                 modifier = Modifier.weight(1f),
                             )
@@ -76,8 +78,8 @@ fun TraineePTPurposeScreen() {
             // TODO PT 주의사항 입력 화면으로 이동
             TnTBottomButton(
                 text = stringResource(R.string.next),
-                onClick = { Log.d("check", "선택된 값들\n${selectedPurposes.value.map { it.name }}") },
-                enabled = selectedPurposes.value.isNotEmpty(),
+                onClick = { Log.d("check", "선택된 값들\n${selectedPurposes.map { it.name }}") },
+                enabled = selectedPurposes.isNotEmpty(),
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -106,7 +108,11 @@ private fun toggleSelection(
     purpose: PTPurpose,
 ): Set<PTPurpose> {
     return selectedPurposes.toMutableSet().apply {
-        if (contains(purpose)) remove(purpose) else add(purpose)
+        if (contains(purpose)) {
+            remove(purpose)
+        } else {
+            add(purpose)
+        }
     }.toSet()
 }
 
