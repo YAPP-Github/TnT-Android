@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="next">다음</string>
+    <string name="start">시작하기</string>
+
+    <string name="nice_to_meet_you_trainer">만나서 반가워요\n%s 트레이너님!</string>
+    <string name="chemistry_boom_with_trainee">트레이니와 함께\n케미를 터뜨려보세요! 🧨</string>
+
+</resources>
