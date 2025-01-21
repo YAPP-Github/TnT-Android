@@ -164,6 +164,7 @@ private fun KakaoLoginButton(
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_kakao),
