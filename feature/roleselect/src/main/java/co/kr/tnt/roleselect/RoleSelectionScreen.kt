@@ -1,4 +1,4 @@
-package co.kr.tnt.signup.common.role
+package co.kr.tnt.roleselect
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,14 +20,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.UserType
-import co.kr.tnt.signup.common.role.model.RoleState
+import co.kr.tnt.feature.roleselect.R
+import co.kr.tnt.roleselect.model.RoleState
 
 @Composable
 fun RoleSelectionScreen(
@@ -44,13 +44,13 @@ fun RoleSelectionScreen(
     ) {
         Column(modifier = Modifier.padding(start = 24.dp, top = 60.dp)) {
             Text(
-                text = stringResource(R.string.signup_select_role_title),
+                text = stringResource(R.string.select_role),
                 color = TnTTheme.colors.neutralColors.Neutral950,
                 style = TnTTheme.typography.h2,
             )
             Spacer(modifier = Modifier.padding(top = 12.dp))
             Text(
-                text = stringResource(R.string.signup_select_role_subtitle),
+                text = stringResource(R.string.select_between_trainer_and_trainee),
                 color = TnTTheme.colors.neutralColors.Neutral500,
                 style = TnTTheme.typography.body1Medium,
             )

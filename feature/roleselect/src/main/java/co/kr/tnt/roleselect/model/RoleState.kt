@@ -1,9 +1,9 @@
-package co.kr.tnt.signup.common.role.model
+package co.kr.tnt.roleselect.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.feature.roleselect.R
 
 sealed class RoleState(
     @StringRes val textResId: Int,

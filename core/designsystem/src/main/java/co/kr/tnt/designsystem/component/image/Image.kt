@@ -118,7 +118,7 @@ private fun TnTProfileImageCustomImagePreview() {
     TnTTheme {
         TnTProfileImage(
             type = ProfileType.Trainer,
-            image = R.drawable.img_select_role_trainer,
+            image = R.drawable.ic_edit,
             modifier = Modifier.fillMaxWidth(),
         )
     }
