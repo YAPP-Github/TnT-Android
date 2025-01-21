@@ -26,18 +26,20 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
+import coil.compose.AsyncImage
 
 @Composable
 fun TnTProfileImage(
     type: ProfileType,
     modifier: Modifier = Modifier,
+    image: Any? = null,
     imageSize: Dp = 132.dp,
     showEditButton: Boolean = true,
     @Suppress("UnusedParameter")
-    onImageSelected: () -> Unit,
+    onImageSelected: () -> Unit = {},
 ) {
     // TODO 선택된 이미지 currentImage에 반영
-    var currentImage by remember { mutableStateOf(type.defaultImage) }
+    var currentImage by remember { mutableStateOf(image ?: type.defaultImage) }
 
     Box(
         modifier = modifier
@@ -46,14 +48,40 @@ fun TnTProfileImage(
             .padding(vertical = 12.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Image(
-            painter = painterResource(currentImage),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(imageSize)
-                .clip(CircleShape),
-        )
+        when (currentImage) {
+            is Int -> {
+                Image(
+                    painter = painterResource(id = currentImage as Int),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(imageSize)
+                        .clip(CircleShape),
+                )
+            }
+
+            is String -> {
+                AsyncImage(
+                    model = currentImage,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(imageSize)
+                        .clip(CircleShape),
+                )
+            }
+
+            else -> {
+                Image(
+                    painter = painterResource(id = type.defaultImage),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(imageSize)
+                        .clip(CircleShape),
+                )
+            }
+        }
         // TODO 버튼 클릭 시 권한 확인 후 사진 선택
         if (showEditButton) {
             IconButton(
@@ -74,12 +102,24 @@ fun TnTProfileImage(
 
 @Preview(showBackground = true)
 @Composable
-private fun TnTProfileImagePreview() {
+private fun TnTProfileImageDefaultImagePreview() {
     TnTTheme {
         TnTProfileImage(
             type = ProfileType.Trainer,
             modifier = Modifier.fillMaxWidth(),
             onImageSelected = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TnTProfileImageCustomImagePreview() {
+    TnTTheme {
+        TnTProfileImage(
+            type = ProfileType.Trainer,
+            image = R.drawable.img_select_role_trainer,
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
