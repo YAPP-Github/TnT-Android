@@ -25,8 +25,9 @@ import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.component.image.TnTProfileImage
+import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.signup.common.component.ProfileImageSection
 import co.kr.tnt.signup.trainee.component.ProgressSteps
 
 @Composable
@@ -54,9 +55,9 @@ fun TraineeProfileSetupScreen() {
                     title = stringResource(R.string.signup_set_name_title),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
-                ProfileImageSection(
+                TnTProfileImage(
                     modifier = Modifier.fillMaxWidth(),
-                    defaultImage = R.drawable.img_default_profile_trainee,
+                    type = ProfileType.Trainee,
                     onImageSelected = { },
                 )
                 Spacer(Modifier.padding(top = 60.dp))

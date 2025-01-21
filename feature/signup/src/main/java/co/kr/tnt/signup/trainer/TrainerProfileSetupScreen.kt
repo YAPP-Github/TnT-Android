@@ -26,8 +26,9 @@ import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.component.image.TnTProfileImage
+import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.signup.common.component.ProfileImageSection
 
 @Composable
 fun TrainerProfileSetupScreen() {
@@ -55,9 +56,9 @@ fun TrainerProfileSetupScreen() {
                     style = TnTTheme.typography.h2,
                 )
                 Spacer(Modifier.padding(top = 48.dp))
-                ProfileImageSection(
+                TnTProfileImage(
                     modifier = Modifier.fillMaxWidth(),
-                    defaultImage = R.drawable.img_default_profile_trainer,
+                    type = ProfileType.Trainer,
                     onImageSelected = { },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
