@@ -37,4 +37,5 @@ include(
     ":feature:home",
     ":feature:signup",
     ":feature:login",
+    ":feature:trainer:signup",
 )
