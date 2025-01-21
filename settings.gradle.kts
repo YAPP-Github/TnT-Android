@@ -38,4 +38,5 @@ include(
     ":feature:signup",
     ":feature:login",
     ":feature:trainer:signup",
+    ":feature:trainee:signup",
 )
