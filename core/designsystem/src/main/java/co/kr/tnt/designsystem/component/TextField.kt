@@ -125,7 +125,6 @@ fun TnTLabeledTextField(
     maxLength: Int = 15,
     isSingleLine: Boolean = false,
     showWarning: Boolean = false,
-    showCounter: Boolean = true,
     isRequired: Boolean = false,
     warningMessage: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
@@ -158,13 +157,62 @@ fun TnTLabeledTextField(
             }
             Spacer(Modifier.weight(1f))
 
-            if (showCounter) {
+            Text(
+                text = stringResource(R.string.text_counter, value.length, maxLength),
+                style = TnTTheme.typography.label1Medium,
+                color = counterColor,
+            )
+        }
+
+        TnTTextField(
+            value = value,
+            placeholder = placeholder,
+            onValueChange = onValueChange,
+            isSingleLine = isSingleLine,
+            showWarning = showWarning,
+            warningMessage = warningMessage,
+            keyboardType = keyboardType,
+            trailingComponent = trailingComponent,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Composable
+fun TnTLabeledTextFieldNoCounter(
+    title: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String? = stringResource(R.string.placeholder_content_input),
+    isSingleLine: Boolean = false,
+    showWarning: Boolean = false,
+    isRequired: Boolean = false,
+    warningMessage: String? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    trailingComponent: @Composable BoxScope.() -> Unit = {},
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(bottom = 8.dp, end = 4.dp)
+                .fillMaxWidth(),
+        ) {
+            Text(
+                text = title,
+                style = TnTTheme.typography.body1Bold,
+                color = TnTTheme.colors.neutralColors.Neutral900,
+            )
+            if (isRequired) {
                 Text(
-                    text = stringResource(R.string.text_counter, value.length, maxLength),
-                    style = TnTTheme.typography.label1Medium,
-                    color = counterColor,
+                    text = "*",
+                    style = TnTTheme.typography.body1Bold,
+                    color = TnTTheme.colors.mainColors.Red500,
                 )
             }
+            Spacer(Modifier.weight(1f))
         }
 
         TnTTextField(
@@ -275,6 +323,38 @@ private fun TnTTextFieldPreview() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp),
+            trailingComponent = {
+                TnTTextButton(
+                    text = "텍스트",
+                    size = ButtonSize.Small,
+                    onClick = { },
+                )
+            },
+        )
+    }
+}
+
+@Preview(showBackground = true, heightDp = 120)
+@Composable
+private fun TnTLabeledTextFieldNoCounterPreview() {
+    TnTTheme {
+        val maxLength = 15
+        var text by remember { mutableStateOf("") }
+        var warningState by remember { mutableStateOf(false) }
+
+        warningState = text.length > maxLength
+
+        TnTLabeledTextFieldNoCounter(
+            title = "제목",
+            value = text,
+            onValueChange = { text = it },
+            showWarning = warningState,
+            isSingleLine = true,
+            isRequired = false,
+            warningMessage = "${maxLength}자 이내로 입력해주세요",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
             trailingComponent = {
                 TnTTextButton(
                     text = "텍스트",
