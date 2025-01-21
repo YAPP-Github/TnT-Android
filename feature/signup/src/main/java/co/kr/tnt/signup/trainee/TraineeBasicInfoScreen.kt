@@ -37,8 +37,8 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.signup.trainee.component.ProgressSteps
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 
 // 000.0 (점 포함 5자리)
 private const val MAX_LENGTH = 5
@@ -46,6 +46,7 @@ private const val MAX_LENGTH = 5
 @Composable
 fun TraineeBasicInfoScreen() {
     // TODO 상태 관리 따로 빼기
+    val today = LocalDate.now()
     var height by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf("") }
     var birthday by remember { mutableStateOf<LocalDate?>(null) }
@@ -82,6 +83,7 @@ fun TraineeBasicInfoScreen() {
                 )
                 BirthdayPicker(
                     modifier = Modifier.padding(horizontal = 20.dp),
+                    today = today,
                     selectedDate = birthday,
                     onDateSelected = { birthday = it },
                 )
@@ -149,32 +151,38 @@ fun TraineeBasicInfoScreen() {
 @Composable
 private fun BirthdayPicker(
     modifier: Modifier = Modifier,
+    today: LocalDate,
     selectedDate: LocalDate?,
     onDateSelected: (LocalDate) -> Unit,
 ) {
     val context = LocalContext.current
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+    val date = selectedDate ?: today
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                val today = LocalDate.now()
-
                 DatePickerDialog(
                     context,
                     { _, selectedYear, selectedMonth, selectedDay ->
                         val newDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
                         onDateSelected(newDate)
                     },
-                    today.year,
-                    today.monthValue - 1,
-                    today.dayOfMonth,
-                ).apply {
-                    // 오늘 이후는 선택 불가능
-                    datePicker.maxDate = Calendar.getInstance().timeInMillis
-                }.show()
+                    date.year,
+                    date.monthValue - 1,
+                    date.dayOfMonth,
+                )
+                    .apply {
+                        // 오늘 이후는 선택 불가능
+                        datePicker.maxDate =
+                            today
+                                .atStartOfDay(ZoneId.systemDefault())
+                                .toInstant()
+                                .toEpochMilli()
+                    }
+                    .show()
             },
     ) {
         Text(
