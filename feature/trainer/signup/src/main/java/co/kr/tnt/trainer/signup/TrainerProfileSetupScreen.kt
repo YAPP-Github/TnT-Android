@@ -22,13 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.feature.trainer.signup.R
 
 @Composable
 fun TrainerProfileSetupScreen() {
@@ -50,7 +50,7 @@ fun TrainerProfileSetupScreen() {
             ) {
                 // TODO 버튼 클릭 시 트레이너/트레이니 화면으로 이동
                 Text(
-                    text = stringResource(R.string.signup_set_name_title),
+                    text = stringResource(R.string.what_is_your_name),
                     modifier = Modifier.padding(start = 24.dp),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h2,
@@ -70,12 +70,12 @@ fun TrainerProfileSetupScreen() {
                         text = filteredText
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    placeholder = stringResource(R.string.signup_set_name_placeholder),
+                    placeholder = stringResource(R.string.name_placeholder),
                     maxLength = maxLength,
                     isSingleLine = true,
                     showWarning = isWarning,
                     isRequired = true,
-                    warningMessage = "$maxLength" + stringResource(R.string.signup_warning_text_length),
+                    warningMessage = stringResource(R.string.text_length_warning, maxLength),
                 )
             }
             // TODO 트레이너 프로필 생성 완료 화면으로 이동

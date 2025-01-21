@@ -74,7 +74,7 @@ fun TraineeProfileSetupScreen() {
                     isSingleLine = true,
                     showWarning = isWarning,
                     isRequired = true,
-                    warningMessage = "$maxLength" + stringResource(R.string.text_length_warning),
+                    warningMessage = stringResource(R.string.text_length_warning, maxLength),
                 )
             }
             // TODO 트레이니 기본 정보 입력 화면으로 이동

@@ -27,8 +27,7 @@ fun TrainerProfileCompleteScreen(
 ) {
     // TODO 이름, 프로필 이미지 불러오기
     val name = "김헬짱"
-    val profileImage =
-        "https://buly.kr/7FQeS5M"
+    val profileImage = "https://buly.kr/7FQeS5M"
 
     Box(
         modifier = modifier
