@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.designsystem.R
@@ -41,6 +43,7 @@ fun TnTTextField(
     isSingleLine: Boolean = false,
     showWarning: Boolean = false,
     warningMessage: String? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
     trailingComponent: @Composable BoxScope.() -> Unit = {},
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -82,6 +85,9 @@ fun TnTTextField(
                     }
                     innerTextField()
                 },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = keyboardType,
+                ),
             )
 
             Box(
@@ -119,8 +125,10 @@ fun TnTLabeledTextField(
     maxLength: Int = 15,
     isSingleLine: Boolean = false,
     showWarning: Boolean = false,
+    showCounter: Boolean = true,
     isRequired: Boolean = false,
     warningMessage: String? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
     trailingComponent: @Composable BoxScope.() -> Unit = {},
 ) {
     val counterColor = when (showWarning) {
@@ -150,11 +158,13 @@ fun TnTLabeledTextField(
             }
             Spacer(Modifier.weight(1f))
 
-            Text(
-                text = stringResource(R.string.text_counter, value.length, maxLength),
-                style = TnTTheme.typography.label1Medium,
-                color = counterColor,
-            )
+            if (showCounter) {
+                Text(
+                    text = stringResource(R.string.text_counter, value.length, maxLength),
+                    style = TnTTheme.typography.label1Medium,
+                    color = counterColor,
+                )
+            }
         }
 
         TnTTextField(
@@ -164,6 +174,7 @@ fun TnTLabeledTextField(
             isSingleLine = isSingleLine,
             showWarning = showWarning,
             warningMessage = warningMessage,
+            keyboardType = keyboardType,
             trailingComponent = trailingComponent,
             modifier = Modifier.fillMaxWidth(),
         )
@@ -178,6 +189,7 @@ fun TnTOutlinedTextField(
     placeholder: String? = null,
     maxLength: Int = 15,
     isError: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     var isFocused by remember { mutableStateOf(false) }
 
@@ -229,6 +241,9 @@ fun TnTOutlinedTextField(
                     innerTextField()
                 }
             },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+            ),
         )
         Text(
             text = "${value.length}/$maxLength",
