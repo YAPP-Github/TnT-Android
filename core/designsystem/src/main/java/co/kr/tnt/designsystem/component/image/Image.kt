@@ -26,20 +26,21 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun TnTProfileImage(
     type: ProfileType,
     modifier: Modifier = Modifier,
-    image: Any? = null,
+    image: AsyncImagePainter? = null,
     imageSize: Dp = 132.dp,
     showEditButton: Boolean = true,
-    @Suppress("UnusedParameter")
-    onImageSelected: () -> Unit = {},
+    onEditClick: () -> Unit = {},
 ) {
     // TODO 선택된 이미지 currentImage에 반영
-    var currentImage by remember { mutableStateOf(image ?: type.defaultImage) }
+    val defaultImage = painterResource(type.defaultImage)
+    var currentImage by remember { mutableStateOf(image ?: defaultImage) }
 
     Box(
         modifier = modifier
@@ -48,44 +49,18 @@ fun TnTProfileImage(
             .padding(vertical = 12.dp),
         contentAlignment = Alignment.Center,
     ) {
-        when (currentImage) {
-            is Int -> {
-                Image(
-                    painter = painterResource(id = currentImage as Int),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(imageSize)
-                        .clip(CircleShape),
-                )
-            }
-
-            is String -> {
-                AsyncImage(
-                    model = currentImage,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(imageSize)
-                        .clip(CircleShape),
-                )
-            }
-
-            else -> {
-                Image(
-                    painter = painterResource(id = type.defaultImage),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(imageSize)
-                        .clip(CircleShape),
-                )
-            }
-        }
+        Image(
+            painter = currentImage,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(imageSize)
+                .clip(CircleShape),
+        )
         // TODO 버튼 클릭 시 권한 확인 후 사진 선택
         if (showEditButton) {
             IconButton(
-                onClick = { },
+                onClick = { onEditClick() },
                 modifier = Modifier
                     .size(28.dp)
                     .align(Alignment.BottomEnd),
@@ -107,7 +82,7 @@ private fun TnTProfileImageDefaultImagePreview() {
         TnTProfileImage(
             type = ProfileType.Trainer,
             modifier = Modifier.fillMaxWidth(),
-            onImageSelected = {},
+            onEditClick = {},
         )
     }
 }
@@ -118,7 +93,7 @@ private fun TnTProfileImageCustomImagePreview() {
     TnTTheme {
         TnTProfileImage(
             type = ProfileType.Trainer,
-            image = R.drawable.ic_edit,
+            image = rememberAsyncImagePainter("https://buly.kr/7FQeS5M"),
             modifier = Modifier.fillMaxWidth(),
         )
     }

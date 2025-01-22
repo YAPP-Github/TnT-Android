@@ -59,7 +59,7 @@ fun TrainerProfileSetupScreen() {
                 TnTProfileImage(
                     modifier = Modifier.fillMaxWidth(),
                     type = ProfileType.Trainer,
-                    onImageSelected = { },
+                    onEditClick = { },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
                 TnTLabeledTextFieldWithCounter(

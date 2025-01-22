@@ -20,6 +20,7 @@ import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun TraineeProfileCompleteScreen(
@@ -58,7 +59,7 @@ fun TraineeProfileCompleteScreen(
             Spacer(Modifier.padding(top = 28.dp))
             TnTProfileImage(
                 type = ProfileType.Trainee,
-                image = profileImage,
+                image = rememberAsyncImagePainter(profileImage),
                 imageSize = 200.dp,
                 showEditButton = false,
             )

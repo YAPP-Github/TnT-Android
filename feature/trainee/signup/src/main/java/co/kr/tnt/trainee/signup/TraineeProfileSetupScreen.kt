@@ -58,7 +58,7 @@ fun TraineeProfileSetupScreen() {
                 TnTProfileImage(
                     modifier = Modifier.fillMaxWidth(),
                     type = ProfileType.Trainee,
-                    onImageSelected = { },
+                    onEditClick = { },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
                 TnTLabeledTextFieldWithCounter(
