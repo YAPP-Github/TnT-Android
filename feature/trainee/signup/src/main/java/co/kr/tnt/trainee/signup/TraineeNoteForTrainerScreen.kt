@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
-import co.kr.tnt.designsystem.component.TnTTopBar
+import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
@@ -35,7 +35,7 @@ fun TraineeNoteForTrainerScreen() {
 
     Scaffold(
         // TODO 버튼 클릭 시 트레이니 PT 목적 화면으로 이동
-        topBar = { TnTTopBar(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {

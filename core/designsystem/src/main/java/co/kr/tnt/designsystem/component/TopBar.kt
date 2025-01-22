@@ -29,7 +29,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TnTTopBar(
+fun TnTTopBarWithBackButton(
     title: String = "",
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier,
@@ -74,13 +74,58 @@ fun TnTTopBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TnTTopBar(
+    title: String = "",
+    modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    trailingComponent: @Composable RowScope.() -> Unit = {},
+) {
+    CenterAlignedTopAppBar(
+        modifier = modifier
+            .fillMaxWidth()
+            // 디자인상으로는 16dp가 맞으나, 라이브러리에서 기본적으로
+            // horizontal padding 으로 4dp 를 부여하고 있음.
+            // 이에 따라 16dp - 4dp 계산값으로 적용
+            // see : TopAppBarLayout
+            .padding(horizontal = 12.dp),
+        title = {
+            Text(
+                text = title,
+                style = TnTTheme.typography.h4,
+                color = TnTTheme.colors.neutralColors.Neutral900,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        },
+        actions = trailingComponent,
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = TnTTheme.colors.commonColors.Common0,
+        ),
+        windowInsets = windowInsets,
+        expandedHeight = 60.dp,
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun TnTTopBarOnlyBackButtonPreview() {
     TnTTheme {
-        TnTTopBar(
+        TnTTopBarWithBackButton(
             modifier = Modifier.fillMaxWidth(),
-            onBackClick = { },
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TnTTopBarOnlyTitlePreview() {
+    TnTTheme {
+        TnTTopBar(
+            title = "제목",
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -89,7 +134,7 @@ private fun TnTTopBarOnlyBackButtonPreview() {
 @Composable
 private fun TnTTopBarBackButtonWithTitlePreview() {
     TnTTheme {
-        TnTTopBar(
+        TnTTopBarWithBackButton(
             modifier = Modifier.fillMaxWidth(),
             title = "제목",
             onBackClick = { },
@@ -101,7 +146,7 @@ private fun TnTTopBarBackButtonWithTitlePreview() {
 @Composable
 private fun TnTTopBarWithAllComponentsPreview() {
     TnTTheme {
-        TnTTopBar(
+        TnTTopBarWithBackButton(
             modifier = Modifier.fillMaxWidth(),
             title = "제목",
             onBackClick = { },

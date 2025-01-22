@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.designsystem.component.TnTTopBar
+import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
@@ -42,7 +42,7 @@ fun TraineePTPurposeScreen() {
 
     Scaffold(
         // TODO 버튼 클릭 시 트레이니 기본 정보 입력 화면으로 이동
-        topBar = { TnTTopBar(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {

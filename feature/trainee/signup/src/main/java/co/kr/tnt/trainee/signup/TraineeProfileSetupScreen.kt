@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
-import co.kr.tnt.designsystem.component.TnTTopBar
+import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
@@ -52,7 +52,7 @@ fun TraineeProfileSetupScreen() {
 
     Scaffold(
         // TODO 버튼 클릭 시 트레이너/트레이니 화면으로 이동
-        topBar = { TnTTopBar(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
