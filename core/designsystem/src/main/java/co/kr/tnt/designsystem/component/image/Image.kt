@@ -10,14 +10,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,21 +23,18 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun TnTProfileImage(
     type: ProfileType,
     modifier: Modifier = Modifier,
-    image: AsyncImagePainter? = null,
+    image: Painter? = null,
     imageSize: Dp = 132.dp,
     showEditButton: Boolean = true,
     onEditClick: () -> Unit = {},
 ) {
-    // TODO 선택된 이미지 currentImage에 반영
     val defaultImage = painterResource(type.defaultImage)
-    var currentImage by remember { mutableStateOf(image ?: defaultImage) }
 
     Box(
         modifier = modifier
@@ -50,7 +44,7 @@ fun TnTProfileImage(
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            painter = currentImage,
+            painter = image ?: defaultImage,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
