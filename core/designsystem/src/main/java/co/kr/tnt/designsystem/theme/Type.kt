@@ -88,6 +88,12 @@ internal val Typography = TnTTypography(
         lineHeight = (13 * 1.5).sp,
         letterSpacing = (13 * -0.02).sp,
     ),
+    label2Bold = PretendardStyle.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp,
+        lineHeight = (12 * 1.5).sp,
+        letterSpacing = (12 * -0.02).sp,
+    ),
     label2Medium = PretendardStyle.copy(
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
@@ -115,6 +121,7 @@ data class TnTTypography(
     val body2Medium: TextStyle,
     val label1Bold: TextStyle,
     val label1Medium: TextStyle,
+    val label2Bold: TextStyle,
     val label2Medium: TextStyle,
     val caption1: TextStyle,
 )
@@ -132,6 +139,7 @@ val LocalTypography = staticCompositionLocalOf {
         body2Medium = PretendardStyle,
         label1Bold = PretendardStyle,
         label1Medium = PretendardStyle,
+        label2Bold = PretendardStyle,
         label2Medium = PretendardStyle,
         caption1 = PretendardStyle,
     )
