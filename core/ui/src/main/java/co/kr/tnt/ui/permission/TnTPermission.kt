@@ -61,7 +61,7 @@ enum class TnTPermission(
      * @return 모든 "필수" 권한이 허용되었는지에 대한 여부
      */
     @OptIn(ExperimentalPermissionsApi::class)
-    fun isAllGranted(permissions: MultiplePermissionsState): Boolean {
+    fun isRequireGranted(permissions: MultiplePermissionsState): Boolean {
         return when (this) {
             NOTIFICATION -> permissions.allPermissionsGranted
             MEDIA_ACCESS -> {

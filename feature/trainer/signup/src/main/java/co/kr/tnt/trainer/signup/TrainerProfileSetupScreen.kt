@@ -73,7 +73,7 @@ fun TrainerProfileSetupScreen() {
                     modifier = Modifier.fillMaxWidth(),
                     type = ProfileType.Trainer,
                     onEditClick = onEditClick@{
-                        if (TnTPermission.MEDIA_ACCESS.isAllGranted(mediaPermissions)) {
+                        if (TnTPermission.MEDIA_ACCESS.isRequireGranted(mediaPermissions)) {
                             // TODO 이미지 피커 이동
                             return@onEditClick
                         }
