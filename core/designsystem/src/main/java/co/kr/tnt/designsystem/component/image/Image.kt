@@ -51,10 +51,9 @@ fun TnTProfileImage(
                 .size(imageSize)
                 .clip(CircleShape),
         )
-        // TODO 버튼 클릭 시 권한 확인 후 사진 선택
         if (showEditButton) {
             IconButton(
-                onClick = { onEditClick() },
+                onClick = onEditClick,
                 modifier = Modifier
                     .size(28.dp)
                     .align(Alignment.BottomEnd),
