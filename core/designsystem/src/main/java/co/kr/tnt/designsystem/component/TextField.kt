@@ -49,7 +49,7 @@ fun TnTTextField(
     var isFocused by remember { mutableStateOf(false) }
 
     val lineColor = when {
-        showWarning -> TnTTheme.colors.mainColors.Red500
+        showWarning -> TnTTheme.colors.redColors.Red500
         isFocused -> TnTTheme.colors.neutralColors.Neutral600
         else -> TnTTheme.colors.neutralColors.Neutral200
     }
@@ -108,7 +108,7 @@ fun TnTTextField(
             Text(
                 text = warningMessage,
                 style = TnTTheme.typography.body2Medium,
-                color = TnTTheme.colors.mainColors.Red500,
+                color = TnTTheme.colors.redColors.Red500,
                 modifier = Modifier.padding(top = 6.dp),
             )
         }
@@ -131,7 +131,7 @@ fun TnTLabeledTextFieldWithCounter(
     trailingComponent: @Composable BoxScope.() -> Unit = {},
 ) {
     val counterColor = when (showWarning) {
-        true -> TnTTheme.colors.mainColors.Red500
+        true -> TnTTheme.colors.redColors.Red500
         false -> TnTTheme.colors.neutralColors.Neutral400
     }
 
@@ -152,7 +152,7 @@ fun TnTLabeledTextFieldWithCounter(
                 Text(
                     text = "*",
                     style = TnTTheme.typography.body1Bold,
-                    color = TnTTheme.colors.mainColors.Red500,
+                    color = TnTTheme.colors.redColors.Red500,
                 )
             }
             Spacer(Modifier.weight(1f))
@@ -208,7 +208,7 @@ fun TnTLabeledTextField(
                 Text(
                     text = "*",
                     style = TnTTheme.typography.body1Bold,
-                    color = TnTTheme.colors.mainColors.Red500,
+                    color = TnTTheme.colors.redColors.Red500,
                 )
             }
         }
@@ -242,13 +242,13 @@ fun TnTOutlinedTextField(
     val borderWidth = if (isError || isFocused) 2.dp else 1.dp
 
     val borderColor = when {
-        isError -> TnTTheme.colors.mainColors.Red500
+        isError -> TnTTheme.colors.redColors.Red500
         isFocused -> TnTTheme.colors.neutralColors.Neutral900
         else -> TnTTheme.colors.neutralColors.Neutral300
     }
 
     val counterColor = when (isError) {
-        true -> TnTTheme.colors.mainColors.Red500
+        true -> TnTTheme.colors.redColors.Red500
         false -> TnTTheme.colors.neutralColors.Neutral300
     }
 

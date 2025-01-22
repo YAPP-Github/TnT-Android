@@ -52,12 +52,12 @@ enum class ButtonType(
     RedOutline(
         stroke = { enabled -> if (enabled) 1.5.dp else 1.dp },
         borderColor = { enabled ->
-            if (enabled) TnTTheme.colors.mainColors.Red400 else TnTTheme.colors.neutralColors.Neutral300
+            if (enabled) TnTTheme.colors.redColors.Red400 else TnTTheme.colors.neutralColors.Neutral300
         },
         colors = {
             ButtonDefaults.buttonColors(
-                containerColor = TnTTheme.colors.mainColors.Red50,
-                contentColor = TnTTheme.colors.mainColors.Red600,
+                containerColor = TnTTheme.colors.redColors.Red50,
+                contentColor = TnTTheme.colors.redColors.Red600,
                 disabledContainerColor = Color.Transparent,
                 disabledContentColor = TnTTheme.colors.neutralColors.Neutral300,
             )
