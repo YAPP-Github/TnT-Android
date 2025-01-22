@@ -116,7 +116,7 @@ fun TnTTextField(
 }
 
 @Composable
-fun TnTLabeledTextField(
+fun TnTLabeledTextFieldWithCounter(
     title: String,
     value: String,
     onValueChange: (String) -> Unit,
@@ -179,7 +179,7 @@ fun TnTLabeledTextField(
 }
 
 @Composable
-fun TnTLabeledTextFieldNoCounter(
+fun TnTLabeledTextField(
     title: String,
     value: String,
     onValueChange: (String) -> Unit,
@@ -194,7 +194,6 @@ fun TnTLabeledTextFieldNoCounter(
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(bottom = 8.dp, end = 4.dp)
@@ -212,7 +211,6 @@ fun TnTLabeledTextFieldNoCounter(
                     color = TnTTheme.colors.mainColors.Red500,
                 )
             }
-            Spacer(Modifier.weight(1f))
         }
 
         TnTTextField(
@@ -336,7 +334,7 @@ private fun TnTTextFieldPreview() {
 
 @Preview(showBackground = true, heightDp = 120)
 @Composable
-private fun TnTLabeledTextFieldNoCounterPreview() {
+private fun TnTLabeledTextFieldPreview() {
     TnTTheme {
         val maxLength = 15
         var text by remember { mutableStateOf("") }
@@ -344,7 +342,7 @@ private fun TnTLabeledTextFieldNoCounterPreview() {
 
         warningState = text.length > maxLength
 
-        TnTLabeledTextFieldNoCounter(
+        TnTLabeledTextField(
             title = "제목",
             value = text,
             onValueChange = { text = it },
@@ -368,7 +366,7 @@ private fun TnTLabeledTextFieldNoCounterPreview() {
 
 @Preview(showBackground = true, heightDp = 120)
 @Composable
-private fun TnTLabeledTextFieldPreview() {
+private fun TnTLabeledTextFieldWithCounterPreview() {
     TnTTheme {
         val maxLength = 15
         var text by remember { mutableStateOf("") }
@@ -376,7 +374,7 @@ private fun TnTLabeledTextFieldPreview() {
 
         warningState = text.length > maxLength
 
-        TnTLabeledTextField(
+        TnTLabeledTextFieldWithCounter(
             title = "제목",
             value = text,
             onValueChange = { text = it },

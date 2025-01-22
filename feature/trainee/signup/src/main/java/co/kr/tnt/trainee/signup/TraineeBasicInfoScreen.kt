@@ -30,7 +30,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.designsystem.component.TnTLabeledTextFieldNoCounter
+import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -99,7 +99,7 @@ fun TraineeBasicInfoScreen() {
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
                 ) {
-                    TnTLabeledTextFieldNoCounter(
+                    TnTLabeledTextField(
                         title = stringResource(R.string.height_label),
                         value = height,
                         placeholder = "0",
@@ -116,7 +116,7 @@ fun TraineeBasicInfoScreen() {
                         },
                         modifier = Modifier.weight(1f),
                     )
-                    TnTLabeledTextFieldNoCounter(
+                    TnTLabeledTextField(
                         title = stringResource(R.string.weight_label),
                         value = weight,
                         placeholder = "00.0",

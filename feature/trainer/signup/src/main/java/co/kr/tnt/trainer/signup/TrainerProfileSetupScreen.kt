@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.designsystem.component.TnTLabeledTextField
+import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
@@ -62,7 +62,7 @@ fun TrainerProfileSetupScreen() {
                     onImageSelected = { },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
-                TnTLabeledTextField(
+                TnTLabeledTextFieldWithCounter(
                     title = stringResource(R.string.name),
                     value = text,
                     onValueChange = { newValue ->
