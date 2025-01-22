@@ -29,13 +29,13 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.feature.trainee.signup.R
+import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.ui.extensions.moveToAppSetting
 import co.kr.tnt.ui.permission.PermissionRequestDialog
 import co.kr.tnt.ui.permission.TnTPermission
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import co.kr.tnt.feature.trainee.signup.R
-import co.kr.tnt.trainee.signup.component.ProgressSteps
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
