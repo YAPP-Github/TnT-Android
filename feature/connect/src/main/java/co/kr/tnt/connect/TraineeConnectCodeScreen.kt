@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.designsystem.component.TnTPopupDialog
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
@@ -42,6 +44,7 @@ fun TraineeConnectScreen(
 ) {
     var code by remember { mutableStateOf("") }
     var verificationState by remember { mutableStateOf<Boolean?>(null) }
+    var showDialog by rememberSaveable { mutableStateOf(true) }
 
     Scaffold(
         topBar = {
@@ -93,6 +96,20 @@ fun TraineeConnectScreen(
                 enabled = code.isNotBlank() && verificationState == true,
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
+            )
+        }
+        if (showDialog) {
+            TnTPopupDialog(
+                title = stringResource(R.string.enter_invite_code_from_trainer),
+                content = stringResource(R.string.not_connected_warning),
+                leftButtonText = stringResource(R.string.next_time),
+                rightButtonText = stringResource(R.string.confirm),
+                onLeftButtonClick = {
+                    showDialog = false
+                    onSkipClick()
+                },
+                onRightButtonClick = { showDialog = false },
+                onDismiss = { showDialog = false },
             )
         }
     }
