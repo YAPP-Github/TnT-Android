@@ -4,6 +4,7 @@
     <string name="skip">건너뛰기</string>
     <string name="complete">완료</string>
     <string name="confirm">확인</string>
+    <string name="next">다음</string>
     <string name="next_time">다음에 할게요</string>
 
     <string name="invite_trainee_with_code">생성된 초대코드로\n트레이니가 로그인할 수 있어요</string>
@@ -16,5 +17,8 @@
     <string name="enter_the_code">코드를 입력해주세요</string>
     <string name="verification_fail">인증에 실패했어요</string>
     <string name="verification_success">인증되었어요</string>
+
+    <string name="connected_with_trainer">%s 트레이너와\n연결되었어요!</string>
+    <string name="connected_with_trainee">%s 트레이니와\n연결되었어요!</string>
 
 </resources>

@@ -36,9 +36,7 @@ fun TnTProfileImage(
     val defaultImage = painterResource(type.defaultImage)
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentSize(),
+        modifier = modifier.wrapContentSize(),
         contentAlignment = Alignment.Center,
     ) {
         Image(
