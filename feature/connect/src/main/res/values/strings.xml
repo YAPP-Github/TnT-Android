@@ -9,4 +9,9 @@
     <string name="code_reissue">코드 재발급</string>
     <string name="code_is_copied">코드가 복사되었어요!</string>
 
+    <string name="enter_invite_code_from_trainer">트레이너에게 받은\n초대 코드를 입력해 주세요</string>
+    <string name="enter_the_code">코드를 입력해주세요</string>
+    <string name="verification_fail">인증에 실패했어요</string>
+    <string name="verification_success">인증되었어요</string>
+
 </resources>
