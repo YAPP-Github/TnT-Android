@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="connect">연결하기</string>
+    <string name="start">시작하기</string>
     <string name="skip">건너뛰기</string>
     <string name="complete">완료</string>
     <string name="confirm">확인</string>
     <string name="next">다음</string>
     <string name="next_time">다음에 할게요</string>
+
+    <string name="trainee">트레이니</string>
+    <string name="age_label">나이</string>
+    <string name="height_label">키</string>
+    <string name="weight_label">체중</string>
+    <string name="age_unit">세</string>
+    <string name="height_unit">cm</string>
+    <string name="weight_unit">kg</string>
 
     <string name="invite_trainee_with_code">생성된 초대코드로\n트레이니가 로그인할 수 있어요</string>
     <string name="my_invite_code">내 초대 코드</string>
@@ -28,5 +37,9 @@
     <string name="total_register_session">총 등록 회차</string>
     <string name="birthday_placeholder">2000/00/00</string>
     <string name="count_unit">회</string>
+    
+    <string name="trainee_who_will_be_with">함께할 트레이니는 이런 분이에요!</string>
+    <string name="purpose_of_pt">PT 목표</string>
+    <string name="caution">주의사항</string>
 
 </resources>
