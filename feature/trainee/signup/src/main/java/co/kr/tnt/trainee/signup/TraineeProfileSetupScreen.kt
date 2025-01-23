@@ -69,7 +69,9 @@ fun TraineeProfileSetupScreen() {
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 TnTProfileImage(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
                     type = ProfileType.Trainee,
                     onEditClick = onEditClick@{
                         if (TnTPermission.MEDIA_ACCESS.isRequireGranted(mediaPermissions)) {

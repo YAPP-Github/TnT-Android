@@ -3,7 +3,6 @@ package co.kr.tnt.designsystem.component.image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
@@ -39,8 +38,7 @@ fun TnTProfileImage(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentSize()
-            .padding(vertical = 12.dp),
+            .wrapContentSize(),
         contentAlignment = Alignment.Center,
     ) {
         Image(
