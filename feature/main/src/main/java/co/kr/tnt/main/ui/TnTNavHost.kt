@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import co.kr.tnt.connect.navigation.connectScreen
 import co.kr.tnt.home.navigation.homeNavGraph
+import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
 
 @Composable
@@ -25,6 +27,12 @@ fun TnTNavHost(
             loginScreen(
                 navigateToHome = { },
                 navigateToSignup = { },
+            )
+            connectScreen(
+                navigateToPrevious = { navController.popBackStack() },
+                navigateToHome = { isTrainer ->
+                    navController.navigateToHome(isTrainer = isTrainer, clearBackStack = true)
+                },
             )
             homeNavGraph {
             }

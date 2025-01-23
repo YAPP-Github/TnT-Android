@@ -11,6 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 @Suppress("UnusedParameter")
 internal fun HomeRoute(
+    isTrainer: Boolean,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     HomeScreen()

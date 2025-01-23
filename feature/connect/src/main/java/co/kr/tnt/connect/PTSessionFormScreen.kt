@@ -1,6 +1,7 @@
 package co.kr.tnt.connect
 
 import android.app.DatePickerDialog
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,6 +47,8 @@ fun PTSessionFormScreen(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
+    BackHandler { onBackClick() }
+
 // TODO 상태 관리 따로 빼기
     val name = "김헬짱"
     var completedSession by remember { mutableStateOf("") }
