@@ -24,6 +24,7 @@
     <string name="enter_invite_code_from_trainer">트레이너에게 받은\n초대 코드를 입력해 주세요</string>
     <string name="not_connected_warning">트레이너와 연결하지 않을 경우\n일부 기능이 제한될 수 있어요.</string>
     <string name="enter_the_code">코드를 입력해주세요</string>
+    <string name="verification">인증하기</string>
     <string name="verification_fail">인증에 실패했어요</string>
     <string name="verification_success">인증되었어요</string>
 

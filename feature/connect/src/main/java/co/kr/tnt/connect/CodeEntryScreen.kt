@@ -84,7 +84,7 @@ fun CodeEntryScreen(
                     verificationState = verificationState,
                     trailingComponent = {
                         TnTTextButton(
-                            text = "인증하기",
+                            text = stringResource(R.string.verification),
                             size = ButtonSize.Small,
                             onClick = { verificationState = checkValid(code) },
                         )
