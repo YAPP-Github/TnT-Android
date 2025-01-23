@@ -38,7 +38,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.connect.R
 
 @Composable
-fun TraineeConnectScreen(
+fun CodeEntryScreen(
     onSkipClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
@@ -92,7 +92,7 @@ fun TraineeConnectScreen(
                 )
             }
             TnTBottomButton(
-                text = stringResource(R.string.complete),
+                text = stringResource(R.string.next),
                 enabled = code.isNotBlank() && verificationState == true,
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -216,9 +216,9 @@ private fun CodeTextField(
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineeConnectScreenPreview() {
+private fun CodeEntryScreenPreview() {
     TnTTheme {
-        TraineeConnectScreen(
+        CodeEntryScreen(
             onSkipClick = {},
             onNextClick = {},
         )
