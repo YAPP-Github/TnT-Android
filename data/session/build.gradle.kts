@@ -8,3 +8,8 @@ plugins {
 android {
     setNamespace("data.session")
 }
+
+dependencies {
+    implementation(projects.data.network)
+    implementation(projects.data.storage)
+}
