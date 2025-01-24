@@ -1,5 +1,7 @@
-package co.kr.tnt.connect
+package co.kr.tnt.connect.trainee
 
+import TraineeConnectContract.TraineeConnectUiState
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,39 +24,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.connect.model.TraineeProfile
 import co.kr.tnt.connect.model.TrainerProfile
 import co.kr.tnt.connect.model.UserProfile
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.connect.R
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun ConnectCompleteScreen(
-    userType: UserType,
+internal fun TraineeConnectCompleteScreen(
+    state: TraineeConnectUiState,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
-
-    // TODO 전달 받기
-    val trainerName = "김헬짱"
-    val traineeName = "김회원"
-    val trainerImage = null
-    val traineeImage = "https://buly.kr/3j7VVqN"
-
-    val trainerInfo = TrainerProfile(
-        name = trainerName,
-        image = trainerImage,
-    )
-    val traineeInfo = TraineeProfile(
-        name = traineeName,
-        image = traineeImage,
-    )
+    Log.d("check", "${state.completedSession} ${state.totalSession} ${state.startDate}")
 
     Scaffold { innerPadding ->
         Image(
@@ -76,11 +62,10 @@ fun ConnectCompleteScreen(
                 ) {
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = if (userType == UserType.Trainer) {
-                            stringResource(R.string.connected_with_trainee, traineeName)
-                        } else {
-                            stringResource(R.string.connected_with_trainer, trainerName)
-                        },
+                        text = stringResource(
+                            R.string.connected_with_trainer,
+                            state.trainerState.name,
+                        ),
                         color = TnTTheme.colors.commonColors.Common0,
                         style = TnTTheme.typography.h1,
                         modifier = Modifier.padding(horizontal = 24.dp),
@@ -90,17 +75,12 @@ fun ConnectCompleteScreen(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        val (leftProfile, rightProfile) = if (userType == UserType.Trainer) {
-                            Pair(traineeInfo, trainerInfo)
-                        } else {
-                            Pair(trainerInfo, traineeInfo)
-                        }
                         ProfileSection(
-                            profile = leftProfile,
+                            profile = state.trainerState,
                             modifier = Modifier.padding(end = 16.dp),
                         )
                         ProfileSection(
-                            profile = rightProfile,
+                            profile = state.traineeState,
                         )
                     }
                     Image(
@@ -155,10 +135,10 @@ private fun ProfileSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun ConnectCompleteScreenPreview() {
+private fun TraineeConnectCompleteScreenPreview() {
     TnTTheme {
-        ConnectCompleteScreen(
-            userType = UserType.Trainer,
+        TraineeConnectCompleteScreen(
+            state = TODO(),
             onNextClick = {},
             onBackClick = {},
         )

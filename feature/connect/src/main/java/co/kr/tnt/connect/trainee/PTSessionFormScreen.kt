@@ -1,5 +1,6 @@
 package co.kr.tnt.connect.trainee
 
+import TraineeConnectContract.TraineeConnectUiState
 import android.app.DatePickerDialog
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.connect.model.PTSessionFormData
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
@@ -43,14 +45,13 @@ import java.util.Calendar
 private const val MAX_COUNT = 99
 
 @Composable
-fun PTSessionFormScreen(
+internal fun PTSessionFormScreen(
+    state: TraineeConnectUiState,
+    onNextClick: (PTSessionFormData) -> Unit,
     onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
 
-// TODO 상태 관리 따로 빼기
-    val name = "김헬짱"
     var completedSession by remember { mutableStateOf("") }
     var totalSession by remember { mutableStateOf("") }
     var startDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -87,7 +88,7 @@ fun PTSessionFormScreen(
             ) {
                 Spacer(Modifier.padding(top = 24.dp))
                 Text(
-                    text = stringResource(R.string.since_when_with_trainer, name),
+                    text = stringResource(R.string.since_when_with_trainer, state.trainerState.name),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h2,
                     modifier = Modifier.padding(horizontal = 24.dp),
@@ -172,7 +173,14 @@ fun PTSessionFormScreen(
                 text = stringResource(R.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
-                onClick = onNextClick,
+                onClick = {
+                    val formData = PTSessionFormData(
+                        completedSession = completedSession.toInt(),
+                        totalSession = totalSession.toInt(),
+                        startDate = startDate,
+                    )
+                    onNextClick(formData)
+                },
             )
         }
     }
@@ -249,6 +257,7 @@ private fun PTSessionFormScreenPreview() {
         PTSessionFormScreen(
             onNextClick = {},
             onBackClick = {},
+            state = TODO(),
         )
     }
 }

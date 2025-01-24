@@ -9,8 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.tnt.connect.ConnectCompleteScreen
-import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.connect.model.PTSessionFormData
 
 @Composable
 internal fun TraineeConnectRoute(
@@ -22,6 +21,9 @@ internal fun TraineeConnectRoute(
 
     TraineeConnectScreen(
         state = state,
+        onFormNextClick = { formData ->
+            viewModel.setEvent(TraineeConnectUiEvent.UpdatePTSessionData(formData))
+        },
         onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnBackClick) },
         onNextClick = { viewModel.setEvent(TraineeConnectUiEvent.OnNextClick) },
         onSkipClick = { viewModel.setEvent(TraineeConnectUiEvent.OnSkipClick) },
@@ -40,6 +42,7 @@ internal fun TraineeConnectRoute(
 @Composable
 private fun TraineeConnectScreen(
     state: TraineeConnectUiState,
+    onFormNextClick: (PTSessionFormData) -> Unit,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
     onSkipClick: () -> Unit,
@@ -51,12 +54,15 @@ private fun TraineeConnectScreen(
         )
 
         TraineeConnectPage.PTSessionForm -> PTSessionFormScreen(
-            onNextClick = onNextClick,
+            state = state,
+            onNextClick = { formData ->
+                onFormNextClick(formData)
+            },
             onBackClick = onBackClick,
         )
 
-        TraineeConnectPage.TraineeConnectComplete -> ConnectCompleteScreen(
-            userType = UserType.Trainee,
+        TraineeConnectPage.TraineeConnectComplete -> TraineeConnectCompleteScreen(
+            state = state,
             onNextClick = onNextClick,
             onBackClick = onBackClick,
         )
