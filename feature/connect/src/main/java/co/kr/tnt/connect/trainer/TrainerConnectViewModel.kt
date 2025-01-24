@@ -3,6 +3,8 @@ package co.kr.tnt.connect.trainer
 import TrainerConnectContract.TrainerConnectSideEffect
 import TrainerConnectContract.TrainerConnectUiEvent
 import TrainerConnectContract.TrainerConnectUiState
+import co.kr.tnt.connect.model.TraineeProfile
+import co.kr.tnt.connect.model.TrainerProfile
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -12,10 +14,35 @@ internal class TrainerConnectViewModel @Inject constructor() :
     BaseViewModel<TrainerConnectUiState, TrainerConnectUiEvent, TrainerConnectSideEffect>(
         TrainerConnectUiState(),
     ) {
+        init {
+            initProfile()
+        }
+
         override suspend fun handleEvent(event: TrainerConnectUiEvent) {
             when (event) {
                 is TrainerConnectUiEvent.OnRegenerateClick -> regenerateCode()
                 TrainerConnectUiEvent.OnSkipClick -> navigateToHome()
+            }
+        }
+
+        private fun initProfile() {
+            // TODO 연결 완료 화면에 보여줄 프로필 정보 불러오기
+            updateState {
+                copy(
+                    trainerState = TrainerProfile(
+                        name = "김헬짱",
+                        image = null,
+                    ),
+                    traineeState = TraineeProfile(
+                        name = "김회원",
+                        image = "https://buly.kr/3j7VVqN",
+                        age = 24,
+                        weight = 165F,
+                        height = 52F,
+                        ptPurpose = "체중 감량, 자세 교정",
+                        caution = "발목이 안좋아서 발목에 무리가는 행동을 하면 안돼요. 잘 부탁드려요!",
+                    ),
+                )
             }
         }
 

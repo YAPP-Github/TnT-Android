@@ -48,5 +48,11 @@ private fun TrainerConnectScreen(
             onBackClick = onBackClick,
             onSkipClick = onSkipClick,
         )
+
+        TrainerConnectPage.TrainerConnectComplete -> TrainerConnectCompleteScreen(
+            state = state,
+            onBackClick = onBackClick,
+            onNextClick = onSkipClick,
+        )
     }
 }
