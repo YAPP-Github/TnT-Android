@@ -22,7 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.connect.model.ProfileInfo
+import co.kr.tnt.connect.model.TraineeProfile
+import co.kr.tnt.connect.model.TrainerProfile
+import co.kr.tnt.connect.model.UserProfile
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
@@ -45,15 +47,13 @@ fun ConnectCompleteScreen(
     val trainerImage = null
     val traineeImage = "https://buly.kr/3j7VVqN"
 
-    val trainerInfo = ProfileInfo(
+    val trainerInfo = TrainerProfile(
         name = trainerName,
         image = trainerImage,
-        type = UserType.Trainer,
     )
-    val traineeInfo = ProfileInfo(
+    val traineeInfo = TraineeProfile(
         name = traineeName,
         image = traineeImage,
-        type = UserType.Trainee,
     )
 
     Scaffold { innerPadding ->
@@ -123,10 +123,15 @@ fun ConnectCompleteScreen(
 
 @Composable
 private fun ProfileSection(
-    profile: ProfileInfo,
+    profile: UserProfile,
     modifier: Modifier = Modifier,
 ) {
     val painter = profile.image?.let { rememberAsyncImagePainter(it) }
+    val userType = if (profile is TrainerProfile) {
+        ProfileType.Trainer
+    } else {
+        ProfileType.Trainee
+    }
 
     Column(
         modifier = modifier,
@@ -134,7 +139,7 @@ private fun ProfileSection(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         TnTProfileImage(
-            type = profile.type.toProfileType(),
+            type = userType,
             image = painter,
             imageSize = 100.dp,
             showEditButton = false,
@@ -145,13 +150,6 @@ private fun ProfileSection(
             style = TnTTheme.typography.body2Medium,
             modifier = Modifier.padding(horizontal = 24.dp),
         )
-    }
-}
-
-private fun UserType.toProfileType(): ProfileType {
-    return when (this) {
-        UserType.Trainer -> ProfileType.Trainer
-        UserType.Trainee -> ProfileType.Trainee
     }
 }
 
