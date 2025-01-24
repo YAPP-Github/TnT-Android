@@ -45,7 +45,7 @@ android {
 dependencies {
     implementation(projects.feature.main)
     implementation(projects.domain)
-    implementation(projects.data)
+    implementation(projects.data.network)
 
     implementation(libs.androidx.activity.compose)
 }

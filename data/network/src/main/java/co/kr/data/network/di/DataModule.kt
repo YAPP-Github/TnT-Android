@@ -1,6 +1,6 @@
-package co.kr.tnt.data.di
+package co.kr.data.network.di
 
-import co.kr.tnt.data.repository.TnTRepositoryImpl
+import co.kr.data.network.repository.TnTRepositoryImpl
 import co.kr.tnt.domain.repository.TnTRepository
 import dagger.Binds
 import dagger.Module

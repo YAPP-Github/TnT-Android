@@ -1,7 +1,7 @@
-package co.kr.tnt.data.di
+package co.kr.data.network.di
 
-import co.kr.tnt.data.BuildConfig
-import co.kr.tnt.data.service.TnTService
+import co.kr.data.network.service.TnTService
+import co.kr.tnt.data.network.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,6 +1,6 @@
-package co.kr.tnt.data.source
+package co.kr.data.network.source
 
-import co.kr.tnt.data.service.TnTService
+import co.kr.data.network.service.TnTService
 import javax.inject.Inject
 
 @Suppress("UnusedPrivateProperty")

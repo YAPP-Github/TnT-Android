@@ -1,15 +1,15 @@
-package co.kr.tnt.data.model.tnt.response
+package co.kr.data.network.tnt.request
 
 import co.kr.tnt.domain.model.TnT
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TnTResponse(
+data class TnTRequest(
     @SerialName("id")
     val id: String,
 )
 
-fun TnTResponse.toDomain(): TnT = TnT(
-    id = id,
+fun TnT.toRemote(): TnTRequest = TnTRequest(
+    id = this.id,
 )

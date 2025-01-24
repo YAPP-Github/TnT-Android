@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    setNamespace("data")
+    setNamespace("data.network")
 
     buildFeatures {
         buildConfig = true
