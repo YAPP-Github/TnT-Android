@@ -27,6 +27,10 @@ internal fun TraineeConnectRoute(
         onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnBackClick) },
         onNextClick = { viewModel.setEvent(TraineeConnectUiEvent.OnNextClick) },
         onSkipClick = { viewModel.setEvent(TraineeConnectUiEvent.OnSkipClick) },
+        onCodeChanged = { viewModel.setEvent(TraineeConnectUiEvent.OnCodeChanged) },
+        onCodeValidationClick = { code ->
+            viewModel.setEvent(TraineeConnectUiEvent.OnCodeValidateClick(code))
+        },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -42,6 +46,8 @@ internal fun TraineeConnectRoute(
 @Composable
 private fun TraineeConnectScreen(
     state: TraineeConnectUiState,
+    onCodeValidationClick: (String) -> Unit,
+    onCodeChanged: () -> Unit,
     onFormNextClick: (PTSessionFormData) -> Unit,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -49,8 +55,13 @@ private fun TraineeConnectScreen(
 ) {
     when (state.page) {
         TraineeConnectPage.CodeEntry -> CodeEntryScreen(
+            state = state,
             onNextClick = onNextClick,
             onSkipClick = onSkipClick,
+            onCodeChanged = onCodeChanged,
+            onValidateClick = { code ->
+                onCodeValidationClick(code)
+            },
         )
 
         TraineeConnectPage.PTSessionForm -> PTSessionFormScreen(

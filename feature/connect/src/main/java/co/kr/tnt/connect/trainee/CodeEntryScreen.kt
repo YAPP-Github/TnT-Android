@@ -1,5 +1,6 @@
 package co.kr.tnt.connect.trainee
 
+import TraineeConnectContract.TraineeConnectUiState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -38,12 +39,14 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.connect.R
 
 @Composable
-fun CodeEntryScreen(
+internal fun CodeEntryScreen(
+    state: TraineeConnectUiState,
     onSkipClick: () -> Unit,
     onNextClick: () -> Unit,
+    onCodeChanged: () -> Unit,
+    onValidateClick: (String) -> Unit,
 ) {
     var code by remember { mutableStateOf("") }
-    var verificationState by remember { mutableStateOf<Boolean?>(null) }
     var showDialog by rememberSaveable { mutableStateOf(true) }
 
     Scaffold(
@@ -78,22 +81,22 @@ fun CodeEntryScreen(
                     value = code,
                     onValueChange = {
                         code = it
-                        verificationState = null
+                        onCodeChanged()
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    verificationState = verificationState,
+                    verificationState = state.isCodeValid,
                     trailingComponent = {
                         TnTTextButton(
                             text = stringResource(R.string.verification),
                             size = ButtonSize.Small,
-                            onClick = { verificationState = checkValid(code) },
+                            onClick = { onValidateClick(code) },
                         )
                     },
                 )
             }
             TnTBottomButton(
                 text = stringResource(R.string.next),
-                enabled = code.isNotBlank() && verificationState == true,
+                enabled = state.isCodeValid == true,
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
@@ -113,11 +116,6 @@ fun CodeEntryScreen(
             )
         }
     }
-}
-
-// TODO 인증 코드 유효성 검사 API 구현 후 삭제
-private fun checkValid(code: String): Boolean {
-    return code == "12345678"
 }
 
 @Composable
@@ -221,6 +219,9 @@ private fun CodeEntryScreenPreview() {
         CodeEntryScreen(
             onSkipClick = {},
             onNextClick = {},
+            state = TODO(),
+            onValidateClick = {},
+            onCodeChanged = TODO(),
         )
     }
 }

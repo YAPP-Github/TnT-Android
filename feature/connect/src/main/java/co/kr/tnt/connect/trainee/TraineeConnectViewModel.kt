@@ -26,6 +26,7 @@ internal class TraineeConnectViewModel @Inject constructor() :
                 is TraineeConnectUiEvent.UpdateTraineeProfile -> updateTraineeProfile(event.profile)
                 is TraineeConnectUiEvent.UpdatePTSessionData -> updatePTSessionForm(event.data)
                 is TraineeConnectUiEvent.OnCodeValidateClick -> validateCode(event.code)
+                TraineeConnectUiEvent.OnCodeChanged -> clearValidation()
                 TraineeConnectUiEvent.OnBackClick -> navigateToBack()
                 TraineeConnectUiEvent.OnNextClick -> navigateToNext()
                 TraineeConnectUiEvent.OnSkipClick -> navigateToHome()
@@ -52,6 +53,10 @@ internal class TraineeConnectViewModel @Inject constructor() :
             // TODO 코드 유효성 확인
             val isValid = code.length == 8
             updateState { copy(inviteCode = code, isCodeValid = isValid) }
+        }
+
+        private fun clearValidation() {
+            updateState { copy(inviteCode = "", isCodeValid = null) }
         }
 
         private fun updatePTSessionForm(data: PTSessionFormData) {
