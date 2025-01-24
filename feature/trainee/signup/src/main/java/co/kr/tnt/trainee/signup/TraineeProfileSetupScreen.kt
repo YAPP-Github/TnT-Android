@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,12 +32,17 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.component.ProgressSteps
+import co.kr.tnt.ui.coil.ResizeTransformation
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 
 @Composable
 fun TraineeProfileSetupScreen() {
+    val context = LocalContext.current
+
     // TODO 상태 관리 따로 빼기
     val maxLength = 15
     var text by remember { mutableStateOf("") }
@@ -44,9 +50,16 @@ fun TraineeProfileSetupScreen() {
     var profileImage by remember { mutableStateOf<Uri?>(null) }
 
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
-        profileImage = uri
+        if (uri != null) {
+            profileImage = uri
+        }
     }
-    val painter = rememberAsyncImagePainter(profileImage)
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(profileImage)
+            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .build(),
+    )
 
     Scaffold(
         // TODO 버튼 클릭 시 트레이너/트레이니 화면으로 이동
