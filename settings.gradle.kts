@@ -24,7 +24,11 @@ dependencyResolutionManagement {
 rootProject.name = "TnT"
 include(":app")
 include(":domain")
-include(":data:network")
+
+include(
+    ":data:network",
+    ":data:storage",
+)
 
 include(
     ":core:designsystem",
