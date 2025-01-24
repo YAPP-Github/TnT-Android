@@ -35,14 +35,14 @@ internal class TrainerConnectContract {
             fun getPreviousPage(currentPage: TrainerConnectPage): TrainerConnectPage {
                 return when (currentPage) {
                     TraineeProfile -> TrainerConnectComplete
-                    else -> throw IllegalStateException("No previous page defined for $currentPage")
+                    else -> error("No previous page defined for $currentPage")
                 }
             }
 
             fun getNextPage(currentPage: TrainerConnectPage): TrainerConnectPage {
                 return when (currentPage) {
                     TrainerConnectComplete -> TraineeProfile
-                    else -> throw IllegalStateException("No previous page defined for $currentPage")
+                    else -> error("No next page defined for $currentPage")
                 }
             }
         }

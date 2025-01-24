@@ -45,7 +45,7 @@ internal class TraineeConnectContract {
                 return when (currentPage) {
                     PTSessionForm -> CodeEntry
                     TraineeConnectComplete -> PTSessionForm
-                    else -> throw IllegalStateException("No previous page defined for $currentPage")
+                    else -> error("No previous page defined for $currentPage")
                 }
             }
 
@@ -53,7 +53,7 @@ internal class TraineeConnectContract {
                 return when (currentPage) {
                     CodeEntry -> PTSessionForm
                     PTSessionForm -> TraineeConnectComplete
-                    else -> throw IllegalStateException("No previous page defined for $currentPage")
+                    else -> error("No next page defined for $currentPage")
                 }
             }
         }
