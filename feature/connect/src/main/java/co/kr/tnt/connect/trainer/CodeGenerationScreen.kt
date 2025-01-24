@@ -1,5 +1,6 @@
 package co.kr.tnt.connect.trainer
 
+import TrainerConnectContract.TrainerConnectUiState
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -38,15 +39,14 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.connect.R
 
 @Composable
-fun CodeGenerationScreen(
+internal fun CodeGenerationScreen(
+    state: TrainerConnectUiState,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
     onSkipClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
 
-    // TODO 인증 코드 받아오기
-    val code = "12345678"
     val context = LocalContext.current
     var showToast by remember { mutableStateOf(false) }
 
@@ -97,14 +97,14 @@ fun CodeGenerationScreen(
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = code,
+                                text = state.inviteCode,
                                 style = TnTTheme.typography.body1Medium,
                                 color = TnTTheme.colors.neutralColors.Neutral600,
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .clickable {
                                         showToast = true
-                                        copyToClipboard(context, code)
+                                        copyToClipboard(context, state.inviteCode)
                                     },
                             )
                             HorizontalDivider(
@@ -161,6 +161,7 @@ private fun copyToClipboard(context: Context, text: String) {
 private fun CodeGenerationScreenPreview() {
     TnTTheme {
         CodeGenerationScreen(
+            state = TODO(),
             onBackClick = {},
             onSkipClick = {},
             onRegenerateClick = {},

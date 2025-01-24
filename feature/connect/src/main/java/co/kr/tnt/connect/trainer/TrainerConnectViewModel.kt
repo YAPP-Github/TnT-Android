@@ -16,6 +16,7 @@ internal class TrainerConnectViewModel @Inject constructor() :
         TrainerConnectUiState(),
     ) {
         init {
+            generateCode()
             initProfile()
         }
 

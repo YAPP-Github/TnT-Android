@@ -46,6 +46,7 @@ private fun TrainerConnectScreen(
 ) {
     when (state.page) {
         TrainerConnectPage.CodeGeneration -> CodeGenerationScreen(
+            state = state,
             onRegenerateClick = onRegenerateClick,
             onBackClick = onBackClick,
             onSkipClick = onSkipClick,
