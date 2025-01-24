@@ -1,10 +1,11 @@
-package co.kr.tnt.connect
+package co.kr.tnt.connect.trainer
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,8 +39,12 @@ import co.kr.tnt.feature.connect.R
 
 @Composable
 fun CodeGenerationScreen(
+    onRegenerateClick: () -> Unit,
+    onBackClick: () -> Unit,
     onSkipClick: () -> Unit,
 ) {
+    BackHandler { onBackClick() }
+
     // TODO 인증 코드 받아오기
     val code = "12345678"
     val context = LocalContext.current
@@ -119,7 +124,7 @@ fun CodeGenerationScreen(
                                     text = stringResource(R.string.code_reissue),
                                     size = ButtonSize.Small,
                                     type = ButtonType.Gray,
-                                    onClick = { },
+                                    onClick = { onRegenerateClick() },
                                 )
                             },
                         )
@@ -156,7 +161,9 @@ private fun copyToClipboard(context: Context, text: String) {
 private fun CodeGenerationScreenPreview() {
     TnTTheme {
         CodeGenerationScreen(
+            onBackClick = {},
             onSkipClick = {},
+            onRegenerateClick = {},
         )
     }
 }
