@@ -1,4 +1,4 @@
-package co.kr.tnt.connect
+package co.kr.tnt.connect.trainee
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

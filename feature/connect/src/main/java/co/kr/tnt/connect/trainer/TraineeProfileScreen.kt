@@ -1,4 +1,4 @@
-package co.kr.tnt.connect
+package co.kr.tnt.connect.trainer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package co.kr.tnt.connect
+package co.kr.tnt.connect.trainee
 
 import android.app.DatePickerDialog
 import androidx.activity.compose.BackHandler
