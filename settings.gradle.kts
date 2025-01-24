@@ -29,6 +29,7 @@ include(
     ":data:network",
     ":data:storage",
     ":data:repository",
+    ":data:session",
 )
 
 include(
