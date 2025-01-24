@@ -61,6 +61,7 @@ private fun TrainerConnectScreen(
         TrainerConnectPage.TraineeProfile -> TraineeProfileScreen(
             state = state,
             onNextClick = onNextClick,
+            onBackClick = onBackClick,
         )
     }
 }

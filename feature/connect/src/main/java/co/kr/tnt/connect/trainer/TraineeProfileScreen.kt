@@ -1,6 +1,7 @@
 package co.kr.tnt.connect.trainer
 
 import TrainerConnectContract.TrainerConnectUiState
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,7 +38,10 @@ import coil.compose.rememberAsyncImagePainter
 internal fun TraineeProfileScreen(
     state: TrainerConnectUiState,
     onNextClick: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
+    BackHandler { onBackClick() }
+
     val trainee = state.traineeState
 
     Scaffold { innerPadding ->
@@ -51,7 +56,7 @@ internal fun TraineeProfileScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 40.dp, vertical = 24.dp),
+                    .padding(vertical = 24.dp),
             ) {
                 Text(
                     text = stringResource(R.string.trainee_who_will_be_with),
@@ -61,10 +66,11 @@ internal fun TraineeProfileScreen(
                 Spacer(Modifier.height(12.dp))
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .wrapContentSize()
                         .clip(RoundedCornerShape(20.dp))
                         .background(TnTTheme.colors.commonColors.Common0)
-                        .padding(horizontal = 20.dp, vertical = 32.dp),
+                        .padding(horizontal = 20.dp, vertical = 32.dp)
+                        .width(260.dp),
                 ) {
                     val painter = trainee.image?.let { rememberAsyncImagePainter(it) }
                     TnTProfileImage(
@@ -192,6 +198,7 @@ private fun TraineeProfileScreenPreview() {
         TraineeProfileScreen(
             state = TODO(),
             onNextClick = {},
+            onBackClick = {},
         )
     }
 }
