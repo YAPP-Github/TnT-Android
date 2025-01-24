@@ -10,5 +10,4 @@ android {
 
 dependencies {
     implementation(libs.kotlinx.immutable)
-    implementation(libs.accompanist.permissions)
 }
