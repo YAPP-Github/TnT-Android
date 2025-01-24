@@ -1,5 +1,9 @@
 package co.kr.tnt.trainer.signup
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +33,7 @@ import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainer.signup.R
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun TrainerProfileSetupScreen() {
@@ -36,6 +41,12 @@ fun TrainerProfileSetupScreen() {
     val maxLength = 15
     var text by remember { mutableStateOf("") }
     val isWarning by remember { derivedStateOf { text.length > maxLength } }
+    var profileImage by remember { mutableStateOf<Uri?>(null) }
+
+    val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
+        profileImage = uri
+    }
+    val painter = rememberAsyncImagePainter(profileImage)
 
     Scaffold(
         topBar = { TnTTopBar(onBackClick = {}) },
@@ -58,9 +69,14 @@ fun TrainerProfileSetupScreen() {
                 Spacer(Modifier.padding(top = 48.dp))
                 TnTProfileImage(
                     modifier = Modifier.fillMaxWidth(),
+                    image = profileImage?.let { painter },
                     type = ProfileType.Trainer,
                     onEditClick = {
-                        // TODO 이미지 피커 이동
+                        pickMediaLauncher.launch(
+                            PickVisualMediaRequest(
+                                mediaType = PickVisualMedia.ImageOnly,
+                            ),
+                        )
                     },
                 )
                 Spacer(Modifier.padding(top = 60.dp))

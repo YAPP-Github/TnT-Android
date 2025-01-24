@@ -1,5 +1,9 @@
 package co.kr.tnt.trainee.signup
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +33,7 @@ import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.component.ProgressSteps
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun TraineeProfileSetupScreen() {
@@ -36,6 +41,12 @@ fun TraineeProfileSetupScreen() {
     val maxLength = 15
     var text by remember { mutableStateOf("") }
     val isWarning by remember { derivedStateOf { text.length > maxLength } }
+    var profileImage by remember { mutableStateOf<Uri?>(null) }
+
+    val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
+        profileImage = uri
+    }
+    val painter = rememberAsyncImagePainter(profileImage)
 
     Scaffold(
         // TODO 버튼 클릭 시 트레이너/트레이니 화면으로 이동
@@ -57,9 +68,14 @@ fun TraineeProfileSetupScreen() {
                 Spacer(Modifier.padding(top = 48.dp))
                 TnTProfileImage(
                     modifier = Modifier.fillMaxWidth(),
+                    image = profileImage?.let { painter },
                     type = ProfileType.Trainee,
                     onEditClick = {
-                        // TODO 이미지 피커 이동
+                        pickMediaLauncher.launch(
+                            PickVisualMediaRequest(
+                                mediaType = PickVisualMedia.ImageOnly,
+                            ),
+                        )
                     },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
