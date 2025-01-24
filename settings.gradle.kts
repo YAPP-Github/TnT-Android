@@ -28,6 +28,7 @@ include(":domain")
 include(
     ":data:network",
     ":data:storage",
+    ":data:repository",
 )
 
 include(
