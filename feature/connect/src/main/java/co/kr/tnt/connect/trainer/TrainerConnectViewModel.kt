@@ -1,5 +1,6 @@
 package co.kr.tnt.connect.trainer
 
+import TrainerConnectContract.TrainerConnectPage
 import TrainerConnectContract.TrainerConnectSideEffect
 import TrainerConnectContract.TrainerConnectUiEvent
 import TrainerConnectContract.TrainerConnectUiState
@@ -21,12 +22,14 @@ internal class TrainerConnectViewModel @Inject constructor() :
         override suspend fun handleEvent(event: TrainerConnectUiEvent) {
             when (event) {
                 is TrainerConnectUiEvent.OnRegenerateClick -> regenerateCode()
+                TrainerConnectUiEvent.OnNextClick -> navigateToNext()
+                TrainerConnectUiEvent.OnBackClick -> navigateToBack()
                 TrainerConnectUiEvent.OnSkipClick -> navigateToHome()
             }
         }
 
         private fun initProfile() {
-            // TODO 연결 완료 화면에 보여줄 프로필 정보 불러오기
+            // TODO 화면에 보여줄 프로필 정보 불러오기
             updateState {
                 copy(
                     trainerState = TrainerProfile(
@@ -36,7 +39,7 @@ internal class TrainerConnectViewModel @Inject constructor() :
                     traineeState = TraineeProfile(
                         name = "김회원",
                         image = "https://buly.kr/3j7VVqN",
-                        age = 24,
+                        age = 25,
                         weight = 165F,
                         height = 52F,
                         ptPurpose = "체중 감량, 자세 교정",
@@ -58,8 +61,28 @@ internal class TrainerConnectViewModel @Inject constructor() :
             updateState { copy(inviteCode = newCode) }
         }
 
-        fun navigateToBack() {
-            sendEffect(TrainerConnectSideEffect.NavigateToBack)
+        private fun navigateToNext() {
+            val nextPage = when (currentState.page) {
+                TrainerConnectPage.TraineeProfile -> {
+                    sendEffect(TrainerConnectSideEffect.NavigateToHome)
+                    return
+                }
+
+                else -> TrainerConnectPage.getNextPage(currentState.page)
+            }
+            updateState { copy(page = nextPage) }
+        }
+
+        private fun navigateToBack() {
+            val previousPage = when (currentState.page) {
+                TrainerConnectPage.TrainerConnectComplete -> {
+                    sendEffect(TrainerConnectSideEffect.NavigateToBack)
+                    return
+                }
+
+                else -> TrainerConnectPage.getPreviousPage(currentState.page)
+            }
+            updateState { copy(page = previousPage) }
         }
 
         private fun navigateToHome() {

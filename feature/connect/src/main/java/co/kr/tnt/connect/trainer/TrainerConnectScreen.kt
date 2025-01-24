@@ -21,7 +21,8 @@ internal fun TrainerConnectRoute(
     TrainerConnectScreen(
         state = state,
         onRegenerateClick = { viewModel.setEvent(TrainerConnectUiEvent.OnRegenerateClick) },
-        onBackClick = { viewModel.navigateToBack() },
+        onBackClick = { viewModel.setEvent(TrainerConnectUiEvent.OnBackClick) },
+        onNextClick = { viewModel.setEvent(TrainerConnectUiEvent.OnNextClick) },
         onSkipClick = { viewModel.setEvent(TrainerConnectUiEvent.OnSkipClick) },
     )
 
@@ -40,6 +41,7 @@ private fun TrainerConnectScreen(
     state: TrainerConnectUiState,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
     onSkipClick: () -> Unit,
 ) {
     when (state.page) {
@@ -52,7 +54,12 @@ private fun TrainerConnectScreen(
         TrainerConnectPage.TrainerConnectComplete -> TrainerConnectCompleteScreen(
             state = state,
             onBackClick = onBackClick,
-            onNextClick = onSkipClick,
+            onNextClick = onNextClick,
+        )
+
+        TrainerConnectPage.TraineeProfile -> TraineeProfileScreen(
+            state = state,
+            onNextClick = onNextClick,
         )
     }
 }

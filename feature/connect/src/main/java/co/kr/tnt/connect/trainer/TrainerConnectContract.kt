@@ -6,7 +6,7 @@ import co.kr.tnt.ui.base.UiState
 
 internal class TrainerConnectContract {
     data class TrainerConnectUiState(
-        val page: TrainerConnectPage = TrainerConnectPage.CodeGeneration,
+        val page: TrainerConnectPage = TrainerConnectPage.TrainerConnectComplete,
         val inviteCode: String? = "",
         val trainerState: TrainerProfile = TrainerProfile(),
         val traineeState: TraineeProfile = TraineeProfile(),
@@ -14,6 +14,8 @@ internal class TrainerConnectContract {
 
     sealed interface TrainerConnectUiEvent : UiEvent {
         data object OnRegenerateClick : TrainerConnectUiEvent
+        data object OnNextClick : TrainerConnectUiEvent
+        data object OnBackClick : TrainerConnectUiEvent
         data object OnSkipClick : TrainerConnectUiEvent
     }
 
@@ -24,6 +26,25 @@ internal class TrainerConnectContract {
 
     enum class TrainerConnectPage {
         CodeGeneration,
+
         TrainerConnectComplete,
+        TraineeProfile,
+        ;
+
+        companion object {
+            fun getPreviousPage(currentPage: TrainerConnectPage): TrainerConnectPage {
+                return when (currentPage) {
+                    TraineeProfile -> TrainerConnectComplete
+                    else -> throw IllegalStateException("No previous page defined for $currentPage")
+                }
+            }
+
+            fun getNextPage(currentPage: TrainerConnectPage): TrainerConnectPage {
+                return when (currentPage) {
+                    TrainerConnectComplete -> TraineeProfile
+                    else -> throw IllegalStateException("No previous page defined for $currentPage")
+                }
+            }
+        }
     }
 }

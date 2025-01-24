@@ -1,5 +1,6 @@
 package co.kr.tnt.connect.trainer
 
+import TrainerConnectContract.TrainerConnectUiState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,17 +33,11 @@ import co.kr.tnt.feature.connect.R
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun TraineeProfileScreen(
+internal fun TraineeProfileScreen(
+    state: TrainerConnectUiState,
     onNextClick: () -> Unit,
 ) {
-    // TODO 값 전달받기
-    val profileImage = "https://buly.kr/3j7VVqN"
-    val name = "김회원"
-    val age = "24"
-    val height = "168"
-    val weight = "52"
-    val purpose = "체중 감량, 자세 교정"
-    val caution = "발목이 안좋아서 발목에 무리가는 행동을 하면 안 돼요. 잘 부탁드려요!"
+    val trainee = state.traineeState
 
     Scaffold { innerPadding ->
         Image(
@@ -71,7 +66,7 @@ fun TraineeProfileScreen(
                         .background(TnTTheme.colors.commonColors.Common0)
                         .padding(horizontal = 20.dp, vertical = 32.dp),
                 ) {
-                    val painter = profileImage?.let { rememberAsyncImagePainter(it) }
+                    val painter = trainee.image?.let { rememberAsyncImagePainter(it) }
                     TnTProfileImage(
                         type = ProfileType.Trainee,
                         image = painter,
@@ -86,7 +81,7 @@ fun TraineeProfileScreen(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
-                            text = name,
+                            text = trainee.name,
                             style = TnTTheme.typography.h2,
                             color = TnTTheme.colors.neutralColors.Neutral950,
                         )
@@ -101,36 +96,35 @@ fun TraineeProfileScreen(
                     Row(modifier = Modifier.fillMaxWidth()) {
                         TextWithLabel(
                             label = stringResource(R.string.age_label),
-                            text = age + stringResource(R.string.age_unit),
+                            text = trainee.age.toString() + stringResource(R.string.age_unit),
                             modifier = Modifier.weight(1f),
                         )
                         TextWithLabel(
                             label = stringResource(R.string.height_label),
-                            text = height + stringResource(R.string.height_unit),
+                            text = trainee.height.toString() + stringResource(R.string.height_unit),
                             modifier = Modifier.weight(1f),
                         )
                         TextWithLabel(
                             label = stringResource(R.string.weight_label),
-                            text = weight + stringResource(R.string.weight_unit),
+                            text = trainee.weight.toString() + stringResource(R.string.weight_unit),
                             modifier = Modifier.weight(1f),
                         )
                     }
                     Spacer(Modifier.height(32.dp))
                     TextWithBackground(
                         label = stringResource(R.string.purpose_of_pt),
-                        text = purpose,
+                        text = trainee.ptPurpose,
                     )
                     Spacer(Modifier.height(32.dp))
                     TextWithBackground(
                         label = stringResource(R.string.caution),
-                        text = caution,
+                        text = trainee.caution,
                         modifier = Modifier.height(128.dp),
                     )
                 }
             }
             TnTBottomButton(
                 text = stringResource(R.string.start),
-                // TODO 홈으로 이동
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
@@ -196,6 +190,7 @@ private fun TextWithBackground(
 private fun TraineeProfileScreenPreview() {
     TnTTheme {
         TraineeProfileScreen(
+            state = TODO(),
             onNextClick = {},
         )
     }
