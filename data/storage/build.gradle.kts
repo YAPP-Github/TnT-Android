@@ -11,4 +11,6 @@ android {
 
 dependencies {
     implementation(projects.domain)
+
+    implementation(libs.androidx.datastore.preferences)
 }
