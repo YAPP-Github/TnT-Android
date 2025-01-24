@@ -46,6 +46,8 @@ dependencies {
     implementation(projects.feature.main)
     implementation(projects.domain)
     implementation(projects.data.network)
+    implementation(projects.data.storage)
+    implementation(projects.data.repository)
 
     implementation(libs.androidx.activity.compose)
 }

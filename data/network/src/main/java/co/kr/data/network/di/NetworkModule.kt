@@ -28,7 +28,7 @@ internal object NetworkModule {
         converterFactory: Converter.Factory,
     ): TnTService {
         return Retrofit.Builder()
-            .baseUrl("TODO") // TODO
+            .baseUrl("https://TODO") // TODO
             .addConverterFactory(converterFactory)
             .client(okHttpClient).build()
             .create(TnTService::class.java)
