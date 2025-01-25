@@ -1,4 +1,4 @@
-package co.kr.tnt.trainer.signup
+package co.kr.tnt.trainee.signup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,15 +19,15 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.feature.trainer.signup.R
+import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun TrainerProfileCompleteScreen(
+fun TraineeSignUpCompleteScreen(
     modifier: Modifier = Modifier,
 ) {
-    // TODO 이름, 프로필 이미지 불러오기
+    // TODO 이름, 프로필 사진 불러오기
     val name = "김헬짱"
     val profileImage = "https://buly.kr/7FQeS5M"
 
@@ -44,7 +44,7 @@ fun TrainerProfileCompleteScreen(
                 .padding(bottom = 66.dp),
         ) {
             Text(
-                text = stringResource(R.string.nice_to_meet_you_trainer, name),
+                text = stringResource(R.string.nice_to_meet_you_trainee, name),
                 color = TnTTheme.colors.neutralColors.Neutral950,
                 style = TnTTheme.typography.h1,
                 textAlign = Center,
@@ -52,20 +52,20 @@ fun TrainerProfileCompleteScreen(
             )
             Spacer(Modifier.padding(top = 10.dp))
             Text(
-                text = stringResource(R.string.chemistry_boom_with_trainee),
+                text = stringResource(R.string.chemistry_boom_with_trainer),
                 color = TnTTheme.colors.neutralColors.Neutral500,
                 style = TnTTheme.typography.body1Medium,
                 textAlign = Center,
             )
             Spacer(Modifier.padding(top = 28.dp))
             TnTProfileImage(
-                defaultImage = painterResource(DefaultUserProfile.Trainer.image),
+                defaultImage = painterResource(DefaultUserProfile.Trainee.image),
                 image = rememberAsyncImagePainter(profileImage),
                 imageSize = 200.dp,
                 showEditButton = false,
             )
         }
-        // TODO 연결코드 생성 화면으로 이동
+        // TODO 연결코드 입력 화면으로 이동
         TnTBottomButton(
             text = stringResource(R.string.start),
             onClick = { },
@@ -76,8 +76,8 @@ fun TrainerProfileCompleteScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun TrainerProfileCompleteScreenPreview() {
+private fun TraineeSignUpCompleteScreenPreview() {
     TnTTheme {
-        TrainerProfileCompleteScreen()
+        TraineeSignUpCompleteScreen()
     }
 }
