@@ -1,5 +1,6 @@
 package co.kr.data.network.di
 
+import co.kr.data.network.authenticator.Authenticator
 import co.kr.data.network.interceptor.SessionInterceptor
 import co.kr.data.network.service.TnTService
 import co.kr.tnt.data.network.BuildConfig
@@ -40,11 +41,13 @@ internal object NetworkModule {
     fun provideOkHttpClient(
         sessionInterceptor: SessionInterceptor,
         loggingInterceptor: HttpLoggingInterceptor,
+        authenticator: Authenticator,
     ): OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(TIME_OUT_SECONDS, TimeUnit.SECONDS)
         .readTimeout(TIME_OUT_SECONDS, TimeUnit.SECONDS)
         .addInterceptor(sessionInterceptor)
         .addInterceptor(loggingInterceptor)
+        .authenticator(authenticator)
         .build()
 
     @Provides
