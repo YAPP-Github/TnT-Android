@@ -1,6 +1,5 @@
 package co.kr.tnt.trainee.signup
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,13 +35,15 @@ private const val COLUMNS_NUM = 2
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TraineePTPurposeScreen() {
+fun TraineePTPurposeScreen(
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
+) {
     // TODO 리소스 id값 텍스트로 전환해 넘겨주기
     var selectedPurposes by remember { mutableStateOf(setOf<PTPurpose>()) }
 
     Scaffold(
-        // TODO 버튼 클릭 시 트레이니 기본 정보 입력 화면으로 이동
-        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = { onBackClick() }) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -75,10 +76,9 @@ fun TraineePTPurposeScreen() {
                     }
                 }
             }
-            // TODO PT 주의사항 입력 화면으로 이동
             TnTBottomButton(
                 text = stringResource(R.string.next),
-                onClick = { Log.d("check", "선택된 값들\n${selectedPurposes.map { it.name }}") },
+                onClick = { onNextClick() },
                 enabled = selectedPurposes.isNotEmpty(),
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
@@ -120,6 +120,9 @@ private fun toggleSelection(
 @Composable
 private fun TraineePTPurposeScreenPreview() {
     TnTTheme {
-        TraineePTPurposeScreen()
+        TraineePTPurposeScreen(
+            onBackClick = {},
+            onNextClick = {},
+        )
     }
 }

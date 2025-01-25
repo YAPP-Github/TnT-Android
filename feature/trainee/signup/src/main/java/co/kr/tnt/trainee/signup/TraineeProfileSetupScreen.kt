@@ -1,6 +1,7 @@
 package co.kr.tnt.trainee.signup
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
@@ -41,7 +42,12 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 
 @Composable
-fun TraineeProfileSetupScreen() {
+fun TraineeProfileSetupScreen(
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
+) {
+    BackHandler { onBackClick() }
+
     val context = LocalContext.current
 
     // TODO 상태 관리 따로 빼기
@@ -111,11 +117,10 @@ fun TraineeProfileSetupScreen() {
                     warningMessage = stringResource(R.string.text_length_warning, maxLength),
                 )
             }
-            // TODO 트레이니 기본 정보 입력 화면으로 이동
             TnTBottomButton(
                 text = stringResource(R.string.next),
                 enabled = text.isNotBlank() && !isWarning,
-                onClick = { },
+                onClick = { onNextClick() },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -133,6 +138,9 @@ private fun validateInput(input: String): String {
 @Composable
 private fun TraineeProfileSetupScreenPreview() {
     TnTTheme {
-        TraineeProfileSetupScreen()
+        TraineeProfileSetupScreen(
+            onBackClick = {},
+            onNextClick = {},
+        )
     }
 }

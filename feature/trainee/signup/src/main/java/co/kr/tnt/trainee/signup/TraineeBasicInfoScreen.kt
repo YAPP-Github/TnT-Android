@@ -44,7 +44,10 @@ private const val MAX_HEIGHT_LENGTH = 3
 private const val MAX_WEIGHT_LENGTH = 5
 
 @Composable
-fun TraineeBasicInfoScreen() {
+fun TraineeBasicInfoScreen(
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
+) {
     // TODO 상태 관리 따로 빼기
     val today = LocalDate.now()
     var height by remember { mutableStateOf("") }
@@ -57,8 +60,7 @@ fun TraineeBasicInfoScreen() {
     val isFormValid by remember { derivedStateOf { isHeightValid && isWeightValid } }
 
     Scaffold(
-        // TODO 버튼 클릭 시 트레이니 이름 입력 화면으로 이동
-        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = { onBackClick() }) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -131,12 +133,11 @@ fun TraineeBasicInfoScreen() {
                     )
                 }
             }
-            // TODO 트레이니 PT 목적 화면으로 이동
             TnTBottomButton(
                 text = stringResource(R.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
-                onClick = { },
+                onClick = { onNextClick() },
             )
         }
     }
@@ -223,6 +224,9 @@ private fun validateWeight(input: String): Boolean {
 @Composable
 private fun TraineeBasicInfoScreenPreview() {
     TnTTheme {
-        TraineeBasicInfoScreen()
+        TraineeBasicInfoScreen(
+            onBackClick = {},
+            onNextClick = {},
+        )
     }
 }

@@ -13,6 +13,12 @@ sealed interface Route {
     data object Login : Route
 
     @Serializable
+    data object TrainerSignUp : Route
+
+    @Serializable
+    data object TraineeSignUp : Route
+
+    @Serializable
     data object TrainerConnect : Route
 
     @Serializable

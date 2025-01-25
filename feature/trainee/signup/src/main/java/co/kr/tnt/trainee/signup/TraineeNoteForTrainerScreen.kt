@@ -29,13 +29,15 @@ import co.kr.tnt.trainee.signup.component.ProgressSteps
 private const val MAX_LENGTH = 100
 
 @Composable
-fun TraineeNoteForTrainerScreen() {
+fun TraineeNoteForTrainerScreen(
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
+) {
     // TODO 상태 관리 따로 빼기
     var text by remember { mutableStateOf("") }
 
     Scaffold(
-        // TODO 버튼 클릭 시 트레이니 PT 목적 화면으로 이동
-        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = { onBackClick() }) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -63,12 +65,11 @@ fun TraineeNoteForTrainerScreen() {
                     maxLength = 100,
                 )
             }
-            // TODO 트레이니 PT 목적 화면으로 이동
             TnTBottomButton(
                 text = stringResource(R.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = text.isNotBlank(),
-                onClick = { },
+                onClick = { onNextClick() },
             )
         }
     }
@@ -78,6 +79,9 @@ fun TraineeNoteForTrainerScreen() {
 @Composable
 private fun TraineeNoteForTrainerScreenPreview() {
     TnTTheme {
-        TraineeNoteForTrainerScreen()
+        TraineeNoteForTrainerScreen(
+            onBackClick = {},
+            onNextClick = {},
+        )
     }
 }

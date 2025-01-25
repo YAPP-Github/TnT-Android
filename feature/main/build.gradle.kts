@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.feature.login)
     implementation(projects.feature.trainer.connect)
     implementation(projects.feature.trainee.connect)
+    implementation(projects.feature.trainee.signup)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
