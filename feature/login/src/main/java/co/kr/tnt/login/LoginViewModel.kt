@@ -14,7 +14,17 @@ internal class LoginViewModel @Inject constructor() : BaseViewModel<LoginUiState
 ) {
     override suspend fun handleEvent(event: LoginUiEvent) {
         when (event) {
-            LoginUiEvent.OnClickKakaoLogin -> sendEffect(LoginSideEffect.ShowTermBottomSheet)
+            is LoginUiEvent.OnLoginSuccess -> {
+                sendEffect(LoginSideEffect.ShowTermBottomSheet)
+            }
+
+            is LoginUiEvent.OnLoginFail -> {
+                if (event.throwable !is LoginException.CancelException) {
+                    // TODO resource provider
+                    sendEffect(LoginSideEffect.ShowToast("로그인에 실패하였습니다. 다시 시도해주세요."))
+                }
+            }
+
             LoginUiEvent.OnCheckAllTermAgree -> checkAllTerms()
             is LoginUiEvent.OnCheckTerm -> checkTerm(event.termState)
             is LoginUiEvent.OnClickTermLink -> TODO()

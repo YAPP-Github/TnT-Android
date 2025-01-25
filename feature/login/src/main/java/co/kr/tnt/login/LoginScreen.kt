@@ -1,5 +1,6 @@
 package co.kr.tnt.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,11 +27,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +49,9 @@ import co.kr.tnt.feature.login.R
 import co.kr.tnt.login.LoginContract.LoginSideEffect
 import co.kr.tnt.login.LoginContract.LoginUiEvent
 import co.kr.tnt.login.LoginContract.LoginUiState
+import co.kr.tnt.login.kakao.KakaoLoginSdk
 import co.kr.tnt.login.model.TermState
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,13 +60,26 @@ internal fun LoginRoute(
     navigateToHome: () -> Unit,
     navigateToSignup: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
 
+    val kakaoLoginSdk = remember { KakaoLoginSdk() }
+
     LoginScreen(
         onClickKakaoLogin = {
-            viewModel.setEvent(LoginUiEvent.OnClickKakaoLogin)
+            coroutineScope.launch {
+                kakaoLoginSdk.login(context)
+                    .onSuccess { accessToken ->
+                        viewModel.setEvent(LoginUiEvent.OnLoginSuccess(accessToken))
+                    }
+                    .onFailure { throwable ->
+                        viewModel.setEvent(LoginUiEvent.OnLoginFail(throwable))
+                    }
+            }
         },
     )
 
@@ -87,6 +106,11 @@ internal fun LoginRoute(
                 LoginSideEffect.ShowTermBottomSheet -> {
                     showBottomSheet = true
                 }
+
+                is LoginSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+
                 LoginSideEffect.NavigateToHome -> navigateToHome()
                 LoginSideEffect.NavigateToSignup -> navigateToSignup()
             }

@@ -16,7 +16,8 @@ internal class LoginContract {
     }
 
     sealed interface LoginUiEvent : UiEvent {
-        data object OnClickKakaoLogin : LoginUiEvent
+        data class OnLoginSuccess(val accessToken: LoginAccessToken) : LoginUiEvent
+        data class OnLoginFail(val throwable: Throwable) : LoginUiEvent
         data object OnCheckAllTermAgree : LoginUiEvent
         data class OnCheckTerm(val termState: TermState) : LoginUiEvent
         data class OnClickTermLink(val link: String) : LoginUiEvent
@@ -25,6 +26,7 @@ internal class LoginContract {
 
     sealed interface LoginSideEffect : UiSideEffect {
         data object ShowTermBottomSheet : LoginSideEffect
+        data class ShowToast(val message: String) : LoginSideEffect
         data object NavigateToHome : LoginSideEffect
         data object NavigateToSignup : LoginSideEffect
     }
