@@ -235,6 +235,7 @@ fun TnTOutlinedTextField(
     placeholder: String? = stringResource(R.string.placeholder_content_input),
     maxLength: Int = 15,
     isError: Boolean = false,
+    warningMessage: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -291,14 +292,24 @@ fun TnTOutlinedTextField(
                 keyboardType = keyboardType,
             ),
         )
-        Text(
-            text = "${value.length}/$maxLength",
-            style = TnTTheme.typography.label2Medium,
-            color = counterColor,
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .align(Alignment.End),
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(vertical = 8.dp),
+        ) {
+            if (isError && !warningMessage.isNullOrEmpty()) {
+                Text(
+                    text = warningMessage,
+                    style = TnTTheme.typography.body2Medium,
+                    color = counterColor,
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "${value.length}/$maxLength",
+                style = TnTTheme.typography.label2Medium,
+                color = counterColor,
+            )
+        }
     }
 }
 
@@ -412,6 +423,7 @@ private fun TnTOutlinedTextFieldPreview() {
             onValueChange = { text = it },
             maxLength = maxLength,
             isError = warningState,
+            warningMessage = "에러",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
