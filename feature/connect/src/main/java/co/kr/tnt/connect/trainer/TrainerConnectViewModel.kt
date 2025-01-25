@@ -42,7 +42,7 @@ internal class TrainerConnectViewModel @Inject constructor() :
                         image = "https://buly.kr/3j7VVqN",
                         age = 25,
                         weight = 100F,
-                        height = 165F,
+                        height = 165,
                         ptPurpose = "체중 감량, 자세 교정",
                         caution = "발목이 안좋아서 발목에 무리가는 행동을 하면 안돼요. 잘 부탁드려요!",
                     ),

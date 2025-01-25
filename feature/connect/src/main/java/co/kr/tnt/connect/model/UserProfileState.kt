@@ -15,7 +15,7 @@ data class TraineeProfile(
     override val image: String? = "",
     val age: Int = 0,
     val weight: Float = 0f,
-    val height: Float = 0f,
+    val height: Int = 0,
     val ptPurpose: String = "",
     val caution: String = "",
 ) : UserProfile
