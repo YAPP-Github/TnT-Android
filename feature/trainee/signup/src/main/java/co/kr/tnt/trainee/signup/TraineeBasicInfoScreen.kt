@@ -40,8 +40,8 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-// 000.0 (점 포함 5자리)
-private const val MAX_LENGTH = 5
+private const val MAX_HEIGHT_LENGTH = 3
+private const val MAX_WEIGHT_LENGTH = 5
 
 @Composable
 fun TraineeBasicInfoScreen() {
@@ -51,8 +51,8 @@ fun TraineeBasicInfoScreen() {
     var weight by remember { mutableStateOf("") }
     var birthday by remember { mutableStateOf<LocalDate?>(null) }
 
-    val isHeightValid by remember { derivedStateOf { height.isNotEmpty() && validateInput(height) } }
-    val isWeightValid by remember { derivedStateOf { weight.isNotEmpty() && validateInput(weight) } }
+    val isHeightValid by remember { derivedStateOf { height.isNotEmpty() && validateHeight(height) } }
+    val isWeightValid by remember { derivedStateOf { weight.isNotEmpty() && validateWeight(weight) } }
 
     val isFormValid by remember { derivedStateOf { isHeightValid && isWeightValid } }
 
@@ -104,16 +104,14 @@ fun TraineeBasicInfoScreen() {
                         value = height,
                         placeholder = "0",
                         isSingleLine = true,
+                        showWarning = !validateHeight(height),
+                        warningMessage = stringResource(R.string.entered_wrong_number),
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
                             UnitLabel(R.string.height_unit)
                         },
-                        onValueChange = { newHeight ->
-                            if (validateInput(newHeight)) {
-                                height = newHeight
-                            }
-                        },
+                        onValueChange = { height = it },
                         modifier = Modifier.weight(1f),
                     )
                     TnTLabeledTextField(
@@ -121,16 +119,14 @@ fun TraineeBasicInfoScreen() {
                         value = weight,
                         placeholder = "00.0",
                         isSingleLine = true,
+                        showWarning = !validateWeight(weight),
+                        warningMessage = stringResource(R.string.entered_wrong_number),
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
                             UnitLabel(R.string.weight_unit)
                         },
-                        onValueChange = { newWeight ->
-                            if (validateInput(newWeight)) {
-                                weight = newWeight
-                            }
-                        },
+                        onValueChange = { weight = it },
                         modifier = Modifier.weight(1f),
                     )
                 }
@@ -207,11 +203,20 @@ private fun UnitLabel(stringResId: Int) {
 }
 
 /**
- * 유효한 입력값인지 검사 (정수 또는 실수 형식 확인)
- * 형식: 5자 이하의 정수 또는 실수
+ * 키가 유효한 입력값인지 검사
+ * 형식: 정수 3자
  */
-private fun validateInput(input: String): Boolean {
-    return input.isEmpty() || (input.toDoubleOrNull() != null && !input.startsWith("0") && input.length <= MAX_LENGTH)
+private fun validateHeight(input: String): Boolean {
+    return input.isEmpty() || input.toIntOrNull() != null && !input.startsWith("0") && input.length <= MAX_HEIGHT_LENGTH
+}
+
+/**
+ * 몸무게가 유효한 입력값인지 검사
+ * 형식: 5자 이하의 실수 (000, 00, 00.0, 000.0)
+ */
+private fun validateWeight(input: String): Boolean {
+    val weightRegex = Regex("^(\\d{1,3}(\\.\\d)?)?\$")
+    return input.isEmpty() || input.matches(weightRegex) && !input.startsWith("0") && input.length <= MAX_WEIGHT_LENGTH
 }
 
 @Preview(showBackground = true)
