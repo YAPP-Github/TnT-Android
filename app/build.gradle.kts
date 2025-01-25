@@ -1,8 +1,7 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 private val kakaoNativeAppKey: String =
-    gradleLocalProperties(rootDir, providers)
-        .getProperty("KAKAO_NATIVE_APP_KEY")
+    gradleLocalProperties(rootDir, providers).getProperty("KAKAO_NATIVE_APP_KEY")
 
 plugins {
     id("tnt.android.application")
@@ -22,8 +21,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", kakaoNativeAppKey)
-        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${kakaoNativeAppKey}\"")
     }
 
     buildTypes {

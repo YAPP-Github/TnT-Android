@@ -37,6 +37,7 @@ include(
     ":core:designsystem",
     ":core:navigation",
     ":core:ui",
+    ":core:login",
 )
 
 include(
