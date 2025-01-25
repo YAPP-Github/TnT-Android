@@ -1,5 +1,6 @@
 package co.kr.data.network.di
 
+import co.kr.data.network.interceptor.SessionInterceptor
 import co.kr.data.network.service.TnTService
 import co.kr.tnt.data.network.BuildConfig
 import dagger.Module
@@ -28,7 +29,7 @@ internal object NetworkModule {
         converterFactory: Converter.Factory,
     ): TnTService {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_API_URL) // TODO
+            .baseUrl(BuildConfig.BASE_API_URL)
             .addConverterFactory(converterFactory)
             .client(okHttpClient).build()
             .create(TnTService::class.java)
@@ -37,10 +38,12 @@ internal object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
+        sessionInterceptor: SessionInterceptor,
         loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(TIME_OUT_SECONDS, TimeUnit.SECONDS)
         .readTimeout(TIME_OUT_SECONDS, TimeUnit.SECONDS)
+        .addInterceptor(sessionInterceptor)
         .addInterceptor(loggingInterceptor)
         .build()
 
