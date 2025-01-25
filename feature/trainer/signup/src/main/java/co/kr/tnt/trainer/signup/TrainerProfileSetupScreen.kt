@@ -41,7 +41,10 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 
 @Composable
-fun TrainerProfileSetupScreen() {
+fun TrainerProfileSetupScreen(
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
+) {
     val context = LocalContext.current
 
     // TODO 상태 관리 따로 빼기
@@ -63,7 +66,7 @@ fun TrainerProfileSetupScreen() {
     )
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = {onBackClick()}) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -112,12 +115,11 @@ fun TrainerProfileSetupScreen() {
                     warningMessage = stringResource(R.string.text_length_warning, maxLength),
                 )
             }
-            // TODO 트레이너 프로필 생성 완료 화면으로 이동
             TnTBottomButton(
                 text = stringResource(R.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = text.isNotBlank() && !isWarning,
-                onClick = { },
+                onClick = { onNextClick() },
             )
         }
     }
@@ -134,6 +136,9 @@ private fun validateInput(input: String): String {
 @Composable
 private fun TrainerProfileSetupScreenPreview() {
     TnTTheme {
-        TrainerProfileSetupScreen()
+        TrainerProfileSetupScreen(
+            onBackClick = {},
+            onNextClick = {},
+        )
     }
 }

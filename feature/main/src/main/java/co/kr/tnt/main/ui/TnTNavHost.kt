@@ -11,6 +11,7 @@ import co.kr.tnt.login.navigation.loginScreen
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
+import co.kr.tnt.trainer.signup.navigation.trainerSignUpScreen
 
 @Composable
 fun TnTNavHost(
@@ -30,7 +31,12 @@ fun TnTNavHost(
                 navigateToHome = { },
                 navigateToSignup = { },
             )
+            // TODO connect로 이동하게 수정
             traineeSignUpScreen(
+                navigateToPrevious = { navController.popBackStack() },
+                navigateToHome = { navController.navigateToHome(false, clearBackStack = true) },
+            )
+            trainerSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
                 navigateToHome = { navController.navigateToHome(false, clearBackStack = true) },
             )
