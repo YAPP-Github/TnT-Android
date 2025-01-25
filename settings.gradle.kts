@@ -39,5 +39,7 @@ include(
     ":feature:roleselect",
     ":feature:connect",
     ":feature:trainer:signup",
+    ":feature:trainer:connect",
     ":feature:trainee:signup",
+    ":feature:trainee:connect",
 )
