@@ -31,11 +31,12 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.feature.connect.R
+import co.kr.tnt.feature.trainer.connect.R
 import coil.compose.rememberAsyncImagePainter
+import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
-internal fun TraineeProfileScreen(
+internal fun TraineeProfilePage(
     state: TrainerConnectUiState,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -46,7 +47,7 @@ internal fun TraineeProfileScreen(
 
     Scaffold { innerPadding ->
         Image(
-            painter = painterResource(R.drawable.img_connection_complete_background_3x),
+            painter = painterResource(uiResource.drawable.img_connection_complete_background_3x),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
@@ -93,7 +94,7 @@ internal fun TraineeProfileScreen(
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
-                            text = stringResource(R.string.trainee),
+                            text = stringResource(uiResource.string.trainee),
                             style = TnTTheme.typography.h4,
                             color = TnTTheme.colors.neutralColors.Neutral950,
                         )
@@ -101,18 +102,18 @@ internal fun TraineeProfileScreen(
                     Spacer(Modifier.height(32.dp))
                     Row(modifier = Modifier.fillMaxWidth()) {
                         TextWithLabel(
-                            label = stringResource(R.string.age_label),
-                            text = trainee.age.toString() + stringResource(R.string.age_unit),
+                            label = stringResource(uiResource.string.age_label),
+                            text = trainee.age.toString() + stringResource(uiResource.string.age_unit),
                             modifier = Modifier.weight(1f),
                         )
                         TextWithLabel(
-                            label = stringResource(R.string.height_label),
-                            text = trainee.height.toString() + stringResource(R.string.height_unit),
+                            label = stringResource(uiResource.string.height_label),
+                            text = trainee.height.toString() + stringResource(uiResource.string.height_unit),
                             modifier = Modifier.weight(1f),
                         )
                         TextWithLabel(
-                            label = stringResource(R.string.weight_label),
-                            text = trainee.weight.toString() + stringResource(R.string.weight_unit),
+                            label = stringResource(uiResource.string.weight_label),
+                            text = trainee.weight.toString() + stringResource(uiResource.string.weight_unit),
                             modifier = Modifier.weight(1f),
                         )
                     }
@@ -193,9 +194,9 @@ private fun TextWithBackground(
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineeProfileScreenPreview() {
+private fun TraineeProfilePagePreview() {
     TnTTheme {
-        TraineeProfileScreen(
+        TraineeProfilePage(
             state = TODO(),
             onNextClick = {},
             onBackClick = {},

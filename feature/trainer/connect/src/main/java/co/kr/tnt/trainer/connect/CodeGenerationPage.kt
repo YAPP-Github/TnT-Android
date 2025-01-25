@@ -36,10 +36,10 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.feature.connect.R
+import co.kr.tnt.feature.trainer.connect.R
 
 @Composable
-internal fun CodeGenerationScreen(
+internal fun CodeGenerationPage(
     state: TrainerConnectUiState,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -158,9 +158,9 @@ private fun copyToClipboard(context: Context, text: String) {
 
 @Preview(showBackground = true)
 @Composable
-private fun CodeGenerationScreenPreview() {
+private fun CodeGenerationPagePreview() {
     TnTTheme {
-        CodeGenerationScreen(
+        CodeGenerationPage(
             state = TODO(),
             onBackClick = {},
             onSkipClick = {},

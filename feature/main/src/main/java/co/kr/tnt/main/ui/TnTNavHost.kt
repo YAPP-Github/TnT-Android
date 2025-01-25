@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import co.kr.tnt.connect.navigation.traineeConnectScreen
-import co.kr.tnt.connect.navigation.trainerConnectScreen
 import co.kr.tnt.home.navigation.homeNavGraph
 import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
+import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
+import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
 
 @Composable
 fun TnTNavHost(

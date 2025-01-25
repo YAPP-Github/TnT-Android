@@ -1,6 +1,6 @@
-package co.kr.tnt.connect.trainer
+package co.kr.tnt.connect.trainee
 
-import TrainerConnectContract.TrainerConnectUiState
+import TraineeConnectContract.TraineeConnectUiState
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -29,12 +29,13 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.feature.connect.R
+import co.kr.tnt.feature.trainee.connect.R
 import coil.compose.rememberAsyncImagePainter
+import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
-internal fun TrainerConnectCompleteScreen(
-    state: TrainerConnectUiState,
+internal fun TraineeConnectCompletePage(
+    state: TraineeConnectUiState,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
@@ -42,7 +43,7 @@ internal fun TrainerConnectCompleteScreen(
 
     Scaffold { innerPadding ->
         Image(
-            painter = painterResource(R.drawable.img_connection_complete_background_3x),
+            painter = painterResource(uiResource.drawable.img_connection_complete_background_3x),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
@@ -60,7 +61,10 @@ internal fun TrainerConnectCompleteScreen(
                 ) {
                     Spacer(Modifier.weight(1f))
                     Text(
-                        stringResource(R.string.connected_with_trainee, state.traineeState.name),
+                        text = stringResource(
+                            R.string.connected_with_trainer,
+                            state.trainerState.name,
+                        ),
                         color = TnTTheme.colors.commonColors.Common0,
                         style = TnTTheme.typography.h1,
                         modifier = Modifier.padding(horizontal = 24.dp),
@@ -130,9 +134,9 @@ private fun ProfileSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun TrainerConnectCompleteScreenPreview() {
+private fun TraineeConnectCompletePagePreview() {
     TnTTheme {
-        TrainerConnectCompleteScreen(
+        TraineeConnectCompletePage(
             state = TODO(),
             onNextClick = {},
             onBackClick = {},

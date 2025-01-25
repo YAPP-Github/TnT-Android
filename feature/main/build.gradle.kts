@@ -11,7 +11,8 @@ android {
 dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.login)
-    implementation(projects.feature.connect)
+    implementation(projects.feature.trainer.connect)
+    implementation(projects.feature.trainee.connect)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

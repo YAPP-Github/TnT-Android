@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="connect">연결하기</string>
+    <string name="start">시작하기</string>
+    <string name="skip">건너뛰기</string>
+    <string name="next">다음</string>
+
+    <string name="invite_trainee_with_code">생성된 초대코드로\n트레이니가 로그인할 수 있어요</string>
+    <string name="my_invite_code">내 초대 코드</string>
+    <string name="code_reissue">코드 재발급</string>
+    <string name="code_is_copied">코드가 복사되었어요!</string>
+
+    <string name="connected_with_trainee">%s 트레이니와\n연결되었어요!</string>
+
+    <string name="trainee_who_will_be_with">함께할 트레이니는 이런 분이에요!</string>
+    <string name="purpose_of_pt">PT 목표</string>
+    <string name="caution">주의사항</string>
+</resources>

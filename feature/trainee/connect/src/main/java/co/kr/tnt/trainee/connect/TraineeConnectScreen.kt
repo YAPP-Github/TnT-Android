@@ -54,7 +54,7 @@ private fun TraineeConnectScreen(
     onSkipClick: () -> Unit,
 ) {
     when (state.page) {
-        TraineeConnectPage.CodeEntry -> CodeEntryScreen(
+        TraineeConnectPage.CodeEntry -> CodeEntryPage(
             state = state,
             onNextClick = onNextClick,
             onSkipClick = onSkipClick,
@@ -64,7 +64,7 @@ private fun TraineeConnectScreen(
             },
         )
 
-        TraineeConnectPage.PTSessionForm -> PTSessionFormScreen(
+        TraineeConnectPage.PTSessionForm -> PTSessionFormPage(
             state = state,
             onNextClick = { formData ->
                 onFormNextClick(formData)
@@ -72,7 +72,7 @@ private fun TraineeConnectScreen(
             onBackClick = onBackClick,
         )
 
-        TraineeConnectPage.TraineeConnectComplete -> TraineeConnectCompleteScreen(
+        TraineeConnectPage.TraineeConnectComplete -> TraineeConnectCompletePage(
             state = state,
             onNextClick = onNextClick,
             onBackClick = onBackClick,

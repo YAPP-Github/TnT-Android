@@ -45,20 +45,20 @@ private fun TrainerConnectScreen(
     onSkipClick: () -> Unit,
 ) {
     when (state.page) {
-        TrainerConnectPage.CodeGeneration -> CodeGenerationScreen(
+        TrainerConnectPage.CodeGeneration -> CodeGenerationPage(
             state = state,
             onRegenerateClick = onRegenerateClick,
             onBackClick = onBackClick,
             onSkipClick = onSkipClick,
         )
 
-        TrainerConnectPage.TrainerConnectComplete -> TrainerConnectCompleteScreen(
+        TrainerConnectPage.TrainerConnectComplete -> TrainerConnectCompletePage(
             state = state,
             onBackClick = onBackClick,
             onNextClick = onNextClick,
         )
 
-        TrainerConnectPage.TraineeProfile -> TraineeProfileScreen(
+        TrainerConnectPage.TraineeProfile -> TraineeProfilePage(
             state = state,
             onNextClick = onNextClick,
             onBackClick = onBackClick,

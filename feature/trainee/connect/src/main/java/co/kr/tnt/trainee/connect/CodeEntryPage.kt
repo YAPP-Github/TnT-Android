@@ -36,10 +36,10 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.feature.connect.R
+import co.kr.tnt.feature.trainee.connect.R
 
 @Composable
-internal fun CodeEntryScreen(
+internal fun CodeEntryPage(
     state: TraineeConnectUiState,
     onSkipClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -214,9 +214,9 @@ private fun CodeTextField(
 
 @Preview(showBackground = true)
 @Composable
-private fun CodeEntryScreenPreview() {
+private fun CodeEntryPagePreview() {
     TnTTheme {
-        CodeEntryScreen(
+        CodeEntryPage(
             onSkipClick = {},
             onNextClick = {},
             state = TODO(),

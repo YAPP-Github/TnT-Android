@@ -37,7 +37,7 @@ import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.feature.connect.R
+import co.kr.tnt.feature.trainee.connect.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -45,7 +45,7 @@ import java.util.Calendar
 private const val MAX_COUNT = 99
 
 @Composable
-internal fun PTSessionFormScreen(
+internal fun PTSessionFormPage(
     state: TraineeConnectUiState,
     onNextClick: (PTSessionFormData) -> Unit,
     onBackClick: () -> Unit,
@@ -252,9 +252,9 @@ private fun validateInput(input: String): Boolean {
 
 @Preview(showBackground = true)
 @Composable
-private fun PTSessionFormScreenPreview() {
+private fun PTSessionFormPagePreview() {
     TnTTheme {
-        PTSessionFormScreen(
+        PTSessionFormPage(
             onNextClick = {},
             onBackClick = {},
             state = TODO(),

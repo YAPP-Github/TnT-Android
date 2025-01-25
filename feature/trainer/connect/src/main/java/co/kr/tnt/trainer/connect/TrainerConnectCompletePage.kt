@@ -1,7 +1,6 @@
-package co.kr.tnt.connect.trainee
+package co.kr.tnt.connect.trainer
 
-import TraineeConnectContract.TraineeConnectUiState
-import android.util.Log
+import TrainerConnectContract.TrainerConnectUiState
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -30,21 +29,21 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.feature.connect.R
+import co.kr.tnt.feature.trainer.connect.R
 import coil.compose.rememberAsyncImagePainter
+import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
-internal fun TraineeConnectCompleteScreen(
-    state: TraineeConnectUiState,
+internal fun TrainerConnectCompletePage(
+    state: TrainerConnectUiState,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
-    Log.d("check", "${state.completedSession} ${state.totalSession} ${state.startDate}")
 
     Scaffold { innerPadding ->
         Image(
-            painter = painterResource(R.drawable.img_connection_complete_background_3x),
+            painter = painterResource(uiResource.drawable.img_connection_complete_background_3x),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
@@ -62,10 +61,7 @@ internal fun TraineeConnectCompleteScreen(
                 ) {
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = stringResource(
-                            R.string.connected_with_trainer,
-                            state.trainerState.name,
-                        ),
+                        stringResource(R.string.connected_with_trainee, state.traineeState.name),
                         color = TnTTheme.colors.commonColors.Common0,
                         style = TnTTheme.typography.h1,
                         modifier = Modifier.padding(horizontal = 24.dp),
@@ -84,7 +80,7 @@ internal fun TraineeConnectCompleteScreen(
                         )
                     }
                     Image(
-                        painter = painterResource(R.drawable.img_boom_3x),
+                        painter = painterResource(uiResource.drawable.img_boom_3x),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.width(320.dp),
@@ -135,9 +131,9 @@ private fun ProfileSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineeConnectCompleteScreenPreview() {
+private fun TrainerConnectCompletePagePreview() {
     TnTTheme {
-        TraineeConnectCompleteScreen(
+        TrainerConnectCompletePage(
             state = TODO(),
             onNextClick = {},
             onBackClick = {},
