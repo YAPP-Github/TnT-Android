@@ -70,7 +70,7 @@ fun TraineeProfileSetupPage(
     )
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = { onBackClick() }) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -120,7 +120,7 @@ fun TraineeProfileSetupPage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 enabled = text.isNotBlank() && !isWarning,
-                onClick = { onNextClick() },
+                onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }

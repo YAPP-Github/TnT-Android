@@ -70,7 +70,7 @@ fun TrainerProfileSetupPage(
     )
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = { onBackClick() }) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -122,7 +122,7 @@ fun TrainerProfileSetupPage(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = text.isNotBlank() && !isWarning,
-                onClick = { onNextClick() },
+                onClick = onNextClick,
             )
         }
     }

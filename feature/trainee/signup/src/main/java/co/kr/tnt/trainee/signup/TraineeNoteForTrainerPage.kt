@@ -41,7 +41,7 @@ fun TraineeNoteForTrainerPage(
     var text by remember { mutableStateOf("") }
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = { onBackClick() }) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -72,7 +72,7 @@ fun TraineeNoteForTrainerPage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
-                onClick = { onNextClick() },
+                onClick = onNextClick,
             )
         }
     }

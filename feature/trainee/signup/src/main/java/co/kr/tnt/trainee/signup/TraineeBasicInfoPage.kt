@@ -64,7 +64,7 @@ fun TraineeBasicInfoPage(
     val isFormValid by remember { derivedStateOf { isHeightValid && isWeightValid } }
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = { onBackClick() }) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -141,7 +141,7 @@ fun TraineeBasicInfoPage(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
-                onClick = { onNextClick() },
+                onClick = onNextClick,
             )
         }
     }

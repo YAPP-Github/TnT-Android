@@ -77,7 +77,7 @@ fun TraineeSignUpCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
-                onClick = { onNextClick() },
+                onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }

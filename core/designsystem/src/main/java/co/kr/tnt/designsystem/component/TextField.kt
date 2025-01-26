@@ -296,9 +296,9 @@ fun TnTOutlinedTextField(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(vertical = 8.dp),
         ) {
-            if (isError && !warningMessage.isNullOrEmpty()) {
+            if (isError && warningMessage.isNullOrEmpty().not()) {
                 Text(
-                    text = warningMessage,
+                    text = warningMessage ?: "",
                     style = TnTTheme.typography.body2Medium,
                     color = counterColor,
                 )

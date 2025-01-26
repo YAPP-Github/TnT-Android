@@ -47,7 +47,7 @@ fun TraineePTPurposePage(
     var selectedPurposes by remember { mutableStateOf(setOf<PTPurpose>()) }
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = { onBackClick() }) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -82,7 +82,7 @@ fun TraineePTPurposePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
-                onClick = { onNextClick() },
+                onClick = onNextClick,
                 enabled = selectedPurposes.isNotEmpty(),
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
