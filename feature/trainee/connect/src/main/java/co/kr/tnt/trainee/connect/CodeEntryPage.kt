@@ -27,7 +27,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
 import co.kr.tnt.trainee.connect.component.CodeTextField
-import co.kr.tnt.trainee.connect.component.InputState.VALID
+import co.kr.tnt.trainee.connect.model.InputState.VALID
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable

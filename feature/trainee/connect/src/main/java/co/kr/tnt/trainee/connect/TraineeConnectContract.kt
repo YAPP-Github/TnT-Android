@@ -1,7 +1,7 @@
 package co.kr.tnt.trainee.connect
 
 import co.kr.tnt.domain.model.UserType
-import co.kr.tnt.trainee.connect.component.InputState
+import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect

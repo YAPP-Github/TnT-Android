@@ -26,17 +26,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
-import co.kr.tnt.trainee.connect.component.InputState.FOCUS
-import co.kr.tnt.trainee.connect.component.InputState.INVALID
-import co.kr.tnt.trainee.connect.component.InputState.UNFOCUSED
-import co.kr.tnt.trainee.connect.component.InputState.VALID
-
-enum class InputState {
-    UNFOCUSED,
-    FOCUS,
-    VALID,
-    INVALID,
-}
+import co.kr.tnt.trainee.connect.model.InputState
+import co.kr.tnt.trainee.connect.model.InputState.FOCUS
+import co.kr.tnt.trainee.connect.model.InputState.INVALID
+import co.kr.tnt.trainee.connect.model.InputState.UNFOCUSED
+import co.kr.tnt.trainee.connect.model.InputState.VALID
 
 @Composable
 fun CodeTextField(
