@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="next_time">다음에 할게요</string>
+
+    <string name="enter_invite_code_from_trainer">트레이너에게 받은\n초대 코드를 입력해 주세요</string>
+    <string name="not_connected_warning">트레이너와 연결하지 않을 경우\n일부 기능이 제한될 수 있어요.</string>
+    <string name="enter_the_code">코드를 입력해주세요</string>
+    <string name="verification">인증하기</string>
+    <string name="verification_fail">인증에 실패했어요</string>
+    <string name="verification_success">인증되었어요</string>
+
+    <string name="invite_trainee_with_code">생성된 초대코드로\n트레이니가 로그인할 수 있어요</string>
+    <string name="my_invite_code">내 초대 코드</string>
+    <string name="code_reissue">코드 재발급</string>
+    <string name="code_is_copied">코드가 복사되었어요!</string>
+
+    <string name="add_pt_info">수업 정보 추가</string>
+    <string name="since_when_with_trainer">%s 트레이너와\n언제부터 함께하셨나요?</string>
+    <string name="pt_start_day">PT 시작일</string>
+    <string name="completed_session_until_now">현재 완료된 회차</string>
+    <string name="total_register_session">총 등록 회차</string>
+    <string name="birthday_placeholder">2000/00/00</string>
+    <string name="count_unit">회</string>
+
+    <string name="connected_with_trainer">%s 트레이너와\n연결되었어요!</string>
+
+</resources>

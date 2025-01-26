@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 
 val FILL_STRONG = Color(0x2970737C)
 
-// Main color
+// Red color
 val Red_950 = Color(0xFF450A0A)
 val Red_900 = Color(0xFF7F1D1D)
 val Red_800 = Color(0xFF991B1B)
@@ -30,6 +30,7 @@ val Green_400 = Color(0xFF49E57D)
 val Green_300 = Color(0xFF7DF5A5)
 val Green_200 = Color(0xFFACFCC7)
 val Green_100 = Color(0xFFD9FFE6)
+val Green_50 = Color(0xFFF2FFF6)
 
 // Orange Color
 val Orange_950 = Color(0xFF361E00)
@@ -128,7 +129,7 @@ val Common_0 = Color(0xFFFFFFFF)
 
 @Immutable
 data class TnTColors(
-    val mainColors: MainColors,
+    val redColors: RedColors,
     val greenColors: GreenColors,
     val orangeColors: OrangeColors,
     val limeColors: LimeColors,
@@ -141,7 +142,7 @@ data class TnTColors(
 )
 
 @Immutable
-data class MainColors(
+data class RedColors(
     val Red950: Color,
     val Red900: Color,
     val Red800: Color,
@@ -167,6 +168,7 @@ data class GreenColors(
     val Green300: Color,
     val Green200: Color,
     val Green100: Color,
+    val Green50: Color,
 )
 
 @Immutable
@@ -282,7 +284,7 @@ data class CommonColors(
 
 val LocalColors = staticCompositionLocalOf {
     TnTColors(
-        mainColors = MainColors(
+        redColors = RedColors(
             Red950 = Red_950,
             Red900 = Red_900,
             Red800 = Red_800,
@@ -306,6 +308,7 @@ val LocalColors = staticCompositionLocalOf {
             Green300 = Green_300,
             Green200 = Green_200,
             Green100 = Green_100,
+            Green50 = Green_50,
         ),
         orangeColors = OrangeColors(
             Orange950 = Orange_950,
