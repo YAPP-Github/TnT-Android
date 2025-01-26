@@ -69,7 +69,6 @@ fun TraineeNoteForTrainerPage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
-                enabled = text.isNotBlank(),
                 onClick = { onNextClick() },
             )
         }
