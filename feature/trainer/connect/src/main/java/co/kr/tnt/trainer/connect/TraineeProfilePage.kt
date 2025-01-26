@@ -129,7 +129,7 @@ internal fun TraineeProfilePage(
                     if (!trainee.caution.isNullOrEmpty()) {
                         TextWithBackground(
                             label = stringResource(R.string.caution),
-                            text = trainee.caution!!,
+                            text = trainee.caution ?: "",
                             modifier = Modifier.height(128.dp),
                         )
                     }
