@@ -58,7 +58,8 @@ internal fun TraineeProfilePage(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 66.dp),
+                    .padding(bottom = 66.dp)
+                    .padding(horizontal = 40.dp),
             ) {
                 Text(
                     text = stringResource(R.string.trainee_who_will_be_with),
@@ -71,8 +72,7 @@ internal fun TraineeProfilePage(
                         .wrapContentSize()
                         .clip(RoundedCornerShape(20.dp))
                         .background(TnTTheme.colors.commonColors.Common0)
-                        .padding(horizontal = 20.dp, vertical = 32.dp)
-                        .width(260.dp),
+                        .padding(horizontal = 20.dp, vertical = 32.dp),
                 ) {
                     val painter = trainee.image?.let { rememberAsyncImagePainter(it) }
                     val defaultImage = painterResource(DefaultUserProfile.Trainee.image)
@@ -102,21 +102,22 @@ internal fun TraineeProfilePage(
                         )
                     }
                     Spacer(Modifier.height(32.dp))
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
                         TextWithLabel(
                             label = stringResource(uiResource.string.age_label),
                             text = trainee.age.toString() + stringResource(uiResource.string.age_unit),
-                            modifier = Modifier.weight(1f),
                         )
                         TextWithLabel(
                             label = stringResource(uiResource.string.height_label),
                             text = trainee.height.toString() + stringResource(uiResource.string.height_unit),
-                            modifier = Modifier.weight(1f),
                         )
+                        val formattedWeight = trainee.weight.toString().removeSuffix(".0")
                         TextWithLabel(
                             label = stringResource(uiResource.string.weight_label),
-                            text = trainee.weight.toString() + stringResource(uiResource.string.weight_unit),
-                            modifier = Modifier.weight(1f),
+                            text = formattedWeight + stringResource(uiResource.string.weight_unit),
                         )
                     }
                     Spacer(Modifier.height(32.dp))
@@ -147,18 +148,14 @@ internal fun TraineeProfilePage(
 private fun TextWithLabel(
     label: String,
     text: String,
-    modifier: Modifier,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier,
-    ) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = label,
             style = TnTTheme.typography.body1Bold,
             color = TnTTheme.colors.neutralColors.Neutral950,
         )
-        Spacer(Modifier.width(12.dp))
+        Spacer(Modifier.width(10.dp))
         Text(
             text = text,
             style = TnTTheme.typography.body2Medium,
