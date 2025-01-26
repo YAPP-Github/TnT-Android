@@ -1,6 +1,7 @@
 package co.kr.tnt.trainee.connect
 
 import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.trainee.connect.component.InputState
 import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
@@ -11,7 +12,7 @@ internal class TraineeConnectContract {
     data class TraineeConnectUiState(
         val page: TraineeConnectPage = TraineeConnectPage.CodeEntry,
         val inviteCode: String = "",
-        val isCodeValid: Boolean? = null,
+        val isCodeValid: InputState? = null,
         val completedSession: Int = 0,
         val totalSession: Int = 0,
         val selectedStartDate: LocalDate = LocalDate.now(),
@@ -24,7 +25,7 @@ internal class TraineeConnectContract {
         data class UpdateTrainerProfile(val profile: UserType.Trainer) : TraineeConnectUiEvent
         data class UpdateTraineeProfile(val profile: UserType.Trainee) : TraineeConnectUiEvent
         data class OnCodeValidateClick(val code: String) : TraineeConnectUiEvent
-        data object OnCodeChanged : TraineeConnectUiEvent
+        data class OnCodeChanged(val code: String) : TraineeConnectUiEvent
         data object OnNextClick : TraineeConnectUiEvent
         data object OnBackClick : TraineeConnectUiEvent
         data object OnSkipClick : TraineeConnectUiEvent

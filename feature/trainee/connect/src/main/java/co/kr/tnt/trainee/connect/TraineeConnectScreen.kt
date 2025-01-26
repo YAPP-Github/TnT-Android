@@ -27,7 +27,9 @@ internal fun TraineeConnectRoute(
         onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnBackClick) },
         onNextClick = { viewModel.setEvent(TraineeConnectUiEvent.OnNextClick) },
         onSkipClick = { viewModel.setEvent(TraineeConnectUiEvent.OnSkipClick) },
-        onCodeChanged = { viewModel.setEvent(TraineeConnectUiEvent.OnCodeChanged) },
+        onCodeChanged = { code ->
+            viewModel.setEvent(TraineeConnectUiEvent.OnCodeChanged(code))
+        },
         onCodeValidationClick = { code ->
             viewModel.setEvent(TraineeConnectUiEvent.OnCodeValidateClick(code))
         },
@@ -38,7 +40,6 @@ internal fun TraineeConnectRoute(
             when (effect) {
                 TraineeConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TraineeConnectSideEffect.NavigateToHome -> navigateToHome(false)
-                else -> {}
             }
         }
     }
@@ -48,7 +49,7 @@ internal fun TraineeConnectRoute(
 private fun TraineeConnectScreen(
     state: TraineeConnectUiState,
     onCodeValidationClick: (String) -> Unit,
-    onCodeChanged: () -> Unit,
+    onCodeChanged: (String) -> Unit,
     onFormNextClick: (PTSessionFormData) -> Unit,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -59,7 +60,9 @@ private fun TraineeConnectScreen(
             state = state,
             onNextClick = onNextClick,
             onSkipClick = onSkipClick,
-            onCodeChanged = onCodeChanged,
+            onCodeChanged = { code ->
+                onCodeChanged(code)
+            },
             onValidateClick = { code ->
                 onCodeValidationClick(code)
             },
