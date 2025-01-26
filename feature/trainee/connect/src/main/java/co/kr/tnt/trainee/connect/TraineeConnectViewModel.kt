@@ -1,12 +1,11 @@
-package co.kr.tnt.connect.trainee
+package co.kr.tnt.trainee.connect
 
-import TraineeConnectContract.TraineeConnectPage
-import TraineeConnectContract.TraineeConnectSideEffect
-import TraineeConnectContract.TraineeConnectUiEvent
-import TraineeConnectContract.TraineeConnectUiState
-import co.kr.tnt.connect.model.PTSessionFormData
-import co.kr.tnt.connect.model.TraineeProfile
-import co.kr.tnt.connect.model.TrainerProfile
+import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
+import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -30,6 +29,7 @@ internal class TraineeConnectViewModel @Inject constructor() :
                 TraineeConnectUiEvent.OnBackClick -> navigateToBack()
                 TraineeConnectUiEvent.OnNextClick -> navigateToNext()
                 TraineeConnectUiEvent.OnSkipClick -> navigateToHome()
+                else -> {}
             }
         }
 
@@ -37,13 +37,20 @@ internal class TraineeConnectViewModel @Inject constructor() :
             // TODO 연결 완료 화면에 보여줄 프로필 정보 불러오기
             updateState {
                 copy(
-                    trainerState = TrainerProfile(
+                    trainerState = UserType.Trainer(
+                        id = "trainer",
                         name = "김헬짱",
                         image = null,
                     ),
-                    traineeState = TraineeProfile(
+                    traineeState = UserType.Trainee(
+                        id = "trainee",
                         name = "김회원",
                         image = "https://buly.kr/3j7VVqN",
+                        age = 25,
+                        weight = 100F,
+                        height = 165,
+                        ptPurpose = listOf("체중 감량", "자세 교정"),
+                        caution = "발목이 안좋아서 발목에 무리가는 행동을 하면 안돼요. 잘 부탁드려요!",
                     ),
                 )
             }
@@ -64,17 +71,17 @@ internal class TraineeConnectViewModel @Inject constructor() :
                 copy(
                     completedSession = data.completedSession,
                     totalSession = data.totalSession,
-                    startDate = data.startDate,
+                    selectedStartDate = data.selectedStartDate,
                 )
             }
             navigateToNext()
         }
 
-        private fun updateTrainerProfile(profile: TrainerProfile) {
+        private fun updateTrainerProfile(profile: UserType.Trainer) {
             updateState { copy(trainerState = profile) }
         }
 
-        private fun updateTraineeProfile(profile: TraineeProfile) {
+        private fun updateTraineeProfile(profile: UserType.Trainee) {
             updateState { copy(traineeState = profile) }
         }
 

@@ -1,6 +1,5 @@
-package co.kr.tnt.connect.trainer
+package co.kr.tnt.trainer.connect
 
-import TrainerConnectContract.TrainerConnectUiState
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,6 +31,7 @@ import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainer.connect.R
+import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 import coil.compose.rememberAsyncImagePainter
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -120,14 +120,16 @@ internal fun TraineeProfilePage(
                     Spacer(Modifier.height(32.dp))
                     TextWithBackground(
                         label = stringResource(R.string.purpose_of_pt),
-                        text = trainee.ptPurpose,
+                        text = trainee.ptPurpose.toString(),
                     )
                     Spacer(Modifier.height(32.dp))
-                    TextWithBackground(
-                        label = stringResource(R.string.caution),
-                        text = trainee.caution,
-                        modifier = Modifier.height(128.dp),
-                    )
+                    if (!trainee.caution.isNullOrEmpty()) {
+                        TextWithBackground(
+                            label = stringResource(R.string.caution),
+                            text = trainee.caution!!,
+                            modifier = Modifier.height(128.dp),
+                        )
+                    }
                 }
             }
             TnTBottomButton(

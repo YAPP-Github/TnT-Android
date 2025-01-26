@@ -1,6 +1,7 @@
-import co.kr.tnt.connect.model.PTSessionFormData
-import co.kr.tnt.connect.model.TraineeProfile
-import co.kr.tnt.connect.model.TrainerProfile
+package co.kr.tnt.trainee.connect
+
+import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -13,15 +14,15 @@ internal class TraineeConnectContract {
         val isCodeValid: Boolean? = null,
         val completedSession: Int = 0,
         val totalSession: Int = 0,
-        val startDate: LocalDate? = null,
-        val trainerState: TrainerProfile = TrainerProfile(),
-        val traineeState: TraineeProfile = TraineeProfile(),
+        val selectedStartDate: LocalDate = LocalDate.now(),
+        val trainerState: UserType.Trainer = UserType.Trainer(),
+        val traineeState: UserType.Trainee = UserType.Trainee(),
     ) : UiState
 
     sealed interface TraineeConnectUiEvent : UiEvent {
         data class UpdatePTSessionData(val data: PTSessionFormData) : TraineeConnectUiEvent
-        data class UpdateTrainerProfile(val profile: TrainerProfile) : TraineeConnectUiEvent
-        data class UpdateTraineeProfile(val profile: TraineeProfile) : TraineeConnectUiEvent
+        data class UpdateTrainerProfile(val profile: UserType.Trainer) : TraineeConnectUiEvent
+        data class UpdateTraineeProfile(val profile: UserType.Trainee) : TraineeConnectUiEvent
         data class OnCodeValidateClick(val code: String) : TraineeConnectUiEvent
         data object OnCodeChanged : TraineeConnectUiEvent
         data object OnNextClick : TraineeConnectUiEvent

@@ -1,6 +1,5 @@
-package co.kr.tnt.connect.trainer
+package co.kr.tnt.trainer.connect
 
-import TrainerConnectContract.TrainerConnectUiState
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -37,6 +36,7 @@ import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainer.connect.R
+import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable

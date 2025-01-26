@@ -1,6 +1,5 @@
-package co.kr.tnt.connect.trainee
+package co.kr.tnt.trainee.connect
 
-import TraineeConnectContract.TraineeConnectUiState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -37,6 +36,7 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable

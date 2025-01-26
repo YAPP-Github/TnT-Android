@@ -6,19 +6,19 @@ sealed class UserType {
     abstract val image: String?
 
     data class Trainer(
-        override val id: String,
-        override val name: String,
+        override val id: String = "",
+        override val name: String = "",
         override val image: String? = null,
     ) : UserType()
 
     data class Trainee(
-        override val id: String,
-        override val name: String,
+        override val id: String = "",
+        override val name: String = "",
         override val image: String? = null,
-        val age: Int,
-        val weight: Float,
-        val height: Int,
-        val ptPurpose: List<String>,
+        val age: Int = 0,
+        val weight: Float = 0f,
+        val height: Int = 0,
+        val ptPurpose: List<String> = emptyList(),
         val caution: String? = null,
     ) : UserType()
 }

@@ -1,14 +1,14 @@
-package co.kr.tnt.connect.trainer
+package co.kr.tnt.trainer.connect
 
-import TrainerConnectContract.TrainerConnectPage
-import TrainerConnectContract.TrainerConnectSideEffect
-import TrainerConnectContract.TrainerConnectUiEvent
-import TrainerConnectContract.TrainerConnectUiState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectPage
+import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectSideEffect
+import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiEvent
+import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 
 @Composable
 internal fun TrainerConnectRoute(
@@ -31,6 +31,7 @@ internal fun TrainerConnectRoute(
             when (effect) {
                 TrainerConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerConnectSideEffect.NavigateToHome -> navigateToHome(true)
+                else -> {}
             }
         }
     }

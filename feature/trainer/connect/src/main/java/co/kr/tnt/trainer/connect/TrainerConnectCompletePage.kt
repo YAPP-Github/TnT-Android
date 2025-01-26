@@ -1,6 +1,5 @@
-package co.kr.tnt.connect.trainer
+package co.kr.tnt.trainer.connect
 
-import TrainerConnectContract.TrainerConnectUiState
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -23,13 +22,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.connect.model.TrainerProfile
-import co.kr.tnt.connect.model.UserProfile
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.trainer.connect.R
+import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 import coil.compose.rememberAsyncImagePainter
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -99,11 +98,11 @@ internal fun TrainerConnectCompletePage(
 
 @Composable
 private fun ProfileSection(
-    profile: UserProfile,
+    profile: UserType,
     modifier: Modifier = Modifier,
 ) {
     val painter = profile.image?.let { rememberAsyncImagePainter(it) }
-    val userType = if (profile is TrainerProfile) {
+    val userType = if (profile is UserType.Trainer) {
         ProfileType.Trainer
     } else {
         ProfileType.Trainee

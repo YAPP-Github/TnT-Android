@@ -1,15 +1,15 @@
-package co.kr.tnt.connect.trainee
+package co.kr.tnt.trainee.connect
 
-import TraineeConnectContract.TraineeConnectPage
-import TraineeConnectContract.TraineeConnectSideEffect
-import TraineeConnectContract.TraineeConnectUiEvent
-import TraineeConnectContract.TraineeConnectUiState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.tnt.connect.model.PTSessionFormData
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
+import co.kr.tnt.trainee.connect.model.PTSessionFormData
 
 @Composable
 internal fun TraineeConnectRoute(
@@ -38,6 +38,7 @@ internal fun TraineeConnectRoute(
             when (effect) {
                 TraineeConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TraineeConnectSideEffect.NavigateToHome -> navigateToHome(false)
+                else -> {}
             }
         }
     }

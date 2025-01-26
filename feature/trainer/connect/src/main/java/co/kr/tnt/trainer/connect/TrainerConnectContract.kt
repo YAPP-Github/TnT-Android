@@ -1,5 +1,6 @@
-import co.kr.tnt.connect.model.TraineeProfile
-import co.kr.tnt.connect.model.TrainerProfile
+package co.kr.tnt.trainer.connect
+
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -8,8 +9,8 @@ internal class TrainerConnectContract {
     data class TrainerConnectUiState(
         val page: TrainerConnectPage = TrainerConnectPage.TrainerConnectComplete,
         val inviteCode: String = "",
-        val trainerState: TrainerProfile = TrainerProfile(),
-        val traineeState: TraineeProfile = TraineeProfile(),
+        val trainerState: UserType.Trainer = UserType.Trainer(),
+        val traineeState: UserType.Trainee = UserType.Trainee(),
     ) : UiState
 
     sealed interface TrainerConnectUiEvent : UiEvent {
