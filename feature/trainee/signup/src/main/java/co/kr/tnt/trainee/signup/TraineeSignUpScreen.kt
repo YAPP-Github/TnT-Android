@@ -41,23 +41,23 @@ private fun TraineeSignUpScreen(
     onBackClick: () -> Unit,
 ) {
     when (state.page) {
-        TraineeSignUpPage.ProfileSetUp -> TraineeProfileSetupScreen(
+        TraineeSignUpPage.ProfileSetUp -> TraineeProfileSetupPage(
             onBackClick = onBackClick,
             onNextClick = onNextClick,
         )
-        TraineeSignUpPage.BasicInfo -> TraineeBasicInfoScreen(
+        TraineeSignUpPage.BasicInfo -> TraineeBasicInfoPage(
             onBackClick = onBackClick,
             onNextClick = onNextClick,
         )
-        TraineeSignUpPage.NoteForTrainer -> TraineeNoteForTrainerScreen(
+        TraineeSignUpPage.NoteForTrainer -> TraineeNoteForTrainerPage(
             onBackClick = onBackClick,
             onNextClick = onNextClick,
         )
-        TraineeSignUpPage.PTPurpose -> TraineePTPurposeScreen(
+        TraineeSignUpPage.PTPurpose -> TraineePTPurposePage(
             onBackClick = onBackClick,
             onNextClick = onNextClick,
         )
-        TraineeSignUpPage.SignUpComplete -> TraineeSignUpCompleteScreen(
+        TraineeSignUpPage.SignUpComplete -> TraineeSignUpCompletePage(
             onBackClick = onBackClick,
             onNextClick = onNextClick,
         )

@@ -30,7 +30,7 @@ import co.kr.tnt.core.ui.R as uiResource
 private const val MAX_LENGTH = 100
 
 @Composable
-fun TraineeNoteForTrainerScreen(
+fun TraineeNoteForTrainerPage(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
@@ -78,9 +78,9 @@ fun TraineeNoteForTrainerScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineeNoteForTrainerScreenPreview() {
+private fun TraineeNoteForTrainerPagePreview() {
     TnTTheme {
-        TraineeNoteForTrainerScreen(
+        TraineeNoteForTrainerPage(
             onBackClick = {},
             onNextClick = {},
         )

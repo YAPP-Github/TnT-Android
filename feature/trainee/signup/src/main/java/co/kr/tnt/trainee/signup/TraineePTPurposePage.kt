@@ -36,7 +36,7 @@ private const val COLUMNS_NUM = 2
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TraineePTPurposeScreen(
+fun TraineePTPurposePage(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
@@ -119,9 +119,9 @@ private fun toggleSelection(
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineePTPurposeScreenPreview() {
+private fun TraineePTPurposePagePreview() {
     TnTTheme {
-        TraineePTPurposeScreen(
+        TraineePTPurposePage(
             onBackClick = {},
             onNextClick = {},
         )

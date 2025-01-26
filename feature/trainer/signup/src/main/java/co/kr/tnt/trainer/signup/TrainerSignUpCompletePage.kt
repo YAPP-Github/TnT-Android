@@ -1,4 +1,4 @@
-package co.kr.tnt.trainee.signup
+package co.kr.tnt.trainer.signup
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -21,19 +21,19 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.feature.trainee.signup.R
+import co.kr.tnt.feature.trainer.signup.R
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
-fun TraineeSignUpCompleteScreen(
+fun TrainerSignUpCompletePage(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
 
-    // TODO 이름, 프로필 사진 불러오기
+    // TODO 이름, 프로필 이미지 불러오기
     val name = "김헬짱"
     val profileImage = "https://buly.kr/7FQeS5M"
 
@@ -54,7 +54,7 @@ fun TraineeSignUpCompleteScreen(
                     .padding(bottom = 66.dp),
             ) {
                 Text(
-                    text = stringResource(R.string.nice_to_meet_you_trainee, name),
+                    text = stringResource(R.string.nice_to_meet_you_trainer, name),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h1,
                     textAlign = Center,
@@ -62,14 +62,14 @@ fun TraineeSignUpCompleteScreen(
                 )
                 Spacer(Modifier.padding(top = 10.dp))
                 Text(
-                    text = stringResource(R.string.chemistry_boom_with_trainer),
+                    text = stringResource(R.string.chemistry_boom_with_trainee),
                     color = TnTTheme.colors.neutralColors.Neutral500,
                     style = TnTTheme.typography.body1Medium,
                     textAlign = Center,
                 )
                 Spacer(Modifier.padding(top = 28.dp))
                 TnTProfileImage(
-                    defaultImage = painterResource(DefaultUserProfile.Trainee.image),
+                    defaultImage = painterResource(DefaultUserProfile.Trainer.image),
                     image = rememberAsyncImagePainter(profileImage),
                     imageSize = 200.dp,
                     showEditButton = false,
@@ -86,9 +86,9 @@ fun TraineeSignUpCompleteScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineeSignUpCompleteScreenPreview() {
+private fun TrainerSignUpCompletePagePreview() {
     TnTTheme {
-        TraineeSignUpCompleteScreen(
+        TrainerSignUpCompletePage(
             onBackClick = {},
             onNextClick = {},
         )

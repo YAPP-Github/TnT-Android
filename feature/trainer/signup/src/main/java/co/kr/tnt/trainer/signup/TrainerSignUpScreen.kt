@@ -39,11 +39,11 @@ private fun TrainerSignUpScreen(
     onBackClick: () -> Unit,
 ) {
     when (state.page) {
-        TrainerSignUpContract.TrainerSignUpPage.ProfileSetUp -> TrainerProfileSetupScreen(
+        TrainerSignUpContract.TrainerSignUpPage.ProfileSetUp -> TrainerProfileSetupPage(
             onNextClick = onNextClick,
             onBackClick = onBackClick,
         )
-        TrainerSignUpContract.TrainerSignUpPage.SignUpComplete -> TrainerSignUpCompleteScreen(
+        TrainerSignUpContract.TrainerSignUpPage.SignUpComplete -> TrainerSignUpCompletePage(
             onNextClick = onNextClick,
             onBackClick = onBackClick,
         )

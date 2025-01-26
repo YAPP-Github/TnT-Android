@@ -1,6 +1,7 @@
-package co.kr.tnt.trainer.signup
+package co.kr.tnt.trainee.signup
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -34,7 +34,8 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
-import co.kr.tnt.feature.trainer.signup.R
+import co.kr.tnt.feature.trainee.signup.R
+import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
@@ -42,10 +43,12 @@ import coil.request.ImageRequest
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
-fun TrainerProfileSetupScreen(
+fun TraineeProfileSetupPage(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
+    BackHandler { onBackClick() }
+
     val context = LocalContext.current
 
     // TODO 상태 관리 따로 빼기
@@ -77,18 +80,17 @@ fun TrainerProfileSetupScreen(
                     .imePadding()
                     .verticalScroll(rememberScrollState()),
             ) {
-                Text(
-                    text = stringResource(R.string.what_is_your_name),
-                    modifier = Modifier.padding(start = 24.dp),
-                    color = TnTTheme.colors.neutralColors.Neutral950,
-                    style = TnTTheme.typography.h2,
+                ProgressSteps(
+                    currentStep = 1,
+                    totalSteps = 4,
+                    title = stringResource(R.string.what_is_your_name),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 TnTProfileImage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 12.dp),
-                    defaultImage = painterResource(DefaultUserProfile.Trainer.image),
+                    defaultImage = painterResource(DefaultUserProfile.Trainee.image),
                     image = profileImage?.let { painter },
                     onEditClick = {
                         pickMediaLauncher.launch(
@@ -107,7 +109,7 @@ fun TrainerProfileSetupScreen(
                         text = filteredText
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    placeholder = stringResource(R.string.name_placeholder),
+                    placeholder = stringResource(R.string.enter_your_name),
                     maxLength = maxLength,
                     isSingleLine = true,
                     showWarning = isWarning,
@@ -117,9 +119,9 @@ fun TrainerProfileSetupScreen(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
-                modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = text.isNotBlank() && !isWarning,
                 onClick = { onNextClick() },
+                modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
     }
@@ -134,9 +136,9 @@ private fun validateInput(input: String): String {
 
 @Preview(showBackground = true)
 @Composable
-private fun TrainerProfileSetupScreenPreview() {
+private fun TraineeProfileSetupPagePreview() {
     TnTTheme {
-        TrainerProfileSetupScreen(
+        TraineeProfileSetupPage(
             onBackClick = {},
             onNextClick = {},
         )

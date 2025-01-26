@@ -45,7 +45,7 @@ private const val MAX_HEIGHT_LENGTH = 3
 private const val MAX_WEIGHT_LENGTH = 5
 
 @Composable
-fun TraineeBasicInfoScreen(
+fun TraineeBasicInfoPage(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
@@ -223,9 +223,9 @@ private fun validateWeight(input: String): Boolean {
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineeBasicInfoScreenPreview() {
+private fun TraineeBasicInfoPagePreview() {
     TnTTheme {
-        TraineeBasicInfoScreen(
+        TraineeBasicInfoPage(
             onBackClick = {},
             onNextClick = {},
         )
