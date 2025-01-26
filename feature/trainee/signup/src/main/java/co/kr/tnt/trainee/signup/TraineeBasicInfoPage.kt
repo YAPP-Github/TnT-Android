@@ -1,6 +1,7 @@
 package co.kr.tnt.trainee.signup
 
 import android.app.DatePickerDialog
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,6 +50,8 @@ fun TraineeBasicInfoPage(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
+    BackHandler { onBackClick() }
+
     // TODO 상태 관리 따로 빼기
     val today = LocalDate.now()
     var height by remember { mutableStateOf("") }

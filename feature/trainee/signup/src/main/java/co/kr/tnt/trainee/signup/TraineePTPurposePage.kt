@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.signup
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,8 @@ fun TraineePTPurposePage(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
+    BackHandler { onBackClick() }
+
     // TODO 리소스 id값 텍스트로 전환해 넘겨주기
     var selectedPurposes by remember { mutableStateOf(setOf<PTPurpose>()) }
 

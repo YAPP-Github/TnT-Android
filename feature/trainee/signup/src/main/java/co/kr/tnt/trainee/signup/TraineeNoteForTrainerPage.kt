@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.signup
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +35,8 @@ fun TraineeNoteForTrainerPage(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
+    BackHandler { onBackClick() }
+
     // TODO 상태 관리 따로 빼기
     var text by remember { mutableStateOf("") }
 

@@ -1,6 +1,7 @@
 package co.kr.tnt.trainer.signup
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
@@ -46,6 +47,8 @@ fun TrainerProfileSetupPage(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
+    BackHandler { onBackClick() }
+
     val context = LocalContext.current
 
     // TODO 상태 관리 따로 빼기
