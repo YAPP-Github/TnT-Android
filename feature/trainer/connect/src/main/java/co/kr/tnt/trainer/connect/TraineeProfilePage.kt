@@ -54,10 +54,11 @@ internal fun TraineeProfilePage(
         )
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(vertical = 24.dp),
+                    .padding(bottom = 66.dp),
             ) {
                 Text(
                     text = stringResource(R.string.trainee_who_will_be_with),
@@ -120,7 +121,7 @@ internal fun TraineeProfilePage(
                     Spacer(Modifier.height(32.dp))
                     TextWithBackground(
                         label = stringResource(R.string.purpose_of_pt),
-                        text = trainee.ptPurpose.toString(),
+                        text = trainee.ptPurpose.joinToString(", "),
                     )
                     Spacer(Modifier.height(32.dp))
                     if (!trainee.caution.isNullOrEmpty()) {
