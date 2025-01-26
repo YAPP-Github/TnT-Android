@@ -17,14 +17,14 @@ fun NavController.navigateToTrainerSignUp(
 
 fun NavGraphBuilder.trainerSignUpScreen(
     navigateToPrevious: () -> Unit,
-    navigateToHome: (Boolean) -> Unit,
+    navigateToConnect: () -> Unit,
 ) {
     composable<Route.TrainerSignUp> { backstackEntry ->
         backstackEntry.toRoute<Route.TrainerSignUp>().apply {
             // TODO 115 머지되면 connect로 이동
             TrainerSignUpRoute(
                 navigateToPrevious = navigateToPrevious,
-                navigateToConnect = { navigateToHome(true) },
+                navigateToConnect = { navigateToConnect() },
             )
         }
     }

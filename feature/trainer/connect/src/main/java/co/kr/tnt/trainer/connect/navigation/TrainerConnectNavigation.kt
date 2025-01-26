@@ -8,10 +8,11 @@ import androidx.navigation.toRoute
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.connect.TrainerConnectRoute
 
-fun NavController.navigateToConnect(
+fun NavController.navigateToTrainerConnect(
+    isFromMyPage: Boolean,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.TrainerConnect,
+    route = Route.TrainerConnect(isFromMyPage),
     builder = navOptions,
 )
 
@@ -22,6 +23,7 @@ fun NavGraphBuilder.trainerConnectScreen(
     composable<Route.TrainerConnect> { backstackEntry ->
         backstackEntry.toRoute<Route.TrainerConnect>().apply {
             TrainerConnectRoute(
+                isFromMyPage = isFromMyPage,
                 navigateToPrevious = navigateToPrevious,
                 navigateToHome = { navigateToHome(true) },
             )

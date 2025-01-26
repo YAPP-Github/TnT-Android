@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.TnTToast
 import co.kr.tnt.designsystem.component.TnTTopBar
+import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
@@ -42,30 +43,44 @@ import co.kr.tnt.core.ui.R as uiResource
 @Composable
 internal fun CodeGenerationPage(
     state: TrainerConnectUiState,
+    isFromMyPage: Boolean,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
     onSkipClick: () -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler {
+        if (isFromMyPage) {
+            onBackClick()
+        } else {
+            onSkipClick()
+        }
+    }
 
     val context = LocalContext.current
     var showToast by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
-            TnTTopBar(
-                title = stringResource(uiResource.string.connect),
-                trailingComponent = {
-                    Text(
-                        text = stringResource(uiResource.string.skip),
-                        color = TnTTheme.colors.neutralColors.Neutral400,
-                        style = TnTTheme.typography.body2Medium,
-                        modifier = Modifier.clickable {
-                            onSkipClick()
-                        },
-                    )
-                },
-            )
+            if (isFromMyPage) {
+                TnTTopBarWithBackButton(
+                    title = stringResource(uiResource.string.connect),
+                    onBackClick = onBackClick,
+                )
+            } else {
+                TnTTopBar(
+                    title = stringResource(uiResource.string.connect),
+                    trailingComponent = {
+                        Text(
+                            text = stringResource(uiResource.string.skip),
+                            color = TnTTheme.colors.neutralColors.Neutral400,
+                            style = TnTTheme.typography.body2Medium,
+                            modifier = Modifier.clickable {
+                                onSkipClick()
+                            },
+                        )
+                    },
+                )
+            }
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
@@ -166,6 +181,7 @@ private fun CodeGenerationPagePreview() {
             onBackClick = {},
             onSkipClick = {},
             onRegenerateClick = {},
+            isFromMyPage = false,
         )
     }
 }

@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.connect
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,16 +11,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.designsystem.component.TnTPopupDialog
 import co.kr.tnt.designsystem.component.TnTTopBar
+import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
@@ -33,28 +32,43 @@ import co.kr.tnt.core.ui.R as uiResource
 @Composable
 internal fun CodeEntryPage(
     state: TraineeConnectUiState,
+    isFromMyPage: Boolean,
     onSkipClick: () -> Unit,
+    onBackClick: () -> Unit,
     onNextClick: () -> Unit,
     onCodeChanged: (String) -> Unit,
     onValidateClick: (String) -> Unit,
 ) {
-    var showDialog by rememberSaveable { mutableStateOf(true) }
+    BackHandler {
+        if (isFromMyPage) {
+            onBackClick()
+        } else {
+            onSkipClick()
+        }
+    }
 
     Scaffold(
         topBar = {
-            TnTTopBar(
-                title = stringResource(uiResource.string.connect),
-                trailingComponent = {
-                    Text(
-                        text = stringResource(uiResource.string.skip),
-                        color = TnTTheme.colors.neutralColors.Neutral400,
-                        style = TnTTheme.typography.body2Medium,
-                        modifier = Modifier.clickable {
-                            onSkipClick()
-                        },
-                    )
-                },
-            )
+            if (isFromMyPage) {
+                TnTTopBarWithBackButton(
+                    title = stringResource(uiResource.string.connect),
+                    onBackClick = onBackClick,
+                )
+            } else {
+                TnTTopBar(
+                    title = stringResource(uiResource.string.connect),
+                    trailingComponent = {
+                        Text(
+                            text = stringResource(uiResource.string.skip),
+                            color = TnTTheme.colors.neutralColors.Neutral400,
+                            style = TnTTheme.typography.body2Medium,
+                            modifier = Modifier.clickable {
+                                onSkipClick()
+                            },
+                        )
+                    },
+                )
+            }
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
@@ -89,20 +103,6 @@ internal fun CodeEntryPage(
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
-        if (showDialog) {
-            TnTPopupDialog(
-                title = stringResource(R.string.enter_invite_code_from_trainer),
-                content = stringResource(R.string.not_connected_warning),
-                leftButtonText = stringResource(R.string.next_time),
-                rightButtonText = stringResource(uiResource.string.ok),
-                onLeftButtonClick = {
-                    showDialog = false
-                    onSkipClick()
-                },
-                onRightButtonClick = { showDialog = false },
-                onDismiss = { showDialog = false },
-            )
-        }
     }
 }
 
@@ -111,11 +111,13 @@ internal fun CodeEntryPage(
 private fun CodeEntryPagePreview() {
     TnTTheme {
         CodeEntryPage(
+            isFromMyPage = false,
             onSkipClick = {},
             onNextClick = {},
             state = TODO(),
             onValidateClick = {},
             onCodeChanged = TODO(),
+            onBackClick = {},
         )
     }
 }

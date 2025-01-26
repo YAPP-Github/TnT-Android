@@ -8,8 +8,10 @@ import androidx.navigation.compose.NavHost
 import co.kr.tnt.home.navigation.homeNavGraph
 import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
-import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
+import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
+import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
+import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
 import co.kr.tnt.trainer.signup.navigation.trainerSignUpScreen
 
@@ -31,14 +33,13 @@ fun TnTNavHost(
                 navigateToHome = { },
                 navigateToSignup = { },
             )
-            // TODO connect로 이동하게 수정
-            traineeSignUpScreen(
-                navigateToPrevious = { navController.popBackStack() },
-                navigateToHome = { navController.navigateToHome(false, clearBackStack = true) },
-            )
             trainerSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
-                navigateToHome = { navController.navigateToHome(false, clearBackStack = true) },
+                navigateToConnect = { navController.navigateToTrainerConnect(isFromMyPage = false) },
+            )
+            traineeSignUpScreen(
+                navigateToPrevious = { navController.popBackStack() },
+                navigateToConnect = { navController.navigateToTraineeConnect(isFromMyPage = false) },
             )
             trainerConnectScreen(
                 navigateToPrevious = { navController.popBackStack() },
