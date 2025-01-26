@@ -24,11 +24,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
-import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
+import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -105,11 +105,7 @@ private fun ProfileSection(
     modifier: Modifier = Modifier,
 ) {
     val painter = profile.image?.let { rememberAsyncImagePainter(it) }
-    val userType = if (profile is UserType.Trainer) {
-        ProfileType.Trainer
-    } else {
-        ProfileType.Trainee
-    }
+    val defaultImage = painterResource(DefaultUserProfile.fromDomain(profile).image)
 
     Column(
         modifier = modifier,
@@ -117,7 +113,7 @@ private fun ProfileSection(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         TnTProfileImage(
-            type = userType,
+            defaultImage = defaultImage,
             image = painter,
             imageSize = 100.dp,
             showEditButton = false,

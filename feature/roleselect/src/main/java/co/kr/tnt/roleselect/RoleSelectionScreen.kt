@@ -36,7 +36,7 @@ fun RoleSelectionScreen(
     onRoleSelected: (UserType) -> Unit = {},
     onNextClick: () -> Unit = {},
 ) {
-    var selectedRole by remember { mutableStateOf(RoleState.fromDomain(UserType.Trainer("", ""))) }
+    var selectedRole by remember { mutableStateOf(RoleState.fromDomain(UserType.Trainer())) }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(

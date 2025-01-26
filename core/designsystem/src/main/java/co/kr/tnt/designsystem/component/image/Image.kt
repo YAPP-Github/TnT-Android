@@ -20,21 +20,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.designsystem.R
-import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun TnTProfileImage(
-    type: ProfileType,
+    defaultImage: Painter,
     modifier: Modifier = Modifier,
     image: Painter? = null,
     imageSize: Dp = 132.dp,
     showEditButton: Boolean = true,
     onEditClick: () -> Unit = {},
 ) {
-    val defaultImage = painterResource(type.defaultImage)
-
     Box(
         modifier = modifier.wrapContentSize(),
         contentAlignment = Alignment.Center,
@@ -69,7 +66,7 @@ fun TnTProfileImage(
 private fun TnTProfileImageDefaultImagePreview() {
     TnTTheme {
         TnTProfileImage(
-            type = ProfileType.Trainer,
+            defaultImage = rememberAsyncImagePainter("https://buly.kr/G3CZDjx"),
             modifier = Modifier.fillMaxWidth(),
             onEditClick = {},
         )
@@ -81,7 +78,7 @@ private fun TnTProfileImageDefaultImagePreview() {
 private fun TnTProfileImageCustomImagePreview() {
     TnTTheme {
         TnTProfileImage(
-            type = ProfileType.Trainer,
+            defaultImage = rememberAsyncImagePainter("https://buly.kr/8ekk1Ud"),
             image = rememberAsyncImagePainter("https://buly.kr/7FQeS5M"),
             modifier = Modifier.fillMaxWidth(),
         )

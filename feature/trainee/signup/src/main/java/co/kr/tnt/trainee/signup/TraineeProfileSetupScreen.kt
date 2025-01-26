@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,11 +28,11 @@ import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
-import co.kr.tnt.designsystem.component.image.model.ProfileType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.ui.extensions.moveToAppSetting
+import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.permission.PermissionRequestDialog
 import co.kr.tnt.ui.permission.TnTPermission
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -72,7 +73,7 @@ fun TraineeProfileSetupScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 12.dp),
-                    type = ProfileType.Trainee,
+                    defaultImage = painterResource(DefaultUserProfile.Trainee.image),
                     onEditClick = onEditClick@{
                         if (TnTPermission.MEDIA_ACCESS.isRequireGranted(mediaPermissions)) {
                             // TODO 이미지 피커 이동

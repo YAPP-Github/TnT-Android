@@ -12,6 +12,7 @@ android {
 
 dependencies {
     implementation(projects.core.designsystem)
+    implementation(projects.domain)
 
     implementation(libs.accompanist.permissions)
 }
