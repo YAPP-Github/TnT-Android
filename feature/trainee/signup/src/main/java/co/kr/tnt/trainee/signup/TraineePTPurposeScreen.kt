@@ -29,6 +29,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.trainee.signup.model.PTPurpose
+import co.kr.tnt.core.ui.R as uiResource
 
 private const val ROW_NUM = 3
 private const val COLUMNS_NUM = 2
@@ -77,7 +78,7 @@ fun TraineePTPurposeScreen(
                 }
             }
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 onClick = { onNextClick() },
                 enabled = selectedPurposes.isNotEmpty(),
                 modifier = Modifier.align(Alignment.BottomCenter),

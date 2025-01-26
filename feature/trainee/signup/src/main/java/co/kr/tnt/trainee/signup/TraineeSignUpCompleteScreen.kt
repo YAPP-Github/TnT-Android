@@ -24,6 +24,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
+import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 fun TraineeSignUpCompleteScreen(
@@ -75,7 +76,7 @@ fun TraineeSignUpCompleteScreen(
                 )
             }
             TnTBottomButton(
-                text = stringResource(R.string.start),
+                text = stringResource(uiResource.string.start),
                 onClick = { onNextClick() },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )

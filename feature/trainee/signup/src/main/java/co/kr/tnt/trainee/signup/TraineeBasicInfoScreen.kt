@@ -39,6 +39,7 @@ import co.kr.tnt.trainee.signup.component.ProgressSteps
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import co.kr.tnt.core.ui.R as uiResource
 
 private const val MAX_HEIGHT_LENGTH = 3
 private const val MAX_WEIGHT_LENGTH = 5
@@ -78,7 +79,7 @@ fun TraineeBasicInfoScreen(
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 Text(
-                    text = stringResource(R.string.birthday_placeholder),
+                    text = stringResource(R.string.birthday_label),
                     color = TnTTheme.colors.neutralColors.Neutral900,
                     style = TnTTheme.typography.body1Bold,
                     modifier = Modifier.padding(start = 20.dp, bottom = 8.dp),
@@ -102,7 +103,7 @@ fun TraineeBasicInfoScreen(
                         .padding(horizontal = 20.dp),
                 ) {
                     TnTLabeledTextField(
-                        title = stringResource(R.string.height_label),
+                        title = stringResource(uiResource.string.height_label),
                         value = height,
                         placeholder = "0",
                         isSingleLine = true,
@@ -111,13 +112,13 @@ fun TraineeBasicInfoScreen(
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
-                            UnitLabel(R.string.height_unit)
+                            UnitLabel(uiResource.string.height_unit)
                         },
                         onValueChange = { height = it },
                         modifier = Modifier.weight(1f),
                     )
                     TnTLabeledTextField(
-                        title = stringResource(R.string.weight_label),
+                        title = stringResource(uiResource.string.weight_label),
                         value = weight,
                         placeholder = "00.0",
                         isSingleLine = true,
@@ -126,7 +127,7 @@ fun TraineeBasicInfoScreen(
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
-                            UnitLabel(R.string.weight_unit)
+                            UnitLabel(uiResource.string.weight_unit)
                         },
                         onValueChange = { weight = it },
                         modifier = Modifier.weight(1f),
@@ -134,7 +135,7 @@ fun TraineeBasicInfoScreen(
                 }
             }
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
                 onClick = { onNextClick() },

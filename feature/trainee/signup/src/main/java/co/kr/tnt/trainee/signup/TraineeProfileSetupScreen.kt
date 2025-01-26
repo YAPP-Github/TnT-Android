@@ -40,6 +40,7 @@ import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 fun TraineeProfileSetupScreen(
@@ -69,8 +70,7 @@ fun TraineeProfileSetupScreen(
     )
 
     Scaffold(
-        // TODO 버튼 클릭 시 트레이너/트레이니 화면으로 이동
-        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = { onBackClick() }) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -102,7 +102,7 @@ fun TraineeProfileSetupScreen(
                 )
                 Spacer(Modifier.padding(top = 60.dp))
                 TnTLabeledTextFieldWithCounter(
-                    title = stringResource(R.string.name),
+                    title = stringResource(uiResource.string.name),
                     value = text,
                     onValueChange = { newValue ->
                         val filteredText = validateInput(newValue)
@@ -118,7 +118,7 @@ fun TraineeProfileSetupScreen(
                 )
             }
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 enabled = text.isNotBlank() && !isWarning,
                 onClick = { onNextClick() },
                 modifier = Modifier.align(Alignment.BottomCenter),

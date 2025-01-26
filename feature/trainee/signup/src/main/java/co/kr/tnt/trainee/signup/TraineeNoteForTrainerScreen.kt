@@ -25,6 +25,7 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.component.ProgressSteps
+import co.kr.tnt.core.ui.R as uiResource
 
 private const val MAX_LENGTH = 100
 
@@ -66,7 +67,7 @@ fun TraineeNoteForTrainerScreen(
                 )
             }
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = text.isNotBlank(),
                 onClick = { onNextClick() },
