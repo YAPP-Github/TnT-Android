@@ -2,7 +2,7 @@ package co.kr.data.network.di
 
 import co.kr.data.network.authenticator.Authenticator
 import co.kr.data.network.interceptor.SessionInterceptor
-import co.kr.data.network.service.TnTService
+import co.kr.data.network.service.ApiService
 import co.kr.tnt.data.network.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -25,15 +25,15 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTnTService(
+    fun provideApiService(
         okHttpClient: OkHttpClient,
         converterFactory: Converter.Factory,
-    ): TnTService {
+    ): ApiService {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_API_URL)
             .addConverterFactory(converterFactory)
             .client(okHttpClient).build()
-            .create(TnTService::class.java)
+            .create(ApiService::class.java)
     }
 
     @Provides
@@ -61,6 +61,7 @@ internal object NetworkModule {
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
         coerceInputValues = true
+        encodeDefaults = true
     }
 
     @Provides

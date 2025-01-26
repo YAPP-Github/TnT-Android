@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SessionDataSource @Inject constructor(
+class SessionLocalDataSource @Inject constructor(
     private val sessionPreferences: DataStore<Preferences>,
 ) {
     val sessionId: Flow<String> = sessionPreferences.data.map { preferences ->
