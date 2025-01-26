@@ -7,18 +7,26 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import co.kr.tnt.domain.monitor.SessionMonitor
 import co.kr.tnt.navigation.Route
 
 @Composable
 fun rememberTnTAppState(
+    sessionMonitor: SessionMonitor,
     navController: NavHostController = rememberNavController(),
 ): TnTAppState {
-    return remember { TnTAppState(navController) }
+    return remember {
+        TnTAppState(
+            sessionMonitor,
+            navController,
+        )
+    }
 }
 
 @Stable
 @Suppress("UnusedPrivateProperty")
 class TnTAppState(
+    val sessionMonitor: SessionMonitor,
     val navController: NavHostController,
 ) {
     private val currentDestination: NavDestination?

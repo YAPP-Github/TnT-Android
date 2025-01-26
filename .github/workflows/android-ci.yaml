@@ -15,6 +15,11 @@ jobs:
           distribution: zulu
           cache: gradle
 
+      - name: add local.properties
+        run: |
+          echo RELEASE_BASE_API_URL=\"${{ secrets.RELEASE_BASE_API_URL }}\" >> ./local.properties
+          echo DEBUG_BASE_API_URL=\"${{ secrets.DEBUG_BASE_API_URL }}\" >> ./local.properties
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
