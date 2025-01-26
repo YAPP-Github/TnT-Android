@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.signup
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,17 +26,22 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.component.ProgressSteps
+import co.kr.tnt.core.ui.R as uiResource
 
 private const val MAX_LENGTH = 100
 
 @Composable
-fun TraineeNoteForTrainerScreen() {
+fun TraineeNoteForTrainerPage(
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
+) {
+    BackHandler { onBackClick() }
+
     // TODO 상태 관리 따로 빼기
     var text by remember { mutableStateOf("") }
 
     Scaffold(
-        // TODO 버튼 클릭 시 트레이니 PT 목적 화면으로 이동
-        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -63,12 +69,10 @@ fun TraineeNoteForTrainerScreen() {
                     maxLength = 100,
                 )
             }
-            // TODO 트레이니 PT 목적 화면으로 이동
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
-                enabled = text.isNotBlank(),
-                onClick = { },
+                onClick = onNextClick,
             )
         }
     }
@@ -76,8 +80,11 @@ fun TraineeNoteForTrainerScreen() {
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineeNoteForTrainerScreenPreview() {
+private fun TraineeNoteForTrainerPagePreview() {
     TnTTheme {
-        TraineeNoteForTrainerScreen()
+        TraineeNoteForTrainerPage(
+            onBackClick = {},
+            onNextClick = {},
+        )
     }
 }

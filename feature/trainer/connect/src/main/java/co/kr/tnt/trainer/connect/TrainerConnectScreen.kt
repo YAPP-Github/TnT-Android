@@ -12,6 +12,7 @@ import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 
 @Composable
 internal fun TrainerConnectRoute(
+    isFromMyPage: Boolean,
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerConnectViewModel = hiltViewModel(),
@@ -20,6 +21,7 @@ internal fun TrainerConnectRoute(
 
     TrainerConnectScreen(
         state = state,
+        isFromMyPage = isFromMyPage,
         onRegenerateClick = { viewModel.setEvent(TrainerConnectUiEvent.OnRegenerateClick) },
         onBackClick = { viewModel.setEvent(TrainerConnectUiEvent.OnBackClick) },
         onNextClick = { viewModel.setEvent(TrainerConnectUiEvent.OnNextClick) },
@@ -31,7 +33,6 @@ internal fun TrainerConnectRoute(
             when (effect) {
                 TrainerConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerConnectSideEffect.NavigateToHome -> navigateToHome(true)
-                else -> {}
             }
         }
     }
@@ -40,6 +41,7 @@ internal fun TrainerConnectRoute(
 @Composable
 private fun TrainerConnectScreen(
     state: TrainerConnectUiState,
+    isFromMyPage: Boolean,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -48,6 +50,7 @@ private fun TrainerConnectScreen(
     when (state.page) {
         TrainerConnectPage.CodeGeneration -> CodeGenerationPage(
             state = state,
+            isFromMyPage = isFromMyPage,
             onRegenerateClick = onRegenerateClick,
             onBackClick = onBackClick,
             onSkipClick = onSkipClick,

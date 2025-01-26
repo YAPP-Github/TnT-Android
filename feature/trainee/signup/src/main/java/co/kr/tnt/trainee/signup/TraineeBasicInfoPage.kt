@@ -1,6 +1,7 @@
 package co.kr.tnt.trainee.signup
 
 import android.app.DatePickerDialog
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,26 +40,31 @@ import co.kr.tnt.trainee.signup.component.ProgressSteps
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import co.kr.tnt.core.ui.R as uiResource
 
-// 000.0 (점 포함 5자리)
-private const val MAX_LENGTH = 5
+private const val MAX_HEIGHT_LENGTH = 3
+private const val MAX_WEIGHT_LENGTH = 5
 
 @Composable
-fun TraineeBasicInfoScreen() {
+fun TraineeBasicInfoPage(
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
+) {
+    BackHandler { onBackClick() }
+
     // TODO 상태 관리 따로 빼기
     val today = LocalDate.now()
     var height by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf("") }
     var birthday by remember { mutableStateOf<LocalDate?>(null) }
 
-    val isHeightValid by remember { derivedStateOf { height.isNotEmpty() && validateInput(height) } }
-    val isWeightValid by remember { derivedStateOf { weight.isNotEmpty() && validateInput(weight) } }
+    val isHeightValid by remember { derivedStateOf { height.isNotEmpty() && validateHeight(height) } }
+    val isWeightValid by remember { derivedStateOf { weight.isNotEmpty() && validateWeight(weight) } }
 
     val isFormValid by remember { derivedStateOf { isHeightValid && isWeightValid } }
 
     Scaffold(
-        // TODO 버튼 클릭 시 트레이니 이름 입력 화면으로 이동
-        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -76,7 +82,7 @@ fun TraineeBasicInfoScreen() {
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 Text(
-                    text = stringResource(R.string.birthday_placeholder),
+                    text = stringResource(R.string.birthday_label),
                     color = TnTTheme.colors.neutralColors.Neutral900,
                     style = TnTTheme.typography.body1Bold,
                     modifier = Modifier.padding(start = 20.dp, bottom = 8.dp),
@@ -100,47 +106,42 @@ fun TraineeBasicInfoScreen() {
                         .padding(horizontal = 20.dp),
                 ) {
                     TnTLabeledTextField(
-                        title = stringResource(R.string.height_label),
+                        title = stringResource(uiResource.string.height_label),
                         value = height,
                         placeholder = "0",
                         isSingleLine = true,
+                        showWarning = !validateHeight(height),
+                        warningMessage = stringResource(R.string.entered_wrong_number),
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
-                            UnitLabel(R.string.height_unit)
+                            UnitLabel(uiResource.string.height_unit)
                         },
-                        onValueChange = { newHeight ->
-                            if (validateInput(newHeight)) {
-                                height = newHeight
-                            }
-                        },
+                        onValueChange = { height = it },
                         modifier = Modifier.weight(1f),
                     )
                     TnTLabeledTextField(
-                        title = stringResource(R.string.weight_label),
+                        title = stringResource(uiResource.string.weight_label),
                         value = weight,
                         placeholder = "00.0",
                         isSingleLine = true,
+                        showWarning = !validateWeight(weight),
+                        warningMessage = stringResource(R.string.entered_wrong_number),
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
-                            UnitLabel(R.string.weight_unit)
+                            UnitLabel(uiResource.string.weight_unit)
                         },
-                        onValueChange = { newWeight ->
-                            if (validateInput(newWeight)) {
-                                weight = newWeight
-                            }
-                        },
+                        onValueChange = { weight = it },
                         modifier = Modifier.weight(1f),
                     )
                 }
             }
-            // TODO 트레이니 PT 목적 화면으로 이동
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
-                onClick = { },
+                onClick = onNextClick,
             )
         }
     }
@@ -207,17 +208,29 @@ private fun UnitLabel(stringResId: Int) {
 }
 
 /**
- * 유효한 입력값인지 검사 (정수 또는 실수 형식 확인)
- * 형식: 5자 이하의 정수 또는 실수
+ * 키가 유효한 입력값인지 검사
+ * 형식: 정수 3자
  */
-private fun validateInput(input: String): Boolean {
-    return input.isEmpty() || (input.toDoubleOrNull() != null && !input.startsWith("0") && input.length <= MAX_LENGTH)
+private fun validateHeight(input: String): Boolean {
+    return input.isEmpty() || input.toIntOrNull() != null && !input.startsWith("0") && input.length <= MAX_HEIGHT_LENGTH
+}
+
+/**
+ * 몸무게가 유효한 입력값인지 검사
+ * 형식: 5자 이하의 실수 (000, 00, 00.0, 000.0)
+ */
+private fun validateWeight(input: String): Boolean {
+    val weightRegex = Regex("^(\\d{1,3}(\\.\\d)?)?\$")
+    return input.isEmpty() || input.matches(weightRegex) && !input.startsWith("0") && input.length <= MAX_WEIGHT_LENGTH
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineeBasicInfoScreenPreview() {
+private fun TraineeBasicInfoPagePreview() {
     TnTTheme {
-        TraineeBasicInfoScreen()
+        TraineeBasicInfoPage(
+            onBackClick = {},
+            onNextClick = {},
+        )
     }
 }

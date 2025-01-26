@@ -1,6 +1,6 @@
 package co.kr.tnt.trainee.signup
 
-import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,19 +30,24 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.trainee.signup.model.PTPurpose
+import co.kr.tnt.core.ui.R as uiResource
 
 private const val ROW_NUM = 3
 private const val COLUMNS_NUM = 2
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TraineePTPurposeScreen() {
+fun TraineePTPurposePage(
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
+) {
+    BackHandler { onBackClick() }
+
     // TODO 리소스 id값 텍스트로 전환해 넘겨주기
     var selectedPurposes by remember { mutableStateOf(setOf<PTPurpose>()) }
 
     Scaffold(
-        // TODO 버튼 클릭 시 트레이니 기본 정보 입력 화면으로 이동
-        topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -75,10 +80,9 @@ fun TraineePTPurposeScreen() {
                     }
                 }
             }
-            // TODO PT 주의사항 입력 화면으로 이동
             TnTBottomButton(
-                text = stringResource(R.string.next),
-                onClick = { Log.d("check", "선택된 값들\n${selectedPurposes.map { it.name }}") },
+                text = stringResource(uiResource.string.next),
+                onClick = onNextClick,
                 enabled = selectedPurposes.isNotEmpty(),
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
@@ -118,8 +122,11 @@ private fun toggleSelection(
 
 @Preview(showBackground = true)
 @Composable
-private fun TraineePTPurposeScreenPreview() {
+private fun TraineePTPurposePagePreview() {
     TnTTheme {
-        TraineePTPurposeScreen()
+        TraineePTPurposePage(
+            onBackClick = {},
+            onNextClick = {},
+        )
     }
 }

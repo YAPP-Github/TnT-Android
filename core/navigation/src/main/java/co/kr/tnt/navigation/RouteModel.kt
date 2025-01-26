@@ -13,10 +13,16 @@ sealed interface Route {
     data object Login : Route
 
     @Serializable
-    data object TrainerConnect : Route
+    data object TrainerSignUp : Route
 
     @Serializable
-    data object TraineeConnect : Route
+    data object TraineeSignUp : Route
+
+    @Serializable
+    data class TrainerConnect(val isFromMyPage: Boolean) : Route
+
+    @Serializable
+    data class TraineeConnect(val isFromMyPage: Boolean) : Route
 
     @Serializable
     data class RoleSelection(

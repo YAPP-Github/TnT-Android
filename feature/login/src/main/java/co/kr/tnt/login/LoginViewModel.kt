@@ -1,5 +1,6 @@
 package co.kr.tnt.login
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.LoginResult
@@ -28,6 +29,7 @@ internal class LoginViewModel @Inject constructor(
             is LoginUiEvent.OnAuthFail -> {
                 if (event.throwable !is LoginException.CancelException) {
                     // TODO resource
+                    Log.w("test", "exception : ${event.throwable}")
                     sendEffect(LoginSideEffect.ShowToast("로그인에 실패하였습니다. 다시 시도해주세요."))
                 }
             }

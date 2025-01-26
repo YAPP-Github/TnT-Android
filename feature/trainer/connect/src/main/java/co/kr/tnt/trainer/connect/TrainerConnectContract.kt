@@ -7,7 +7,7 @@ import co.kr.tnt.ui.base.UiState
 
 internal class TrainerConnectContract {
     data class TrainerConnectUiState(
-        val page: TrainerConnectPage = TrainerConnectPage.TrainerConnectComplete,
+        val page: TrainerConnectPage = TrainerConnectPage.CodeGeneration,
         val inviteCode: String = "",
         val trainerState: UserType.Trainer = UserType.Trainer(),
         val traineeState: UserType.Trainee = UserType.Trainee(),

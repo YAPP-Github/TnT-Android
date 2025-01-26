@@ -13,6 +13,7 @@ import co.kr.tnt.trainee.connect.model.PTSessionFormData
 
 @Composable
 internal fun TraineeConnectRoute(
+    isFromMyPage: Boolean,
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
     viewModel: TraineeConnectViewModel = hiltViewModel(),
@@ -21,6 +22,7 @@ internal fun TraineeConnectRoute(
 
     TraineeConnectScreen(
         state = state,
+        isFromMyPage = isFromMyPage,
         onFormNextClick = { formData ->
             viewModel.setEvent(TraineeConnectUiEvent.UpdatePTSessionData(formData))
         },
@@ -48,6 +50,7 @@ internal fun TraineeConnectRoute(
 @Composable
 private fun TraineeConnectScreen(
     state: TraineeConnectUiState,
+    isFromMyPage: Boolean,
     onCodeValidationClick: (String) -> Unit,
     onCodeChanged: (String) -> Unit,
     onFormNextClick: (PTSessionFormData) -> Unit,
@@ -58,7 +61,9 @@ private fun TraineeConnectScreen(
     when (state.page) {
         TraineeConnectPage.CodeEntry -> CodeEntryPage(
             state = state,
+            isFromMyPage = isFromMyPage,
             onNextClick = onNextClick,
+            onBackClick = onBackClick,
             onSkipClick = onSkipClick,
             onCodeChanged = { code ->
                 onCodeChanged(code)

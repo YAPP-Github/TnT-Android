@@ -9,9 +9,10 @@ import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainee.connect.TraineeConnectRoute
 
 fun NavController.navigateToTraineeConnect(
+    isFromMyPage: Boolean,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.TraineeConnect,
+    route = Route.TraineeConnect(isFromMyPage),
     builder = navOptions,
 )
 
@@ -22,6 +23,7 @@ fun NavGraphBuilder.traineeConnectScreen(
     composable<Route.TraineeConnect> { backstackEntry ->
         backstackEntry.toRoute<Route.TraineeConnect>().apply {
             TraineeConnectRoute(
+                isFromMyPage = isFromMyPage,
                 navigateToPrevious = navigateToPrevious,
                 navigateToHome = { navigateToHome(false) },
             )

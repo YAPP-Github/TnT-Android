@@ -33,5 +33,5 @@ class TnTAppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = Route.TrainerConnect
+    val startDestination = Route.Login
 }
