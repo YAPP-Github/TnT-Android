@@ -23,8 +23,8 @@ internal class TraineeSignUpContract {
     enum class TraineeSignUpPage {
         ProfileSetUp,
         BasicInfo,
-        NoteForTrainer,
         PTPurpose,
+        NoteForTrainer,
         SignUpComplete,
         ;
 
@@ -32,9 +32,9 @@ internal class TraineeSignUpContract {
             fun getPreviousPage(currentPage: TraineeSignUpPage): TraineeSignUpPage {
                 return when (currentPage) {
                     BasicInfo -> ProfileSetUp
-                    NoteForTrainer -> BasicInfo
-                    PTPurpose -> NoteForTrainer
-                    SignUpComplete -> PTPurpose
+                    PTPurpose -> BasicInfo
+                    NoteForTrainer -> PTPurpose
+                    SignUpComplete -> NoteForTrainer
                     else -> error("No previous page defined for $currentPage")
                 }
             }
@@ -42,9 +42,9 @@ internal class TraineeSignUpContract {
             fun getNextPage(currentPage: TraineeSignUpPage): TraineeSignUpPage {
                 return when (currentPage) {
                     ProfileSetUp -> BasicInfo
-                    BasicInfo -> NoteForTrainer
-                    NoteForTrainer -> PTPurpose
-                    PTPurpose -> SignUpComplete
+                    BasicInfo -> PTPurpose
+                    PTPurpose -> NoteForTrainer
+                    NoteForTrainer -> SignUpComplete
                     else -> error("No next page defined for $currentPage")
                 }
             }
