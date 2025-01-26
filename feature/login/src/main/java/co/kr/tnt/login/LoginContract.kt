@@ -1,6 +1,7 @@
 package co.kr.tnt.login
 
 import co.kr.tnt.domain.model.AuthType
+import co.kr.tnt.domain.model.LoginResult
 import co.kr.tnt.domain.model.Term
 import co.kr.tnt.login.model.TermState
 import co.kr.tnt.ui.base.UiEvent
@@ -33,6 +34,6 @@ internal class LoginContract {
         data object ShowTermBottomSheet : LoginSideEffect
         data class ShowToast(val message: String) : LoginSideEffect
         data object NavigateToHome : LoginSideEffect
-        data object NavigateToSignup : LoginSideEffect
+        data class NavigateToSignup(val loginResult: LoginResult) : LoginSideEffect
     }
 }

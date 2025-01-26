@@ -25,7 +25,7 @@ fun NavController.navigateToHome(
 )
 
 fun NavGraphBuilder.homeNavGraph(
-    homeDestination: NavGraphBuilder.() -> Unit,
+    homeDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.HomeBase>(startDestination = Route.Home(false)) {
         composable<Route.Home> { backstackEntry ->

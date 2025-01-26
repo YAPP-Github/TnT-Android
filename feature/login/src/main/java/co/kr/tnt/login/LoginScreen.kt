@@ -46,6 +46,7 @@ import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.AuthType
+import co.kr.tnt.domain.model.LoginResult
 import co.kr.tnt.feature.login.R
 import co.kr.tnt.login.LoginContract.LoginSideEffect
 import co.kr.tnt.login.LoginContract.LoginUiEvent
@@ -59,7 +60,7 @@ import kotlinx.coroutines.launch
 internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
-    navigateToSignup: () -> Unit,
+    navigateToSignup: (LoginResult) -> Unit,
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -122,9 +123,9 @@ internal fun LoginRoute(
                     navigateToHome()
                 }
 
-                LoginSideEffect.NavigateToSignup -> {
+                is LoginSideEffect.NavigateToSignup -> {
                     showBottomSheet = false
-                    navigateToSignup()
+                    navigateToSignup(effect.loginResult)
                 }
             }
         }

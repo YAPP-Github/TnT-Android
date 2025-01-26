@@ -26,17 +26,24 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.roleselect.R
 import co.kr.tnt.roleselect.model.RoleState
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
+@Suppress("UnusedParameter")
 fun RoleSelectionScreen(
     onRoleSelected: (UserType) -> Unit = {},
     onNextClick: () -> Unit = {},
+    authId: String,
+    authType: String,
+    email: String,
+    modifier: Modifier = Modifier,
 ) {
     var selectedRole by remember { mutableStateOf(RoleState.fromDomain(UserType.Trainer())) }
+    val authType = AuthType.from(authType)
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -108,6 +115,10 @@ private fun RoleScreenPreview() {
         RoleSelectionScreen(
             onRoleSelected = {},
             onNextClick = {},
+            authId = "",
+            authType = "",
+            email = "",
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

@@ -17,4 +17,11 @@ sealed interface Route {
 
     @Serializable
     data object TraineeConnect : Route
+
+    @Serializable
+    data class RoleSelection(
+        val authId: String,
+        val authType: String,
+        val email: String,
+    ) : Route
 }

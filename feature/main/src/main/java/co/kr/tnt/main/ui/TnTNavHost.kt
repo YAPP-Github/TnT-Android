@@ -11,6 +11,8 @@ import co.kr.tnt.login.navigation.loginScreen
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
 import co.kr.tnt.navigation.Route
+import co.kr.tnt.roleselect.navigateToRoleSelection
+import co.kr.tnt.roleselect.roleSelectionScreen
 
 @Composable
 fun TnTNavHost(
@@ -36,7 +38,13 @@ fun TnTNavHost(
                         restoreState = true
                     }
                 },
-                navigateToSignup = { },
+                navigateToSignup = { loginResult ->
+                    navController.navigateToRoleSelection(
+                        authId = loginResult.authId,
+                        authType = loginResult.authType.name,
+                        email = loginResult.email,
+                    )
+                },
             )
             trainerConnectScreen(
                 navigateToPrevious = { navController.popBackStack() },
@@ -50,8 +58,8 @@ fun TnTNavHost(
                     navController.navigateToHome(isTrainer = false, clearBackStack = true)
                 },
             )
-            homeNavGraph {
-            }
+            roleSelectionScreen()
+            homeNavGraph()
         }
     }
 }
