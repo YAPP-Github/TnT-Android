@@ -5,8 +5,8 @@ import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
-import co.kr.tnt.trainee.connect.component.InputState.INVALID
-import co.kr.tnt.trainee.connect.component.InputState.VALID
+import co.kr.tnt.trainee.connect.model.InputState.INVALID
+import co.kr.tnt.trainee.connect.model.InputState.VALID
 import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,4 +1,5 @@
 import co.kr.tnt.setNamespace
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
     id("tnt.android.library")
@@ -11,6 +12,24 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField(
+                "String",
+                "BASE_API_URL",
+                gradleLocalProperties(rootDir, providers).getProperty("DEBUG_BASE_API_URL"),
+            )
+        }
+
+        release {
+            buildConfigField(
+                "String",
+                "BASE_API_URL",
+                gradleLocalProperties(rootDir, providers).getProperty("RELEASE_BASE_API_URL"),
+            )
+        }
     }
 }
 

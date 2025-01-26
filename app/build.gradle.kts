@@ -1,3 +1,8 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
+private val kakaoNativeAppKey: String =
+    gradleLocalProperties(rootDir, providers).getProperty("KAKAO_NATIVE_APP_KEY")
+
 plugins {
     id("tnt.android.application")
     id("tnt.android.compose")
@@ -15,6 +20,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${kakaoNativeAppKey}\"")
     }
 
     buildTypes {
@@ -48,6 +55,8 @@ dependencies {
     implementation(projects.data.network)
     implementation(projects.data.storage)
     implementation(projects.data.repository)
+    implementation(projects.data.session)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.kakao.user)
 }

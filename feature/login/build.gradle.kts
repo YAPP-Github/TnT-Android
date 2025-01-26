@@ -7,3 +7,7 @@ plugins {
 android {
     setNamespace("feature.login")
 }
+
+dependencies {
+    implementation(projects.core.login)
+}

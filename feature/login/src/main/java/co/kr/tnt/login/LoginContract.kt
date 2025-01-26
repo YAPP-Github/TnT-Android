@@ -1,5 +1,7 @@
 package co.kr.tnt.login
 
+import co.kr.tnt.domain.model.AuthType
+import co.kr.tnt.domain.model.LoginResult
 import co.kr.tnt.domain.model.Term
 import co.kr.tnt.login.model.TermState
 import co.kr.tnt.ui.base.UiEvent
@@ -16,7 +18,12 @@ internal class LoginContract {
     }
 
     sealed interface LoginUiEvent : UiEvent {
-        data object OnClickKakaoLogin : LoginUiEvent
+        data class OnAuthSuccess(
+            val authType: AuthType,
+            val accessToken: String,
+        ) : LoginUiEvent
+
+        data class OnAuthFail(val throwable: Throwable) : LoginUiEvent
         data object OnCheckAllTermAgree : LoginUiEvent
         data class OnCheckTerm(val termState: TermState) : LoginUiEvent
         data class OnClickTermLink(val link: String) : LoginUiEvent
@@ -25,7 +32,8 @@ internal class LoginContract {
 
     sealed interface LoginSideEffect : UiSideEffect {
         data object ShowTermBottomSheet : LoginSideEffect
+        data class ShowToast(val message: String) : LoginSideEffect
         data object NavigateToHome : LoginSideEffect
-        data object NavigateToSignup : LoginSideEffect
+        data class NavigateToSignup(val loginResult: LoginResult) : LoginSideEffect
     }
 }

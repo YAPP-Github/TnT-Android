@@ -8,6 +8,9 @@ import androidx.navigation.compose.NavHost
 import co.kr.tnt.home.navigation.homeNavGraph
 import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
+import co.kr.tnt.navigation.Route
+import co.kr.tnt.roleselect.navigateToRoleSelection
+import co.kr.tnt.roleselect.roleSelectionScreen
 import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
@@ -30,8 +33,22 @@ fun TnTNavHost(
             startDestination = appState.startDestination,
         ) {
             loginScreen(
-                navigateToHome = { },
-                navigateToSignup = { },
+                navigateToHome = {
+                    navController.navigateToHome(isTrainer = true) {
+                        popUpTo(Route.Login) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                navigateToSignup = { loginResult ->
+                    navController.navigateToRoleSelection(
+                        authId = loginResult.authId,
+                        authType = loginResult.authType.name,
+                        email = loginResult.email,
+                    )
+                },
             )
             trainerSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
@@ -53,8 +70,8 @@ fun TnTNavHost(
                     navController.navigateToHome(isTrainer = false, clearBackStack = true)
                 },
             )
-            homeNavGraph {
-            }
+            roleSelectionScreen()
+            homeNavGraph()
         }
     }
 }
