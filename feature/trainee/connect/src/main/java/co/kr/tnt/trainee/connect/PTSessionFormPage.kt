@@ -1,6 +1,5 @@
-package co.kr.tnt.connect.trainee
+package co.kr.tnt.trainee.connect
 
-import TraineeConnectContract.TraineeConnectUiState
 import android.app.DatePickerDialog
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
@@ -32,15 +31,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.connect.model.PTSessionFormData
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
+import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
+import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import co.kr.tnt.core.ui.R as uiResource
 
 private const val MAX_COUNT = 99
@@ -53,9 +53,10 @@ internal fun PTSessionFormPage(
 ) {
     BackHandler { onBackClick() }
 
+    val today = LocalDate.now()
     var completedSession by remember { mutableStateOf("") }
     var totalSession by remember { mutableStateOf("") }
-    var startDate by remember { mutableStateOf<LocalDate?>(null) }
+    var selectedStartDate by remember { mutableStateOf<LocalDate?>(null) }
 
     /**
      * 모든 입력 값의 유효성을 확인
@@ -65,7 +66,7 @@ internal fun PTSessionFormPage(
      */
     val isFormValid by remember {
         derivedStateOf {
-            completedSession.isNotEmpty() && totalSession.isNotEmpty() && startDate != null &&
+            completedSession.isNotEmpty() && totalSession.isNotEmpty() && selectedStartDate != null &&
                 (completedSession.toIntOrNull() ?: 0) < (totalSession.toIntOrNull() ?: 0)
         }
     }
@@ -89,7 +90,10 @@ internal fun PTSessionFormPage(
             ) {
                 Spacer(Modifier.padding(top = 24.dp))
                 Text(
-                    text = stringResource(R.string.since_when_with_trainer, state.trainerState.name),
+                    text = stringResource(
+                        R.string.since_when_with_trainer,
+                        state.trainerState.name,
+                    ),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h2,
                     modifier = Modifier.padding(horizontal = 24.dp),
@@ -110,8 +114,9 @@ internal fun PTSessionFormPage(
                 }
                 DatePicker(
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    selectedDate = startDate,
-                    onDateSelected = { startDate = it },
+                    today = today,
+                    selectedDate = selectedStartDate,
+                    onDateSelected = { selectedStartDate = it },
                 )
                 HorizontalDivider(
                     thickness = 1.dp,
@@ -178,7 +183,7 @@ internal fun PTSessionFormPage(
                     val formData = PTSessionFormData(
                         completedSession = completedSession.toInt(),
                         totalSession = totalSession.toInt(),
-                        startDate = startDate,
+                        selectedStartDate = selectedStartDate ?: LocalDate.now(),
                     )
                     onNextClick(formData)
                 },
@@ -190,32 +195,36 @@ internal fun PTSessionFormPage(
 @Composable
 private fun DatePicker(
     modifier: Modifier = Modifier,
+    today: LocalDate,
     selectedDate: LocalDate?,
     onDateSelected: (LocalDate) -> Unit,
 ) {
     val context = LocalContext.current
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+    val date = selectedDate ?: today
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                val today = LocalDate.now()
-
                 DatePickerDialog(
                     context,
                     { _, selectedYear, selectedMonth, selectedDay ->
                         val newDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
                         onDateSelected(newDate)
                     },
-                    today.year,
-                    today.monthValue - 1,
-                    today.dayOfMonth,
+                    date.year,
+                    date.monthValue - 1,
+                    date.dayOfMonth,
                 )
                     .apply {
                         // 오늘 이후는 선택 불가능
-                        datePicker.maxDate = Calendar.getInstance().timeInMillis
+                        datePicker.maxDate =
+                            today
+                                .atStartOfDay(ZoneId.systemDefault())
+                                .toInstant()
+                                .toEpochMilli()
                     }
                     .show()
             },
