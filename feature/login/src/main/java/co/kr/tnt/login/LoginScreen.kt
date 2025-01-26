@@ -45,6 +45,7 @@ import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.feature.login.R
 import co.kr.tnt.login.LoginContract.LoginSideEffect
 import co.kr.tnt.login.LoginContract.LoginUiEvent
@@ -74,10 +75,15 @@ internal fun LoginRoute(
             coroutineScope.launch {
                 kakaoLoginSdk.login(context)
                     .onSuccess { accessToken ->
-                        viewModel.setEvent(LoginUiEvent.OnLoginSuccess(accessToken))
+                        viewModel.setEvent(
+                            LoginUiEvent.OnAuthSuccess(
+                                authType = AuthType.KAKAO,
+                                accessToken = accessToken.value,
+                            ),
+                        )
                     }
                     .onFailure { throwable ->
-                        viewModel.setEvent(LoginUiEvent.OnLoginFail(throwable))
+                        viewModel.setEvent(LoginUiEvent.OnAuthFail(throwable))
                     }
             }
         },
@@ -111,8 +117,15 @@ internal fun LoginRoute(
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
 
-                LoginSideEffect.NavigateToHome -> navigateToHome()
-                LoginSideEffect.NavigateToSignup -> navigateToSignup()
+                LoginSideEffect.NavigateToHome -> {
+                    showBottomSheet = false
+                    navigateToHome()
+                }
+
+                LoginSideEffect.NavigateToSignup -> {
+                    showBottomSheet = false
+                    navigateToSignup()
+                }
             }
         }
     }

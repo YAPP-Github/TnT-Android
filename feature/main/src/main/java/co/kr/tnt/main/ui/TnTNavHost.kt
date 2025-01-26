@@ -10,6 +10,7 @@ import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
+import co.kr.tnt.navigation.Route
 
 @Composable
 fun TnTNavHost(
@@ -26,7 +27,15 @@ fun TnTNavHost(
             startDestination = appState.startDestination,
         ) {
             loginScreen(
-                navigateToHome = { },
+                navigateToHome = {
+                    navController.navigateToHome(isTrainer = true) {
+                        popUpTo(Route.Login) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
                 navigateToSignup = { },
             )
             trainerConnectScreen(

@@ -1,5 +1,6 @@
 package co.kr.tnt.login
 
+import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.Term
 import co.kr.tnt.login.model.TermState
 import co.kr.tnt.ui.base.UiEvent
@@ -16,8 +17,12 @@ internal class LoginContract {
     }
 
     sealed interface LoginUiEvent : UiEvent {
-        data class OnLoginSuccess(val accessToken: LoginAccessToken) : LoginUiEvent
-        data class OnLoginFail(val throwable: Throwable) : LoginUiEvent
+        data class OnAuthSuccess(
+            val authType: AuthType,
+            val accessToken: String,
+        ) : LoginUiEvent
+
+        data class OnAuthFail(val throwable: Throwable) : LoginUiEvent
         data object OnCheckAllTermAgree : LoginUiEvent
         data class OnCheckTerm(val termState: TermState) : LoginUiEvent
         data class OnClickTermLink(val link: String) : LoginUiEvent

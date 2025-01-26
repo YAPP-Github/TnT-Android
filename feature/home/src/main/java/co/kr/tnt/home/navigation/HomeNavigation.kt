@@ -34,7 +34,7 @@ fun NavGraphBuilder.homeNavGraph(
                     isTrainer = isTrainer,
                 )
             }
+            homeDestination()
         }
-        homeDestination()
     }
 }
