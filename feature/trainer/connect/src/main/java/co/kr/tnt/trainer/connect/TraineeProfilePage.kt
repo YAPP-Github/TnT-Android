@@ -131,7 +131,7 @@ internal fun TraineeProfilePage(
                 }
             }
             TnTBottomButton(
-                text = stringResource(R.string.start),
+                text = stringResource(uiResource.string.start),
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )

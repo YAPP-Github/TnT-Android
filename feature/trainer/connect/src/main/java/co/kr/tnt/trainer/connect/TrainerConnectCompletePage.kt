@@ -89,7 +89,7 @@ internal fun TrainerConnectCompletePage(
                 }
             }
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )

@@ -41,6 +41,7 @@ import co.kr.tnt.feature.trainee.connect.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import co.kr.tnt.core.ui.R as uiResource
 
 private const val MAX_COUNT = 99
 
@@ -170,7 +171,7 @@ internal fun PTSessionFormPage(
                 }
             }
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
                 onClick = {

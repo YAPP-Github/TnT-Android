@@ -20,7 +20,9 @@
     <string name="trainer">트레이너</string>
 
     <string name="next">다음</string>
+    <string name="connect">연결하기</string>
     <string name="start">시작하기</string>
+    <string name="skip">건너뛰기</string>
 
     <string name="age_label">나이</string>
     <string name="height_label">키</string>

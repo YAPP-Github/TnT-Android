@@ -37,6 +37,7 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
+import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun CodeEntryPage(
@@ -52,10 +53,10 @@ internal fun CodeEntryPage(
     Scaffold(
         topBar = {
             TnTTopBar(
-                title = stringResource(R.string.connect),
+                title = stringResource(uiResource.string.connect),
                 trailingComponent = {
                     Text(
-                        text = stringResource(R.string.skip),
+                        text = stringResource(uiResource.string.skip),
                         color = TnTTheme.colors.neutralColors.Neutral400,
                         style = TnTTheme.typography.body2Medium,
                         modifier = Modifier.clickable {
@@ -95,7 +96,7 @@ internal fun CodeEntryPage(
                 )
             }
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 enabled = state.isCodeValid == true,
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -106,7 +107,7 @@ internal fun CodeEntryPage(
                 title = stringResource(R.string.enter_invite_code_from_trainer),
                 content = stringResource(R.string.not_connected_warning),
                 leftButtonText = stringResource(R.string.next_time),
-                rightButtonText = stringResource(R.string.confirm),
+                rightButtonText = stringResource(uiResource.string.ok),
                 onLeftButtonClick = {
                     showDialog = false
                     onSkipClick()

@@ -83,7 +83,7 @@ internal fun TraineeConnectCompletePage(
                         )
                     }
                     Image(
-                        painter = painterResource(R.drawable.img_boom_3x),
+                        painter = painterResource(uiResource.drawable.img_boom_3x),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.width(320.dp),
@@ -92,7 +92,7 @@ internal fun TraineeConnectCompletePage(
                 }
             }
             TnTBottomButton(
-                text = stringResource(R.string.next),
+                text = stringResource(uiResource.string.next),
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )

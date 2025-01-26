@@ -37,6 +37,7 @@ import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainer.connect.R
+import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun CodeGenerationPage(
@@ -53,10 +54,10 @@ internal fun CodeGenerationPage(
     Scaffold(
         topBar = {
             TnTTopBar(
-                title = stringResource(R.string.connect),
+                title = stringResource(uiResource.string.connect),
                 trailingComponent = {
                     Text(
-                        text = stringResource(R.string.skip),
+                        text = stringResource(uiResource.string.skip),
                         color = TnTTheme.colors.neutralColors.Neutral400,
                         style = TnTTheme.typography.body2Medium,
                         modifier = Modifier.clickable {
