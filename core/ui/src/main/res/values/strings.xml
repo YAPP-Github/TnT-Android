@@ -19,6 +19,9 @@
     <string name="trainee">트레이니</string>
     <string name="trainer">트레이너</string>
 
+    <string name="next">다음</string>
+    <string name="start">시작하기</string>
+
     <string name="age_label">나이</string>
     <string name="height_label">키</string>
     <string name="weight_label">체중</string>
