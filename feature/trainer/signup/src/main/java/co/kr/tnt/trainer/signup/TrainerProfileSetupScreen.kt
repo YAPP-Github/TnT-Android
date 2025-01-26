@@ -1,5 +1,9 @@
 package co.kr.tnt.trainer.signup
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +20,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,15 +33,13 @@ import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.feature.trainer.signup.R
-import co.kr.tnt.ui.extensions.moveToAppSetting
+import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.DefaultUserProfile
-import co.kr.tnt.ui.permission.PermissionRequestDialog
-import co.kr.tnt.ui.permission.TnTPermission
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun TrainerProfileSetupScreen() {
     val context = LocalContext.current
@@ -47,9 +48,19 @@ fun TrainerProfileSetupScreen() {
     val maxLength = 15
     var text by remember { mutableStateOf("") }
     val isWarning by remember { derivedStateOf { text.length > maxLength } }
+    var profileImage by remember { mutableStateOf<Uri?>(null) }
 
-    var showPermissionRequestDialog by rememberSaveable { mutableStateOf(false) }
-    val mediaPermissions = rememberMultiplePermissionsState(TnTPermission.MEDIA_ACCESS.values)
+    val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
+        if (uri != null) {
+            profileImage = uri
+        }
+    }
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(profileImage)
+            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .build(),
+    )
 
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = {}) },
@@ -75,13 +86,13 @@ fun TrainerProfileSetupScreen() {
                         .fillMaxWidth()
                         .padding(vertical = 12.dp),
                     defaultImage = painterResource(DefaultUserProfile.Trainer.image),
-                    onEditClick = onEditClick@{
-                        if (TnTPermission.MEDIA_ACCESS.isRequireGranted(mediaPermissions)) {
-                            // TODO 이미지 피커 이동
-                            return@onEditClick
-                        }
-
-                        showPermissionRequestDialog = true
+                    image = profileImage?.let { painter },
+                    onEditClick = {
+                        pickMediaLauncher.launch(
+                            PickVisualMediaRequest(
+                                mediaType = PickVisualMedia.ImageOnly,
+                            ),
+                        )
                     },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
@@ -107,26 +118,6 @@ fun TrainerProfileSetupScreen() {
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = text.isNotBlank() && !isWarning,
                 onClick = { },
-            )
-        }
-
-        if (showPermissionRequestDialog) {
-            PermissionRequestDialog(
-                permission = TnTPermission.MEDIA_ACCESS,
-                isPermanentlyDenied = mediaPermissions.shouldShowRationale,
-                onOkButtonClick = onOkButtonClick@{ isPermanentlyDenied ->
-                    showPermissionRequestDialog = false
-
-                    if (isPermanentlyDenied.not()) {
-                        mediaPermissions.launchMultiplePermissionRequest()
-                        return@onOkButtonClick
-                    }
-
-                    context.moveToAppSetting()
-                },
-                onDismissRequest = {
-                    showPermissionRequestDialog = false
-                },
             )
         }
     }

@@ -45,7 +45,7 @@ fun PermissionRequestDialog(
 private fun PermissionRequestDialogPreview() {
     TnTTheme {
         PermissionRequestDialog(
-            permission = TnTPermission.MEDIA_ACCESS,
+            permission = TnTPermission.NOTIFICATION,
             isPermanentlyDenied = false,
             onOkButtonClick = { },
             onDismissRequest = { },
