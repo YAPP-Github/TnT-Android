@@ -10,6 +10,9 @@ import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 
 @Composable
 internal fun TrainerSignUpRoute(
+    authId: String,
+    authType: String,
+    email: String,
     navigateToPrevious: () -> Unit,
     navigateToConnect: () -> Unit,
     viewModel: TrainerSignUpViewModel = hiltViewModel(),

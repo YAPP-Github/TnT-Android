@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,29 +22,44 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.roleselect.R
+import co.kr.tnt.roleselect.RoleSelectionContract.RoleSelectionEffect
+import co.kr.tnt.roleselect.RoleSelectionContract.RoleSelectionUiEvent
 import co.kr.tnt.roleselect.model.RoleState
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
-@Suppress("UnusedParameter")
+internal fun RoleSelectionRoute(
+    viewModel: RoleSelectionViewModel = hiltViewModel(),
+    navigateToTraineeSignUp: () -> Unit,
+    navigateToTrainerSignUp: () -> Unit,
+) {
+    RoleSelectionScreen(
+        onNextClick = { viewModel.setEvent(RoleSelectionUiEvent.OnNextClick(it)) },
+    )
+
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                RoleSelectionEffect.NavigateToTraineeSignUp -> navigateToTraineeSignUp()
+                RoleSelectionEffect.NavigateToTrainerSignUp -> navigateToTrainerSignUp()
+            }
+        }
+    }
+}
+
+@Composable
 fun RoleSelectionScreen(
-    onRoleSelected: (UserType) -> Unit = {},
-    onNextClick: () -> Unit = {},
-    authId: String,
-    authType: String,
-    email: String,
-    modifier: Modifier = Modifier,
+    onNextClick: (RoleState) -> Unit = {},
 ) {
     var selectedRole by remember { mutableStateOf(RoleState.fromDomain(UserType.Trainer())) }
-    val authType = AuthType.from(authType)
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -71,7 +87,6 @@ fun RoleSelectionScreen(
                 contentDescription = null,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
-            // TODO 선택한 버튼 정보 저장
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
@@ -85,7 +100,6 @@ fun RoleSelectionScreen(
                     type = if (selectedRole == RoleState.Trainer) ButtonType.RedOutline else ButtonType.GrayOutline,
                     onClick = {
                         selectedRole = RoleState.Trainer
-                        onRoleSelected(UserType.Trainer("", ""))
                     },
                 )
                 TnTTextButton(
@@ -95,14 +109,13 @@ fun RoleSelectionScreen(
                     type = if (selectedRole == RoleState.Trainee) ButtonType.RedOutline else ButtonType.GrayOutline,
                     onClick = {
                         selectedRole = RoleState.Trainee
-                        onRoleSelected(UserType.Trainer("", ""))
                     },
                 )
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 enabled = true,
-                onClick = { onNextClick() },
+                onClick = { onNextClick(selectedRole) },
             )
         }
     }
@@ -113,12 +126,7 @@ fun RoleSelectionScreen(
 private fun RoleScreenPreview() {
     TnTTheme {
         RoleSelectionScreen(
-            onRoleSelected = {},
             onNextClick = {},
-            authId = "",
-            authType = "",
-            email = "",
-            modifier = Modifier.fillMaxSize(),
         )
     }
 }

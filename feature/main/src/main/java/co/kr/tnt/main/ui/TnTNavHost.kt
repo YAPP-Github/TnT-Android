@@ -13,9 +13,11 @@ import co.kr.tnt.roleselect.navigateToRoleSelection
 import co.kr.tnt.roleselect.roleSelectionScreen
 import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
+import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
+import co.kr.tnt.trainer.signup.navigation.navigateToTrainerSignUp
 import co.kr.tnt.trainer.signup.navigation.trainerSignUpScreen
 
 @Composable
@@ -50,6 +52,22 @@ fun TnTNavHost(
                     )
                 },
             )
+            roleSelectionScreen(
+                navigateToTraineeSignUp = { authId, authType, email ->
+                    navController.navigateToTraineeSignUp(
+                        authId = authId,
+                        authType = authType,
+                        email = email,
+                    )
+                },
+                navigateToTrainerSignUp = { authId, authType, email ->
+                    navController.navigateToTrainerSignUp(
+                        authId = authId,
+                        authType = authType,
+                        email = email,
+                    )
+                },
+            )
             trainerSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
                 navigateToConnect = { navController.navigateToTrainerConnect(isFromMyPage = false) },
@@ -70,7 +88,6 @@ fun TnTNavHost(
                     navController.navigateToHome(isTrainer = false, clearBackStack = true)
                 },
             )
-            roleSelectionScreen()
             homeNavGraph()
         }
     }

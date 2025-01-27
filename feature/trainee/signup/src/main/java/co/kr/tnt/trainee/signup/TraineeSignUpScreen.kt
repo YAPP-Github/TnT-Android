@@ -12,6 +12,9 @@ import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 
 @Composable
 internal fun TraineeSignUpRoute(
+    authId: String,
+    authType: String,
+    email: String,
     navigateToPrevious: () -> Unit,
     navigateToConnect: () -> Unit,
     viewModel: TraineeSignUpViewModel = hiltViewModel(),

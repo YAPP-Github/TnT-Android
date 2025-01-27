@@ -9,9 +9,16 @@ import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.signup.TrainerSignUpRoute
 
 fun NavController.navigateToTrainerSignUp(
+    authId: String,
+    authType: String,
+    email: String,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.TrainerSignUp,
+    route = Route.TrainerSignUp(
+        authId = authId,
+        authType = authType,
+        email = email,
+    ),
     builder = navOptions,
 )
 
@@ -21,8 +28,10 @@ fun NavGraphBuilder.trainerSignUpScreen(
 ) {
     composable<Route.TrainerSignUp> { backstackEntry ->
         backstackEntry.toRoute<Route.TrainerSignUp>().apply {
-            // TODO 115 머지되면 connect로 이동
             TrainerSignUpRoute(
+                authId = authId,
+                authType = authType,
+                email = email,
                 navigateToPrevious = navigateToPrevious,
                 navigateToConnect = { navigateToConnect() },
             )
