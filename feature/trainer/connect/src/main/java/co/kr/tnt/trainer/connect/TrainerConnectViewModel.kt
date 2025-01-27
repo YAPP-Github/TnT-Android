@@ -25,7 +25,6 @@ internal class TrainerConnectViewModel @Inject constructor() :
                 TrainerConnectUiEvent.OnNextClick -> navigateToNext()
                 TrainerConnectUiEvent.OnBackClick -> navigateToBack()
                 TrainerConnectUiEvent.OnSkipClick -> navigateToHome()
-                else -> {}
             }
         }
 

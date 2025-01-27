@@ -26,9 +26,7 @@ internal class TrainerSignUpViewModel @Inject constructor() :
         private fun setProfileImage(imageUri: Uri) {
             updateState {
                 copy(
-                    trainerState = trainerState.copy(
-                        image = imageUri.toString(),
-                    ),
+                    trainerState = trainerState.copy(image = imageUri.toString()),
                 )
             }
         }
@@ -36,9 +34,7 @@ internal class TrainerSignUpViewModel @Inject constructor() :
         private fun setName(name: String) {
             updateState {
                 copy(
-                    trainerState = trainerState.copy(
-                        name = name,
-                    ),
+                    trainerState = trainerState.copy(name = name),
                 )
             }
         }
