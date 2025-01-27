@@ -55,8 +55,8 @@ internal fun TrainerProfileSetupPage(
 
     val context = LocalContext.current
 
-    val isWarning by remember(state.name) {
-        derivedStateOf { state.name.length > MAX_LENGTH }
+    val isWarning by remember(state.trainerState.name) {
+        derivedStateOf { state.trainerState.name.length > MAX_LENGTH }
     }
 
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
@@ -66,7 +66,7 @@ internal fun TrainerProfileSetupPage(
     }
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context)
-            .data(state.profileImage)
+            .data(state.trainerState.image)
             .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
             .build(),
     )
@@ -94,7 +94,7 @@ internal fun TrainerProfileSetupPage(
                         .fillMaxWidth()
                         .padding(vertical = 12.dp),
                     defaultImage = painterResource(DefaultUserProfile.Trainer.image),
-                    image = state.profileImage?.let { painter },
+                    image = state.trainerState.image?.let { painter },
                     onEditClick = {
                         pickMediaLauncher.launch(
                             PickVisualMediaRequest(
@@ -106,7 +106,7 @@ internal fun TrainerProfileSetupPage(
                 Spacer(Modifier.padding(top = 60.dp))
                 TnTLabeledTextFieldWithCounter(
                     title = stringResource(uiResource.string.name),
-                    value = state.name,
+                    value = state.trainerState.name,
                     onValueChange = { newValue ->
                         val filteredText = validateInput(newValue)
                         onNameChanged(filteredText)
@@ -123,7 +123,7 @@ internal fun TrainerProfileSetupPage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
-                enabled = state.name.isNotBlank() && !isWarning,
+                enabled = state.trainerState.name.isNotBlank() && !isWarning,
                 onClick = onNextClick,
             )
         }

@@ -52,7 +52,7 @@ internal fun TrainerSignUpCompletePage(
                     .padding(bottom = 66.dp),
             ) {
                 Text(
-                    text = stringResource(R.string.nice_to_meet_you_trainer, state.name),
+                    text = stringResource(R.string.nice_to_meet_you_trainer, state.trainerState.name),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h1,
                     textAlign = Center,
@@ -68,7 +68,7 @@ internal fun TrainerSignUpCompletePage(
                 Spacer(Modifier.padding(top = 28.dp))
                 TnTProfileImage(
                     defaultImage = painterResource(DefaultUserProfile.Trainer.image),
-                    image = rememberAsyncImagePainter(state.profileImage),
+                    image = rememberAsyncImagePainter(state.trainerState.image),
                     imageSize = 200.dp,
                     showEditButton = false,
                 )

@@ -24,11 +24,23 @@ internal class TrainerSignUpViewModel @Inject constructor() :
         }
 
         private fun setProfileImage(imageUri: Uri) {
-            updateState { copy(profileImage = imageUri) }
+            updateState {
+                copy(
+                    trainerState = trainerState.copy(
+                        image = imageUri.toString(),
+                    ),
+                )
+            }
         }
 
         private fun setName(name: String) {
-            updateState { copy(name = name) }
+            updateState {
+                copy(
+                    trainerState = trainerState.copy(
+                        name = name,
+                    ),
+                )
+            }
         }
 
         private fun navigateToNext() {
