@@ -1,5 +1,7 @@
 package co.kr.tnt.domain.model
 
+import java.time.LocalDate
+
 sealed class UserType {
     abstract val id: String
     abstract val name: String
@@ -15,10 +17,11 @@ sealed class UserType {
         override val id: String = "",
         override val name: String = "",
         override val image: String? = null,
-        val age: Int = 0,
+        val birthday: LocalDate? = null,
+        val age: Int? = 0,
         val weight: Float = 0f,
         val height: Int = 0,
         val ptPurpose: List<String> = emptyList(),
-        val caution: String? = null,
+        val caution: String? = "",
     ) : UserType()
 }

@@ -12,8 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,20 +23,20 @@ import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
+import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.core.ui.R as uiResource
 
 private const val MAX_LENGTH = 100
 
 @Composable
-fun TraineeNoteForTrainerPage(
+internal fun TraineeNoteForTrainerPage(
+    state: TraineeSignUpUiState,
+    onCautionChange: (String) -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
-
-    // TODO 상태 관리 따로 빼기
-    var text by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
@@ -59,10 +57,10 @@ fun TraineeNoteForTrainerPage(
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 TnTOutlinedTextField(
-                    value = text,
+                    value = state.traineeState.caution.toString(),
                     onValueChange = { newValue ->
                         if (newValue.length <= MAX_LENGTH) {
-                            text = newValue
+                            onCautionChange(newValue)
                         }
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
@@ -85,6 +83,8 @@ private fun TraineeNoteForTrainerPagePreview() {
         TraineeNoteForTrainerPage(
             onBackClick = {},
             onNextClick = {},
+            state = TODO(),
+            onCautionChange = {},
         )
     }
 }

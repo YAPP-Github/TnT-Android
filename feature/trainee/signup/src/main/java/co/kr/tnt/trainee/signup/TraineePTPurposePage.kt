@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +26,7 @@ import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
+import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.trainee.signup.model.PTPurpose
 import co.kr.tnt.core.ui.R as uiResource
@@ -37,14 +36,13 @@ private const val COLUMNS_NUM = 2
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TraineePTPurposePage(
+internal fun TraineePTPurposePage(
+    state: TraineeSignUpUiState,
+    onPurposeSelected: (String) -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
-
-    // TODO 리소스 id값 텍스트로 전환해 넘겨주기
-    var selectedPurposes by remember { mutableStateOf(setOf<PTPurpose>()) }
 
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
@@ -68,12 +66,11 @@ fun TraineePTPurposePage(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         PTPurpose.entries.forEach { purpose ->
+                            val purposeText = stringResource(purpose.textResId)
                             PurposeButton(
-                                text = stringResource(purpose.textResId),
-                                isSelected = purpose in selectedPurposes,
-                                onClick = {
-                                    selectedPurposes = toggleSelection(selectedPurposes, purpose)
-                                },
+                                text = purposeText,
+                                isSelected = purposeText in state.traineeState.ptPurpose,
+                                onClick = { onPurposeSelected(purposeText) },
                                 modifier = Modifier.weight(1f),
                             )
                         }
@@ -83,7 +80,7 @@ fun TraineePTPurposePage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 onClick = onNextClick,
-                enabled = selectedPurposes.isNotEmpty(),
+                enabled = state.traineeState.ptPurpose.isNotEmpty(),
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -106,27 +103,15 @@ fun PurposeButton(
     )
 }
 
-// 선택된 값 업데이트
-private fun toggleSelection(
-    selectedPurposes: Set<PTPurpose>,
-    purpose: PTPurpose,
-): Set<PTPurpose> {
-    return selectedPurposes.toMutableSet().apply {
-        if (contains(purpose)) {
-            remove(purpose)
-        } else {
-            add(purpose)
-        }
-    }.toSet()
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun TraineePTPurposePagePreview() {
     TnTTheme {
         TraineePTPurposePage(
+            state = TODO(),
             onBackClick = {},
             onNextClick = {},
+            onPurposeSelected = {},
         )
     }
 }

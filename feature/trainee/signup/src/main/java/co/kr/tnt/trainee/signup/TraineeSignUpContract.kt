@@ -1,16 +1,32 @@
 package co.kr.tnt.trainee.signup
 
+import android.net.Uri
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import java.time.LocalDate
 
 internal class TraineeSignUpContract {
     data class TraineeSignUpUiState(
         val page: TraineeSignUpPage = TraineeSignUpPage.ProfileSetUp,
-        val name: String = "",
+        val height: String = "",
+        val weight: String = "",
+        val isHeightValid: Boolean = false,
+        val isWeightValid: Boolean = false,
+        val isBasicInfoValid: Boolean = false,
+        val traineeState: UserType.Trainee = UserType.Trainee(),
     ) : UiState
 
     sealed interface TraineeSignUpUiEvent : UiEvent {
+        data class OnImageChange(val imageUri: Uri) : TraineeSignUpUiEvent
+        data class OnNameChange(val name: String) : TraineeSignUpUiEvent
+        data class OnHeightChange(val height: String) : TraineeSignUpUiEvent
+        data class OnWeightChange(val weight: String) : TraineeSignUpUiEvent
+        data class OnBirthdayChange(val birthday: LocalDate) : TraineeSignUpUiEvent
+        data object OnBasicFormUpdate : TraineeSignUpUiEvent
+        data class OnPurposeSelected(val purpose: String) : TraineeSignUpUiEvent
+        data class OnCautionChange(val text: String) : TraineeSignUpUiEvent
         data object OnNextClick : TraineeSignUpUiEvent
         data object OnBackClick : TraineeSignUpUiEvent
     }
