@@ -46,8 +46,8 @@ private const val MAX_LENGTH = 15
 @Composable
 internal fun TrainerProfileSetupPage(
     state: TrainerSignUpUiState,
-    onProfileImageSelected: (Uri) -> Unit,
-    onNameChanged: (String) -> Unit,
+    onProfileImageSelect: (Uri) -> Unit,
+    onNameChange: (String) -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
@@ -61,7 +61,7 @@ internal fun TrainerProfileSetupPage(
 
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         if (uri != null) {
-            onProfileImageSelected(uri)
+            onProfileImageSelect(uri)
         }
     }
     val painter = rememberAsyncImagePainter(
@@ -109,7 +109,7 @@ internal fun TrainerProfileSetupPage(
                     value = state.trainerState.name,
                     onValueChange = { newValue ->
                         val filteredText = validateInput(newValue)
-                        onNameChanged(filteredText)
+                        onNameChange(filteredText)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
                     placeholder = stringResource(R.string.name_placeholder),
@@ -143,8 +143,8 @@ private fun TrainerProfileSetupPagePreview() {
     TnTTheme {
         TrainerProfileSetupPage(
             state = TODO(),
-            onNameChanged = {},
-            onProfileImageSelected = {},
+            onNameChange = {},
+            onProfileImageSelect = {},
             onBackClick = {},
             onNextClick = {},
         )

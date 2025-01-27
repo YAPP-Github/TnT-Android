@@ -13,8 +13,8 @@ internal class TrainerSignUpContract {
     ) : UiState
 
     sealed interface TrainerSignUpUiEvent : UiEvent {
-        data class OnImagePicked(val imageUri: Uri) : TrainerSignUpUiEvent
-        data class OnNameChanged(val name: String) : TrainerSignUpUiEvent
+        data class OnImageChange(val imageUri: Uri) : TrainerSignUpUiEvent
+        data class OnNameChange(val name: String) : TrainerSignUpUiEvent
         data object OnNextClick : TrainerSignUpUiEvent
         data object OnBackClick : TrainerSignUpUiEvent
     }

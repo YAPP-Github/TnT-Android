@@ -22,8 +22,8 @@ internal fun TrainerSignUpRoute(
 
     TrainerSignUpScreen(
         state = uiState,
-        onNameChanged = { viewModel.setEvent(TrainerSignUpUiEvent.OnNameChanged(it)) },
-        onProfileImageSelected = { viewModel.setEvent(TrainerSignUpUiEvent.OnImagePicked(it)) },
+        onNameChange = { viewModel.setEvent(TrainerSignUpUiEvent.OnNameChange(it)) },
+        onProfileImageSelect = { viewModel.setEvent(TrainerSignUpUiEvent.OnImageChange(it)) },
         onNextClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnNextClick) },
         onBackClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnBackClick) },
     )
@@ -41,16 +41,16 @@ internal fun TrainerSignUpRoute(
 @Composable
 private fun TrainerSignUpScreen(
     state: TrainerSignUpUiState,
-    onProfileImageSelected: (Uri) -> Unit,
-    onNameChanged: (String) -> Unit,
+    onProfileImageSelect: (Uri) -> Unit,
+    onNameChange: (String) -> Unit,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     when (state.page) {
         TrainerSignUpContract.TrainerSignUpPage.ProfileSetUp -> TrainerProfileSetupPage(
             state = state,
-            onProfileImageSelected = onProfileImageSelected,
-            onNameChanged = onNameChanged,
+            onProfileImageSelect = onProfileImageSelect,
+            onNameChange = onNameChange,
             onNextClick = onNextClick,
             onBackClick = onBackClick,
         )
