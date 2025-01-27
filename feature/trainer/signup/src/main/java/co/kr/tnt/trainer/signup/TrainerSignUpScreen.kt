@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.signup
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -21,6 +22,8 @@ internal fun TrainerSignUpRoute(
 
     TrainerSignUpScreen(
         state = uiState,
+        onNameChanged = { viewModel.setEvent(TrainerSignUpUiEvent.OnNameChanged(it)) },
+        onProfileImageSelected = { viewModel.setEvent(TrainerSignUpUiEvent.OnImagePicked(it)) },
         onNextClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnNextClick) },
         onBackClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnBackClick) },
     )
@@ -38,15 +41,21 @@ internal fun TrainerSignUpRoute(
 @Composable
 private fun TrainerSignUpScreen(
     state: TrainerSignUpUiState,
+    onProfileImageSelected: (Uri) -> Unit,
+    onNameChanged: (String) -> Unit,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     when (state.page) {
         TrainerSignUpContract.TrainerSignUpPage.ProfileSetUp -> TrainerProfileSetupPage(
+            state = state,
+            onProfileImageSelected = onProfileImageSelected,
+            onNameChanged = onNameChanged,
             onNextClick = onNextClick,
             onBackClick = onBackClick,
         )
         TrainerSignUpContract.TrainerSignUpPage.SignUpComplete -> TrainerSignUpCompletePage(
+            state = state,
             onNextClick = onNextClick,
             onBackClick = onBackClick,
         )

@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.signup
 
+import android.net.Uri
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -8,9 +9,12 @@ internal class TrainerSignUpContract {
     data class TrainerSignUpUiState(
         val page: TrainerSignUpPage = TrainerSignUpPage.ProfileSetUp,
         val name: String = "",
+        val profileImage: Uri? = null,
     ) : UiState
 
     sealed interface TrainerSignUpUiEvent : UiEvent {
+        data class OnImagePicked(val imageUri: Uri) : TrainerSignUpUiEvent
+        data class OnNameChanged(val name: String) : TrainerSignUpUiEvent
         data object OnNextClick : TrainerSignUpUiEvent
         data object OnBackClick : TrainerSignUpUiEvent
     }

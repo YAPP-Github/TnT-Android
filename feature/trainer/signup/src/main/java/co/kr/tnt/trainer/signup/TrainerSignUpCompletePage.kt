@@ -22,20 +22,18 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainer.signup.R
+import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
-fun TrainerSignUpCompletePage(
+internal fun TrainerSignUpCompletePage(
+    state: TrainerSignUpUiState,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
-
-    // TODO 이름, 프로필 이미지 불러오기
-    val name = "김헬짱"
-    val profileImage = "https://buly.kr/7FQeS5M"
 
     Scaffold(
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -54,7 +52,7 @@ fun TrainerSignUpCompletePage(
                     .padding(bottom = 66.dp),
             ) {
                 Text(
-                    text = stringResource(R.string.nice_to_meet_you_trainer, name),
+                    text = stringResource(R.string.nice_to_meet_you_trainer, state.name),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h1,
                     textAlign = Center,
@@ -70,7 +68,7 @@ fun TrainerSignUpCompletePage(
                 Spacer(Modifier.padding(top = 28.dp))
                 TnTProfileImage(
                     defaultImage = painterResource(DefaultUserProfile.Trainer.image),
-                    image = rememberAsyncImagePainter(profileImage),
+                    image = rememberAsyncImagePainter(state.profileImage),
                     imageSize = 200.dp,
                     showEditButton = false,
                 )
@@ -91,6 +89,7 @@ private fun TrainerSignUpCompletePagePreview() {
         TrainerSignUpCompletePage(
             onBackClick = {},
             onNextClick = {},
+            state = TODO(),
         )
     }
 }
