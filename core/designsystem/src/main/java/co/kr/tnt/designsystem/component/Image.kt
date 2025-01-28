@@ -1,4 +1,4 @@
-package co.kr.tnt.designsystem.component.image
+package co.kr.tnt.designsystem.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
