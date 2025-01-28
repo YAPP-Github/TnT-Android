@@ -16,6 +16,8 @@
     <string name="close">닫기</string>
     <string name="ok">확인</string>
 
+    <string name="error_server_request_failed">서버 요청에 실패했어요</string>
+
     <string name="trainee">트레이니</string>
     <string name="trainer">트레이너</string>
 

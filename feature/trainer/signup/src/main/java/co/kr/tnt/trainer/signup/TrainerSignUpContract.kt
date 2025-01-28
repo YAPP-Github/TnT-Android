@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.signup
 
+import android.content.Context
 import android.net.Uri
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.ui.base.UiEvent
@@ -17,9 +18,17 @@ internal class TrainerSignUpContract {
         data class OnNameChange(val name: String) : TrainerSignUpUiEvent
         data object OnNextClick : TrainerSignUpUiEvent
         data object OnBackClick : TrainerSignUpUiEvent
+        data class RequestSignUp(
+            val context: Context,
+            val imageUri: Uri?,
+            val id: String,
+            val email: String,
+            val authType: String,
+        ) : TrainerSignUpUiEvent
     }
 
     sealed interface TrainerSignUpEffect : UiSideEffect {
+        data class ShowToast(val message: String) : TrainerSignUpEffect
         data object NavigateToBack : TrainerSignUpEffect
         data object NavigateToConnect : TrainerSignUpEffect
     }
