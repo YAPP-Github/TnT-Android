@@ -1,9 +1,7 @@
 package co.kr.data.network.model
 
 import co.kr.tnt.domain.model.UserType
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import java.time.LocalDate
 
 @Serializable
 data class SignUpRequest(
@@ -16,8 +14,7 @@ data class SignUpRequest(
     val socialEmail: String,
     val memberType: String,
     val name: String,
-    @Contextual
-    val birthday: LocalDate? = null,
+    val birthday: String? = null,
     val height: Double? = null,
     val weight: Double? = null,
     val goalContents: List<String>? = null,
@@ -53,11 +50,11 @@ object SignUpRequestMapper {
             is UserType.Trainee -> SignUpRequest(
                 memberType = "trainee",
                 name = userType.name,
-                birthday = userType.birthday,
+                birthday = userType.birthday?.toString(),
                 height = userType.height.toDouble(),
                 weight = userType.weight,
                 goalContents = userType.ptPurpose,
-                cautionNote = userType.caution,
+                cautionNote = userType.caution?.ifBlank { null },
                 socialType = socialType,
                 socialId = socialId,
                 socialEmail = email,

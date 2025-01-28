@@ -21,8 +21,6 @@ internal class TrainerSignUpViewModel @Inject constructor(
 ) : BaseViewModel<TrainerSignUpUiState, TrainerSignUpUiEvent, TrainerSignUpEffect>(
         TrainerSignUpUiState(),
     ) {
-    private var signupResult: Boolean? = null
-
     override suspend fun handleEvent(event: TrainerSignUpUiEvent) {
         when (event) {
             is TrainerSignUpUiEvent.OnImageChange -> setProfileImage(event.imageUri)
@@ -47,7 +45,7 @@ internal class TrainerSignUpViewModel @Inject constructor(
         authType: String,
     ) {
         viewModelScope.launch {
-            val profileImagePart = imageUri?.toMultiPart(context)
+            val profileImagePart = imageUri?.toMultiPart(context, "profileImage")
 
             runCatching {
                 signUpRepository.signUp(
@@ -58,7 +56,6 @@ internal class TrainerSignUpViewModel @Inject constructor(
                     email = email,
                 )
             }.onSuccess {
-                signupResult = true
                 sendEffect(TrainerSignUpEffect.NavigateToConnect)
             }.onFailure {
                 // TODO 디자인 시스템 Toast 적용

@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.signup
 
+import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -19,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -32,7 +34,7 @@ import co.kr.tnt.core.ui.R as uiResource
 internal fun TraineeSignUpCompletePage(
     state: TraineeSignUpUiState,
     onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onNextClick: (Uri?) -> Unit,
 ) {
     BackHandler { onBackClick() }
 
@@ -78,7 +80,7 @@ internal fun TraineeSignUpCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
-                onClick = onNextClick,
+                onClick = { onNextClick(state.traineeState.image?.toUri()) },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
