@@ -1,7 +1,6 @@
 package co.kr.tnt.trainee.signup
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -37,8 +35,6 @@ internal fun TraineeSignUpCompletePage(
     onNextClick: (Uri?) -> Unit,
 ) {
     BackHandler { onBackClick() }
-
-    Log.d("test", "${state.traineeState}")
 
     Scaffold(
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -57,7 +53,7 @@ internal fun TraineeSignUpCompletePage(
                     .padding(bottom = 66.dp),
             ) {
                 Text(
-                    text = stringResource(R.string.nice_to_meet_you_trainee, state.traineeState.name),
+                    text = stringResource(R.string.nice_to_meet_you_trainee, state.name),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h1,
                     textAlign = Center,
@@ -73,14 +69,14 @@ internal fun TraineeSignUpCompletePage(
                 Spacer(Modifier.padding(top = 28.dp))
                 TnTProfileImage(
                     defaultImage = painterResource(DefaultUserProfile.Trainee.image),
-                    image = rememberAsyncImagePainter(state.traineeState.image),
+                    image = rememberAsyncImagePainter(state.image),
                     imageSize = 200.dp,
                     showEditButton = false,
                 )
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
-                onClick = { onNextClick(state.traineeState.image?.toUri()) },
+                onClick = { onNextClick(state.image) },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -94,7 +90,7 @@ private fun TraineeSignUpCompletePagePreview() {
         TraineeSignUpCompletePage(
             onBackClick = {},
             onNextClick = {},
-            state = TODO(),
+            state = TraineeSignUpUiState(name = "김회원"),
         )
     }
 }

@@ -2,11 +2,11 @@ package co.kr.tnt.domain.repository
 
 import co.kr.tnt.domain.model.SignUpResult
 import co.kr.tnt.domain.model.UserType
-import okhttp3.MultipartBody
+import java.io.File
 
 interface SignUpRepository {
     suspend fun signUp(
-        profileImage: MultipartBody.Part?,
+        profileImage: File?,
         userType: UserType,
         socialId: String,
         socialType: String,

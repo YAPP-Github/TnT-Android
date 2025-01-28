@@ -16,9 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -54,11 +51,6 @@ internal fun TraineeProfileSetupPage(
     BackHandler { onBackClick() }
 
     val context = LocalContext.current
-
-    val isWarning by remember(state.traineeState.name) {
-        derivedStateOf { state.traineeState.name.length > MAX_LENGTH }
-    }
-
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         if (uri != null) {
             onProfileImageSelect(uri)
@@ -66,7 +58,7 @@ internal fun TraineeProfileSetupPage(
     }
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context)
-            .data(state.traineeState.image)
+            .data(state.image)
             .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
             .build(),
     )
@@ -93,7 +85,7 @@ internal fun TraineeProfileSetupPage(
                         .fillMaxWidth()
                         .padding(vertical = 12.dp),
                     defaultImage = painterResource(DefaultUserProfile.Trainee.image),
-                    image = state.traineeState.image?.let { painter },
+                    image = state.image?.let { painter },
                     onEditClick = {
                         pickMediaLauncher.launch(
                             PickVisualMediaRequest(
@@ -105,7 +97,7 @@ internal fun TraineeProfileSetupPage(
                 Spacer(Modifier.padding(top = 60.dp))
                 TnTLabeledTextFieldWithCounter(
                     title = stringResource(uiResource.string.name),
-                    value = state.traineeState.name,
+                    value = state.name,
                     onValueChange = { newValue ->
                         val filteredText = validateInput(newValue)
                         onNameChange(filteredText)
@@ -114,14 +106,14 @@ internal fun TraineeProfileSetupPage(
                     placeholder = stringResource(R.string.enter_your_name),
                     maxLength = MAX_LENGTH,
                     isSingleLine = true,
-                    showWarning = isWarning,
+                    showWarning = !state.isNameValid,
                     isRequired = true,
                     warningMessage = stringResource(R.string.text_length_warning, MAX_LENGTH),
                 )
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
-                enabled = state.traineeState.name.isNotBlank() && !isWarning,
+                enabled = state.name.isNotBlank() && state.isNameValid,
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
@@ -141,9 +133,9 @@ private fun validateInput(input: String): String {
 private fun TraineeProfileSetupPagePreview() {
     TnTTheme {
         TraineeProfileSetupPage(
+            state = TraineeSignUpUiState(),
             onBackClick = {},
             onNextClick = {},
-            state = TODO(),
             onProfileImageSelect = {},
             onNameChange = {},
         )

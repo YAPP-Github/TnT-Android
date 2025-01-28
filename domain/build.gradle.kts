@@ -5,6 +5,5 @@ plugins {
 
 dependencies {
     implementation(libs.inject)
-    implementation(libs.okhttp.logging)
     implementation(libs.coroutines.core)
 }

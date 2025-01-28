@@ -3,13 +3,14 @@ package co.kr.tnt.trainer.signup
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.domain.repository.SignUpRepository
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpEffect
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpPage
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiEvent
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 import co.kr.tnt.ui.base.BaseViewModel
-import co.kr.tnt.ui.util.toMultiPart
+import co.kr.tnt.ui.util.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -45,12 +46,16 @@ internal class TrainerSignUpViewModel @Inject constructor(
         authType: String,
     ) {
         viewModelScope.launch {
-            val profileImagePart = imageUri?.toMultiPart(context, "profileImage")
+            val profileImagePart = imageUri?.toFile(context)
 
             runCatching {
                 signUpRepository.signUp(
                     profileImage = profileImagePart,
-                    userType = currentState.trainerState,
+                    userType = UserType.Trainer(
+                        id = id,
+                        name = currentState.name,
+                        image = currentState.image.toString(),
+                    ),
                     socialId = id,
                     socialType = authType,
                     email = email,
@@ -66,19 +71,11 @@ internal class TrainerSignUpViewModel @Inject constructor(
     }
 
     private fun setProfileImage(imageUri: Uri) {
-        updateState {
-            copy(
-                trainerState = trainerState.copy(image = imageUri.toString()),
-            )
-        }
+        updateState { copy(image = imageUri) }
     }
 
     private fun setName(name: String) {
-        updateState {
-            copy(
-                trainerState = trainerState.copy(name = name),
-            )
-        }
+        updateState { copy(name = name) }
     }
 
     private fun navigateToNext() {

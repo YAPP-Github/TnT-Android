@@ -96,7 +96,7 @@ private fun TraineeSignUpScreen(
         )
 
         TraineeSignUpPage.NoteForTrainer -> TraineeNoteForTrainerPage(
-            state = state,
+            caution = state.caution,
             onCautionChange = onCautionChange,
             onBackClick = onBackClick,
             onNextClick = onNextClick,

@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -69,7 +67,7 @@ internal fun TraineePTPurposePage(
                             val purposeText = stringResource(purpose.textResId)
                             PurposeButton(
                                 text = purposeText,
-                                isSelected = purposeText in state.traineeState.ptPurpose,
+                                isSelected = purposeText in state.ptPurpose,
                                 onClick = { onPurposeSelected(purposeText) },
                                 modifier = Modifier.weight(1f),
                             )
@@ -80,7 +78,7 @@ internal fun TraineePTPurposePage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 onClick = onNextClick,
-                enabled = state.traineeState.ptPurpose.isNotEmpty(),
+                enabled = state.ptPurpose.isNotEmpty(),
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -108,7 +106,7 @@ fun PurposeButton(
 private fun TraineePTPurposePagePreview() {
     TnTTheme {
         TraineePTPurposePage(
-            state = TODO(),
+            state = TraineeSignUpUiState(),
             onBackClick = {},
             onNextClick = {},
             onPurposeSelected = {},

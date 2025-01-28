@@ -13,7 +13,9 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 import javax.inject.Inject
 
 class SignUpRepositoryImpl @Inject constructor(
@@ -21,12 +23,17 @@ class SignUpRepositoryImpl @Inject constructor(
     private val sessionLocalDataSource: SessionLocalDataSource,
 ) : SignUpRepository {
     override suspend fun signUp(
-        profileImage: MultipartBody.Part?,
+        profileImage: File?,
         userType: UserType,
         socialId: String,
         socialType: String,
         email: String,
     ): SignUpResult {
+        val profileImagePart = profileImage?.let {
+            val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("profileImage", it.name, requestFile)
+        }
+
         // TODO FCM token
         val signUpRequest = SignUpRequestMapper.fromUserType(
             userType = userType,
@@ -38,7 +45,7 @@ class SignUpRepositoryImpl @Inject constructor(
         val requestBody = prepareJsonRequestBody(signUpRequest)
 
         val response = signupRemoteDataSource.postSignUp(
-            profileImage = profileImage,
+            profileImage = profileImagePart,
             request = requestBody,
         )
 

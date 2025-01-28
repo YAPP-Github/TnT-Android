@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -54,7 +53,7 @@ internal fun TrainerSignUpCompletePage(
                     .padding(bottom = 66.dp),
             ) {
                 Text(
-                    text = stringResource(R.string.nice_to_meet_you_trainer, state.trainerState.name),
+                    text = stringResource(R.string.nice_to_meet_you_trainer, state.name),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h1,
                     textAlign = Center,
@@ -70,14 +69,14 @@ internal fun TrainerSignUpCompletePage(
                 Spacer(Modifier.padding(top = 28.dp))
                 TnTProfileImage(
                     defaultImage = painterResource(DefaultUserProfile.Trainer.image),
-                    image = rememberAsyncImagePainter(state.trainerState.image),
+                    image = rememberAsyncImagePainter(state.image),
                     imageSize = 200.dp,
                     showEditButton = false,
                 )
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
-                onClick = { onNextClick(state.trainerState.image?.toUri()) },
+                onClick = { onNextClick(state.image) },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -91,7 +90,7 @@ private fun TrainerSignUpCompletePagePreview() {
         TrainerSignUpCompletePage(
             onBackClick = {},
             onNextClick = {},
-            state = TODO(),
+            state = TrainerSignUpUiState(),
         )
     }
 }

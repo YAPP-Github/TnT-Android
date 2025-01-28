@@ -18,7 +18,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -79,8 +78,8 @@ internal fun TraineeBasicInfoPage(
                 BirthdayPicker(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     today = today,
-                    selectedDate = state.traineeState.birthday,
-                    onDateSelected = { onBirthdayChange(it) },
+                    selectedDate = state.birthday,
+                    onDateSelected = onBirthdayChange,
                 )
                 HorizontalDivider(
                     thickness = 1.dp,
@@ -106,7 +105,7 @@ internal fun TraineeBasicInfoPage(
                         trailingComponent = {
                             UnitLabel(uiResource.string.height_unit)
                         },
-                        onValueChange = { onHeightChange(it) },
+                        onValueChange = onHeightChange,
                         modifier = Modifier.weight(1f),
                     )
                     TnTLabeledTextField(
@@ -121,7 +120,7 @@ internal fun TraineeBasicInfoPage(
                         trailingComponent = {
                             UnitLabel(uiResource.string.weight_unit)
                         },
-                        onValueChange = { onWeightChange(it) },
+                        onValueChange = onWeightChange,
                         modifier = Modifier.weight(1f),
                     )
                 }
@@ -201,9 +200,9 @@ private fun UnitLabel(stringResId: Int) {
 private fun TraineeBasicInfoPagePreview() {
     TnTTheme {
         TraineeBasicInfoPage(
+            state = TraineeSignUpUiState(),
             onBackClick = {},
             onNextClick = {},
-            state = TODO(),
             onHeightChange = {},
             onWeightChange = {},
             onBirthdayChange = {},

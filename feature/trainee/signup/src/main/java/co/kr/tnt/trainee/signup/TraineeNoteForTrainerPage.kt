@@ -21,7 +21,6 @@ import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
-import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -29,7 +28,7 @@ private const val MAX_LENGTH = 100
 
 @Composable
 internal fun TraineeNoteForTrainerPage(
-    state: TraineeSignUpUiState,
+    caution: String?,
     onCautionChange: (String) -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -55,14 +54,14 @@ internal fun TraineeNoteForTrainerPage(
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 TnTOutlinedTextField(
-                    value = state.traineeState.caution.toString(),
+                    value = caution ?: "",
                     onValueChange = { newValue ->
                         if (newValue.length <= MAX_LENGTH) {
                             onCautionChange(newValue)
                         }
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    isError = (state.traineeState.caution?.length ?: 0) == MAX_LENGTH,
+                    isError = (caution?.length ?: 0) == MAX_LENGTH,
                     warningMessage = stringResource(R.string.text_length_overflow),
                     maxLength = 100,
                 )
@@ -81,9 +80,9 @@ internal fun TraineeNoteForTrainerPage(
 private fun TraineeNoteForTrainerPagePreview() {
     TnTTheme {
         TraineeNoteForTrainerPage(
+            caution = "",
             onBackClick = {},
             onNextClick = {},
-            state = TODO(),
             onCautionChange = {},
         )
     }

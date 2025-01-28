@@ -47,6 +47,7 @@ internal class TraineeConnectViewModel @Inject constructor() :
                         id = "trainee",
                         name = "김회원",
                         image = "https://buly.kr/3j7VVqN",
+                        birthday = null,
                         age = 25,
                         weight = 100.0,
                         height = 165,

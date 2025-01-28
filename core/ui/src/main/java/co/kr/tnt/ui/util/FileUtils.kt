@@ -5,18 +5,13 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
-fun Uri.toMultiPart(context: Context, keyName: String = "image"): MultipartBody.Part? {
+fun Uri.toFile(context: Context): File? {
     return getRealPathFromUri(this, context)?.let { filePath ->
-        val file = File(filePath)
-        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        MultipartBody.Part.createFormData(keyName, file.name, requestFile)
+        File(filePath)
     } ?: run {
-        Log.e("toMultipartImagePart", "Error creating multipart image for URI: $this")
+        Log.e("toFile", "Error creating file for URI: $this")
         null
     }
 }
