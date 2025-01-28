@@ -132,7 +132,7 @@ private fun ProfileSection(
 private fun TraineeConnectCompletePagePreview() {
     TnTTheme {
         TraineeConnectCompletePage(
-            state = TODO(),
+            state = TraineeConnectUiState(),
             onNextClick = {},
             onBackClick = {},
         )

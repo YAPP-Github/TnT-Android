@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.image.TnTProfileImage
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.trainer.connect.R
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 import co.kr.tnt.ui.model.DefaultUserProfile
@@ -106,10 +107,12 @@ internal fun TraineeProfilePage(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        TextWithLabel(
-                            label = stringResource(uiResource.string.age_label),
-                            text = trainee.age.toString() + stringResource(uiResource.string.age_unit),
-                        )
+                        if (trainee.age.toString() != "null") {
+                            TextWithLabel(
+                                label = stringResource(uiResource.string.age_label),
+                                text = trainee.age.toString() + stringResource(uiResource.string.age_unit),
+                            )
+                        }
                         TextWithLabel(
                             label = stringResource(uiResource.string.height_label),
                             text = trainee.height.toString() + stringResource(uiResource.string.height_unit),
@@ -198,7 +201,19 @@ private fun TextWithBackground(
 private fun TraineeProfilePagePreview() {
     TnTTheme {
         TraineeProfilePage(
-            state = TODO(),
+            state = TrainerConnectUiState(
+                traineeState = UserType.Trainee(
+                    id = "",
+                    name = "김회원",
+                    image = null,
+                    birthday = null,
+                    age = null,
+                    weight = 55.0,
+                    height = 150,
+                    ptPurpose = listOf("체중 감량", "자세 교정"),
+                    caution = null,
+                ),
+            ),
             onNextClick = {},
             onBackClick = {},
         )
