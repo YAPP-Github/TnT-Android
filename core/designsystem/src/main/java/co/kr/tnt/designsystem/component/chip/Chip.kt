@@ -1,4 +1,4 @@
-package co.kr.tnt.designsystem.component.tag
+package co.kr.tnt.designsystem.component.chip
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -12,33 +12,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.designsystem.component.tag.model.TagType
+import co.kr.tnt.designsystem.component.chip.model.ChipStyle
 import co.kr.tnt.designsystem.theme.TnTTheme
 
 @Composable
-fun TnTTag(
+fun TnTChip(
     text: String,
-    type: TagType,
+    style: ChipStyle,
     modifier: Modifier = Modifier,
     leadingEmoji: String? = null,
 ) {
-    val backgroundColor: Color
-    val textColor: Color
-
-    when (type) {
-        TagType.EXERCISE -> {
-            backgroundColor = TnTTheme.colors.blueColors.Blue100
-            textColor = TnTTheme.colors.blueColors.Blue800
-        }
-
-        TagType.DIET -> {
-            backgroundColor = TnTTheme.colors.pinkColors.Pink100
-            textColor = TnTTheme.colors.pinkColors.Pink800
-        }
-    }
+    val backgroundColor = style.backgroundColor()
+    val textColor = style.textColor()
 
     Row(
         modifier = modifier
@@ -65,11 +52,11 @@ fun TnTTag(
 
 @Preview(showBackground = true, widthDp = 100, heightDp = 40)
 @Composable
-private fun TnTExerciseTagPreview() {
+private fun TnTExerciseChipPreview() {
     TnTTheme {
-        TnTTag(
+        TnTChip(
             text = "8회차 수업",
-            type = TagType.EXERCISE,
+            style = ChipStyle.BLUE,
             leadingEmoji = "💪",
         )
     }
@@ -77,22 +64,22 @@ private fun TnTExerciseTagPreview() {
 
 @Preview(showBackground = true, widthDp = 100, heightDp = 40)
 @Composable
-private fun TnTTagWithoutEmojiPreview() {
+private fun TnTChipWithoutEmojiPreview() {
     TnTTheme {
-        TnTTag(
+        TnTChip(
             text = "등 운동",
-            type = TagType.EXERCISE,
+            style = ChipStyle.BLUE,
         )
     }
 }
 
 @Preview(showBackground = true, widthDp = 100, heightDp = 40)
 @Composable
-private fun TnTDietTagPreview() {
+private fun TnTDietChipPreview() {
     TnTTheme {
-        TnTTag(
+        TnTChip(
             text = "아침",
-            type = TagType.DIET,
+            style = ChipStyle.PINK,
             leadingEmoji = "\uD83C\uDF1E",
         )
     }
