@@ -19,7 +19,7 @@ sealed class UserType {
         override val image: String? = null,
         val birthday: LocalDate? = null,
         val age: Int? = 0,
-        val weight: Float = 0f,
+        val weight: Double = 0.0,
         val height: Int = 0,
         val ptPurpose: List<String> = emptyList(),
         val caution: String? = "",

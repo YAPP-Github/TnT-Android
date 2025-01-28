@@ -1,0 +1,56 @@
+package co.kr.data.repository
+
+import co.kr.data.network.model.SignUpRequest
+import co.kr.data.network.model.SignUpRequestMapper
+import co.kr.data.network.model.toDomain
+import co.kr.data.network.source.SignUpRemoteDataSource
+import co.kr.data.storage.source.SessionLocalDataSource
+import co.kr.tnt.domain.model.SignUpResult
+import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.repository.SignUpRepository
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import javax.inject.Inject
+
+class SignUpRepositoryImpl @Inject constructor(
+    private val signupRemoteDataSource: SignUpRemoteDataSource,
+    private val sessionLocalDataSource: SessionLocalDataSource,
+) : SignUpRepository {
+    override suspend fun signUp(
+        profileImage: MultipartBody.Part?,
+        userType: UserType,
+        socialId: String,
+        socialType: String,
+        email: String,
+    ): SignUpResult {
+        // TODO FCM token
+        val signUpRequest = SignUpRequestMapper.fromUserType(
+            userType = userType,
+            socialId = socialId,
+            socialType = socialType,
+            email = email,
+            fcmToken = "EMPTY",
+        )
+        val requestBody = prepareJsonRequestBody(signUpRequest)
+
+        val response = signupRemoteDataSource.postSignUp(
+            profileImage = profileImage,
+            request = requestBody,
+        )
+
+        response.sessionId.let { sessionId ->
+            sessionLocalDataSource.updateSessionId(sessionId)
+        }
+
+        return response.toDomain()
+    }
+
+    private fun prepareJsonRequestBody(signUpRequest: SignUpRequest): RequestBody {
+        val jsonString = Json.encodeToString(signUpRequest)
+        return jsonString.toRequestBody("application/json".toMediaTypeOrNull())
+    }
+}
