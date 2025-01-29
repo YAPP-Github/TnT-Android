@@ -1,8 +1,8 @@
 package co.kr.data.repository
 
 import co.kr.data.network.model.SignUpRequest
-import co.kr.data.network.model.SignUpRequestMapper
 import co.kr.data.network.model.toDomain
+import co.kr.data.network.model.toSignUpRequest
 import co.kr.data.network.source.SignUpRemoteDataSource
 import co.kr.data.storage.source.SessionLocalDataSource
 import co.kr.tnt.domain.model.SignUpResult
@@ -21,6 +21,7 @@ import javax.inject.Inject
 class SignUpRepositoryImpl @Inject constructor(
     private val signupRemoteDataSource: SignUpRemoteDataSource,
     private val sessionLocalDataSource: SessionLocalDataSource,
+    private val json: Json,
 ) : SignUpRepository {
     override suspend fun signUp(
         profileImage: File?,
@@ -35,29 +36,26 @@ class SignUpRepositoryImpl @Inject constructor(
         }
 
         // TODO FCM token
-        val signUpRequest = SignUpRequestMapper.fromUserType(
-            userType = userType,
+        val signUpRequest = userType.toSignUpRequest(
             socialId = socialId,
             socialType = socialType,
             email = email,
             fcmToken = "EMPTY",
         )
-        val requestBody = prepareJsonRequestBody(signUpRequest)
+        val requestBody = signUpRequest.toRequestBody(Json)
 
         val response = signupRemoteDataSource.postSignUp(
             profileImage = profileImagePart,
             request = requestBody,
         )
 
-        response.sessionId.let { sessionId ->
-            sessionLocalDataSource.updateSessionId(sessionId)
-        }
+        sessionLocalDataSource.updateSessionId(response.sessionId)
 
         return response.toDomain()
     }
 
-    private fun prepareJsonRequestBody(signUpRequest: SignUpRequest): RequestBody {
-        val jsonString = Json.encodeToString(signUpRequest)
+    private fun SignUpRequest.toRequestBody(json: Json): RequestBody {
+        val jsonString = json.encodeToString(this)
         return jsonString.toRequestBody("application/json".toMediaTypeOrNull())
     }
 }

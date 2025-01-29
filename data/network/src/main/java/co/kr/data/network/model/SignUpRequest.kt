@@ -21,48 +21,45 @@ data class SignUpRequest(
     val cautionNote: String? = "",
 )
 
-object SignUpRequestMapper {
-    fun fromUserType(
-        userType: UserType,
-        socialId: String,
-        socialType: String,
-        email: String,
-        fcmToken: String,
-    ): SignUpRequest {
-        return when (userType) {
-            is UserType.Trainer -> SignUpRequest(
-                memberType = "trainer",
-                name = userType.name,
-                birthday = null,
-                height = null,
-                weight = null,
-                goalContents = null,
-                cautionNote = null,
-                socialType = socialType,
-                socialId = socialId,
-                socialEmail = email,
-                fcmToken = fcmToken,
-                serviceAgreement = true,
-                collectionAgreement = true,
-                advertisementAgreement = true,
-            )
+fun UserType.toSignUpRequest(
+    socialId: String,
+    socialType: String,
+    email: String,
+    fcmToken: String,
+): SignUpRequest {
+    return when (this) {
+        is UserType.Trainer -> SignUpRequest(
+            memberType = "trainer",
+            name = name,
+            birthday = null,
+            height = null,
+            weight = null,
+            goalContents = null,
+            cautionNote = null,
+            socialType = socialType,
+            socialId = socialId,
+            socialEmail = email,
+            fcmToken = fcmToken,
+            serviceAgreement = true,
+            collectionAgreement = true,
+            advertisementAgreement = true,
+        )
 
-            is UserType.Trainee -> SignUpRequest(
-                memberType = "trainee",
-                name = userType.name,
-                birthday = userType.birthday?.toString(),
-                height = userType.height.toDouble(),
-                weight = userType.weight,
-                goalContents = userType.ptPurpose,
-                cautionNote = userType.caution?.ifBlank { null },
-                socialType = socialType,
-                socialId = socialId,
-                socialEmail = email,
-                fcmToken = fcmToken,
-                serviceAgreement = true,
-                collectionAgreement = true,
-                advertisementAgreement = true,
-            )
-        }
+        is UserType.Trainee -> SignUpRequest(
+            memberType = "trainee",
+            name = name,
+            birthday = birthday?.toString(),
+            height = height.toDouble(),
+            weight = weight,
+            goalContents = ptPurpose,
+            cautionNote = caution?.ifBlank { null },
+            socialType = socialType,
+            socialId = socialId,
+            socialEmail = email,
+            fcmToken = fcmToken,
+            serviceAgreement = true,
+            collectionAgreement = true,
+            advertisementAgreement = true,
+        )
     }
 }
