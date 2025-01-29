@@ -25,7 +25,7 @@ sealed interface RecordChip {
 
     companion object {
         @Composable
-        fun create(type: RecordType, sessionCount: Int): RecordChip {
+        fun create(type: RecordType): RecordChip {
             return when (type) {
                 is RecordType.MealType -> {
                     val title = when (type) {
@@ -55,9 +55,9 @@ sealed interface RecordChip {
                 }
 
                 is RecordType.PTSessionType -> {
-                    val title = stringResource(R.string.pt_session, sessionCount)
+                    val title = stringResource(R.string.pt_session, type.sessionCount)
                     val emoji = "💪"
-                    PTSessionChip(title, sessionCount, emoji)
+                    PTSessionChip(title, type.sessionCount, emoji)
                 }
             }
         }
