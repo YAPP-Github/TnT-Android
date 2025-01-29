@@ -4,4 +4,6 @@
     <string name="text_counter">%1$d/%2$d자</string>
     <string name="placeholder_content_input">내용을 입력해주세요</string>
 
+    <!--  Card  -->
+    <string name="received_feedback">받은 피드백</string>
 </resources>
