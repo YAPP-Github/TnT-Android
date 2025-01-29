@@ -1,11 +1,11 @@
 package co.kr.tnt.domain.model
 
 sealed class RecordType {
-    sealed class DietType : RecordType() {
-        data object BREAKFAST : DietType()
-        data object LUNCH : DietType()
-        data object DINNER : DietType()
-        data object SNACK : DietType()
+    sealed class MealType : RecordType() {
+        data object BREAKFAST : MealType()
+        data object LUNCH : MealType()
+        data object DINNER : MealType()
+        data object SNACK : MealType()
     }
 
     sealed class ExerciseType : RecordType() {
@@ -16,7 +16,5 @@ sealed class RecordType {
         data object CARDIO : ExerciseType()
     }
 
-    sealed class PTSessionType : RecordType() {
-        data object SESSION : PTSessionType()
-    }
+    data class PTSessionType(val sessionCount: Int) : RecordType()
 }

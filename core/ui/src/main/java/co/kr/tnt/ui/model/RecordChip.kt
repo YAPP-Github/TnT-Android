@@ -5,37 +5,40 @@ import androidx.compose.ui.res.stringResource
 import co.kr.tnt.core.ui.R
 import co.kr.tnt.domain.model.RecordType
 
-sealed class RecordChip(val title: String, val emoji: String?) {
-    class DietChip(
-        title: String,
-        emoji: String,
-    ) : RecordChip(title, emoji)
-    class ExerciseChip(
-        title: String,
-        emoji: String? = null,
-    ) : RecordChip(title, emoji)
-    class PTSessionChip(
-        title: String,
+sealed interface RecordChip {
+    val title: String
+    val emoji: String?
+
+    data class DietChip(
+        override val title: String,
+        override val emoji: String,
+    ) : RecordChip
+    data class ExerciseChip(
+        override val title: String,
+        override val emoji: String? = null,
+    ) : RecordChip
+    data class PTSessionChip(
+        override val title: String,
         val sessionCount: Int,
-        emoji: String,
-    ) : RecordChip(title, emoji)
+        override val emoji: String,
+    ) : RecordChip
 
     companion object {
         @Composable
-        fun create(type: RecordType, sessionCount: Int? = null): RecordChip {
+        fun create(type: RecordType, sessionCount: Int): RecordChip {
             return when (type) {
-                is RecordType.DietType -> {
+                is RecordType.MealType -> {
                     val title = when (type) {
-                        RecordType.DietType.BREAKFAST -> stringResource(R.string.diet_breakfast)
-                        RecordType.DietType.LUNCH -> stringResource(R.string.diet_lunch)
-                        RecordType.DietType.DINNER -> stringResource(R.string.diet_dinner)
-                        RecordType.DietType.SNACK -> stringResource(R.string.diet_snack)
+                        RecordType.MealType.BREAKFAST -> stringResource(R.string.diet_breakfast)
+                        RecordType.MealType.LUNCH -> stringResource(R.string.diet_lunch)
+                        RecordType.MealType.DINNER -> stringResource(R.string.diet_dinner)
+                        RecordType.MealType.SNACK -> stringResource(R.string.diet_snack)
                     }
                     val emoji = when (type) {
-                        RecordType.DietType.BREAKFAST -> "🌞"
-                        RecordType.DietType.LUNCH -> "⛅"
-                        RecordType.DietType.DINNER -> "🌙"
-                        RecordType.DietType.SNACK -> "🍰"
+                        RecordType.MealType.BREAKFAST -> "🌞"
+                        RecordType.MealType.LUNCH -> "⛅"
+                        RecordType.MealType.DINNER -> "🌙"
+                        RecordType.MealType.SNACK -> "🍰"
                     }
                     DietChip(title, emoji)
                 }
@@ -52,9 +55,9 @@ sealed class RecordChip(val title: String, val emoji: String?) {
                 }
 
                 is RecordType.PTSessionType -> {
-                    val title = stringResource(R.string.pt_session, sessionCount ?: 1)
+                    val title = stringResource(R.string.pt_session, sessionCount)
                     val emoji = "💪"
-                    PTSessionChip(title, sessionCount ?: 1, emoji)
+                    PTSessionChip(title, sessionCount, emoji)
                 }
             }
         }
