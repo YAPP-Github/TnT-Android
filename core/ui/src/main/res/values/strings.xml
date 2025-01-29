@@ -31,4 +31,20 @@
     <string name="age_unit">세</string>
     <string name="height_unit">cm</string>
     <string name="weight_unit">kg</string>
+
+    <!-- Diet -->
+    <string name="diet_breakfast">아침</string>
+    <string name="diet_lunch">점심</string>
+    <string name="diet_dinner">저녁</string>
+    <string name="diet_snack">간식</string>
+
+    <!-- Exercise -->
+    <string name="exercise_upper_body">상체 운동</string>
+    <string name="exercise_lower_body">하체 운동</string>
+    <string name="exercise_back">등 운동</string>
+    <string name="exercise_shoulder">어깨 운동</string>
+    <string name="exercise_cardio">유산소</string>
+
+    <!-- PT Session -->
+    <string name="pt_session">%d회차 수업</string>
 </resources>
