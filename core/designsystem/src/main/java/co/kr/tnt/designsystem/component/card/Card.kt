@@ -48,7 +48,7 @@ fun TnTRecordCard(
     leadingEmoji: String? = null,
     feedbackCount: Int? = null,
 ) {
-    val maxLines = if (image == null) 2 else 4
+    val maxLines = if (image == null) 3 else 2
 
     Column(
         modifier = modifier
@@ -168,7 +168,8 @@ fun TnTSessionRecordCard(
     defaultImage: Painter,
     modifier: Modifier = Modifier,
     profileImage: Painter? = null,
-    isSessionRecordRequired: Boolean? = false,
+    showSessionRecordCreation: Boolean? = false,
+    showSessionRecordDetails: Boolean? = false,
     onClick: () -> Unit,
 ) {
     val backgroundColor = if (isTrainer) {
@@ -247,7 +248,7 @@ fun TnTSessionRecordCard(
             )
         }
         // Trainer
-        if (isSessionRecordRequired == true) {
+        if (showSessionRecordCreation == true) {
             Spacer(Modifier.height(12.dp))
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -268,6 +269,26 @@ fun TnTSessionRecordCard(
                     text = stringResource(R.string.make_pt_session_record),
                     style = TnTTheme.typography.label2Medium,
                     color = TnTTheme.colors.neutralColors.Neutral400,
+                )
+            }
+        }
+        // Trainee
+        if (showSessionRecordDetails == true) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .clickable(onClick = onClick),
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_feedback),
+                    contentDescription = "feedback icon",
+                )
+                Spacer(Modifier.width(2.dp))
+                Text(
+                    text = stringResource(R.string.see_pt_session_record),
+                    color = TnTTheme.colors.neutralColors.Neutral500,
+                    style = TnTTheme.typography.label2Medium,
                 )
             }
         }
@@ -349,7 +370,7 @@ private fun TnTTrainerSessionRecordCardPreview() {
             isTrainer = true,
             modifier = Modifier.padding(10.dp),
             leadingEmoji = "\uD83D\uDCAA",
-            isSessionRecordRequired = true,
+            showSessionRecordCreation = true,
             onClick = {},
         )
     }
@@ -369,6 +390,7 @@ private fun TnTTraineeSessionRecordCardPreview() {
             modifier = Modifier.padding(10.dp),
             leadingEmoji = "\uD83D\uDCAA",
             profileImage = painterResource(R.drawable.ic_edit),
+            showSessionRecordDetails = true,
             onClick = {},
         )
     }
