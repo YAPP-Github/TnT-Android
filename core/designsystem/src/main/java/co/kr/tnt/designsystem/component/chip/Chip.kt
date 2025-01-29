@@ -75,7 +75,7 @@ private fun TnTChipWithoutEmojiPreview() {
 
 @Preview(showBackground = true, widthDp = 100, heightDp = 40)
 @Composable
-private fun TnTDietChipPreview() {
+private fun TnTMealChipPreview() {
     TnTTheme {
         TnTChip(
             text = "아침",

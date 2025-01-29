@@ -9,7 +9,7 @@ sealed interface RecordChip {
     val title: String
     val emoji: String?
 
-    data class DietChip(
+    data class MealChip(
         override val title: String,
         override val emoji: String,
     ) : RecordChip
@@ -40,7 +40,7 @@ sealed interface RecordChip {
                         RecordType.MealType.DINNER -> "🌙"
                         RecordType.MealType.SNACK -> "🍰"
                     }
-                    DietChip(title, emoji)
+                    MealChip(title, emoji)
                 }
 
                 is RecordType.ExerciseType -> {
