@@ -6,4 +6,5 @@
 
     <!--  Card  -->
     <string name="received_feedback">받은 피드백</string>
+    <string name="make_pt_session_record">PT 수업 기록 남기기</string>
 </resources>

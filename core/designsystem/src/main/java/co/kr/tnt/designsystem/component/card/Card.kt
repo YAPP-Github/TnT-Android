@@ -2,6 +2,7 @@ package co.kr.tnt.designsystem.component.card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,7 +51,7 @@ fun TnTRecordCard(
     val maxLines = if (image == null) 2 else 4
     // 사진이 없으면 기록 아래 20.dp 간격 (20 - 12 = 8.dp)
     val recordBottomPadding = if (image == null) 8.dp else 0.dp
-    // 사진이 없고 피드백이 있으면 사이에 20.dp 간격 (20 - 8 = 12.dp)
+    // 사진이 없고 피드백이 있으면 기록과 피드백 사이에 20.dp 간격 (20 - 8 = 12.dp)
     val feedBackTopPadding = if (image == null) 12.dp else 0.dp
     val imageBottomPadding = if (feedbackCount == null) 0.dp else 12.dp
 
@@ -95,7 +97,7 @@ fun TnTRecordCard(
                             painter = painterResource(R.drawable.ic_clock),
                             contentDescription = "clock icon",
                         )
-                        Spacer(Modifier.width(2.dp))
+                        Spacer(Modifier.width(4.dp))
                         Text(
                             text = time,
                             color = TnTTheme.colors.neutralColors.Neutral500,
@@ -127,6 +129,7 @@ fun TnTRecordCard(
                     painter = painterResource(R.drawable.ic_feedback),
                     contentDescription = "feedback icon",
                 )
+                Spacer(Modifier.width(2.dp))
                 Text(
                     text = buildAnnotatedString {
                         withStyle(
@@ -143,6 +146,122 @@ fun TnTRecordCard(
                     },
                     color = TnTTheme.colors.neutralColors.Neutral500,
                     modifier = Modifier.alignBy(LastBaseline),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TnTSessionRecordCard(
+    name: String,
+    tagText: String,
+    startTime: String,
+    endTime: String,
+    isTrainer: Boolean,
+    leadingEmoji: String,
+    defaultImage: Painter,
+    modifier: Modifier = Modifier,
+    profileImage: Painter? = null,
+    isSessionRecordRequired: Boolean? = false,
+    onClick: () -> Unit,
+) {
+    val backgroundColor = if (isTrainer) {
+        TnTTheme.colors.commonColors.Common0
+    } else {
+        TnTTheme.colors.neutralColors.Neutral100
+    }
+    val clockIcon = if (isTrainer) {
+        R.drawable.ic_clock
+    } else {
+        R.drawable.ic_clock_dark
+    }
+    val image = profileImage ?: defaultImage
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(backgroundColor)
+            .padding(horizontal = 12.dp)
+            .padding(top = 12.dp, bottom = 16.dp),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TnTChip(
+                text = tagText,
+                style = ChipStyle.BLUE,
+                leadingEmoji = leadingEmoji,
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Image(
+                    painter = painterResource(clockIcon),
+                    contentDescription = "clock icon",
+                )
+                Spacer(Modifier.width(4.dp))
+                Text(
+                    text = buildString {
+                        append(startTime)
+                        append(" ~ ")
+                        append(endTime)
+                    },
+                    color = TnTTheme.colors.neutralColors.Neutral500,
+                    style = TnTTheme.typography.label2Medium,
+                )
+            }
+        }
+        Spacer(Modifier.height(12.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Image(
+                painter = image,
+                contentDescription = "clock icon",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape),
+            )
+            Spacer(Modifier.width(6.dp))
+            Text(
+                text = name,
+                color = TnTTheme.colors.neutralColors.Neutral800,
+                style = TnTTheme.typography.body1Bold,
+                textAlign = TextAlign.Start,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 6.dp),
+            )
+        }
+        if (isSessionRecordRequired == true) {
+            Spacer(Modifier.height(12.dp))
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(TnTTheme.colors.neutralColors.Neutral100)
+                    .padding(vertical = 12.dp)
+                    .clickable { onClick() },
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_edit_gray),
+                    contentDescription = null,
+                )
+                Spacer(Modifier.width(4.dp))
+                Text(
+                    text = stringResource(R.string.make_pt_session_record),
+                    style = TnTTheme.typography.label2Medium,
+                    color = TnTTheme.colors.neutralColors.Neutral400,
                 )
             }
         }
@@ -207,6 +326,44 @@ private fun TnTRecordCardWithImageAndFeedbackPreview() {
             image = ColorPainter(Color.Gray),
             leadingEmoji = "\uD83C\uDF1E",
             feedbackCount = 2,
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF000000, widthDp = 358)
+@Composable
+private fun TnTTrainerSessionRecordCardPreview() {
+    TnTTheme {
+        TnTSessionRecordCard(
+            name = "김회원",
+            tagText = "8회차 수업",
+            startTime = "오후 17:00",
+            endTime = "오후 18:00",
+            defaultImage = painterResource(R.drawable.img_default),
+            isTrainer = true,
+            modifier = Modifier.padding(10.dp),
+            leadingEmoji = "\uD83D\uDCAA",
+            isSessionRecordRequired = true,
+            onClick = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF000000, widthDp = 358)
+@Composable
+private fun TnTTraineeSessionRecordCardPreview() {
+    TnTTheme {
+        TnTSessionRecordCard(
+            name = "김민수 트레이너",
+            tagText = "6회차 수업",
+            startTime = "오후 17:00",
+            endTime = "오후 18:00",
+            defaultImage = painterResource(R.drawable.img_default),
+            isTrainer = false,
+            modifier = Modifier.padding(10.dp),
+            leadingEmoji = "\uD83D\uDCAA",
+            profileImage = painterResource(R.drawable.ic_edit),
+            onClick = {},
         )
     }
 }
