@@ -49,11 +49,6 @@ fun TnTRecordCard(
     feedbackCount: Int? = null,
 ) {
     val maxLines = if (image == null) 2 else 4
-    // 사진이 없으면 기록 아래 20.dp 간격 (20 - 12 = 8.dp)
-    val recordBottomPadding = if (image == null) 8.dp else 0.dp
-    // 사진이 없고 피드백이 있으면 기록과 피드백 사이에 20.dp 간격 (20 - 8 = 12.dp)
-    val feedBackTopPadding = if (image == null) 12.dp else 0.dp
-    val imageBottomPadding = if (feedbackCount == null) 0.dp else 12.dp
 
     Column(
         modifier = modifier
@@ -73,7 +68,9 @@ fun TnTRecordCard(
                             .size(140.dp)
                             .clip(RoundedCornerShape(16.dp)),
                     )
-                    Spacer(modifier = Modifier.height(imageBottomPadding))
+                    if (feedbackCount != null) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
                 }
                 Spacer(modifier = Modifier.width(12.dp))
             }
@@ -117,11 +114,19 @@ fun TnTRecordCard(
                         .fillMaxWidth()
                         .padding(horizontal = 4.dp),
                 )
-                Spacer(Modifier.height(recordBottomPadding))
+                // 사진이 없으면 기록 아래 20.dp 간격
+                // 20 - 12(기본 vertical padding) = 8.dp
+                if (image == null) {
+                    Spacer(Modifier.height(8.dp))
+                }
             }
         }
         feedbackCount?.let {
-            Spacer(Modifier.height(feedBackTopPadding))
+            // 사진이 없고 피드백이 있으면 기록과 피드백 사이에 20.dp 간격
+            // 20 - 8(위의 기록 아래 간격) = 12.dp
+            if (image == null) {
+                Spacer(Modifier.height(12.dp))
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -141,7 +146,7 @@ fun TnTRecordCard(
                         withStyle(
                             style = TnTTheme.typography.label2Bold.toSpanStyle(),
                         ) {
-                            append(feedbackCount.toString())
+                            append(it.toString())
                         }
                     },
                     color = TnTTheme.colors.neutralColors.Neutral500,
@@ -241,6 +246,7 @@ fun TnTSessionRecordCard(
                     .padding(horizontal = 6.dp),
             )
         }
+        // Trainer
         if (isSessionRecordRequired == true) {
             Spacer(Modifier.height(12.dp))
             Row(
