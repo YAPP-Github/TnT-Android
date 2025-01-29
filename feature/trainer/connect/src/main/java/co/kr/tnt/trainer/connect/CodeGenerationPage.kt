@@ -177,7 +177,7 @@ private fun copyToClipboard(context: Context, text: String) {
 private fun CodeGenerationPagePreview() {
     TnTTheme {
         CodeGenerationPage(
-            state = TODO(),
+            state = TrainerConnectUiState(),
             onBackClick = {},
             onSkipClick = {},
             onRegenerateClick = {},

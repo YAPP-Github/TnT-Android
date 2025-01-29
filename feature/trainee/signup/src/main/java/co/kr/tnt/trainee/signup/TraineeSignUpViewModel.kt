@@ -1,46 +1,137 @@
 package co.kr.tnt.trainee.signup
 
+import android.content.Context
+import android.net.Uri
+import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R
+import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.repository.SignUpRepository
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpEffect
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpPage
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiEvent
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.util.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-internal class TraineeSignUpViewModel @Inject constructor() :
-    BaseViewModel<TraineeSignUpUiState, TraineeSignUpUiEvent, TraineeSignUpEffect>(
+internal class TraineeSignUpViewModel @Inject constructor(
+    private val signUpRepository: SignUpRepository,
+) : BaseViewModel<TraineeSignUpUiState, TraineeSignUpUiEvent, TraineeSignUpEffect>(
         TraineeSignUpUiState(),
     ) {
-        override suspend fun handleEvent(event: TraineeSignUpUiEvent) {
-            when (event) {
-                TraineeSignUpUiEvent.OnBackClick -> navigateToBack()
-                TraineeSignUpUiEvent.OnNextClick -> navigateToNext()
-            }
-        }
-
-        private fun navigateToNext() {
-            val nextPage = when (currentState.page) {
-                TraineeSignUpPage.SignUpComplete -> {
-                    sendEffect(TraineeSignUpEffect.NavigateToConnect)
-                    return
-                }
-
-                else -> TraineeSignUpPage.getNextPage(currentState.page)
-            }
-            updateState { copy(page = nextPage) }
-        }
-
-        private fun navigateToBack() {
-            val previousPage = when (currentState.page) {
-                TraineeSignUpPage.ProfileSetUp -> {
-                    sendEffect(TraineeSignUpEffect.NavigateToBack)
-                    return
-                }
-
-                else -> TraineeSignUpPage.getPreviousPage(currentState.page)
-            }
-            updateState { copy(page = previousPage) }
+    override suspend fun handleEvent(event: TraineeSignUpUiEvent) {
+        when (event) {
+            is TraineeSignUpUiEvent.OnImageChange -> updateProfileImage(event.imageUri)
+            is TraineeSignUpUiEvent.OnNameChange -> updateName(event.name)
+            is TraineeSignUpUiEvent.OnHeightChange -> updateHeight(event.height)
+            is TraineeSignUpUiEvent.OnWeightChange -> updateWeight(event.weight)
+            is TraineeSignUpUiEvent.OnBirthdayChange -> updateBirthday(event.birthday)
+            is TraineeSignUpUiEvent.OnPurposeSelected -> updateSelectedPurposes(event.purpose)
+            is TraineeSignUpUiEvent.OnCautionChange -> updateCaution(event.text)
+            TraineeSignUpUiEvent.OnBackClick -> navigateToBack()
+            TraineeSignUpUiEvent.OnNextClick -> navigateToNext()
+            is TraineeSignUpUiEvent.RequestSignUp -> signUp(
+                context = event.context,
+                imageUri = event.imageUri,
+                id = event.id,
+                email = event.email,
+                authType = event.authType,
+            )
         }
     }
+
+    private fun signUp(
+        context: Context,
+        imageUri: Uri?,
+        id: String,
+        email: String,
+        authType: String,
+    ) {
+        viewModelScope.launch {
+            val state = currentState
+            val profileImagePart = imageUri?.toFile(context)
+
+            runCatching {
+                signUpRepository.signUp(
+                    profileImage = profileImagePart,
+                    userType = UserType.Trainee(
+                        id = id,
+                        name = state.name,
+                        image = state.image.toString(),
+                        birthday = state.birthday,
+                        age = null,
+                        weight = state.weight.toDouble(),
+                        height = state.height.toInt(),
+                        ptPurpose = state.ptPurpose,
+                        caution = state.caution,
+                    ),
+                    socialId = id,
+                    socialType = authType,
+                    email = email,
+                )
+            }.onSuccess {
+                sendEffect(TraineeSignUpEffect.NavigateToConnect)
+            }.onFailure {
+                // TODO 디자인 시스템 Toast 적용
+                val message = context.getString(R.string.error_server_request_failed)
+                sendEffect(TraineeSignUpEffect.ShowToast(message))
+            }
+        }
+    }
+
+    private fun updateProfileImage(imageUri: Uri) {
+        updateState { copy(image = imageUri) }
+    }
+
+    private fun updateName(name: String) {
+        updateState { copy(name = name) }
+    }
+
+    private fun updateHeight(height: String) {
+        updateState { copy(height = height) }
+    }
+
+    private fun updateWeight(weight: String) {
+        updateState { copy(weight = weight) }
+    }
+
+    private fun updateBirthday(birthday: LocalDate) {
+        updateState { copy(birthday = birthday) }
+    }
+
+    private fun updateSelectedPurposes(purpose: String) {
+        val updatedPurposes = currentState.ptPurpose.toMutableList().apply {
+            if (contains(purpose)) {
+                remove(purpose)
+            } else {
+                add(purpose)
+            }
+        }
+        updateState { copy(ptPurpose = updatedPurposes) }
+    }
+
+    private fun updateCaution(text: String) {
+        updateState { copy(caution = text) }
+    }
+
+    private fun navigateToNext() {
+        val nextPage = TraineeSignUpPage.getNextPage(currentState.page)
+        updateState { copy(page = nextPage) }
+    }
+
+    private fun navigateToBack() {
+        val previousPage = when (currentState.page) {
+            TraineeSignUpPage.ProfileSetUp -> {
+                sendEffect(TraineeSignUpEffect.NavigateToBack)
+                return
+            }
+
+            else -> TraineeSignUpPage.getPreviousPage(currentState.page)
+        }
+        updateState { copy(page = previousPage) }
+    }
+}

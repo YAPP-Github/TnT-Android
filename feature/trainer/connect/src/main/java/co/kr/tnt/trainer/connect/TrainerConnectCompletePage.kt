@@ -129,7 +129,7 @@ private fun ProfileSection(
 private fun TrainerConnectCompletePagePreview() {
     TnTTheme {
         TrainerConnectCompletePage(
-            state = TODO(),
+            state = TrainerConnectUiState(),
             onNextClick = {},
             onBackClick = {},
         )

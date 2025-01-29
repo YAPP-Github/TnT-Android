@@ -11,10 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,14 +27,13 @@ import co.kr.tnt.core.ui.R as uiResource
 private const val MAX_LENGTH = 100
 
 @Composable
-fun TraineeNoteForTrainerPage(
+internal fun TraineeNoteForTrainerPage(
+    caution: String?,
+    onCautionChange: (String) -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
-
-    // TODO 상태 관리 따로 빼기
-    var text by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
@@ -59,13 +54,15 @@ fun TraineeNoteForTrainerPage(
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 TnTOutlinedTextField(
-                    value = text,
+                    value = caution ?: "",
                     onValueChange = { newValue ->
                         if (newValue.length <= MAX_LENGTH) {
-                            text = newValue
+                            onCautionChange(newValue)
                         }
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
+                    isError = (caution?.length ?: 0) == MAX_LENGTH,
+                    warningMessage = stringResource(R.string.text_length_overflow),
                     maxLength = 100,
                 )
             }
@@ -83,8 +80,10 @@ fun TraineeNoteForTrainerPage(
 private fun TraineeNoteForTrainerPagePreview() {
     TnTTheme {
         TraineeNoteForTrainerPage(
+            caution = "",
             onBackClick = {},
             onNextClick = {},
+            onCautionChange = {},
         )
     }
 }

@@ -21,13 +21,15 @@ fun NavController.navigateToRoleSelection(
     builder = navOptions,
 )
 
-fun NavGraphBuilder.roleSelectionScreen() {
+fun NavGraphBuilder.roleSelectionScreen(
+    navigateToTraineeSignUp: (authId: String, authType: String, email: String) -> Unit,
+    navigateToTrainerSignUp: (authId: String, authType: String, email: String) -> Unit,
+) {
     composable<Route.RoleSelection> { navBackstackEntry ->
         navBackstackEntry.toRoute<Route.RoleSelection>().apply {
-            RoleSelectionScreen(
-                authId = authId,
-                authType = authType,
-                email = email,
+            RoleSelectionRoute(
+                navigateToTraineeSignUp = { navigateToTraineeSignUp(authId, authType, email) },
+                navigateToTrainerSignUp = { navigateToTrainerSignUp(authId, authType, email) },
             )
         }
     }

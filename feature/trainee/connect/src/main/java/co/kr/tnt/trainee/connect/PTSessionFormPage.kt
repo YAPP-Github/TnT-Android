@@ -267,7 +267,7 @@ private fun PTSessionFormPagePreview() {
         PTSessionFormPage(
             onNextClick = {},
             onBackClick = {},
-            state = TODO(),
+            state = TraineeConnectUiState(),
         )
     }
 }

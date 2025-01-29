@@ -113,9 +113,9 @@ private fun CodeEntryPagePreview() {
             isFromMyPage = false,
             onSkipClick = {},
             onNextClick = {},
-            state = TODO(),
+            state = TraineeConnectUiState(),
             onValidateClick = {},
-            onCodeChanged = TODO(),
+            onCodeChanged = {},
             onBackClick = {},
         )
     }

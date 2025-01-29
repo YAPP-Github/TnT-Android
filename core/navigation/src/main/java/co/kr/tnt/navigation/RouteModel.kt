@@ -13,10 +13,18 @@ sealed interface Route {
     data object Login : Route
 
     @Serializable
-    data object TrainerSignUp : Route
+    data class TrainerSignUp(
+        val authId: String,
+        val authType: String,
+        val email: String,
+    ) : Route
 
     @Serializable
-    data object TraineeSignUp : Route
+    data class TraineeSignUp(
+        val authId: String,
+        val authType: String,
+        val email: String,
+    ) : Route
 
     @Serializable
     data class TrainerConnect(val isFromMyPage: Boolean) : Route

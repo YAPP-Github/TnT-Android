@@ -18,11 +18,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,32 +31,25 @@ import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
+import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.trainee.signup.component.ProgressSteps
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import co.kr.tnt.core.ui.R as uiResource
 
-private const val MAX_HEIGHT_LENGTH = 3
-private const val MAX_WEIGHT_LENGTH = 5
-
 @Composable
-fun TraineeBasicInfoPage(
+internal fun TraineeBasicInfoPage(
+    state: TraineeSignUpUiState,
+    onHeightChange: (String) -> Unit,
+    onWeightChange: (String) -> Unit,
+    onBirthdayChange: (LocalDate) -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
 
-    // TODO 상태 관리 따로 빼기
     val today = LocalDate.now()
-    var height by remember { mutableStateOf("") }
-    var weight by remember { mutableStateOf("") }
-    var birthday by remember { mutableStateOf<LocalDate?>(null) }
-
-    val isHeightValid by remember { derivedStateOf { height.isNotEmpty() && validateHeight(height) } }
-    val isWeightValid by remember { derivedStateOf { weight.isNotEmpty() && validateWeight(weight) } }
-
-    val isFormValid by remember { derivedStateOf { isHeightValid && isWeightValid } }
 
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
@@ -90,8 +78,8 @@ fun TraineeBasicInfoPage(
                 BirthdayPicker(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     today = today,
-                    selectedDate = birthday,
-                    onDateSelected = { birthday = it },
+                    selectedDate = state.birthday,
+                    onDateSelected = onBirthdayChange,
                 )
                 HorizontalDivider(
                     thickness = 1.dp,
@@ -107,32 +95,32 @@ fun TraineeBasicInfoPage(
                 ) {
                     TnTLabeledTextField(
                         title = stringResource(uiResource.string.height_label),
-                        value = height,
+                        value = state.height,
                         placeholder = "0",
                         isSingleLine = true,
-                        showWarning = !validateHeight(height),
+                        showWarning = state.height.isNotEmpty() && !state.isHeightValid,
                         warningMessage = stringResource(R.string.entered_wrong_number),
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
                             UnitLabel(uiResource.string.height_unit)
                         },
-                        onValueChange = { height = it },
+                        onValueChange = onHeightChange,
                         modifier = Modifier.weight(1f),
                     )
                     TnTLabeledTextField(
                         title = stringResource(uiResource.string.weight_label),
-                        value = weight,
+                        value = state.weight,
                         placeholder = "00.0",
                         isSingleLine = true,
-                        showWarning = !validateWeight(weight),
+                        showWarning = state.weight.isNotEmpty() && !state.isWeightValid,
                         warningMessage = stringResource(R.string.entered_wrong_number),
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
                             UnitLabel(uiResource.string.weight_unit)
                         },
-                        onValueChange = { weight = it },
+                        onValueChange = onWeightChange,
                         modifier = Modifier.weight(1f),
                     )
                 }
@@ -140,7 +128,7 @@ fun TraineeBasicInfoPage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
-                enabled = isFormValid,
+                enabled = state.isBasicInfoValid,
                 onClick = onNextClick,
             )
         }
@@ -207,30 +195,17 @@ private fun UnitLabel(stringResId: Int) {
     )
 }
 
-/**
- * 키가 유효한 입력값인지 검사
- * 형식: 정수 3자
- */
-private fun validateHeight(input: String): Boolean {
-    return input.isEmpty() || input.toIntOrNull() != null && !input.startsWith("0") && input.length <= MAX_HEIGHT_LENGTH
-}
-
-/**
- * 몸무게가 유효한 입력값인지 검사
- * 형식: 5자 이하의 실수 (000, 00, 00.0, 000.0)
- */
-private fun validateWeight(input: String): Boolean {
-    val weightRegex = Regex("^(\\d{1,3}(\\.\\d)?)?\$")
-    return input.isEmpty() || input.matches(weightRegex) && !input.startsWith("0") && input.length <= MAX_WEIGHT_LENGTH
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun TraineeBasicInfoPagePreview() {
     TnTTheme {
         TraineeBasicInfoPage(
+            state = TraineeSignUpUiState(),
             onBackClick = {},
             onNextClick = {},
+            onHeightChange = {},
+            onWeightChange = {},
+            onBirthdayChange = {},
         )
     }
 }

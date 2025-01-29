@@ -16,8 +16,22 @@ internal class TraineeConnectContract {
         val completedSession: Int = 0,
         val totalSession: Int = 0,
         val selectedStartDate: LocalDate = LocalDate.now(),
-        val trainerState: UserType.Trainer = UserType.Trainer(),
-        val traineeState: UserType.Trainee = UserType.Trainee(),
+        val trainerState: UserType.Trainer = UserType.Trainer(
+            id = "",
+            name = "",
+            image = null,
+        ),
+        val traineeState: UserType.Trainee = UserType.Trainee(
+            id = "",
+            name = "",
+            image = null,
+            birthday = null,
+            age = 0,
+            weight = 0.0,
+            height = 0,
+            ptPurpose = emptyList(),
+            caution = null,
+        ),
     ) : UiState
 
     sealed interface TraineeConnectUiEvent : UiEvent {
