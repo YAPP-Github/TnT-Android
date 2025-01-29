@@ -66,7 +66,7 @@ fun TnTRecordCard(
             image?.let {
                 Column {
                     Image(
-                        painter = image,
+                        painter = it,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -87,7 +87,7 @@ fun TnTRecordCard(
                 ) {
                     TnTChip(
                         text = tagText,
-                        style = style,
+                        chipStyle = style,
                         leadingEmoji = leadingEmoji,
                     )
                     Row(
@@ -193,7 +193,7 @@ fun TnTSessionRecordCard(
         ) {
             TnTChip(
                 text = tagText,
-                style = ChipStyle.BLUE,
+                chipStyle = ChipStyle.BLUE,
                 leadingEmoji = leadingEmoji,
             )
             Row(
@@ -251,7 +251,7 @@ fun TnTSessionRecordCard(
                     .clip(RoundedCornerShape(8.dp))
                     .background(TnTTheme.colors.neutralColors.Neutral100)
                     .padding(vertical = 12.dp)
-                    .clickable { onClick() },
+                    .clickable(onClick = onClick),
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_edit_gray),

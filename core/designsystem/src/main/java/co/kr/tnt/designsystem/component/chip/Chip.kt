@@ -20,12 +20,12 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 @Composable
 fun TnTChip(
     text: String,
-    style: ChipStyle,
+    chipStyle: ChipStyle,
     modifier: Modifier = Modifier,
     leadingEmoji: String? = null,
 ) {
-    val backgroundColor = style.backgroundColor()
-    val textColor = style.textColor()
+    val backgroundColor = chipStyle.backgroundColor()
+    val textColor = chipStyle.textColor()
 
     Row(
         modifier = modifier
@@ -56,7 +56,7 @@ private fun TnTExerciseChipPreview() {
     TnTTheme {
         TnTChip(
             text = "8회차 수업",
-            style = ChipStyle.BLUE,
+            chipStyle = ChipStyle.BLUE,
             leadingEmoji = "💪",
         )
     }
@@ -68,7 +68,7 @@ private fun TnTChipWithoutEmojiPreview() {
     TnTTheme {
         TnTChip(
             text = "등 운동",
-            style = ChipStyle.BLUE,
+            chipStyle = ChipStyle.BLUE,
         )
     }
 }
@@ -79,7 +79,7 @@ private fun TnTDietChipPreview() {
     TnTTheme {
         TnTChip(
             text = "아침",
-            style = ChipStyle.PINK,
+            chipStyle = ChipStyle.PINK,
             leadingEmoji = "\uD83C\uDF1E",
         )
     }
