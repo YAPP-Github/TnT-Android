@@ -14,8 +14,8 @@ internal class TraineeMyPageViewModel @Inject constructor() :
     ) {
         override suspend fun handleEvent(event: TraineeMyPageUiEvent) {
             when (event) {
-                TraineeMyPageUiEvent.OnConnectClick -> TODO()
-                TraineeMyPageUiEvent.ToggleNotification -> TODO()
+                TraineeMyPageUiEvent.OnConnectClick -> {}
+                TraineeMyPageUiEvent.ToggleNotification -> {}
             }
         }
     }

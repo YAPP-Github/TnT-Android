@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="connect_with_trainer">트레이너와 연결하기</string>
+    <string name="disconnect_with_trainer">트레이너와 연결끊기</string>
+
+</resources>

@@ -49,4 +49,15 @@
 
     <!-- PT Session -->
     <string name="pt_session">%d회차 수업</string>
+
+    <!--  MyPage  -->
+    <string name="modifying_personal_info">개인정보 수정</string>
+    <string name="app_push_notification">앱 푸시 알림</string>
+    <string name="terms_of_service">서비스 이용약관</string>
+    <string name="privacy_policy">개인정보 처리방침</string>
+    <string name="app_version">버전 정보</string>
+    <string name="open_source_license">오픈소스 라이선스</string>
+    <string name="logout">로그아웃</string>
+    <string name="delete_account">계정 탈퇴</string>
+
 </resources>
