@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.mypage
 
+import android.content.Context
 import co.kr.tnt.trainee.mypage.model.PopupType
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
@@ -23,8 +24,8 @@ internal class TraineeMyPageContract {
         data object OnConnectButtonClick : TraineeMyPageUiEvent
         data object OnDisconnectButtonClick : TraineeMyPageUiEvent
         data object ToggleNotification : TraineeMyPageUiEvent
-        data object OnServiceTermClick : TraineeMyPageUiEvent
-        data object OnPrivacyClick : TraineeMyPageUiEvent
+        data class OnServiceTermClick(val context: Context) : TraineeMyPageUiEvent
+        data class OnPrivacyClick(val context: Context) : TraineeMyPageUiEvent
         data object OnOpenSourceClick : TraineeMyPageUiEvent
         data object OnLogoutClick : TraineeMyPageUiEvent
         data object OnDeleteAccountClick : TraineeMyPageUiEvent
