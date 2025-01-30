@@ -50,4 +50,5 @@ include(
     ":feature:trainer:connect",
     ":feature:trainee:signup",
     ":feature:trainee:connect",
+    ":feature:trainee:mypage",
 )
