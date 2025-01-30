@@ -25,4 +25,6 @@ dependencies {
     implementation(libs.kotlinx.immutable)
     androidTestImplementation(libs.hilt.android.testing)
     kspAndroidTest(libs.hilt.android.compiler)
+
+    implementation(libs.calendar.compose)
 }
