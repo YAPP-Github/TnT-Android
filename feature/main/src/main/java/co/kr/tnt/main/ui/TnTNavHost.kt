@@ -13,6 +13,7 @@ import co.kr.tnt.roleselect.navigateToRoleSelection
 import co.kr.tnt.roleselect.roleSelectionScreen
 import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
+import co.kr.tnt.trainee.mypage.navigation.traineeMyPageScreen
 import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
@@ -87,6 +88,10 @@ fun TnTNavHost(
                 navigateToHome = {
                     navController.navigateToHome(isTrainer = false, clearBackStack = true)
                 },
+            )
+            traineeMyPageScreen(
+                navigateToPrevious = { navController.popBackStack() },
+                navigateToTraineeConnect = { navController.navigateToTraineeConnect(isFromMyPage = true) },
             )
             homeNavGraph()
         }

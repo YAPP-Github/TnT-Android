@@ -1,5 +1,7 @@
 package co.kr.tnt.trainee.mypage
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +19,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +39,8 @@ import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.mypage.R
+import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
+import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.core.ui.R as uiResource
@@ -51,22 +56,38 @@ internal fun TraineeMyPageRoute(
 
     TraineeMyPageScreen(
         state = uiState,
-        onEditButtonClick = TODO(),
-        onConnectButtonClick = TODO(),
-        onPushNotificationToggle = TODO(),
-        onServiceTermClick = TODO(),
-        onPrivacyClick = TODO(),
-        onOpenSourceClick = TODO(),
-        onLogoutClick = TODO(),
-        onDeleteAccountClick = TODO(),
+        onBackClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnBackClick) },
+        onEditButtonClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnEditButtonClick) },
+        onConnectButtonClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnConnectButtonClick) },
+        onDisconnectButtonClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnDisconnectButtonClick) },
+        onPushNotificationToggle = { viewModel.setEvent(TraineeMyPageUiEvent.ToggleNotification) },
+        onServiceTermClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnServiceTermClick) },
+        onPrivacyClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnPrivacyClick) },
+        onOpenSourceClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnOpenSourceClick) },
+        onLogoutClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnLogoutClick) },
+        onDeleteAccountClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnDeleteAccountClick) },
     )
+
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                TraineeMyPageEffect.NavigateToPrevious -> navigateToPrevious()
+                TraineeMyPageEffect.NavigateToConnect -> navigateToConnect()
+                is TraineeMyPageEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 }
 
 @Composable
 private fun TraineeMyPageScreen(
     state: TraineeMyPageUiState,
+    onBackClick: () -> Unit,
     onEditButtonClick: () -> Unit,
     onConnectButtonClick: () -> Unit,
+    onDisconnectButtonClick: () -> Unit,
     onPushNotificationToggle: () -> Unit,
     onServiceTermClick: () -> Unit,
     onPrivacyClick: () -> Unit,
@@ -74,6 +95,8 @@ private fun TraineeMyPageScreen(
     onLogoutClick: () -> Unit,
     onDeleteAccountClick: () -> Unit,
 ) {
+    BackHandler { onBackClick() }
+
     Scaffold(containerColor = TnTTheme.colors.neutralColors.Neutral50) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -92,7 +115,7 @@ private fun TraineeMyPageScreen(
                 color = TnTTheme.colors.neutralColors.Neutral950,
                 style = TnTTheme.typography.h2,
             )
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(8.dp))
             TnTTextButton(
                 text = stringResource(uiResource.string.modifying_personal_info),
                 size = ButtonSize.Small,
@@ -177,7 +200,7 @@ private fun TraineeMyPageScreen(
                     WhiteButton(
                         text = stringResource(R.string.disconnect_with_trainer),
                         height = 47.dp,
-                        onClick = onConnectButtonClick,
+                        onClick = onDisconnectButtonClick,
                     )
                 }
                 Column(
@@ -259,6 +282,8 @@ private fun TraineeMyPagePreview() {
             onOpenSourceClick = {},
             onLogoutClick = {},
             onDeleteAccountClick = {},
+            onDisconnectButtonClick = {},
+            onBackClick = {},
         )
     }
 }
