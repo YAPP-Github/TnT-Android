@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import co.kr.tnt.home.navigation.homeNavGraph
 import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
+import co.kr.tnt.login.navigation.navigateToLogin
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.roleselect.navigateToRoleSelection
 import co.kr.tnt.roleselect.roleSelectionScreen
@@ -92,6 +93,7 @@ fun TnTNavHost(
             traineeMyPageScreen(
                 navigateToPrevious = { navController.popBackStack() },
                 navigateToTraineeConnect = { navController.navigateToTraineeConnect(isFromMyPage = true) },
+                navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
             )
             homeNavGraph()
         }

@@ -1,10 +1,13 @@
 package co.kr.tnt.trainee.mypage
 
+import androidx.lifecycle.viewModelScope
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
+import co.kr.tnt.trainee.mypage.model.PopupType
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,11 +27,38 @@ internal class TraineeMyPageViewModel @Inject constructor() :
                 TraineeMyPageUiEvent.OnLogoutClick -> logout()
                 TraineeMyPageUiEvent.OnDeleteAccountClick -> deleteAccount()
                 TraineeMyPageUiEvent.OnBackClick -> navigateBack()
+                TraineeMyPageUiEvent.OnConfirmFirstPopup -> confirmFirstPopup()
+                TraineeMyPageUiEvent.OnConfirmSecondPopup -> handleSecondPopupConfirm()
+                TraineeMyPageUiEvent.OnDismissPopup -> dismissPopup()
+            }
+        }
+
+        init {
+            loadUserData()
+        }
+
+        private fun loadUserData() {
+            viewModelScope.launch {
+                try {
+                    // TODO 유저 정보 API 호출
+                    updateState {
+                        copy(
+                            image = null,
+                            name = "김회원",
+                            trainerName = "",
+                            isConnected = true,
+                            isPushEnabled = true,
+                            appVersion = "0.0.0",
+                        )
+                    }
+                } catch (e: Exception) {
+                    // TODO 에러 처리
+                }
             }
         }
 
         private fun navigateToPersonalInfo() {
-            // TODO 개인 정보 수정 화면
+            // TODO 개인 정보 수정 화면 연결
         }
 
         private fun navigateToConnect() {
@@ -36,7 +66,14 @@ internal class TraineeMyPageViewModel @Inject constructor() :
         }
 
         private fun showDisconnectPopup() {
-            // TODO 연결 끊기 팝업 노출
+            // TODO 트레이너 이름 불러오기? -> API 나오면 수정
+            updateState {
+                copy(
+                    trainerName = "김피티",
+                    showFirstPopup = true,
+                    popupType = PopupType.DISCONNECT,
+                )
+            }
         }
 
         private fun togglePushNotification() {
@@ -52,14 +89,65 @@ internal class TraineeMyPageViewModel @Inject constructor() :
         }
 
         private fun logout() {
-            // TODO 로그아웃 팝업 노출
+            updateState { copy(showFirstPopup = true, popupType = PopupType.LOGOUT) }
         }
 
         private fun deleteAccount() {
-            // TODO 계정 삭제 팝업 노출
+            updateState { copy(showFirstPopup = true, popupType = PopupType.DELETE_ACCOUNT) }
         }
 
         private fun navigateBack() {
             sendEffect(TraineeMyPageEffect.NavigateToPrevious)
+        }
+
+        private fun confirmFirstPopup() {
+            updateState { copy(showFirstPopup = false, showSecondPopup = true) }
+        }
+
+        private fun dismissPopup() {
+            updateState { copy(showFirstPopup = false, showSecondPopup = false) }
+        }
+
+        private fun handleSecondPopupConfirm() {
+            when (currentState.popupType) {
+                PopupType.LOGOUT -> performLogout()
+                PopupType.DELETE_ACCOUNT -> performAccountDeletion()
+                PopupType.DISCONNECT -> performDisconnect()
+            }
+        }
+
+        private fun performLogout() {
+            viewModelScope.launch {
+                try {
+                    // TODO 로그아웃 API 호출
+                    updateState { copy(showSecondPopup = false) }
+                    sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                } catch (e: Exception) {
+                    // TODO 에러 처리
+                }
+            }
+        }
+
+        private fun performAccountDeletion() {
+            viewModelScope.launch {
+                try {
+                    // TODO 회원 탈퇴 API 호출
+                    updateState { copy(showSecondPopup = false) }
+                    sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                } catch (e: Exception) {
+                    // TODO 에러 처리
+                }
+            }
+        }
+
+        private fun performDisconnect() {
+            viewModelScope.launch {
+                try {
+                    // TODO 연결 해제 API 호출
+                    updateState { copy(isConnected = false, showSecondPopup = false) }
+                } catch (e: Exception) {
+                    // TODO 에러 처리
+                }
+            }
         }
     }

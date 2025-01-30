@@ -17,11 +17,13 @@ fun NavController.navigateToTraineeMyPage(
 fun NavGraphBuilder.traineeMyPageScreen(
     navigateToPrevious: () -> Unit,
     navigateToTraineeConnect: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
     composable<Route.TraineeMyPage> {
         TraineeMyPageRoute(
             navigateToPrevious = navigateToPrevious,
             navigateToConnect = navigateToTraineeConnect,
+            navigateToLogin = navigateToLogin,
         )
     }
 }

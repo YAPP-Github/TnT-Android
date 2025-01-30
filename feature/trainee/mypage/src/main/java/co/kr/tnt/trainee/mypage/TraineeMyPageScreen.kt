@@ -32,7 +32,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
+import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTSwitch
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
@@ -42,6 +44,7 @@ import co.kr.tnt.feature.trainee.mypage.R
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
+import co.kr.tnt.trainee.mypage.model.PopupType
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -49,6 +52,7 @@ import co.kr.tnt.core.ui.R as uiResource
 internal fun TraineeMyPageRoute(
     navigateToPrevious: () -> Unit,
     navigateToConnect: () -> Unit,
+    navigateToLogin: () -> Unit,
     viewModel: TraineeMyPageViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -66,6 +70,9 @@ internal fun TraineeMyPageRoute(
         onOpenSourceClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnOpenSourceClick) },
         onLogoutClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnLogoutClick) },
         onDeleteAccountClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnDeleteAccountClick) },
+        onDismissPopup = { viewModel.setEvent(TraineeMyPageUiEvent.OnDismissPopup) },
+        onConfirmFirstPopup = { viewModel.setEvent(TraineeMyPageUiEvent.OnConfirmFirstPopup) },
+        onConfirmSecondPopup = { viewModel.setEvent(TraineeMyPageUiEvent.OnConfirmSecondPopup) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -73,6 +80,7 @@ internal fun TraineeMyPageRoute(
             when (effect) {
                 TraineeMyPageEffect.NavigateToPrevious -> navigateToPrevious()
                 TraineeMyPageEffect.NavigateToConnect -> navigateToConnect()
+                TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
                 is TraineeMyPageEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
@@ -94,6 +102,9 @@ private fun TraineeMyPageScreen(
     onOpenSourceClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onDeleteAccountClick: () -> Unit,
+    onConfirmFirstPopup: () -> Unit,
+    onConfirmSecondPopup: () -> Unit,
+    onDismissPopup: () -> Unit,
 ) {
     BackHandler { onBackClick() }
 
@@ -230,6 +241,36 @@ private fun TraineeMyPageScreen(
             }
         }
     }
+
+    if (state.showFirstPopup) {
+        TnTIconPopupDialog(
+            title = if (state.popupType == PopupType.DISCONNECT) {
+                stringResource(state.popupType.firstPopupTitle, state.trainerName)
+            } else {
+                stringResource(state.popupType.firstPopupTitle)
+            },
+            content = stringResource(state.popupType.firstPopupContent),
+            leftButtonText = stringResource(uiResource.string.cancel),
+            rightButtonText = stringResource(uiResource.string.ok),
+            onLeftButtonClick = onDismissPopup,
+            onRightButtonClick = onConfirmFirstPopup,
+            onDismiss = onDismissPopup,
+        )
+    }
+
+    if (state.showSecondPopup) {
+        TnTSingleButtonPopupDialog(
+            title = if (state.popupType == PopupType.DISCONNECT) {
+                stringResource(state.popupType.secondPopupTitle, state.trainerName)
+            } else {
+                stringResource(state.popupType.secondPopupTitle)
+            },
+            content = stringResource(state.popupType.secondPopupContent),
+            buttonText = stringResource(uiResource.string.ok),
+            onButtonClick = onConfirmSecondPopup,
+            onDismiss = onDismissPopup,
+        )
+    }
 }
 
 @Composable
@@ -284,6 +325,9 @@ private fun TraineeMyPagePreview() {
             onDeleteAccountClick = {},
             onDisconnectButtonClick = {},
             onBackClick = {},
+            onConfirmFirstPopup = {},
+            onDismissPopup = {},
+            onConfirmSecondPopup = {},
         )
     }
 }
