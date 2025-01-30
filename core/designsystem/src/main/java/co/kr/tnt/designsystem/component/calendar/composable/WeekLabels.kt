@@ -20,7 +20,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
-fun WeekLabels(
+internal fun WeekLabels(
     daysOfWeek: List<DayOfWeek>,
     modifier: Modifier = Modifier,
 ) {
