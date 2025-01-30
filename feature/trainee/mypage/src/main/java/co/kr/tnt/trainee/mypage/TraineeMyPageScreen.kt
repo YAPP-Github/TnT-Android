@@ -9,17 +9,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +28,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,6 +45,7 @@ import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
 import co.kr.tnt.trainee.mypage.model.PopupType
+import co.kr.tnt.ui.component.TnTMyPageButton
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -153,7 +149,7 @@ private fun TraineeMyPageScreen(
                         .padding(20.dp),
                 ) {
                     if (state.isConnected.not()) {
-                        WhiteButton(
+                        TnTMyPageButton(
                             text = stringResource(R.string.connect_with_trainer),
                             height = 47.dp,
                             onClick = onConnectButtonClick,
@@ -185,12 +181,12 @@ private fun TraineeMyPageScreen(
                             .background(TnTTheme.colors.commonColors.Common0)
                             .padding(vertical = 12.dp),
                     ) {
-                        WhiteButton(
+                        TnTMyPageButton(
                             text = stringResource(uiResource.string.terms_of_service),
                             height = 40.dp,
                             onClick = onServiceTermClick,
                         )
-                        WhiteButton(
+                        TnTMyPageButton(
                             text = stringResource(uiResource.string.privacy_policy),
                             height = 40.dp,
                             onClick = onPrivacyClick,
@@ -214,14 +210,14 @@ private fun TraineeMyPageScreen(
                                 style = TnTTheme.typography.body2Medium,
                             )
                         }
-                        WhiteButton(
+                        TnTMyPageButton(
                             text = stringResource(uiResource.string.open_source_license),
                             height = 40.dp,
                             onClick = onOpenSourceClick,
                         )
                     }
                     if (state.isConnected) {
-                        WhiteButton(
+                        TnTMyPageButton(
                             text = stringResource(R.string.disconnect_with_trainer),
                             height = 47.dp,
                             onClick = onDisconnectButtonClick,
@@ -283,36 +279,6 @@ private fun TraineeMyPageScreen(
             buttonText = stringResource(uiResource.string.ok),
             onButtonClick = onConfirmSecondPopup,
             onDismiss = onDismissPopup,
-        )
-    }
-}
-
-@Composable
-private fun WhiteButton(
-    text: String,
-    height: Dp,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
-    Button(
-        onClick = onClick,
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonColors(
-            containerColor = TnTTheme.colors.commonColors.Common0,
-            contentColor = TnTTheme.colors.neutralColors.Neutral700,
-            disabledContainerColor = TnTTheme.colors.commonColors.Common0,
-            disabledContentColor = TnTTheme.colors.neutralColors.Neutral700,
-        ),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .height(height)
-            .defaultMinSize(minWidth = Dp.Hairline),
-    ) {
-        Text(
-            text = text,
-            style = TnTTheme.typography.body2Medium,
-            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
