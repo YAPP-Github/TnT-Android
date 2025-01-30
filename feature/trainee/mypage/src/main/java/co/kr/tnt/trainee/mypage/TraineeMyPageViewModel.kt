@@ -1,8 +1,5 @@
 package co.kr.tnt.trainee.mypage
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
@@ -24,14 +21,9 @@ internal class TraineeMyPageViewModel @Inject constructor() :
                 TraineeMyPageUiEvent.OnConnectButtonClick -> navigateToConnect()
                 TraineeMyPageUiEvent.OnDisconnectButtonClick -> showDisconnectPopup()
                 TraineeMyPageUiEvent.ToggleNotification -> togglePushNotification()
-                is TraineeMyPageUiEvent.OnServiceTermClick -> openWebView(
-                    url = "https://www.naver.com",
-                    context = event.context,
-                )
-                is TraineeMyPageUiEvent.OnPrivacyClick -> openWebView(
-                    url = "https://github.com/",
-                    context = event.context,
-                )
+                TraineeMyPageUiEvent.OnServiceTermClick -> openWebView()
+                TraineeMyPageUiEvent.OnPrivacyClick -> openWebView()
+                TraineeMyPageUiEvent.OnWebViewBackClick -> dismissWebView()
                 TraineeMyPageUiEvent.OnOpenSourceClick -> navigateToOpenSource()
                 TraineeMyPageUiEvent.OnLogoutClick -> logout()
                 TraineeMyPageUiEvent.OnDeleteAccountClick -> deleteAccount()
@@ -89,11 +81,14 @@ internal class TraineeMyPageViewModel @Inject constructor() :
             updateState { copy(isPushEnabled = !isPushEnabled) }
         }
 
-        private fun openWebView(url: String, context: Context) {
-            // TODO 웹뷰 수정
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url.ifEmpty { "https://www.google.com" }))
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            context.startActivity(intent)
+        private fun openWebView() {
+            // TODO Url API 호출?
+            val url = "https://www.naver.com"
+            updateState { copy(showWebView = !showWebView, url = url) }
+        }
+
+        private fun dismissWebView() {
+            updateState { copy(showWebView = !showWebView) }
         }
 
         private fun navigateToOpenSource() {
