@@ -40,20 +40,16 @@ internal class TraineeMyPageViewModel @Inject constructor() :
 
         private fun loadUserData() {
             viewModelScope.launch {
-                try {
-                    // TODO 유저 정보 API 호출
-                    updateState {
-                        copy(
-                            image = null,
-                            name = "김회원",
-                            trainerName = "",
-                            isConnected = true,
-                            isPushEnabled = true,
-                            appVersion = "0.0.0",
-                        )
-                    }
-                } catch (e: Exception) {
-                    // TODO 에러 처리
+                // TODO 유저 정보 API 호출
+                updateState {
+                    copy(
+                        image = null,
+                        name = "김회원",
+                        trainerName = "",
+                        isConnected = true,
+                        isPushEnabled = true,
+                        appVersion = "0.0.0",
+                    )
                 }
             }
         }
@@ -125,36 +121,24 @@ internal class TraineeMyPageViewModel @Inject constructor() :
 
         private fun performLogout() {
             viewModelScope.launch {
-                try {
-                    // TODO 로그아웃 API 호출
-                    updateState { copy(showSecondPopup = false) }
-                    sendEffect(TraineeMyPageEffect.NavigateToLogin)
-                } catch (e: Exception) {
-                    // TODO 에러 처리
-                }
+                // TODO 로그아웃 API 호출
+                updateState { copy(showSecondPopup = false) }
+                sendEffect(TraineeMyPageEffect.NavigateToLogin)
             }
         }
 
         private fun performAccountDeletion() {
             viewModelScope.launch {
-                try {
-                    // TODO 회원 탈퇴 API 호출
-                    updateState { copy(showSecondPopup = false) }
-                    sendEffect(TraineeMyPageEffect.NavigateToLogin)
-                } catch (e: Exception) {
-                    // TODO 에러 처리
-                }
+                // TODO 회원 탈퇴 API 호출
+                updateState { copy(showSecondPopup = false) }
+                sendEffect(TraineeMyPageEffect.NavigateToLogin)
             }
         }
 
         private fun performDisconnect() {
             viewModelScope.launch {
-                try {
-                    // TODO 연결 해제 API 호출
-                    updateState { copy(isConnected = false, showSecondPopup = false) }
-                } catch (e: Exception) {
-                    // TODO 에러 처리
-                }
+                // TODO 연결 해제 API 호출
+                updateState { copy(isConnected = false, showSecondPopup = false) }
             }
         }
     }
