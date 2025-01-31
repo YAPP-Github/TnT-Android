@@ -18,12 +18,14 @@ fun NavGraphBuilder.traineeMyPageScreen(
     navigateToPrevious: () -> Unit,
     navigateToTraineeConnect: () -> Unit,
     navigateToLogin: () -> Unit,
+    navigateToWebView: (String) -> Unit,
 ) {
     composable<Route.TraineeMyPage> {
         TraineeMyPageRoute(
             navigateToPrevious = navigateToPrevious,
             navigateToConnect = navigateToTraineeConnect,
             navigateToLogin = navigateToLogin,
+            navigateToWebView = navigateToWebView,
         )
     }
 }

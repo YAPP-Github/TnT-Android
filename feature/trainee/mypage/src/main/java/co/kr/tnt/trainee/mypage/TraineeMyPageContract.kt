@@ -1,6 +1,5 @@
 package co.kr.tnt.trainee.mypage
 
-import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPagePage.MyPage
 import co.kr.tnt.trainee.mypage.model.DialogState
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
@@ -8,7 +7,6 @@ import co.kr.tnt.ui.base.UiState
 
 internal class TraineeMyPageContract {
     data class TraineeMyPageUiState(
-        val page: TraineeMyPagePage = MyPage,
         val image: String? = "",
         val name: String = "",
         val trainerName: String = "",
@@ -32,11 +30,9 @@ internal class TraineeMyPageContract {
         data object OnOpenSourceClick : TraineeMyPageUiEvent
         data object OnLogoutClick : TraineeMyPageUiEvent
         data object OnDeleteAccountClick : TraineeMyPageUiEvent
-        data object OnConfirmFirstPopup : TraineeMyPageUiEvent
+        data object OnConfirmWarningDialog : TraineeMyPageUiEvent
+        data object OnConfirmCompleteDialog : TraineeMyPageUiEvent
         data object OnDismissPopup : TraineeMyPageUiEvent
-        data object OnBackClick : TraineeMyPageUiEvent
-        data object OnConfirmSecondPopup : TraineeMyPageUiEvent
-        data object OnWebViewBackClick : TraineeMyPageUiEvent
     }
 
     sealed interface TraineeMyPageEffect : UiSideEffect {
@@ -44,27 +40,6 @@ internal class TraineeMyPageContract {
         data object NavigateToConnect : TraineeMyPageEffect
         data object NavigateToPrevious : TraineeMyPageEffect
         data object NavigateToLogin : TraineeMyPageEffect
-    }
-
-    enum class TraineeMyPagePage {
-        MyPage,
-        WebView,
-        ;
-
-        companion object {
-            fun getPreviousPage(currentPage: TraineeMyPagePage): TraineeMyPagePage {
-                return when (currentPage) {
-                    WebView -> MyPage
-                    else -> error("No previous page defined for $currentPage")
-                }
-            }
-
-            fun getNextPage(currentPage: TraineeMyPagePage): TraineeMyPagePage {
-                return when (currentPage) {
-                    MyPage -> WebView
-                    else -> error("No next page defined for $currentPage")
-                }
-            }
-        }
+        data class NavigateToWebView(val url: String) : TraineeMyPageEffect
     }
 }

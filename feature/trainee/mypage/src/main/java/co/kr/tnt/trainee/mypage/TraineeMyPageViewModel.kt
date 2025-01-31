@@ -2,7 +2,6 @@ package co.kr.tnt.trainee.mypage
 
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
-import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPagePage
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
 import co.kr.tnt.trainee.mypage.model.DialogState
@@ -24,13 +23,11 @@ internal class TraineeMyPageViewModel @Inject constructor() :
                 TraineeMyPageUiEvent.ToggleNotification -> togglePushNotification()
                 TraineeMyPageUiEvent.OnServiceTermClick -> openWebView()
                 TraineeMyPageUiEvent.OnPrivacyClick -> openWebView()
-                TraineeMyPageUiEvent.OnWebViewBackClick -> dismissWebView()
                 TraineeMyPageUiEvent.OnOpenSourceClick -> navigateToOpenSource()
                 TraineeMyPageUiEvent.OnLogoutClick -> logout()
                 TraineeMyPageUiEvent.OnDeleteAccountClick -> deleteAccount()
-                TraineeMyPageUiEvent.OnBackClick -> navigateBack()
-                TraineeMyPageUiEvent.OnConfirmFirstPopup -> confirmFirstPopup()
-                TraineeMyPageUiEvent.OnConfirmSecondPopup -> handleSecondPopupConfirm()
+                TraineeMyPageUiEvent.OnConfirmWarningDialog -> confirmWarningDialog()
+                TraineeMyPageUiEvent.OnConfirmCompleteDialog -> handleCompleteDialogConfirm()
                 TraineeMyPageUiEvent.OnDismissPopup -> dismissPopup()
             }
         }
@@ -87,14 +84,7 @@ internal class TraineeMyPageViewModel @Inject constructor() :
                     url = url,
                 )
             }
-
-            val nextPage = TraineeMyPagePage.getNextPage(currentState.page)
-            updateState { copy(page = nextPage) }
-        }
-
-        private fun dismissWebView() {
-            val previousPage = TraineeMyPagePage.getPreviousPage(currentState.page)
-            updateState { copy(page = previousPage) }
+            sendEffect(TraineeMyPageEffect.NavigateToWebView(url))
         }
 
         private fun navigateToOpenSource() {
@@ -102,30 +92,46 @@ internal class TraineeMyPageViewModel @Inject constructor() :
         }
 
         private fun logout() {
-            updateState { copy(showWarningDialog = true, dialogState = DialogState.LOGOUT) }
+            updateState {
+                copy(
+                    showWarningDialog = true,
+                    dialogState = DialogState.LOGOUT,
+                )
+            }
         }
 
         private fun deleteAccount() {
-            updateState { copy(showWarningDialog = true, dialogState = DialogState.DELETE_ACCOUNT) }
+            updateState {
+                copy(
+                    showWarningDialog = true,
+                    dialogState = DialogState.DELETE_ACCOUNT,
+                )
+            }
         }
 
-        private fun navigateBack() {
-            sendEffect(TraineeMyPageEffect.NavigateToPrevious)
+        private fun confirmWarningDialog() {
+            updateState {
+                copy(
+                    showWarningDialog = false,
+                    showCompleteDialog = true,
+                )
+            }
         }
 
-        private fun confirmFirstPopup() {
-            updateState { copy(showWarningDialog = false, showCompleteDialog = true) }
-        }
-
-        private fun dismissPopup() {
-            updateState { copy(showWarningDialog = false, showCompleteDialog = false) }
-        }
-
-        private fun handleSecondPopupConfirm() {
+        private fun handleCompleteDialogConfirm() {
             when (currentState.dialogState) {
                 DialogState.LOGOUT -> performLogout()
                 DialogState.DELETE_ACCOUNT -> performAccountDeletion()
                 DialogState.DISCONNECT -> performDisconnect()
+            }
+        }
+
+        private fun dismissPopup() {
+            updateState {
+                copy(
+                    showWarningDialog = false,
+                    showCompleteDialog = false,
+                )
             }
         }
 
@@ -148,7 +154,12 @@ internal class TraineeMyPageViewModel @Inject constructor() :
         private fun performDisconnect() {
             viewModelScope.launch {
                 // TODO 연결 해제 API 호출
-                updateState { copy(isConnected = false, showCompleteDialog = false) }
+                updateState {
+                    copy(
+                        isConnected = false,
+                        showCompleteDialog = false,
+                    )
+                }
             }
         }
     }

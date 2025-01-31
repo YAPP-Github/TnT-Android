@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import co.kr.tnt.feature.webview.navigateToWebView
+import co.kr.tnt.feature.webview.webViewScreen
 import co.kr.tnt.home.navigation.homeNavGraph
 import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
@@ -94,6 +96,12 @@ fun TnTNavHost(
                 navigateToPrevious = { navController.popBackStack() },
                 navigateToTraineeConnect = { navController.navigateToTraineeConnect(isFromMyPage = true) },
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
+                navigateToWebView = { url ->
+                    navController.navigateToWebView(url = url)
+                },
+            )
+            webViewScreen(
+                navigateToPrevious = { navController.popBackStack() },
             )
             homeNavGraph()
         }
