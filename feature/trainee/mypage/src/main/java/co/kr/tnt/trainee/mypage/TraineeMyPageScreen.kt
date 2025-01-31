@@ -280,7 +280,7 @@ private fun TraineeMyPageScreen(
             content = stringResource(state.popupType.secondPopupContent),
             buttonText = stringResource(uiResource.string.ok),
             onButtonClick = onConfirmSecondPopup,
-            onDismiss = onDismissPopup,
+            onDismiss = onConfirmSecondPopup,
         )
     }
 }
