@@ -48,7 +48,10 @@ fun TnTTextButton(
         ),
         contentPadding = size.contentPadding,
         // Small, XSmall 버튼을 위해 Button minWidth, minHeight 설정
-        modifier = modifier.defaultMinSize(minWidth = Dp.Hairline, minHeight = size.height),
+        modifier = modifier.defaultMinSize(
+            minWidth = Dp.Hairline,
+            minHeight = size.height,
+        ),
     ) {
         Text(
             text = text,
@@ -80,7 +83,10 @@ fun TnTIconButton(
         ),
         contentPadding = size.contentPadding,
         // Small, XSmall 버튼을 위해 Button minWidth 설정
-        modifier = modifier.defaultMinSize(minWidth = Dp.Hairline, minHeight = size.height),
+        modifier = modifier.defaultMinSize(
+            minWidth = Dp.Hairline,
+            minHeight = size.height,
+        ),
     ) {
         when (iconPosition) {
             is IconPosition.Leading -> {
@@ -153,7 +159,7 @@ fun TnTTnTTextButtonPreview() {
         TnTTextButton(
             size = ButtonSize.Small,
             type = ButtonType.Primary,
-            text = "텍스트ddddddddddddd",
+            text = "텍스트",
             enabled = true,
             onClick = { },
             modifier = Modifier.wrapContentSize(),
@@ -168,7 +174,7 @@ private fun TnTOutLinedButtonPreview() {
         TnTTextButton(
             size = ButtonSize.Medium,
             type = ButtonType.RedOutline,
-            text = "텍스트dddddddddddddddddddddd",
+            text = "텍스트",
             enabled = true,
             onClick = { },
             modifier = Modifier.wrapContentSize(),
@@ -190,7 +196,7 @@ private fun TnTIconButtonPreview() {
                         contentDescription = null,
                     )
                 },
-                text = "텍스트ttttttttttttttttt",
+                text = "텍스트",
                 enabled = true,
                 onClick = { },
                 modifier = Modifier.wrapContentSize(),
@@ -204,7 +210,7 @@ private fun TnTIconButtonPreview() {
                         contentDescription = null,
                     )
                 },
-                text = "텍스트tttttttttttttttttt",
+                text = "텍스트",
                 enabled = true,
                 onClick = { },
                 modifier = Modifier.wrapContentSize(),
