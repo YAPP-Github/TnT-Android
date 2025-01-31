@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.mypage
 
+import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPagePage.MyPage
 import co.kr.tnt.trainee.mypage.model.DialogState
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
@@ -7,6 +8,7 @@ import co.kr.tnt.ui.base.UiState
 
 internal class TraineeMyPageContract {
     data class TraineeMyPageUiState(
+        val page: TraineeMyPagePage = MyPage,
         val image: String? = "",
         val name: String = "",
         val trainerName: String = "",

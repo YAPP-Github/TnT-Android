@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
-fun TraineeMyPageWebViewScreen(url: String, onBackPress: () -> Unit) {
+fun TraineeMyPageWebViewPage(url: String, onBackPress: () -> Unit) {
     var webView: WebView? = null
 
     BackHandler {

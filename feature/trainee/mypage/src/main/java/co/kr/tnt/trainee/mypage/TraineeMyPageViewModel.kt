@@ -2,6 +2,7 @@ package co.kr.tnt.trainee.mypage
 
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
+import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPagePage
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
 import co.kr.tnt.trainee.mypage.model.DialogState
@@ -80,11 +81,20 @@ internal class TraineeMyPageViewModel @Inject constructor() :
         private fun openWebView() {
             // TODO Url API 호출?
             val url = "https://www.naver.com"
-            updateState { copy(showWebView = !showWebView, url = url) }
+            updateState {
+                copy(
+                    showWebView = !showWebView,
+                    url = url,
+                )
+            }
+
+            val nextPage = TraineeMyPagePage.getNextPage(currentState.page)
+            updateState { copy(page = nextPage) }
         }
 
         private fun dismissWebView() {
-            updateState { copy(showWebView = !showWebView) }
+            val previousPage = TraineeMyPagePage.getPreviousPage(currentState.page)
+            updateState { copy(page = previousPage) }
         }
 
         private fun navigateToOpenSource() {
