@@ -1,8 +1,5 @@
 package co.kr.tnt.trainee.mypage
 
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -11,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
@@ -46,7 +41,7 @@ import co.kr.tnt.feature.trainee.mypage.R
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
-import co.kr.tnt.trainee.mypage.model.PopupType
+import co.kr.tnt.trainee.mypage.model.DialogState
 import co.kr.tnt.ui.component.TnTMyPageButton
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.core.ui.R as uiResource
@@ -76,7 +71,6 @@ internal fun TraineeMyPageRoute(
         onDismissPopup = { viewModel.setEvent(TraineeMyPageUiEvent.OnDismissPopup) },
         onConfirmFirstPopup = { viewModel.setEvent(TraineeMyPageUiEvent.OnConfirmFirstPopup) },
         onConfirmSecondPopup = { viewModel.setEvent(TraineeMyPageUiEvent.OnConfirmSecondPopup) },
-        onDismissWebView = { viewModel.setEvent(TraineeMyPageUiEvent.OnWebViewBackClick) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -109,159 +103,151 @@ private fun TraineeMyPageScreen(
     onConfirmFirstPopup: () -> Unit,
     onConfirmSecondPopup: () -> Unit,
     onDismissPopup: () -> Unit,
-    onDismissWebView: () -> Unit,
 ) {
-    if (state.showWebView) {
-        WebViewScreen(
-            url = state.url,
-            onBackPress = onDismissWebView,
-        )
-    } else {
-        BackHandler { onBackClick() }
+    BackHandler { onBackClick() }
 
-        Scaffold(containerColor = TnTTheme.colors.neutralColors.Neutral50) { innerPadding ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+    Scaffold(containerColor = TnTTheme.colors.neutralColors.Neutral50) { innerPadding ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            TnTProfileImage(
+                defaultImage = painterResource(DefaultUserProfile.Trainee.image),
+                imageSize = 132.dp,
+                showEditButton = false,
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .verticalScroll(rememberScrollState()),
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+            )
+            Text(
+                text = state.name,
+                color = TnTTheme.colors.neutralColors.Neutral950,
+                style = TnTTheme.typography.h2,
+            )
+            Spacer(Modifier.height(8.dp))
+            TnTTextButton(
+                text = stringResource(uiResource.string.modifying_personal_info),
+                size = ButtonSize.Small,
+                type = ButtonType.Gray,
+                onClick = onEditButtonClick,
+            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
             ) {
-                TnTProfileImage(
-                    defaultImage = painterResource(DefaultUserProfile.Trainee.image),
-                    imageSize = 132.dp,
-                    showEditButton = false,
+                if (state.isConnected.not()) {
+                    TnTMyPageButton(
+                        text = stringResource(R.string.connect_with_trainer),
+                        onClick = onConnectButtonClick,
+                        verticalPadding = 14.dp,
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 12.dp),
-                )
-                Text(
-                    text = state.name,
-                    color = TnTTheme.colors.neutralColors.Neutral950,
-                    style = TnTTheme.typography.h2,
-                )
-                Spacer(Modifier.height(8.dp))
-                TnTTextButton(
-                    text = stringResource(uiResource.string.modifying_personal_info),
-                    size = ButtonSize.Small,
-                    type = ButtonType.Gray,
-                    onClick = onEditButtonClick,
-                )
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(TnTTheme.colors.commonColors.Common0)
+                        .padding(horizontal = 20.dp, vertical = 12.dp),
                 ) {
-                    if (state.isConnected.not()) {
-                        TnTMyPageButton(
-                            text = stringResource(R.string.connect_with_trainer),
-                            onClick = onConnectButtonClick,
-                            verticalPadding = 14.dp,
-                        )
-                    }
+                    Text(
+                        text = stringResource(uiResource.string.app_push_notification),
+                        color = TnTTheme.colors.neutralColors.Neutral700,
+                        style = TnTTheme.typography.body2Medium,
+                    )
+                    TnTSwitch(
+                        checked = state.isPushEnabled,
+                        onCheckedChange = onPushNotificationToggle,
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(TnTTheme.colors.commonColors.Common0)
+                        .padding(vertical = 12.dp),
+                ) {
+                    TnTMyPageButton(
+                        text = stringResource(uiResource.string.terms_of_service),
+                        onClick = onServiceTermClick,
+                        verticalPadding = 8.dp,
+                    )
+                    TnTMyPageButton(
+                        text = stringResource(uiResource.string.privacy_policy),
+                        onClick = onPrivacyClick,
+                        verticalPadding = 8.dp,
+                    )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(TnTTheme.colors.commonColors.Common0)
-                            .padding(horizontal = 20.dp, vertical = 12.dp),
+                            .padding(horizontal = 20.dp, vertical = 8.dp),
                     ) {
                         Text(
-                            text = stringResource(uiResource.string.app_push_notification),
+                            text = stringResource(uiResource.string.app_version),
                             color = TnTTheme.colors.neutralColors.Neutral700,
                             style = TnTTheme.typography.body2Medium,
                         )
-                        TnTSwitch(
-                            checked = state.isPushEnabled,
-                            onCheckedChange = onPushNotificationToggle,
+                        Text(
+                            text = state.appVersion,
+                            color = TnTTheme.colors.neutralColors.Neutral400,
+                            style = TnTTheme.typography.body2Medium,
                         )
                     }
-                    Column(
+                    TnTMyPageButton(
+                        text = stringResource(uiResource.string.open_source_license),
+                        onClick = onOpenSourceClick,
+                        verticalPadding = 8.dp,
+                    )
+                }
+                if (state.isConnected) {
+                    TnTMyPageButton(
+                        text = stringResource(R.string.disconnect_with_trainer),
+                        onClick = onDisconnectButtonClick,
+                        verticalPadding = 14.dp,
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(TnTTheme.colors.commonColors.Common0)
+                        .padding(vertical = 12.dp),
+                ) {
+                    Text(
+                        text = stringResource(uiResource.string.logout),
+                        color = TnTTheme.colors.neutralColors.Neutral700,
+                        style = TnTTheme.typography.body2Medium,
                         modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(TnTTheme.colors.commonColors.Common0)
-                            .padding(vertical = 12.dp),
-                    ) {
-                        TnTMyPageButton(
-                            text = stringResource(uiResource.string.terms_of_service),
-                            onClick = onServiceTermClick,
-                            verticalPadding = 8.dp,
-                        )
-                        TnTMyPageButton(
-                            text = stringResource(uiResource.string.privacy_policy),
-                            onClick = onPrivacyClick,
-                            verticalPadding = 8.dp,
-                        )
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp, vertical = 8.dp),
-                        ) {
-                            Text(
-                                text = stringResource(uiResource.string.app_version),
-                                color = TnTTheme.colors.neutralColors.Neutral700,
-                                style = TnTTheme.typography.body2Medium,
-                            )
-                            Text(
-                                text = state.appVersion,
-                                color = TnTTheme.colors.neutralColors.Neutral400,
-                                style = TnTTheme.typography.body2Medium,
-                            )
-                        }
-                        TnTMyPageButton(
-                            text = stringResource(uiResource.string.open_source_license),
-                            onClick = onOpenSourceClick,
-                            verticalPadding = 8.dp,
-                        )
-                    }
-                    if (state.isConnected) {
-                        TnTMyPageButton(
-                            text = stringResource(R.string.disconnect_with_trainer),
-                            onClick = onDisconnectButtonClick,
-                            verticalPadding = 14.dp,
-                        )
-                    }
-                    Column(
+                            .padding(horizontal = 20.dp, vertical = 8.dp)
+                            .clickable(onClick = onLogoutClick),
+                    )
+                    Text(
+                        text = stringResource(uiResource.string.delete_account),
+                        color = TnTTheme.colors.neutralColors.Neutral700,
+                        style = TnTTheme.typography.body2Medium,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(TnTTheme.colors.commonColors.Common0)
-                            .padding(vertical = 12.dp),
-                    ) {
-                        Text(
-                            text = stringResource(uiResource.string.logout),
-                            color = TnTTheme.colors.neutralColors.Neutral700,
-                            style = TnTTheme.typography.body2Medium,
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 8.dp)
-                                .clickable(onClick = onLogoutClick),
-                        )
-                        Text(
-                            text = stringResource(uiResource.string.delete_account),
-                            color = TnTTheme.colors.neutralColors.Neutral700,
-                            style = TnTTheme.typography.body2Medium,
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 8.dp)
-                                .clickable(onClick = onDeleteAccountClick),
-                        )
-                    }
+                            .padding(horizontal = 20.dp, vertical = 8.dp)
+                            .clickable(onClick = onDeleteAccountClick),
+                    )
                 }
             }
         }
     }
 
-    if (state.showFirstPopup) {
+    if (state.showWarningDialog) {
         TnTIconPopupDialog(
-            title = if (state.popupType == PopupType.DISCONNECT) {
-                stringResource(state.popupType.firstPopupTitle, state.trainerName)
+            title = if (state.dialogState == DialogState.DISCONNECT) {
+                stringResource(state.dialogState.warningDialogTitle, state.trainerName)
             } else {
-                stringResource(state.popupType.firstPopupTitle)
+                stringResource(state.dialogState.warningDialogTitle)
             },
-            content = stringResource(state.popupType.firstPopupContent),
+            content = stringResource(state.dialogState.warningDialogContent),
             leftButtonText = stringResource(uiResource.string.cancel),
             rightButtonText = stringResource(uiResource.string.ok),
             onLeftButtonClick = onDismissPopup,
@@ -270,49 +256,18 @@ private fun TraineeMyPageScreen(
         )
     }
 
-    if (state.showSecondPopup) {
+    if (state.showCompleteDialog) {
         TnTSingleButtonPopupDialog(
-            title = if (state.popupType == PopupType.DISCONNECT) {
-                stringResource(state.popupType.secondPopupTitle, state.trainerName)
+            title = if (state.dialogState == DialogState.DISCONNECT) {
+                stringResource(state.dialogState.completeDialogTitle, state.trainerName)
             } else {
-                stringResource(state.popupType.secondPopupTitle)
+                stringResource(state.dialogState.completeDialogTitle)
             },
-            content = stringResource(state.popupType.secondPopupContent),
+            content = stringResource(state.dialogState.completeDialogContent),
             buttonText = stringResource(uiResource.string.ok),
             onButtonClick = onConfirmSecondPopup,
             onDismiss = onConfirmSecondPopup,
         )
-    }
-}
-
-@Composable
-fun WebViewScreen(url: String, onBackPress: () -> Unit) {
-    var webView: WebView? = null
-
-    AndroidView(
-        factory = { context ->
-            WebView(context).apply {
-                settings.javaScriptEnabled = true
-                settings.domStorageEnabled = true
-                settings.loadWithOverviewMode = true
-                settings.useWideViewPort = true
-                settings.builtInZoomControls = true
-                settings.displayZoomControls = false
-                settings.cacheMode = WebSettings.LOAD_NO_CACHE
-                webViewClient = WebViewClient()
-                loadUrl(url)
-                webView = this
-            }
-        },
-        modifier = Modifier.fillMaxSize(),
-    )
-
-    BackHandler {
-        if (webView?.canGoBack() == true) {
-            webView?.goBack()
-        } else {
-            onBackPress()
-        }
     }
 }
 
@@ -341,7 +296,6 @@ private fun TraineeMyPagePreview() {
             onConfirmFirstPopup = {},
             onDismissPopup = {},
             onConfirmSecondPopup = {},
-            onDismissWebView = {},
         )
     }
 }

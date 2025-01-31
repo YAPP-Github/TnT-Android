@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
-import co.kr.tnt.trainee.mypage.model.PopupType
+import co.kr.tnt.trainee.mypage.model.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -67,8 +67,8 @@ internal class TraineeMyPageViewModel @Inject constructor() :
             updateState {
                 copy(
                     trainerName = "김피티",
-                    showFirstPopup = true,
-                    popupType = PopupType.DISCONNECT,
+                    showWarningDialog = true,
+                    dialogState = DialogState.DISCONNECT,
                 )
             }
         }
@@ -92,11 +92,11 @@ internal class TraineeMyPageViewModel @Inject constructor() :
         }
 
         private fun logout() {
-            updateState { copy(showFirstPopup = true, popupType = PopupType.LOGOUT) }
+            updateState { copy(showWarningDialog = true, dialogState = DialogState.LOGOUT) }
         }
 
         private fun deleteAccount() {
-            updateState { copy(showFirstPopup = true, popupType = PopupType.DELETE_ACCOUNT) }
+            updateState { copy(showWarningDialog = true, dialogState = DialogState.DELETE_ACCOUNT) }
         }
 
         private fun navigateBack() {
@@ -104,25 +104,25 @@ internal class TraineeMyPageViewModel @Inject constructor() :
         }
 
         private fun confirmFirstPopup() {
-            updateState { copy(showFirstPopup = false, showSecondPopup = true) }
+            updateState { copy(showWarningDialog = false, showCompleteDialog = true) }
         }
 
         private fun dismissPopup() {
-            updateState { copy(showFirstPopup = false, showSecondPopup = false) }
+            updateState { copy(showWarningDialog = false, showCompleteDialog = false) }
         }
 
         private fun handleSecondPopupConfirm() {
-            when (currentState.popupType) {
-                PopupType.LOGOUT -> performLogout()
-                PopupType.DELETE_ACCOUNT -> performAccountDeletion()
-                PopupType.DISCONNECT -> performDisconnect()
+            when (currentState.dialogState) {
+                DialogState.LOGOUT -> performLogout()
+                DialogState.DELETE_ACCOUNT -> performAccountDeletion()
+                DialogState.DISCONNECT -> performDisconnect()
             }
         }
 
         private fun performLogout() {
             viewModelScope.launch {
                 // TODO 로그아웃 API 호출
-                updateState { copy(showSecondPopup = false) }
+                updateState { copy(showCompleteDialog = false) }
                 sendEffect(TraineeMyPageEffect.NavigateToLogin)
             }
         }
@@ -130,7 +130,7 @@ internal class TraineeMyPageViewModel @Inject constructor() :
         private fun performAccountDeletion() {
             viewModelScope.launch {
                 // TODO 회원 탈퇴 API 호출
-                updateState { copy(showSecondPopup = false) }
+                updateState { copy(showCompleteDialog = false) }
                 sendEffect(TraineeMyPageEffect.NavigateToLogin)
             }
         }
@@ -138,7 +138,7 @@ internal class TraineeMyPageViewModel @Inject constructor() :
         private fun performDisconnect() {
             viewModelScope.launch {
                 // TODO 연결 해제 API 호출
-                updateState { copy(isConnected = false, showSecondPopup = false) }
+                updateState { copy(isConnected = false, showCompleteDialog = false) }
             }
         }
     }
