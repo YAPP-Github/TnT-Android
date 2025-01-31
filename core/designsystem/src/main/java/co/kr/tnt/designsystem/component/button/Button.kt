@@ -1,11 +1,12 @@
 package co.kr.tnt.designsystem.component.button
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -45,14 +47,17 @@ fun TnTTextButton(
             color = type.borderColor(enabled),
         ),
         contentPadding = size.contentPadding,
-        modifier = modifier
-            .height(size.height)
-            // Small, XSmall 버튼을 위해 Button minWidth 설정
-            .defaultMinSize(minWidth = Dp.Hairline),
+        // Small, XSmall 버튼을 위해 Button minWidth, minHeight 설정
+        modifier = modifier.defaultMinSize(
+            minWidth = Dp.Hairline,
+            minHeight = size.height,
+        ),
     ) {
         Text(
             text = text,
             style = size.textStyle(),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
         )
     }
 }
@@ -77,28 +82,43 @@ fun TnTIconButton(
             color = type.borderColor(enabled),
         ),
         contentPadding = size.contentPadding,
-        modifier = modifier
-            .height(size.height)
-            // Small, XSmall 버튼을 위해 Button minWidth 설정
-            .defaultMinSize(minWidth = Dp.Hairline),
+        // Small, XSmall 버튼을 위해 Button minWidth 설정
+        modifier = modifier.defaultMinSize(
+            minWidth = Dp.Hairline,
+            minHeight = size.height,
+        ),
     ) {
         when (iconPosition) {
             is IconPosition.Leading -> {
-                iconPosition.icon()
-                Text(
-                    text = text,
-                    style = size.textStyle(),
-                    modifier = Modifier.padding(start = 4.dp),
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    iconPosition.icon()
+                    Text(
+                        text = text,
+                        style = size.textStyle(),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        modifier = Modifier.weight(1f, false),
+                    )
+                }
             }
 
             is IconPosition.Trailing -> {
-                Text(
-                    text = text,
-                    style = size.textStyle(),
-                    modifier = Modifier.padding(end = 4.dp),
-                )
-                iconPosition.icon()
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Text(
+                        text = text,
+                        style = size.textStyle(),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        modifier = Modifier.weight(1f, false),
+                    )
+                    iconPosition.icon()
+                }
             }
         }
     }
@@ -137,7 +157,7 @@ fun TnTBottomButton(
 fun TnTTnTTextButtonPreview() {
     TnTTheme {
         TnTTextButton(
-            size = ButtonSize.Medium,
+            size = ButtonSize.Small,
             type = ButtonType.Primary,
             text = "텍스트",
             enabled = true,
@@ -162,24 +182,40 @@ private fun TnTOutLinedButtonPreview() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 150, heightDp = 100)
+@Preview(showBackground = true, widthDp = 150, heightDp = 130)
 @Composable
 private fun TnTIconButtonPreview() {
     TnTTheme {
-        TnTIconButton(
-            size = ButtonSize.Medium,
-            type = ButtonType.GrayOutline,
-            iconPosition = IconPosition.Trailing {
-                Icon(
-                    painter = painterResource(R.drawable.ic_delete),
-                    contentDescription = null,
-                )
-            },
-            text = "텍스트",
-            enabled = true,
-            onClick = { },
-            modifier = Modifier.wrapContentSize(),
-        )
+        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            TnTIconButton(
+                size = ButtonSize.Medium,
+                type = ButtonType.GrayOutline,
+                iconPosition = IconPosition.Trailing {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_delete),
+                        contentDescription = null,
+                    )
+                },
+                text = "텍스트",
+                enabled = true,
+                onClick = { },
+                modifier = Modifier.wrapContentSize(),
+            )
+            TnTIconButton(
+                size = ButtonSize.Medium,
+                type = ButtonType.GrayOutline,
+                iconPosition = IconPosition.Leading {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_delete),
+                        contentDescription = null,
+                    )
+                },
+                text = "텍스트",
+                enabled = true,
+                onClick = { },
+                modifier = Modifier.wrapContentSize(),
+            )
+        }
     }
 }
 

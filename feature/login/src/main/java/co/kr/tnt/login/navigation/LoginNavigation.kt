@@ -4,15 +4,22 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import co.kr.tnt.domain.model.LoginResult
 import co.kr.tnt.login.LoginRoute
 import co.kr.tnt.navigation.Route
 
 fun NavController.navigateToLogin(
+    clearBackStack: Boolean = false,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
     route = Route.Login,
-    builder = navOptions,
+    navOptions = navOptions {
+        if (clearBackStack) {
+            popUpTo(graph.startDestinationId) { inclusive = true }
+        }
+        navOptions()
+    },
 )
 
 fun NavGraphBuilder.loginScreen(

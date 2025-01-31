@@ -5,14 +5,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import co.kr.tnt.feature.webview.navigateToWebView
+import co.kr.tnt.feature.webview.webViewScreen
 import co.kr.tnt.home.navigation.homeNavGraph
 import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
+import co.kr.tnt.login.navigation.navigateToLogin
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.roleselect.navigateToRoleSelection
 import co.kr.tnt.roleselect.roleSelectionScreen
 import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
+import co.kr.tnt.trainee.mypage.navigation.traineeMyPageScreen
 import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
@@ -87,6 +91,17 @@ fun TnTNavHost(
                 navigateToHome = {
                     navController.navigateToHome(isTrainer = false, clearBackStack = true)
                 },
+            )
+            traineeMyPageScreen(
+                navigateToPrevious = { navController.popBackStack() },
+                navigateToTraineeConnect = { navController.navigateToTraineeConnect(isFromMyPage = true) },
+                navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
+                navigateToWebView = { url ->
+                    navController.navigateToWebView(url = url)
+                },
+            )
+            webViewScreen(
+                navigateToPrevious = { navController.popBackStack() },
             )
             homeNavGraph()
         }

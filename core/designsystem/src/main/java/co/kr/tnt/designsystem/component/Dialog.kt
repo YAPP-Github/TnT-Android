@@ -156,7 +156,7 @@ fun TnTSingleButtonPopupDialog(
 fun TnTIconPopupDialog(
     title: String,
     content: String,
-    topIcon: Painter,
+    topIcon: Painter = painterResource(R.drawable.ic_round_warning),
     leftButtonText: String,
     rightButtonText: String,
     modifier: Modifier = Modifier,

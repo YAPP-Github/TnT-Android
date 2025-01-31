@@ -29,10 +29,10 @@ sealed interface RecordChip {
             return when (type) {
                 is RecordType.MealType -> {
                     val title = when (type) {
-                        RecordType.MealType.BREAKFAST -> stringResource(R.string.diet_breakfast)
-                        RecordType.MealType.LUNCH -> stringResource(R.string.diet_lunch)
-                        RecordType.MealType.DINNER -> stringResource(R.string.diet_dinner)
-                        RecordType.MealType.SNACK -> stringResource(R.string.diet_snack)
+                        RecordType.MealType.BREAKFAST -> stringResource(R.string.meal_breakfast)
+                        RecordType.MealType.LUNCH -> stringResource(R.string.meal_lunch)
+                        RecordType.MealType.DINNER -> stringResource(R.string.meal_dinner)
+                        RecordType.MealType.SNACK -> stringResource(R.string.meal_snack)
                     }
                     val emoji = when (type) {
                         RecordType.MealType.BREAKFAST -> "🌞"
