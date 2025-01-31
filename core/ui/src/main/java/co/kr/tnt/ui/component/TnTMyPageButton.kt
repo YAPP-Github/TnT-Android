@@ -24,7 +24,7 @@ fun TnTMyPageButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 39.dp) {
         Button(
             onClick = onClick,
             shape = RoundedCornerShape(12.dp),
