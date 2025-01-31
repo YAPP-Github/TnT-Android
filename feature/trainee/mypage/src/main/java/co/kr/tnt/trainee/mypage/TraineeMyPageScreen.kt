@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -120,7 +122,9 @@ private fun TraineeMyPageScreen(
         Scaffold(containerColor = TnTTheme.colors.neutralColors.Neutral50) { innerPadding ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(innerPadding),
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState()),
             ) {
                 TnTProfileImage(
                     defaultImage = painterResource(DefaultUserProfile.Trainee.image),
@@ -151,8 +155,8 @@ private fun TraineeMyPageScreen(
                     if (state.isConnected.not()) {
                         TnTMyPageButton(
                             text = stringResource(R.string.connect_with_trainer),
-                            height = 47.dp,
                             onClick = onConnectButtonClick,
+                            verticalPadding = 14.dp,
                         )
                     }
                     Row(
@@ -160,10 +164,9 @@ private fun TraineeMyPageScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(48.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(TnTTheme.colors.commonColors.Common0)
-                            .padding(horizontal = 20.dp),
+                            .padding(horizontal = 20.dp, vertical = 12.dp),
                     ) {
                         Text(
                             text = stringResource(uiResource.string.app_push_notification),
@@ -183,20 +186,19 @@ private fun TraineeMyPageScreen(
                     ) {
                         TnTMyPageButton(
                             text = stringResource(uiResource.string.terms_of_service),
-                            height = 40.dp,
                             onClick = onServiceTermClick,
+                            verticalPadding = 8.dp,
                         )
                         TnTMyPageButton(
                             text = stringResource(uiResource.string.privacy_policy),
-                            height = 40.dp,
                             onClick = onPrivacyClick,
+                            verticalPadding = 8.dp,
                         )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(40.dp)
                                 .padding(horizontal = 20.dp, vertical = 8.dp),
                         ) {
                             Text(
@@ -212,15 +214,15 @@ private fun TraineeMyPageScreen(
                         }
                         TnTMyPageButton(
                             text = stringResource(uiResource.string.open_source_license),
-                            height = 40.dp,
                             onClick = onOpenSourceClick,
+                            verticalPadding = 8.dp,
                         )
                     }
                     if (state.isConnected) {
                         TnTMyPageButton(
                             text = stringResource(R.string.disconnect_with_trainer),
-                            height = 47.dp,
                             onClick = onDisconnectButtonClick,
+                            verticalPadding = 14.dp,
                         )
                     }
                     Column(
@@ -235,7 +237,7 @@ private fun TraineeMyPageScreen(
                             color = TnTTheme.colors.neutralColors.Neutral700,
                             style = TnTTheme.typography.body2Medium,
                             modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 12.dp)
+                                .padding(horizontal = 20.dp, vertical = 8.dp)
                                 .clickable(onClick = onLogoutClick),
                         )
                         Text(
@@ -243,7 +245,7 @@ private fun TraineeMyPageScreen(
                             color = TnTTheme.colors.neutralColors.Neutral700,
                             style = TnTTheme.typography.body2Medium,
                             modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 12.dp)
+                                .padding(horizontal = 20.dp, vertical = 8.dp)
                                 .clickable(onClick = onDeleteAccountClick),
                         )
                     }
@@ -322,7 +324,7 @@ private fun TraineeMyPagePreview() {
             state = TraineeMyPageUiState(
                 image = null,
                 name = "김회원",
-                isConnected = true,
+                isConnected = false,
                 isPushEnabled = true,
                 appVersion = "0.0.0",
             ),
