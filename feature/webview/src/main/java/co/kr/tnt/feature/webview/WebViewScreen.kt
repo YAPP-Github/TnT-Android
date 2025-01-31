@@ -1,4 +1,4 @@
-package co.kr.tnt.trainee.mypage
+package co.kr.tnt.feature.webview
 
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -12,14 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
-fun TraineeMyPageWebViewPage(url: String, onBackPress: () -> Unit) {
+internal fun WebViewScreen(
+    url: String,
+    onBackClick: () -> Unit,
+) {
     var webView: WebView? = null
 
     BackHandler {
         if (webView?.canGoBack() == true) {
             webView?.goBack()
         } else {
-            onBackPress()
+            onBackClick()
         }
     }
 

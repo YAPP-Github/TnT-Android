@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(projects.feature.home)
+    implementation(projects.feature.webview)
     implementation(projects.feature.login)
     implementation(projects.feature.roleselect)
     implementation(projects.feature.trainee.signup)
