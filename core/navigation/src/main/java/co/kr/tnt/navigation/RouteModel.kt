@@ -43,5 +43,8 @@ sealed interface Route {
     data object TraineeMyPage : Route
 
     @Serializable
+    data object TraineeNotification : Route
+
+    @Serializable
     data class WebView(val url: String) : Route
 }

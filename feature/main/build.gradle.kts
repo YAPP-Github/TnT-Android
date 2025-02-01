@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.feature.trainer.connect)
     implementation(projects.feature.trainee.connect)
     implementation(projects.feature.trainee.mypage)
+    implementation(projects.feature.trainee.notification)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
