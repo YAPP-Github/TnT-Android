@@ -11,6 +11,10 @@ import javax.inject.Singleton
 class LoginRemoteDataSource @Inject constructor(
     private val apiService: ApiService,
 ) {
+    suspend fun getCheckSession() = networkHandler {
+        apiService.getCheckSession()
+    }
+
     suspend fun postLogin(loginRequest: LoginRequest): LoginResponse = networkHandler {
         apiService.postLogin(loginRequest)
     }
