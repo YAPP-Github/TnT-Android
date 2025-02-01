@@ -40,7 +40,7 @@ fun TnTNavHost(
         ) {
             loginScreen(
                 navigateToHome = {
-                    navController.navigateToHome(isTrainer = true) {
+                    navController.navigateToHome {
                         popUpTo(Route.Login) {
                             inclusive = true
                         }
@@ -83,13 +83,13 @@ fun TnTNavHost(
             trainerConnectScreen(
                 navigateToPrevious = { navController.popBackStack() },
                 navigateToHome = {
-                    navController.navigateToHome(isTrainer = true, clearBackStack = true)
+                    navController.navigateToHome(clearBackStack = true)
                 },
             )
             traineeConnectScreen(
                 navigateToPrevious = { navController.popBackStack() },
                 navigateToHome = {
-                    navController.navigateToHome(isTrainer = false, clearBackStack = true)
+                    navController.navigateToHome(clearBackStack = true)
                 },
             )
             traineeMyPageScreen(

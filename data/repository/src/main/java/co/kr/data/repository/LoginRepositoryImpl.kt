@@ -15,6 +15,9 @@ internal class LoginRepositoryImpl @Inject constructor(
     private val loginRemoteDataSource: LoginRemoteDataSource,
     private val sessionLocalDataSource: SessionLocalDataSource,
 ) : LoginRepository {
+    override suspend fun isNeedLogin(): Boolean =
+        runCatching { loginRemoteDataSource.getCheckSession() }.isFailure
+
     override suspend fun login(
         authType: AuthType,
         accessToken: String,
