@@ -7,7 +7,7 @@ sealed interface Route {
     data object HomeBase : Route
 
     @Serializable
-    data class Home(val isTrainer: Boolean) : Route
+    data object Home : Route
 
     @Serializable
     data object Login : Route
