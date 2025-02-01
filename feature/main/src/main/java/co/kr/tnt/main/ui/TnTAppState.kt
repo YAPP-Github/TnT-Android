@@ -14,11 +14,13 @@ import co.kr.tnt.navigation.Route
 fun rememberTnTAppState(
     sessionMonitor: SessionMonitor,
     navController: NavHostController = rememberNavController(),
+    startDestination: Route,
 ): TnTAppState {
     return remember {
         TnTAppState(
             sessionMonitor,
             navController,
+            startDestination,
         )
     }
 }
@@ -28,10 +30,9 @@ fun rememberTnTAppState(
 class TnTAppState(
     val sessionMonitor: SessionMonitor,
     val navController: NavHostController,
+    val startDestination: Route,
 ) {
     private val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
-
-    val startDestination = Route.TraineeMyPage
 }
