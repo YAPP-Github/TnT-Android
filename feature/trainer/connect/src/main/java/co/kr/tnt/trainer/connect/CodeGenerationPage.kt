@@ -43,16 +43,16 @@ import co.kr.tnt.core.ui.R as uiResource
 @Composable
 internal fun CodeGenerationPage(
     state: TrainerConnectUiState,
-    isFromMyPage: Boolean,
+    isSkippable: Boolean,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
     onSkipClick: () -> Unit,
 ) {
     BackHandler {
-        if (isFromMyPage) {
-            onBackClick()
-        } else {
+        if (isSkippable) {
             onSkipClick()
+        } else {
+            onBackClick()
         }
     }
 
@@ -61,12 +61,7 @@ internal fun CodeGenerationPage(
 
     Scaffold(
         topBar = {
-            if (isFromMyPage) {
-                TnTTopBarWithBackButton(
-                    title = stringResource(uiResource.string.connect),
-                    onBackClick = onBackClick,
-                )
-            } else {
+            if (isSkippable) {
                 TnTTopBar(
                     title = stringResource(uiResource.string.connect),
                     trailingComponent = {
@@ -79,6 +74,11 @@ internal fun CodeGenerationPage(
                             },
                         )
                     },
+                )
+            } else {
+                TnTTopBarWithBackButton(
+                    title = stringResource(uiResource.string.connect),
+                    onBackClick = onBackClick,
                 )
             }
         },
@@ -135,7 +135,6 @@ internal fun CodeGenerationPage(
                                 .align(Alignment.CenterVertically)
                                 .padding(vertical = 4.dp),
                             content = {
-                                // TODO 코드 재발급
                                 TnTTextButton(
                                     text = stringResource(R.string.code_reissue),
                                     size = ButtonSize.Small,
@@ -181,7 +180,7 @@ private fun CodeGenerationPagePreview() {
             onBackClick = {},
             onSkipClick = {},
             onRegenerateClick = {},
-            isFromMyPage = false,
+            isSkippable = false,
         )
     }
 }

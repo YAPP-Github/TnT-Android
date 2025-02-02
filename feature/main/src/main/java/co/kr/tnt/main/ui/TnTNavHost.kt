@@ -75,11 +75,11 @@ fun TnTNavHost(
             )
             trainerSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
-                navigateToConnect = { navController.navigateToTrainerConnect(isFromMyPage = false) },
+                navigateToConnect = { navController.navigateToTrainerConnect(isSkippable = true) },
             )
             traineeSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
-                navigateToConnect = { navController.navigateToTraineeConnect(isFromMyPage = false) },
+                navigateToConnect = { navController.navigateToTraineeConnect(isSkippable = true) },
             )
             trainerConnectScreen(
                 navigateToPrevious = { navController.popBackStack() },
@@ -95,7 +95,7 @@ fun TnTNavHost(
             )
             traineeMyPageScreen(
                 navigateToPrevious = { navController.popBackStack() },
-                navigateToTraineeConnect = { navController.navigateToTraineeConnect(isFromMyPage = true) },
+                navigateToTraineeConnect = { navController.navigateToTraineeConnect(isSkippable = false) },
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
                 navigateToWebView = { url ->
                     navController.navigateToWebView(url = url)
