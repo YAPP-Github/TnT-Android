@@ -16,6 +16,7 @@ dependencies {
     implementation(projects.feature.trainee.signup)
     implementation(projects.feature.trainer.signup)
     implementation(projects.feature.trainer.connect)
+    implementation(projects.feature.trainer.notification)
     implementation(projects.feature.trainee.connect)
     implementation(projects.feature.trainee.mypage)
     implementation(projects.feature.trainee.notification)
