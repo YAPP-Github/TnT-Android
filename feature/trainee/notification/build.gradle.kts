@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    setNamespace("feature.notification")
+    setNamespace("feature.trainee.notification")
 }
 
 dependencies {
