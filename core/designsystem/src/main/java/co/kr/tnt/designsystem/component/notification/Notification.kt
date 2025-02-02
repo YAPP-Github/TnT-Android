@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.designsystem.component.notification.model.NotificationType
+import co.kr.tnt.designsystem.component.notification.model.NotificationIcon
 import co.kr.tnt.designsystem.theme.TnTTheme
 
 @Composable
 fun TnTNotification(
-    type: NotificationType,
+    type: NotificationIcon,
     title: String,
     contents: String,
     time: String,
@@ -78,7 +78,7 @@ fun TnTNotification(
 private fun TnTNotificationPreview() {
     TnTTheme {
         TnTNotification(
-            type = NotificationType.LINK,
+            type = NotificationIcon.LINK,
             title = "알림 문구",
             contents = "알림 상세 문구",
             time = "2분전",
