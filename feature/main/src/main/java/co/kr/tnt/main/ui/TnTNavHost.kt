@@ -20,6 +20,7 @@ import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
+import co.kr.tnt.trainer.notification.navigation.trainerNotification
 import co.kr.tnt.trainer.signup.navigation.navigateToTrainerSignUp
 import co.kr.tnt.trainer.signup.navigation.trainerSignUpScreen
 import co.kr.tnt.webview.navigateToWebView
@@ -75,7 +76,12 @@ fun TnTNavHost(
             )
             trainerSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
-                navigateToConnect = { navController.navigateToTrainerConnect(isSkippable = true) },
+                navigateToConnect = {
+                    navController.navigateToTrainerConnect(
+                        isSkippable = true,
+                        isCompleted = false,
+                    )
+                },
             )
             traineeSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
@@ -103,6 +109,15 @@ fun TnTNavHost(
             )
             traineeNotification(
                 navigateToPrevious = { navController.popBackStack() },
+            )
+            trainerNotification(
+                navigateToPrevious = { navController.popBackStack() },
+                navigateToConnect = {
+                    navController.navigateToTrainerConnect(
+                        isSkippable = false,
+                        isCompleted = true,
+                    )
+                },
             )
             webViewScreen(
                 navigateToPrevious = { navController.popBackStack() },

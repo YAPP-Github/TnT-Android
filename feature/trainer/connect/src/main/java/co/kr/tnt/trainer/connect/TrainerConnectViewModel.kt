@@ -14,11 +14,6 @@ internal class TrainerConnectViewModel @Inject constructor() :
     BaseViewModel<TrainerConnectUiState, TrainerConnectUiEvent, TrainerConnectSideEffect>(
         TrainerConnectUiState(),
     ) {
-        init {
-            generateCode()
-            initProfile()
-        }
-
         override suspend fun handleEvent(event: TrainerConnectUiEvent) {
             when (event) {
                 is TrainerConnectUiEvent.OnRegenerateClick -> regenerateCode()
@@ -26,6 +21,22 @@ internal class TrainerConnectViewModel @Inject constructor() :
                 TrainerConnectUiEvent.OnBackClick -> navigateToBack()
                 TrainerConnectUiEvent.OnSkipClick -> navigateToHome()
             }
+        }
+
+        fun setStartPage(startPage: TrainerConnectPage) {
+            updateState { copy(page = startPage) }
+
+            if (startPage == TrainerConnectPage.CodeGeneration) {
+                generateCode()
+            } else {
+                initProfile()
+            }
+        }
+
+        private fun generateCode() {
+            // TODO 코드 발급
+            val code = "12345678"
+            updateState { copy(inviteCode = code) }
         }
 
         private fun initProfile() {
@@ -52,12 +63,6 @@ internal class TrainerConnectViewModel @Inject constructor() :
             }
         }
 
-        fun generateCode() {
-            // TODO 코드 발급
-            val code = "12345678"
-            updateState { copy(inviteCode = code) }
-        }
-
         private fun regenerateCode() {
             // TODO 코드 재발급
             val newCode = "87654321"
@@ -78,7 +83,9 @@ internal class TrainerConnectViewModel @Inject constructor() :
 
         private fun navigateToBack() {
             val previousPage = when (currentState.page) {
-                TrainerConnectPage.TrainerConnectComplete -> {
+                TrainerConnectPage.CodeGeneration,
+                TrainerConnectPage.TrainerConnectComplete,
+                -> {
                     sendEffect(TrainerConnectSideEffect.NavigateToBack)
                     return
                 }

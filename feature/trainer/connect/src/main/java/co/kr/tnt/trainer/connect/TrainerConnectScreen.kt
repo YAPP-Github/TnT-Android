@@ -13,11 +13,21 @@ import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 @Composable
 internal fun TrainerConnectRoute(
     isSkippable: Boolean,
+    isCompleted: Boolean,
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerConnectViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        val startPage = if (isCompleted) {
+            TrainerConnectContract.TrainerConnectPage.TrainerConnectComplete
+        } else {
+            TrainerConnectContract.TrainerConnectPage.CodeGeneration
+        }
+        viewModel.setStartPage(startPage)
+    }
 
     TrainerConnectScreen(
         state = state,

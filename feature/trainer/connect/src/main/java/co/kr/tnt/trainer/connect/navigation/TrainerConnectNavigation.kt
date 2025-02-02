@@ -10,9 +10,10 @@ import co.kr.tnt.trainer.connect.TrainerConnectRoute
 
 fun NavController.navigateToTrainerConnect(
     isSkippable: Boolean,
+    isCompleted: Boolean,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.TrainerConnect(isSkippable),
+    route = Route.TrainerConnect(isSkippable, isCompleted),
     builder = navOptions,
 )
 
@@ -24,6 +25,7 @@ fun NavGraphBuilder.trainerConnectScreen(
         backstackEntry.toRoute<Route.TrainerConnect>().apply {
             TrainerConnectRoute(
                 isSkippable = isSkippable,
+                isCompleted = isCompleted,
                 navigateToPrevious = navigateToPrevious,
                 navigateToHome = { navigateToHome(true) },
             )

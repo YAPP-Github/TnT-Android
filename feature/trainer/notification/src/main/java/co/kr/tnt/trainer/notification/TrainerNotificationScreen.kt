@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.notification
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,16 +19,19 @@ import co.kr.tnt.core.ui.R as uiResource
 @Composable
 internal fun TrainerNotificationRoute(
     navigateToPrevious: () -> Unit,
+    navigateToConnect: () -> Unit,
     viewModel: TrainerNotificationViewModel = hiltViewModel(),
 ) {
     TrainerNotificationScreen(
         onBackClick = navigateToPrevious,
+        onLinkNotificationClick = navigateToConnect,
     )
 }
 
 @Composable
 private fun TrainerNotificationScreen(
     onBackClick: () -> Unit,
+    onLinkNotificationClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -49,6 +53,9 @@ private fun TrainerNotificationScreen(
                     text = stringResource(uiResource.string.no_recent_notifications),
                     style = TnTTheme.typography.label1Medium,
                     color = TnTTheme.colors.neutralColors.Neutral400,
+                    modifier = Modifier.clickable {
+                        onLinkNotificationClick()
+                    },
                 )
             }
         }
@@ -61,6 +68,7 @@ private fun TrainerNotificationScreenPreview() {
     TnTTheme {
         TrainerNotificationScreen(
             onBackClick = {},
+            onLinkNotificationClick = {},
         )
     }
 }
