@@ -36,6 +36,7 @@
     <string name="weight_unit">kg</string>
 
     <string name="notification">알림</string>
+    <string name="no_recent_notifications">최근 받은 알림이 없어요</string>
 
     <!-- Meal -->
     <string name="meal_breakfast">아침</string>

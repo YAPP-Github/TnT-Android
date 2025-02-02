@@ -1,0 +1,26 @@
+package co.kr.tnt.domain.model
+
+data class NotificationInfo(
+    val type: NotificationType,
+    val title: String,
+    val contents: String,
+    val time: String,
+    val isChecked: Boolean,
+)
+
+// TODO API 나오면 수정 필요
+enum class NotificationType {
+    LINK,
+    SCHEDULE,
+    ;
+
+    companion object {
+        fun from(type: String): NotificationType {
+            return when (type) {
+                "LINK" -> LINK
+                "SCHEDULE" -> SCHEDULE
+                else -> throw IllegalArgumentException("지원하지 않는 $type 입니다.")
+            }
+        }
+    }
+}
