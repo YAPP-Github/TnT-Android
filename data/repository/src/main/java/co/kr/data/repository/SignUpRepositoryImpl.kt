@@ -42,7 +42,7 @@ class SignUpRepositoryImpl @Inject constructor(
             email = email,
             fcmToken = "EMPTY",
         )
-        val requestBody = signUpRequest.toRequestBody(Json)
+        val requestBody = signUpRequest.toRequestBody()
 
         val response = signupRemoteDataSource.postSignUp(
             profileImage = profileImagePart,
@@ -54,7 +54,7 @@ class SignUpRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 
-    private fun SignUpRequest.toRequestBody(json: Json): RequestBody {
+    private fun SignUpRequest.toRequestBody(): RequestBody {
         val jsonString = json.encodeToString(this)
         return jsonString.toRequestBody("application/json".toMediaTypeOrNull())
     }
