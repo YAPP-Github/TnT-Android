@@ -22,6 +22,7 @@ import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.notification.TnTNotification
 import co.kr.tnt.designsystem.component.notification.model.NotificationIcon
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiEvent
 import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiState
 import co.kr.tnt.ui.model.NotificationState
 import co.kr.tnt.core.ui.R as uiResource
@@ -36,7 +37,7 @@ internal fun TraineeNotificationRoute(
 
     TraineeNotificationScreen(
         state = uiState,
-        onBackClick = navigateToPrevious,
+        onBackClick = { viewModel.setEvent(TraineeNotificationUiEvent.OnBackClick) },
     )
 
     LaunchedEffect(viewModel.effect) {
