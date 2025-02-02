@@ -46,6 +46,7 @@ include(
     ":feature:login",
     ":feature:roleselect",
     ":feature:connect",
+    ":feature:trainer:home",
     ":feature:trainer:signup",
     ":feature:trainer:connect",
     ":feature:trainee:signup",
