@@ -13,7 +13,7 @@ import co.kr.tnt.login.navigation.loginScreen
 import co.kr.tnt.login.navigation.navigateToLogin
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.roleselect.navigateToRoleSelection
-import co.kr.tnt.roleselect.roleSelectionScreen
+import co.kr.tnt.roleselect.signupNavGraph
 import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
 import co.kr.tnt.trainee.mypage.navigation.traineeMyPageScreen
@@ -56,7 +56,7 @@ fun TnTNavHost(
                     )
                 },
             )
-            roleSelectionScreen(
+            signupNavGraph(
                 navigateToTraineeSignUp = { authId, authType, email ->
                     navController.navigateToTraineeSignUp(
                         authId = authId,
@@ -71,29 +71,30 @@ fun TnTNavHost(
                         email = email,
                     )
                 },
-            )
-            trainerSignUpScreen(
-                navigateToPrevious = { navController.popBackStack() },
-                navigateToConnect = { navController.navigateToTrainerConnect(isFromMyPage = false) },
-            )
-            traineeSignUpScreen(
-                navigateToPrevious = { navController.popBackStack() },
-                navigateToConnect = { navController.navigateToTraineeConnect(isFromMyPage = false) },
-            )
+            ) {
+                trainerSignUpScreen(
+                    navigateToPrevious = navController::popBackStack,
+                    navigateToConnect = { navController.navigateToTrainerConnect(isFromMyPage = false) },
+                )
+                traineeSignUpScreen(
+                    navigateToPrevious = navController::popBackStack,
+                    navigateToConnect = { navController.navigateToTraineeConnect(isFromMyPage = false) },
+                )
+            }
             trainerConnectScreen(
-                navigateToPrevious = { navController.popBackStack() },
+                navigateToPrevious = navController::popBackStack,
                 navigateToHome = {
                     navController.navigateToHome(clearBackStack = true)
                 },
             )
             traineeConnectScreen(
-                navigateToPrevious = { navController.popBackStack() },
+                navigateToPrevious = navController::popBackStack,
                 navigateToHome = {
                     navController.navigateToHome(clearBackStack = true)
                 },
             )
             traineeMyPageScreen(
-                navigateToPrevious = { navController.popBackStack() },
+                navigateToPrevious = navController::popBackStack,
                 navigateToTraineeConnect = { navController.navigateToTraineeConnect(isFromMyPage = true) },
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
                 navigateToWebView = { url ->
@@ -101,7 +102,7 @@ fun TnTNavHost(
                 },
             )
             webViewScreen(
-                navigateToPrevious = { navController.popBackStack() },
+                navigateToPrevious = navController::popBackStack,
             )
             homeNavGraph()
         }
