@@ -3,6 +3,7 @@ package co.kr.tnt.ui.model
 import co.kr.tnt.designsystem.component.notification.model.NotificationIcon
 import co.kr.tnt.domain.model.NotificationInfo
 import co.kr.tnt.domain.model.NotificationType
+import co.kr.tnt.domain.util.NotificationTimeUtil
 
 data class NotificationState(
     val type: NotificationIcon,
@@ -20,7 +21,7 @@ data class NotificationState(
                 },
                 title = domain.title,
                 contents = domain.contents,
-                time = domain.time,
+                time = NotificationTimeUtil.formatTime(domain.time),
                 isChecked = domain.isChecked,
             )
         }
