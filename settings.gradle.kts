@@ -50,11 +50,12 @@ include(
     ":feature:trainer:connect",
     ":feature:trainee:signup",
     ":feature:trainer:main",
-    ":feature:trainee:home",
     ":feature:trainer:feedback",
     ":feature:trainer:members",
     ":feature:trainer:mypage",
     ":feature:trainee:connect",
+    ":feature:trainee:main",
+    ":feature:trainee:home",
     ":feature:trainee:mypage",
     ":feature:webview",
 )
