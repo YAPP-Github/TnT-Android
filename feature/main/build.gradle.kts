@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.feature.webview)
     implementation(projects.feature.login)
     implementation(projects.feature.roleselect)
+    implementation(projects.feature.trainer.main)
     implementation(projects.feature.trainee.signup)
     implementation(projects.feature.trainer.signup)
     implementation(projects.feature.trainer.connect)

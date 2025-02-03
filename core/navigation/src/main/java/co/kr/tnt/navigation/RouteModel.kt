@@ -56,6 +56,32 @@ sealed interface Route {
     @Serializable
     data object TrainerMain : Route
 
+    sealed interface TrainerMainTab : Route {
+        @Serializable
+        data object Home : TrainerMainTab
+
+        @Serializable
+        data object Members : TrainerMainTab
+
+        @Serializable
+        data object FeedBack : TrainerMainTab
+
+        @Serializable
+        data object MyPage : TrainerMainTab
+    }
+
+    @Serializable
+    data object TrainerHome : Route
+
+    @Serializable
+    data object TrainerMembers : Route
+
+    @Serializable
+    data object TrainerFeedBack : Route
+
+    @Serializable
+    data object TrainerMyPage : Route
+
     @Serializable
     data object TraineeMyPage : Route
 

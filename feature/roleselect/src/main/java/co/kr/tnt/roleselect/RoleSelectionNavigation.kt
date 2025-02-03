@@ -22,7 +22,7 @@ fun NavController.navigateToRoleSelection(
     builder = navOptions,
 )
 
-fun NavGraphBuilder.signupNavGraph(
+fun NavGraphBuilder.signUpNavGraph(
     navigateToTraineeSignUp: (authId: String, authType: String, email: String) -> Unit,
     navigateToTrainerSignUp: (authId: String, authType: String, email: String) -> Unit,
     signUpDestination: NavGraphBuilder.() -> Unit = { },

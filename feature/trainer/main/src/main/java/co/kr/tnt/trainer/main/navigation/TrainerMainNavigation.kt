@@ -2,6 +2,7 @@ package co.kr.tnt.trainer.main.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
@@ -21,8 +22,18 @@ fun NavController.navigateToTrainerMain(
     },
 )
 
-fun NavGraphBuilder.trainerMainScreen() {
+fun NavGraphBuilder.trainerMainScreen(
+    navController: NavHostController,
+    navigateToConnect: () -> Unit,
+    navigateToLogin: () -> Unit,
+    navigateToWebView: (url: String) -> Unit,
+) {
     composable<Route.TrainerMain> {
-        TrainerMainRoute()
+        TrainerMainRoute(
+            navController = navController,
+            navigateToConnect = navigateToConnect,
+            navigateToLogin = navigateToLogin,
+            navigateToWebView = navigateToWebView,
+        )
     }
 }

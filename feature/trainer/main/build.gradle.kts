@@ -9,5 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.trainer.home)
+
     implementation(libs.kotlinx.immutable)
 }
