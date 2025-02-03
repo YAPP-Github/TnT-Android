@@ -159,7 +159,7 @@ private fun TraineeMyPageScreen(
                     )
                     TnTSwitch(
                         checked = state.isPushEnabled,
-                        onCheckedChange = onPushNotificationToggle,
+                        onClick = onPushNotificationToggle,
                     )
                 }
                 Column(
