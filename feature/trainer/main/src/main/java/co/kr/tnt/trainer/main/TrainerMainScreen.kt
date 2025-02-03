@@ -12,12 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.feedback.navigation.trainerFeedbackNavGraph
 import co.kr.tnt.trainer.home.navigation.trainerHomeNavGraph
 import co.kr.tnt.trainer.members.navigation.trainerMembersNavGraph
+import co.kr.tnt.trainer.mypage.navigation.trainerMyPageNavGraph
 
 @Composable
 @Suppress("UnusedParameter")
@@ -99,9 +99,7 @@ fun TrainerMainScreen(
             trainerHomeNavGraph()
             trainerFeedbackNavGraph()
             trainerMembersNavGraph()
-            composable<Route.TrainerMainTab.MyPage> {
-                Text(text = "trainer my page")
-            }
+            trainerMyPageNavGraph()
         }
     }
 }
