@@ -1,4 +1,4 @@
-package co.kr.tnt.trainer.feedback.navigation
+package co.kr.tnt.trainer.members.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -7,13 +7,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navOptions
 import co.kr.tnt.navigation.Route
-import co.kr.tnt.trainer.feedback.TrainerFeedbackRoute
+import co.kr.tnt.trainer.members.TrainerMembersRoute
 
-fun NavController.navigateToTrainerFeedback(
+fun NavController.navigateToTrainerMembers(
     clearBackStack: Boolean = false,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.TrainerFeedback,
+    route = Route.TrainerMembers,
     navOptions = navOptions {
         if (clearBackStack) {
             popUpTo(graph.startDestinationId) { inclusive = true }
@@ -22,13 +22,13 @@ fun NavController.navigateToTrainerFeedback(
     },
 )
 
-fun NavGraphBuilder.trainerFeedbackNavGraph(
-    feedbackDestination: NavGraphBuilder.() -> Unit = { },
+fun NavGraphBuilder.trainerMembersNavGraph(
+    membersDestination: NavGraphBuilder.() -> Unit = { },
 ) {
-    navigation<Route.TrainerMainTab.Feedback>(startDestination = Route.TrainerFeedback) {
-        composable<Route.TrainerFeedback> {
-            TrainerFeedbackRoute()
+    navigation<Route.TrainerMainTab.Members>(startDestination = Route.TrainerMembers) {
+        composable<Route.TrainerMembers> {
+            TrainerMembersRoute()
         }
-        feedbackDestination()
+        membersDestination()
     }
 }

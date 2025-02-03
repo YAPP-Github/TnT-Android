@@ -17,6 +17,7 @@ import androidx.navigation.navOptions
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.feedback.navigation.trainerFeedbackNavGraph
 import co.kr.tnt.trainer.home.navigation.trainerHomeNavGraph
+import co.kr.tnt.trainer.members.navigation.trainerMembersNavGraph
 
 @Composable
 @Suppress("UnusedParameter")
@@ -97,9 +98,7 @@ fun TrainerMainScreen(
         ) {
             trainerHomeNavGraph()
             trainerFeedbackNavGraph()
-            composable<Route.TrainerMainTab.Members> {
-                Text(text = "trainer members")
-            }
+            trainerMembersNavGraph()
             composable<Route.TrainerMainTab.MyPage> {
                 Text(text = "trainer my page")
             }

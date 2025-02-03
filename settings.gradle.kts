@@ -52,6 +52,7 @@ include(
     ":feature:trainer:main",
     ":feature:trainee:home",
     ":feature:trainer:feedback",
+    ":feature:trainer:members",
     ":feature:trainee:connect",
     ":feature:trainee:mypage",
     ":feature:webview",
