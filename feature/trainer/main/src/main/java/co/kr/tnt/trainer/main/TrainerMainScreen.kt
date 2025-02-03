@@ -36,7 +36,7 @@ internal fun TrainerMainRoute(
 }
 
 @Composable
-fun TrainerMainScreen(
+private fun TrainerMainScreen(
     navController: NavHostController,
     navigateToConnect: () -> Unit,
     navigateToLogin: () -> Unit,
@@ -45,49 +45,11 @@ fun TrainerMainScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            Row(
-                modifier = Modifier.navigationBarsPadding(),
-            ) {
-                Button(
-                    onClick = {
-                        navController.navigate(
-                            route = Route.TrainerMainTab.Home,
-                            navOptions = getTopLevelNavOptions(navController),
-                        )
-                    },
-                ) {
-                    Text("home")
-                }
-                Button(
-                    onClick = {
-                        navController.navigate(
-                            route = Route.TrainerMainTab.Feedback,
-                            navOptions = getTopLevelNavOptions(navController),
-                        )
-                    },
-                ) {
-                    Text("feedBack")
-                }
-                Button(
-                    onClick = {
-                        navController.navigate(
-                            route = Route.TrainerMainTab.Members,
-                            navOptions = getTopLevelNavOptions(navController),
-                        )
-                    },
-                ) {
-                    Text("members")
-                }
-                Button(
-                    onClick = {
-                        navController.navigate(
-                            route = Route.TrainerMainTab.MyPage,
-                            navOptions = getTopLevelNavOptions(navController),
-                        )
-                    },
-                ) {
-                    Text("my page")
-                }
+            TrainerMainBottomBar { tab ->
+                navController.navigate(
+                    route = tab.route,
+                    navOptions = getTopLevelNavOptions(navController),
+                )
             }
         },
     ) { innerPadding ->
@@ -100,6 +62,25 @@ fun TrainerMainScreen(
             trainerFeedbackNavGraph()
             trainerMembersNavGraph()
             trainerMyPageNavGraph()
+        }
+    }
+}
+
+@Composable
+private fun TrainerMainBottomBar(
+    onClickTab: (tab: TrainerMainTab) -> Unit,
+) {
+    Row(
+        modifier = Modifier.navigationBarsPadding(),
+    ) {
+        TrainerMainTab.entries.forEach { tab ->
+            Button(
+                onClick = {
+                    onClickTab(tab)
+                },
+            ) {
+                Text(tab.contentDescription)
+            }
         }
     }
 }
