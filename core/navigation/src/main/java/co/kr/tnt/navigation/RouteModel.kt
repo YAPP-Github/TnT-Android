@@ -64,7 +64,7 @@ sealed interface Route {
         data object Members : TrainerMainTab
 
         @Serializable
-        data object FeedBack : TrainerMainTab
+        data object Feedback : TrainerMainTab
 
         @Serializable
         data object MyPage : TrainerMainTab
@@ -77,7 +77,7 @@ sealed interface Route {
     data object TrainerMembers : Route
 
     @Serializable
-    data object TrainerFeedBack : Route
+    data object TrainerFeedback : Route
 
     @Serializable
     data object TrainerMyPage : Route

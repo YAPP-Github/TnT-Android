@@ -51,6 +51,7 @@ include(
     ":feature:trainee:signup",
     ":feature:trainer:main",
     ":feature:trainee:home",
+    ":feature:trainer:feedback",
     ":feature:trainee:connect",
     ":feature:trainee:mypage",
     ":feature:webview",

@@ -5,12 +5,9 @@ plugins {
 }
 
 android {
-    setNamespace("feature.trainer.main")
+    setNamespace("feature.trainer.feedback")
 }
 
 dependencies {
-    implementation(projects.feature.trainer.home)
-    implementation(projects.feature.trainer.feedback)
-
     implementation(libs.kotlinx.immutable)
 }

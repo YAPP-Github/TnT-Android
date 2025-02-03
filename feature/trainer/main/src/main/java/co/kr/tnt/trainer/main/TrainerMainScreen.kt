@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import co.kr.tnt.navigation.Route
+import co.kr.tnt.trainer.feedback.navigation.trainerFeedbackNavGraph
 import co.kr.tnt.trainer.home.navigation.trainerHomeNavGraph
 
 @Composable
@@ -59,7 +60,7 @@ fun TrainerMainScreen(
                 Button(
                     onClick = {
                         navController.navigate(
-                            route = Route.TrainerMainTab.FeedBack,
+                            route = Route.TrainerMainTab.Feedback,
                             navOptions = getTopLevelNavOptions(navController),
                         )
                     },
@@ -95,9 +96,7 @@ fun TrainerMainScreen(
             startDestination = Route.TrainerMainTab.Home,
         ) {
             trainerHomeNavGraph()
-            composable<Route.TrainerMainTab.FeedBack> {
-                Text(text = "trainer feedback")
-            }
+            trainerFeedbackNavGraph()
             composable<Route.TrainerMainTab.Members> {
                 Text(text = "trainer members")
             }
