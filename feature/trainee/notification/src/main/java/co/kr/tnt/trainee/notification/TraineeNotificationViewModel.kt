@@ -8,6 +8,8 @@ import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotific
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.model.toUiStateList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,26 +29,28 @@ internal class TraineeNotificationViewModel @Inject constructor() :
 
         private fun getNotification() {
             // TODO 알림 불러오기
+            val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+
             val sampleNotifications = listOf(
                 NotificationInfo(
                     type = NotificationType.LINK,
                     title = "트레이너 연결 해제",
                     contents = "박헬린 트레이너가 연결을 끊었어요",
-                    time = "2025-02-02T23:12:00",
+                    time = LocalDateTime.parse("2025-02-03T23:12:00", formatter),
                     isChecked = false,
                 ),
                 NotificationInfo(
                     type = NotificationType.LINK,
                     title = "트레이너 연결 해제",
                     contents = "김헬스 트레이너가 연결을 끊었어요",
-                    time = "2025-02-02T23:03:00",
+                    time = LocalDateTime.parse("2025-02-03T23:03:00", formatter),
                     isChecked = true,
                 ),
                 NotificationInfo(
                     type = NotificationType.LINK,
                     title = "트레이너 연결 해제",
                     contents = "김피티 트레이너가 연결을 끊었어요",
-                    time = "2025-01-31T22:29:00",
+                    time = LocalDateTime.parse("2025-02-02T22:29:00", formatter),
                     isChecked = true,
                 ),
             )

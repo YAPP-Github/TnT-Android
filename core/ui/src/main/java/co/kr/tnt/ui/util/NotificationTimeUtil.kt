@@ -5,13 +5,12 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Locale
 
-object NotificationTimeUtil {
-    fun formatTime(notificationTime: String): String {
+class NotificationTimeFormatter {
+    fun formatTime(notificationTime: LocalDateTime): String {
         val now = LocalDateTime.now()
-        val time = LocalDateTime.parse(notificationTime, DateTimeFormatter.ISO_DATE_TIME)
 
-        val minutesDiff = ChronoUnit.MINUTES.between(time, now)
-        val hoursDiff = ChronoUnit.HOURS.between(time, now)
+        val minutesDiff = ChronoUnit.MINUTES.between(notificationTime, now)
+        val hoursDiff = ChronoUnit.HOURS.between(notificationTime, now)
 
         return when {
             minutesDiff < 1 -> "방금"
@@ -19,7 +18,7 @@ object NotificationTimeUtil {
             hoursDiff < 24 -> "${hoursDiff}시간 전"
             else -> {
                 val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd", Locale.getDefault())
-                time.format(dateFormatter)
+                notificationTime.format(dateFormatter)
             }
         }
     }

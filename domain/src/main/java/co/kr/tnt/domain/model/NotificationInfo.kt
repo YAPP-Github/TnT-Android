@@ -1,10 +1,12 @@
 package co.kr.tnt.domain.model
 
+import java.time.LocalDateTime
+
 data class NotificationInfo(
     val type: NotificationType,
     val title: String,
     val contents: String,
-    val time: String,
+    val time: LocalDateTime,
     val isChecked: Boolean,
 )
 
