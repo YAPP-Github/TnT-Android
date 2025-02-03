@@ -1,4 +1,4 @@
-package co.kr.tnt.domain.util
+package co.kr.tnt.ui.util
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
