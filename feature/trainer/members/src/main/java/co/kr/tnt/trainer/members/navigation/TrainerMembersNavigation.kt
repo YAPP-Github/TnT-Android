@@ -10,16 +10,10 @@ import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.members.TrainerMembersRoute
 
 fun NavController.navigateToTrainerMembers(
-    clearBackStack: Boolean = false,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
     route = Route.TrainerMembers,
-    navOptions = navOptions {
-        if (clearBackStack) {
-            popUpTo(graph.startDestinationId) { inclusive = true }
-        }
-        navOptions()
-    },
+    builder = navOptions,
 )
 
 fun NavGraphBuilder.trainerMembersNavGraph(

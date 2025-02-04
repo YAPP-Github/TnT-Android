@@ -10,16 +10,10 @@ import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.mypage.TrainerMyPageRoute
 
 fun NavController.navigateToTrainerMyPage(
-    clearBackStack: Boolean = false,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
     route = Route.TrainerMyPage,
-    navOptions = navOptions {
-        if (clearBackStack) {
-            popUpTo(graph.startDestinationId) { inclusive = true }
-        }
-        navOptions()
-    },
+    builder = navOptions,
 )
 
 fun NavGraphBuilder.trainerMyPageNavGraph(

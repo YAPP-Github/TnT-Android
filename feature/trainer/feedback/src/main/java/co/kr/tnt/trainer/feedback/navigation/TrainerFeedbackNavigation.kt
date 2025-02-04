@@ -10,16 +10,10 @@ import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.feedback.TrainerFeedbackRoute
 
 fun NavController.navigateToTrainerFeedback(
-    clearBackStack: Boolean = false,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
     route = Route.TrainerFeedback,
-    navOptions = navOptions {
-        if (clearBackStack) {
-            popUpTo(graph.startDestinationId) { inclusive = true }
-        }
-        navOptions()
-    },
+    builder = navOptions,
 )
 
 fun NavGraphBuilder.trainerFeedbackNavGraph(

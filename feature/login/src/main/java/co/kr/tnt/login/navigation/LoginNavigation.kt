@@ -16,7 +16,7 @@ fun NavController.navigateToLogin(
     route = Route.Login,
     navOptions = navOptions {
         if (clearBackStack) {
-            popUpTo(graph.startDestinationId) { inclusive = true }
+            popUpTo(graph.id) { inclusive = true }
         }
         navOptions()
     },
