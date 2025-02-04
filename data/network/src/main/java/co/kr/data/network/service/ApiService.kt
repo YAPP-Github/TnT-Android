@@ -1,6 +1,7 @@
 package co.kr.data.network.service
 
 import co.kr.data.network.model.CheckSessionResponse
+import co.kr.data.network.model.InviteCodeResponse
 import co.kr.data.network.model.LoginRequest
 import co.kr.data.network.model.LoginResponse
 import co.kr.data.network.model.SignUpResponse
@@ -28,4 +29,7 @@ interface ApiService {
         @Part profileImage: MultipartBody.Part?,
         @Part("request") request: RequestBody,
     ): SignUpResponse
+
+    @GET("/trainers/invitation-code")
+    suspend fun getInviteCode(): InviteCodeResponse
 }
