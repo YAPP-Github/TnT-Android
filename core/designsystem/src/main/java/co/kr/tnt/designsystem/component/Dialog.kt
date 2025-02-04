@@ -140,7 +140,7 @@ fun TnTSingleButtonPopupDialog(
                 )
                 TnTTextButton(
                     size = ButtonSize.Medium,
-                    type = ButtonType.Gray,
+                    type = ButtonType.Primary,
                     text = buttonText,
                     onClick = onButtonClick,
                     modifier = Modifier
@@ -230,6 +230,7 @@ fun TnTIconSingleButtonPopupDialog(
     topIcon: Painter,
     buttonText: String,
     modifier: Modifier = Modifier,
+    type: ButtonType = ButtonType.Gray,
     onButtonClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -273,7 +274,7 @@ fun TnTIconSingleButtonPopupDialog(
                 )
                 TnTTextButton(
                     size = ButtonSize.Medium,
-                    type = ButtonType.Gray,
+                    type = type,
                     text = buttonText,
                     onClick = onButtonClick,
                     modifier = Modifier
