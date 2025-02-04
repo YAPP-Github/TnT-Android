@@ -30,7 +30,6 @@ fun TnTNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
-    val mainNavController = appState.mainNavController
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -41,7 +40,7 @@ fun TnTNavHost(
         ) {
             loginScreen(
                 navigateToHome = {
-                    navController.navigateToTrainerMain(clearBackStack = true)
+                    navController.navigateToTraineeMain(clearBackStack = true)
                 },
                 navigateToSignup = { loginResult ->
                     navController.navigateToRoleSelection(
@@ -72,13 +71,11 @@ fun TnTNavHost(
                 navigateToHome = { navController.navigateToTraineeMain(clearBackStack = true) },
             )
             trainerMainScreen(
-                navController = mainNavController,
                 navigateToConnect = { navController.navigateToTraineeConnect(true) },
                 navigateToWebView = navController::navigateToWebView,
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
             )
             traineeMainScreen(
-                navController = mainNavController,
                 navigateToConnect = { navController.navigateToTraineeConnect(true) },
                 navigateToWebView = navController::navigateToWebView,
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainee.home.navigation.traineeHomeNavGraph
@@ -19,10 +20,10 @@ import co.kr.tnt.trainee.mypage.navigation.traineeMyPageNavGraph
 
 @Composable
 internal fun TraineeMainRoute(
-    navController: NavHostController,
     navigateToConnect: () -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
+    navController: NavHostController = rememberNavController(),
 ) {
     TraineeMainScreen(
         navController = navController,
