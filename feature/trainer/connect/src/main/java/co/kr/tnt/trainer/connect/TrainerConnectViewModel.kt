@@ -75,9 +75,16 @@ internal class TrainerConnectViewModel @Inject constructor(
     }
 
     private fun regenerateCode() {
-        // TODO 코드 재발급
-        val newCode = "87654321"
-        updateState { copy(inviteCode = newCode) }
+        viewModelScope.launch {
+            runCatching {
+                connectRepository.regenerateInviteCode()
+            }.onSuccess { result ->
+                updateState { copy(inviteCode = result.invitationCode) }
+            }.onFailure {
+                // TODO 컴포넌트 사용
+                sendEffect(TrainerConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
+            }
+        }
     }
 
     private fun navigateToNext() {
