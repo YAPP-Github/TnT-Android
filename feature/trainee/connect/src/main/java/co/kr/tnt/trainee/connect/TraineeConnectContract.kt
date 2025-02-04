@@ -34,6 +34,7 @@ internal class TraineeConnectContract {
     sealed interface TraineeConnectSideEffect : UiSideEffect {
         data object NavigateToBack : TraineeConnectSideEffect
         data object NavigateToHome : TraineeConnectSideEffect
+        data class ShowToast(val message: String) : TraineeConnectSideEffect
     }
 
     enum class TraineeConnectPage {

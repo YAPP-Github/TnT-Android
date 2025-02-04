@@ -82,7 +82,7 @@ internal fun CodeEntryPage(
                 Spacer(Modifier.padding(top = 48.dp))
                 CodeTextField(
                     value = state.inviteCode,
-                    onValueChange = { onCodeChanged(it) },
+                    onValueChange = onCodeChanged,
                     modifier = Modifier.padding(horizontal = 20.dp),
                     isCodeValid = state.isCodeValid,
                     trailingComponent = {

@@ -1,6 +1,8 @@
 package co.kr.tnt.trainee.connect
 
 import co.kr.tnt.domain.model.User
+import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
@@ -10,13 +12,16 @@ import co.kr.tnt.trainee.connect.model.InputState.VALID
 import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class TraineeConnectViewModel @Inject constructor() :
+internal class TraineeConnectViewModel @Inject constructor(
+    private val connectRepository: ConnectRepository,
+) :
     BaseViewModel<TraineeConnectUiState, TraineeConnectUiEvent, TraineeConnectSideEffect>(
-        TraineeConnectUiState(),
-    ) {
+            TraineeConnectUiState(),
+        ) {
         init {
             initProfile()
         }
@@ -59,13 +64,19 @@ internal class TraineeConnectViewModel @Inject constructor() :
         }
 
         private fun validateCode(code: String) {
-            // TODO 코드 유효성 확인
-            val isValid = if (code.length == 8) {
-                VALID
-            } else {
-                INVALID
+            viewModelScope.launch {
+                runCatching {
+                    connectRepository.verifyInviteCode(code)
+                }.onSuccess { result ->
+                    if (result) {
+                        updateState { copy(inviteCode = code, isCodeValid = VALID) }
+                    } else {
+                        updateState { copy(inviteCode = code, isCodeValid = INVALID) }
+                    }
+                }.onFailure {
+                    sendEffect(TraineeConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
+                }
             }
-            updateState { copy(inviteCode = code, isCodeValid = isValid) }
         }
 
         private fun resetCode(code: String) {

@@ -1,8 +1,10 @@
 package co.kr.tnt.trainee.connect
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
@@ -18,6 +20,7 @@ internal fun TraineeConnectRoute(
     navigateToHome: (Boolean) -> Unit,
     viewModel: TraineeConnectViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     TraineeConnectScreen(
@@ -42,6 +45,9 @@ internal fun TraineeConnectRoute(
             when (effect) {
                 TraineeConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TraineeConnectSideEffect.NavigateToHome -> navigateToHome(false)
+                is TraineeConnectSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
