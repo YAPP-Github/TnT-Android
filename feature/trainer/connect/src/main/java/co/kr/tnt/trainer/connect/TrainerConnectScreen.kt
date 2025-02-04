@@ -12,16 +12,26 @@ import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 
 @Composable
 internal fun TrainerConnectRoute(
-    isFromMyPage: Boolean,
+    isSkippable: Boolean,
+    isCompleted: Boolean,
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerConnectViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        val startPage = if (isCompleted) {
+            TrainerConnectContract.TrainerConnectPage.TrainerConnectComplete
+        } else {
+            TrainerConnectContract.TrainerConnectPage.CodeGeneration
+        }
+        viewModel.setStartPage(startPage)
+    }
+
     TrainerConnectScreen(
         state = state,
-        isFromMyPage = isFromMyPage,
+        isSkippable = isSkippable,
         onRegenerateClick = { viewModel.setEvent(TrainerConnectUiEvent.OnRegenerateClick) },
         onBackClick = { viewModel.setEvent(TrainerConnectUiEvent.OnBackClick) },
         onNextClick = { viewModel.setEvent(TrainerConnectUiEvent.OnNextClick) },
@@ -41,7 +51,7 @@ internal fun TrainerConnectRoute(
 @Composable
 private fun TrainerConnectScreen(
     state: TrainerConnectUiState,
-    isFromMyPage: Boolean,
+    isSkippable: Boolean,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -50,7 +60,7 @@ private fun TrainerConnectScreen(
     when (state.page) {
         TrainerConnectPage.CodeGeneration -> CodeGenerationPage(
             state = state,
-            isFromMyPage = isFromMyPage,
+            isSkippable = isSkippable,
             onRegenerateClick = onRegenerateClick,
             onBackClick = onBackClick,
             onSkipClick = onSkipClick,

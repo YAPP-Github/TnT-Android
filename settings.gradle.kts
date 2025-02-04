@@ -48,6 +48,7 @@ include(
     ":feature:connect",
     ":feature:trainer:signup",
     ":feature:trainer:connect",
+    ":feature:trainer:notification",
     ":feature:trainee:signup",
     ":feature:trainee:connect",
     ":feature:trainee:mypage",

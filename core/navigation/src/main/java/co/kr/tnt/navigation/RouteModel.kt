@@ -34,16 +34,22 @@ sealed interface Route {
     ) : Route
 
     @Serializable
-    data class TrainerConnect(val isFromMyPage: Boolean) : Route
+    data class TrainerConnect(
+        val isSkippable: Boolean,
+        val isCompleted: Boolean,
+    ) : Route
 
     @Serializable
-    data class TraineeConnect(val isFromMyPage: Boolean) : Route
+    data class TraineeConnect(val isSkippable: Boolean) : Route
 
     @Serializable
     data object TraineeMyPage : Route
 
     @Serializable
     data object TraineeNotification : Route
+
+    @Serializable
+    data object TrainerNotification : Route
 
     @Serializable
     data class WebView(val url: String) : Route

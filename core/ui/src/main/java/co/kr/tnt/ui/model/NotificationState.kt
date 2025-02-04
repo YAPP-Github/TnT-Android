@@ -11,24 +11,23 @@ data class NotificationState(
     val contents: String,
     val time: String,
     val isChecked: Boolean = true,
+    val isClickable: Boolean = false,
 ) {
     companion object {
         fun fromDomain(domain: NotificationInfo): NotificationState {
             val timeFormatter = NotificationTimeFormatter()
             return NotificationState(
                 type = when (domain.type) {
-                    NotificationType.LINK -> NotificationIcon.LINK
+                    NotificationType.CONNECT_COMPLETE -> NotificationIcon.LINK
+                    NotificationType.DISCONNECT -> NotificationIcon.LINK
                     NotificationType.SCHEDULE -> NotificationIcon.SCHEDULE
                 },
                 title = domain.title,
                 contents = domain.contents,
                 time = timeFormatter.formatTime(domain.time),
                 isChecked = domain.isChecked,
+                isClickable = domain.type == NotificationType.CONNECT_COMPLETE,
             )
         }
     }
-}
-
-fun List<NotificationInfo>.toUiStateList(): List<NotificationState> {
-    return this.map { NotificationState.fromDomain(it) }
 }

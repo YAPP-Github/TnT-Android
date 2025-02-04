@@ -12,14 +12,16 @@ data class NotificationInfo(
 
 // TODO API 나오면 수정 필요
 enum class NotificationType {
-    LINK,
+    CONNECT_COMPLETE,
+    DISCONNECT,
     SCHEDULE,
     ;
 
     companion object {
         fun from(type: String): NotificationType {
             return when (type) {
-                "LINK" -> LINK
+                "CONNECT_COMPLETE" -> CONNECT_COMPLETE
+                "DISCONNECT" -> DISCONNECT
                 "SCHEDULE" -> SCHEDULE
                 else -> throw IllegalArgumentException("지원하지 않는 $type 입니다.")
             }

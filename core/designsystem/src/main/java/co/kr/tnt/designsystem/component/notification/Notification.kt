@@ -2,6 +2,7 @@ package co.kr.tnt.designsystem.component.notification
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ fun TnTNotification(
     contents: String,
     time: String,
     isChecked: Boolean,
+    onClick: (() -> Unit)? = null,
 ) {
     val backgroundColor = if (isChecked) {
         TnTTheme.colors.commonColors.Common0
@@ -37,7 +39,14 @@ fun TnTNotification(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
-            .padding(20.dp),
+            .padding(20.dp)
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable { onClick.invoke() }
+                } else {
+                    Modifier
+                },
+            ),
     ) {
         Image(
             painter = painterResource(type.icon),

@@ -6,7 +6,7 @@ import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotific
 import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiEvent
 import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiState
 import co.kr.tnt.ui.base.BaseViewModel
-import co.kr.tnt.ui.model.toUiStateList
+import co.kr.tnt.ui.model.NotificationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -33,28 +33,28 @@ internal class TraineeNotificationViewModel @Inject constructor() :
 
             val sampleNotifications = listOf(
                 NotificationInfo(
-                    type = NotificationType.LINK,
+                    type = NotificationType.DISCONNECT,
                     title = "트레이너 연결 해제",
                     contents = "박헬린 트레이너가 연결을 끊었어요",
                     time = LocalDateTime.parse("2025-02-03T23:12:00", formatter),
                     isChecked = false,
                 ),
                 NotificationInfo(
-                    type = NotificationType.LINK,
+                    type = NotificationType.DISCONNECT,
                     title = "트레이너 연결 해제",
                     contents = "김헬스 트레이너가 연결을 끊었어요",
                     time = LocalDateTime.parse("2025-02-03T23:03:00", formatter),
                     isChecked = true,
                 ),
                 NotificationInfo(
-                    type = NotificationType.LINK,
+                    type = NotificationType.DISCONNECT,
                     title = "트레이너 연결 해제",
                     contents = "김피티 트레이너가 연결을 끊었어요",
                     time = LocalDateTime.parse("2025-02-02T22:29:00", formatter),
                     isChecked = true,
                 ),
             )
-            updateState { copy(notifications = sampleNotifications.toUiStateList()) }
+            updateState { copy(notifications = sampleNotifications.map(NotificationState::fromDomain)) }
         }
 
         private fun navigateToBack() {

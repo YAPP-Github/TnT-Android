@@ -1,4 +1,4 @@
-package co.kr.tnt.feature.webview
+package co.kr.tnt.webview
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import co.kr.tnt.feature.webview.navigateToWebView
-import co.kr.tnt.feature.webview.webViewScreen
 import co.kr.tnt.home.navigation.homeNavGraph
 import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
@@ -22,8 +20,11 @@ import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
+import co.kr.tnt.trainer.notification.navigation.trainerNotification
 import co.kr.tnt.trainer.signup.navigation.navigateToTrainerSignUp
 import co.kr.tnt.trainer.signup.navigation.trainerSignUpScreen
+import co.kr.tnt.webview.navigateToWebView
+import co.kr.tnt.webview.webViewScreen
 
 @Composable
 fun TnTNavHost(
@@ -75,11 +76,16 @@ fun TnTNavHost(
             )
             trainerSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
-                navigateToConnect = { navController.navigateToTrainerConnect(isFromMyPage = false) },
+                navigateToConnect = {
+                    navController.navigateToTrainerConnect(
+                        isSkippable = true,
+                        isCompleted = false,
+                    )
+                },
             )
             traineeSignUpScreen(
                 navigateToPrevious = { navController.popBackStack() },
-                navigateToConnect = { navController.navigateToTraineeConnect(isFromMyPage = false) },
+                navigateToConnect = { navController.navigateToTraineeConnect(isSkippable = true) },
             )
             trainerConnectScreen(
                 navigateToPrevious = { navController.popBackStack() },
@@ -95,7 +101,7 @@ fun TnTNavHost(
             )
             traineeMyPageScreen(
                 navigateToPrevious = { navController.popBackStack() },
-                navigateToTraineeConnect = { navController.navigateToTraineeConnect(isFromMyPage = true) },
+                navigateToTraineeConnect = { navController.navigateToTraineeConnect(isSkippable = false) },
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
                 navigateToWebView = { url ->
                     navController.navigateToWebView(url = url)
@@ -103,6 +109,15 @@ fun TnTNavHost(
             )
             traineeNotification(
                 navigateToPrevious = { navController.popBackStack() },
+            )
+            trainerNotification(
+                navigateToPrevious = { navController.popBackStack() },
+                navigateToConnect = {
+                    navController.navigateToTrainerConnect(
+                        isSkippable = false,
+                        isCompleted = true,
+                    )
+                },
             )
             webViewScreen(
                 navigateToPrevious = { navController.popBackStack() },
