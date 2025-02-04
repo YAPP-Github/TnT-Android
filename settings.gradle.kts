@@ -42,20 +42,25 @@ include(
 
 include(
     ":feature:main",
-    ":feature:home",
     ":feature:login",
     ":feature:roleselect",
+    ":feature:webview",
+)
+
+include(
     ":feature:trainer:signup",
-    ":feature:trainer:home",
     ":feature:trainer:connect",
-    ":feature:trainee:signup",
     ":feature:trainer:main",
+    ":feature:trainer:home",
     ":feature:trainer:feedback",
     ":feature:trainer:members",
     ":feature:trainer:mypage",
+)
+
+include(
+    ":feature:trainee:signup",
     ":feature:trainee:connect",
     ":feature:trainee:main",
     ":feature:trainee:home",
     ":feature:trainee:mypage",
-    ":feature:webview",
 )

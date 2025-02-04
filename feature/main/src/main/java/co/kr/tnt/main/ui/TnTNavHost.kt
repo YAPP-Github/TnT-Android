@@ -7,13 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import co.kr.tnt.feature.webview.navigateToWebView
 import co.kr.tnt.feature.webview.webViewScreen
-import co.kr.tnt.home.navigation.navigateToHome
 import co.kr.tnt.login.navigation.loginScreen
 import co.kr.tnt.login.navigation.navigateToLogin
 import co.kr.tnt.roleselect.navigateToRoleSelection
 import co.kr.tnt.roleselect.roleSelectionScreen
 import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
+import co.kr.tnt.trainee.main.navigation.navigateToTraineeMain
 import co.kr.tnt.trainee.main.navigation.traineeMainScreen
 import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
@@ -69,7 +69,7 @@ fun TnTNavHost(
             )
             traineeConnectScreen(
                 navigateToPrevious = navController::popBackStack,
-                navigateToHome = { navController.navigateToHome(clearBackStack = true) },
+                navigateToHome = { navController.navigateToTraineeMain(clearBackStack = true) },
             )
             trainerMainScreen(
                 navController = mainNavController,
