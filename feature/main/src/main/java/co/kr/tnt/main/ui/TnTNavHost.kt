@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import co.kr.tnt.feature.webview.navigateToWebView
-import co.kr.tnt.feature.webview.webViewScreen
 import co.kr.tnt.login.navigation.loginScreen
 import co.kr.tnt.login.navigation.navigateToLogin
 import co.kr.tnt.roleselect.navigateToRoleSelection
@@ -15,14 +13,18 @@ import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
 import co.kr.tnt.trainee.main.navigation.navigateToTraineeMain
 import co.kr.tnt.trainee.main.navigation.traineeMainScreen
+import co.kr.tnt.trainee.notification.navigation.traineeNotification
 import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
 import co.kr.tnt.trainer.main.navigation.navigateToTrainerMain
 import co.kr.tnt.trainer.main.navigation.trainerMainScreen
+import co.kr.tnt.trainer.notification.navigation.trainerNotification
 import co.kr.tnt.trainer.signup.navigation.navigateToTrainerSignUp
 import co.kr.tnt.trainer.signup.navigation.trainerSignUpScreen
+import co.kr.tnt.webview.navigateToWebView
+import co.kr.tnt.webview.webViewScreen
 
 @Composable
 fun TnTNavHost(
@@ -56,11 +58,21 @@ fun TnTNavHost(
             )
             trainerSignUpScreen(
                 navigateToPrevious = navController::popBackStack,
-                navigateToConnect = { navController.navigateToTrainerConnect(isFromMyPage = false) },
+                navigateToConnect = {
+                    navController.navigateToTrainerConnect(
+                        isSkippable = true,
+                        isCompleted = false,
+                    )
+                },
             )
             traineeSignUpScreen(
                 navigateToPrevious = navController::popBackStack,
-                navigateToConnect = { navController.navigateToTraineeConnect(isFromMyPage = false) },
+                navigateToConnect = {
+                    navController.navigateToTrainerConnect(
+                        isSkippable = true,
+                        isCompleted = false,
+                    )
+                },
             )
             trainerConnectScreen(
                 navigateToPrevious = navController::popBackStack,
@@ -79,6 +91,18 @@ fun TnTNavHost(
                 navigateToConnect = { navController.navigateToTraineeConnect(true) },
                 navigateToWebView = navController::navigateToWebView,
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
+            )
+            traineeNotification(
+                navigateToPrevious = { navController.popBackStack() },
+            )
+            trainerNotification(
+                navigateToPrevious = { navController.popBackStack() },
+                navigateToConnect = {
+                    navController.navigateToTrainerConnect(
+                        isSkippable = false,
+                        isCompleted = true,
+                    )
+                },
             )
             webViewScreen(
                 navigateToPrevious = navController::popBackStack,

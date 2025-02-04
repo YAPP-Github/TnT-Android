@@ -55,6 +55,7 @@ include(
     ":feature:trainer:feedback",
     ":feature:trainer:members",
     ":feature:trainer:mypage",
+    ":feature:trainer:notification",
 )
 
 include(
@@ -63,4 +64,5 @@ include(
     ":feature:trainee:main",
     ":feature:trainee:home",
     ":feature:trainee:mypage",
+    ":feature:trainee:notification",
 )

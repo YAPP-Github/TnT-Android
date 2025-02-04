@@ -54,7 +54,7 @@ fun TnTCheckToggle(
 @Composable
 fun TnTSwitch(
     checked: Boolean,
-    onCheckedChange: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val trackColor = if (checked) {
@@ -75,7 +75,7 @@ fun TnTSwitch(
             .height(24.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(trackColor)
-            .clickable(onClick = onCheckedChange)
+            .clickable(onClick = onClick)
             .padding(horizontal = 2.dp),
     ) {
         Box(
@@ -109,7 +109,7 @@ private fun TnTSwitchPreview() {
 
         TnTSwitch(
             checked = checked,
-            onCheckedChange = { checked = !checked },
+            onClick = { checked = !checked },
         )
     }
 }

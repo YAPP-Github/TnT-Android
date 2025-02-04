@@ -30,7 +30,7 @@ import co.kr.tnt.core.ui.R as uiResource
 @Composable
 internal fun CodeEntryPage(
     state: TraineeConnectUiState,
-    isFromMyPage: Boolean,
+    isSkippable: Boolean,
     onSkipClick: () -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -38,21 +38,16 @@ internal fun CodeEntryPage(
     onValidateClick: (String) -> Unit,
 ) {
     BackHandler {
-        if (isFromMyPage) {
-            onBackClick()
-        } else {
+        if (isSkippable) {
             onSkipClick()
+        } else {
+            onBackClick()
         }
     }
 
     Scaffold(
         topBar = {
-            if (isFromMyPage) {
-                TnTTopBarWithBackButton(
-                    title = stringResource(uiResource.string.connect),
-                    onBackClick = onBackClick,
-                )
-            } else {
+            if (isSkippable) {
                 TnTTopBar(
                     title = stringResource(uiResource.string.connect),
                     trailingComponent = {
@@ -65,6 +60,11 @@ internal fun CodeEntryPage(
                             },
                         )
                     },
+                )
+            } else {
+                TnTTopBarWithBackButton(
+                    title = stringResource(uiResource.string.connect),
+                    onBackClick = onBackClick,
                 )
             }
         },
@@ -110,7 +110,7 @@ internal fun CodeEntryPage(
 private fun CodeEntryPagePreview() {
     TnTTheme {
         CodeEntryPage(
-            isFromMyPage = false,
+            isSkippable = false,
             onSkipClick = {},
             onNextClick = {},
             state = TraineeConnectUiState(),
