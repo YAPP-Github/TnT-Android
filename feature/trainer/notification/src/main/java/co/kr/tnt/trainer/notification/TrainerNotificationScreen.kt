@@ -96,7 +96,6 @@ private fun TrainerNotificationScreen(
                             contents = notification.contents,
                             time = notification.time,
                             isChecked = notification.isChecked,
-                            isClickable = notification.isClickable,
                             onClick = if (notification.isClickable) {
                                 onLinkNotificationClick
                             } else {

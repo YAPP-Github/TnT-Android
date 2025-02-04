@@ -25,7 +25,6 @@ fun TnTNotification(
     contents: String,
     time: String,
     isChecked: Boolean,
-    isClickable: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
     val backgroundColor = if (isChecked) {
@@ -41,7 +40,13 @@ fun TnTNotification(
             .fillMaxWidth()
             .background(backgroundColor)
             .padding(20.dp)
-            .let { if (isClickable) it.clickable { onClick?.invoke() } else it },
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable { onClick.invoke() }
+                } else {
+                    Modifier
+                },
+            ),
     ) {
         Image(
             painter = painterResource(type.icon),
