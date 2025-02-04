@@ -22,7 +22,7 @@ internal class MainViewModel @Inject constructor(
                 val startDestination: Route = if (isNeedLogin) {
                     Route.Login
                 } else {
-                    Route.TrainerMain
+                    Route.TraineeMain
                 }
 
                 updateState {

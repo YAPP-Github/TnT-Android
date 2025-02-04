@@ -9,5 +9,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.trainee.home)
+    implementation(projects.feature.trainee.mypage)
+
     implementation(libs.kotlinx.immutable)
 }

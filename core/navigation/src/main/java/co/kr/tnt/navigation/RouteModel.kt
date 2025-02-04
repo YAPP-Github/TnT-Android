@@ -85,6 +85,17 @@ sealed interface Route {
     @Serializable
     data object TraineeMain : Route
 
+    sealed interface TraineeMainTab : Route {
+        @Serializable
+        data object Home : TraineeMainTab
+
+        @Serializable
+        data object MyPage : TraineeMainTab
+    }
+
+    @Serializable
+    data object TraineeHome : Route
+
     @Serializable
     data object TraineeMyPage : Route
 

@@ -20,7 +20,6 @@ import co.kr.tnt.trainer.members.navigation.trainerMembersNavGraph
 import co.kr.tnt.trainer.mypage.navigation.trainerMyPageNavGraph
 
 @Composable
-@Suppress("UnusedParameter")
 internal fun TrainerMainRoute(
     navController: NavHostController,
     navigateToConnect: () -> Unit,
@@ -48,7 +47,13 @@ private fun TrainerMainScreen(
             TrainerMainBottomBar { tab ->
                 navController.navigate(
                     route = tab.route,
-                    navOptions = getTopLevelNavOptions(navController),
+                    navOptions = navOptions {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    },
                 )
             }
         },
@@ -75,20 +80,10 @@ private fun TrainerMainBottomBar(
     ) {
         TrainerMainTab.entries.forEach { tab ->
             Button(
-                onClick = {
-                    onClickTab(tab)
-                },
+                onClick = { onClickTab(tab) },
             ) {
                 Text(tab.contentDescription)
             }
         }
     }
-}
-
-private fun getTopLevelNavOptions(navController: NavHostController) = navOptions {
-    popUpTo(navController.graph.findStartDestination().id) {
-        saveState = true
-    }
-    launchSingleTop = true
-    restoreState = true
 }
