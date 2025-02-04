@@ -6,7 +6,7 @@ import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotific
 import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotificationUiEvent
 import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotificationUiState
 import co.kr.tnt.ui.base.BaseViewModel
-import co.kr.tnt.ui.model.toUiStateList
+import co.kr.tnt.ui.model.NotificationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -55,7 +55,7 @@ internal class TrainerNotificationViewModel @Inject constructor() :
                     isChecked = true,
                 ),
             )
-            updateState { copy(notifications = sampleNotifications.toUiStateList()) }
+            updateState { copy(notifications = sampleNotifications.map(NotificationState::fromDomain)) }
         }
 
         private fun navigateToBack() {

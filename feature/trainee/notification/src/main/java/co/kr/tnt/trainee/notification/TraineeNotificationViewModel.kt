@@ -6,7 +6,7 @@ import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotific
 import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiEvent
 import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiState
 import co.kr.tnt.ui.base.BaseViewModel
-import co.kr.tnt.ui.model.toUiStateList
+import co.kr.tnt.ui.model.NotificationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -54,7 +54,7 @@ internal class TraineeNotificationViewModel @Inject constructor() :
                     isChecked = true,
                 ),
             )
-            updateState { copy(notifications = sampleNotifications.toUiStateList()) }
+            updateState { copy(notifications = sampleNotifications.map(NotificationState::fromDomain)) }
         }
 
         private fun navigateToBack() {

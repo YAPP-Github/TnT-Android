@@ -31,7 +31,3 @@ data class NotificationState(
         }
     }
 }
-
-fun List<NotificationInfo>.toUiStateList(): List<NotificationState> {
-    return this.map { NotificationState.fromDomain(it) }
-}
