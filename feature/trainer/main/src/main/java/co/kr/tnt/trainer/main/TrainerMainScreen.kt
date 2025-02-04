@@ -36,6 +36,7 @@ internal fun TrainerMainRoute(
 
 @Composable
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Suppress("UnusedParameter")
 private fun TrainerMainScreen(
     navController: NavHostController,
     navigateToConnect: () -> Unit,
