@@ -20,4 +20,10 @@ class ConnectRepositoryImpl @Inject constructor(
 
         return response.toDomain()
     }
+
+    override suspend fun verifyInviteCode(code: String): Boolean {
+        val response = connectRemoteDataSource.verifyInviteCode(code = code)
+
+        return response.isVerified
+    }
 }

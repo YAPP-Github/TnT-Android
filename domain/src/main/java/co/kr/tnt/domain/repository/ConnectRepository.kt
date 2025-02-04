@@ -6,4 +6,6 @@ interface ConnectRepository {
     suspend fun getInviteCode(): InviteCodeResult
 
     suspend fun regenerateInviteCode(): InviteCodeResult
+
+    suspend fun verifyInviteCode(code: String): Boolean
 }

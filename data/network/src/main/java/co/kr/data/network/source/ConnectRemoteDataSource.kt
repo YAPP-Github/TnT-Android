@@ -1,6 +1,7 @@
 package co.kr.data.network.source
 
 import co.kr.data.network.model.InviteCodeResponse
+import co.kr.data.network.model.VerifyCodeResponse
 import co.kr.data.network.service.ApiService
 import co.kr.data.network.util.networkHandler
 import javax.inject.Inject
@@ -16,5 +17,9 @@ class ConnectRemoteDataSource @Inject constructor(
 
     suspend fun regenerateInviteCode(): InviteCodeResponse = networkHandler {
         apiService.regenerateInviteCode()
+    }
+
+    suspend fun verifyInviteCode(code: String): VerifyCodeResponse = networkHandler {
+        apiService.verifyInviteCode(code = code)
     }
 }
