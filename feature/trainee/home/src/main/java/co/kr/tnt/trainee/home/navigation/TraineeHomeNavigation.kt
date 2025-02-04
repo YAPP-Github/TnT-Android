@@ -16,11 +16,14 @@ fun NavController.navigateToTraineeHome(
 )
 
 fun NavGraphBuilder.traineeHomeNavGraph(
+    navigateToNotification: () -> Unit,
     homeDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TraineeMainTab.Home>(startDestination = Route.TraineeHome) {
         composable<Route.TraineeHome> {
-            TraineeHomeRoute()
+            TraineeHomeRoute(
+                navigateToNotification = navigateToNotification,
+            )
         }
         homeDestination()
     }

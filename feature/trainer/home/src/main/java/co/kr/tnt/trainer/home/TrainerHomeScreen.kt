@@ -1,7 +1,9 @@
 package co.kr.tnt.trainer.home
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,16 +14,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Suppress("UnusedParameter")
 internal fun TrainerHomeRoute(
     viewModel: TrainerHomeViewModel = hiltViewModel(),
+    navigateToNotification: () -> Unit,
 ) {
-    TrainerHomeScreen()
+    TrainerHomeScreen(navigateToNotification)
 }
 
 @Composable
-private fun TrainerHomeScreen() {
+private fun TrainerHomeScreen(
+    navigateToNotification: () -> Unit,
+) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Text(
-            text = "trainer home",
-            modifier = Modifier.padding(innerPadding),
-        )
+        Column {
+            Text(
+                text = "trainer home",
+                modifier = Modifier.padding(innerPadding),
+            )
+            Button(onClick = navigateToNotification) {
+                Text("navigate to notification")
+            }
+        }
     }
 }

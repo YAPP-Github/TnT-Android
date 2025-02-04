@@ -19,10 +19,12 @@ import co.kr.tnt.trainer.feedback.navigation.trainerFeedbackNavGraph
 import co.kr.tnt.trainer.home.navigation.trainerHomeNavGraph
 import co.kr.tnt.trainer.members.navigation.trainerMembersNavGraph
 import co.kr.tnt.trainer.mypage.navigation.trainerMyPageNavGraph
+import co.kr.tnt.trainer.notification.navigation.navigateToTrainerNotification
+import co.kr.tnt.trainer.notification.navigation.trainerNotification
 
 @Composable
 internal fun TrainerMainRoute(
-    navigateToConnect: () -> Unit,
+    navigateToConnect: (isSkippable: Boolean, isCompleted: Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
     navController: NavHostController = rememberNavController(),
@@ -40,7 +42,7 @@ internal fun TrainerMainRoute(
 @Suppress("UnusedParameter")
 private fun TrainerMainScreen(
     navController: NavHostController,
-    navigateToConnect: () -> Unit,
+    navigateToConnect: (isSkippable: Boolean, isCompleted: Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {
@@ -65,7 +67,14 @@ private fun TrainerMainScreen(
             navController = navController,
             startDestination = Route.TrainerMainTab.Home,
         ) {
-            trainerHomeNavGraph()
+            trainerHomeNavGraph(
+                navigateToNotification = navController::navigateToTrainerNotification,
+            ) {
+                trainerNotification(
+                    navigateToPrevious = navController::popBackStack,
+                    navigateToConnect = { navigateToConnect(false, true) },
+                )
+            }
             trainerFeedbackNavGraph()
             trainerMembersNavGraph()
             trainerMyPageNavGraph()

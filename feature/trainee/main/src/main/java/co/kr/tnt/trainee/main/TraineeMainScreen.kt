@@ -17,6 +17,8 @@ import androidx.navigation.navOptions
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainee.home.navigation.traineeHomeNavGraph
 import co.kr.tnt.trainee.mypage.navigation.traineeMyPageNavGraph
+import co.kr.tnt.trainee.notification.navigation.navigateToTraineeNotification
+import co.kr.tnt.trainee.notification.navigation.traineeNotification
 
 @Composable
 internal fun TraineeMainRoute(
@@ -62,7 +64,13 @@ private fun TraineeMainScreen(
             navController = navController,
             startDestination = Route.TraineeMainTab.Home,
         ) {
-            traineeHomeNavGraph()
+            traineeHomeNavGraph(
+                navigateToNotification = navController::navigateToTraineeNotification,
+            ) {
+                traineeNotification(
+                    navigateToPrevious = navController::popBackStack,
+                )
+            }
             traineeMyPageNavGraph(
                 navigateToPrevious = navController::popBackStack,
                 navigateToLogin = navigateToLogin,

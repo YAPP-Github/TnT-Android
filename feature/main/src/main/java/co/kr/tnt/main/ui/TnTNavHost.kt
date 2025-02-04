@@ -13,14 +13,12 @@ import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
 import co.kr.tnt.trainee.main.navigation.navigateToTraineeMain
 import co.kr.tnt.trainee.main.navigation.traineeMainScreen
-import co.kr.tnt.trainee.notification.navigation.traineeNotification
 import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
 import co.kr.tnt.trainer.main.navigation.navigateToTrainerMain
 import co.kr.tnt.trainer.main.navigation.trainerMainScreen
-import co.kr.tnt.trainer.notification.navigation.trainerNotification
 import co.kr.tnt.trainer.signup.navigation.navigateToTrainerSignUp
 import co.kr.tnt.trainer.signup.navigation.trainerSignUpScreen
 import co.kr.tnt.webview.navigateToWebView
@@ -83,7 +81,7 @@ fun TnTNavHost(
                 navigateToHome = { navController.navigateToTraineeMain(clearBackStack = true) },
             )
             trainerMainScreen(
-                navigateToConnect = { navController.navigateToTraineeConnect(true) },
+                navigateToConnect = navController::navigateToTrainerConnect,
                 navigateToWebView = navController::navigateToWebView,
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
             )
@@ -91,18 +89,6 @@ fun TnTNavHost(
                 navigateToConnect = { navController.navigateToTraineeConnect(true) },
                 navigateToWebView = navController::navigateToWebView,
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
-            )
-            traineeNotification(
-                navigateToPrevious = { navController.popBackStack() },
-            )
-            trainerNotification(
-                navigateToPrevious = { navController.popBackStack() },
-                navigateToConnect = {
-                    navController.navigateToTrainerConnect(
-                        isSkippable = false,
-                        isCompleted = true,
-                    )
-                },
             )
             webViewScreen(
                 navigateToPrevious = navController::popBackStack,

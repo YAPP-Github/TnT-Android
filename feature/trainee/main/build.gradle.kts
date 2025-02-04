@@ -11,6 +11,7 @@ android {
 dependencies {
     implementation(projects.feature.trainee.home)
     implementation(projects.feature.trainee.mypage)
+    implementation(projects.feature.trainee.notification)
 
     implementation(libs.kotlinx.immutable)
 }

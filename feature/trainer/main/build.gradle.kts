@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.feature.trainer.feedback)
     implementation(projects.feature.trainer.members)
     implementation(projects.feature.trainer.mypage)
+    implementation(projects.feature.trainer.notification)
 
     implementation(libs.kotlinx.immutable)
 }
