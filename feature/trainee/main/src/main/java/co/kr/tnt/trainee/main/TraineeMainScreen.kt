@@ -1,9 +1,9 @@
 package co.kr.tnt.trainee.main
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,6 +33,7 @@ internal fun TraineeMainRoute(
 }
 
 @Composable
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 private fun TraineeMainScreen(
     navController: NavHostController,
     navigateToConnect: () -> Unit,
@@ -55,9 +56,8 @@ private fun TraineeMainScreen(
                 )
             }
         },
-    ) { innerPadding ->
+    ) { _ ->
         NavHost(
-            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = Route.TraineeMainTab.Home,
         ) {
