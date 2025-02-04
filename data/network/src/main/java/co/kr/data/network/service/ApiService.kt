@@ -12,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 
 interface ApiService {
@@ -32,4 +33,7 @@ interface ApiService {
 
     @GET("/trainers/invitation-code")
     suspend fun getInviteCode(): InviteCodeResponse
+
+    @PUT("/trainers/invitation-code/reissue")
+    suspend fun regenerateInviteCode(): InviteCodeResponse
 }

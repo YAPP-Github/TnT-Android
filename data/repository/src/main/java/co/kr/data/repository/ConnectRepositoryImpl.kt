@@ -14,4 +14,10 @@ class ConnectRepositoryImpl @Inject constructor(
 
         return response.toDomain()
     }
+
+    override suspend fun regenerateInviteCode(): InviteCodeResult {
+        val response = connectRemoteDataSource.regenerateInviteCode()
+
+        return response.toDomain()
+    }
 }
