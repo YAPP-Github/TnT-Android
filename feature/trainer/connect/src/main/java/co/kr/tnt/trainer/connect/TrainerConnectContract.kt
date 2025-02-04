@@ -23,6 +23,7 @@ internal class TrainerConnectContract {
     sealed interface TrainerConnectSideEffect : UiSideEffect {
         data object NavigateToBack : TrainerConnectSideEffect
         data object NavigateToHome : TrainerConnectSideEffect
+        data class ShowToast(val message: String) : TrainerConnectSideEffect
     }
 
     enum class TrainerConnectPage {

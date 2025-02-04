@@ -1,8 +1,10 @@
 package co.kr.tnt.trainer.connect
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectPage
@@ -18,6 +20,7 @@ internal fun TrainerConnectRoute(
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerConnectViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -43,6 +46,9 @@ internal fun TrainerConnectRoute(
             when (effect) {
                 TrainerConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerConnectSideEffect.NavigateToHome -> navigateToHome(true)
+                is TrainerConnectSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
