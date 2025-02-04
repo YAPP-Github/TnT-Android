@@ -13,39 +13,25 @@ sealed interface Route {
     data object Login : Route
 
     @Serializable
-    data object SignUpBaseRoute : Route
+    data class RoleSelection(
+        val authId: String,
+        val authType: String,
+        val email: String,
+    ) : Route
 
     @Serializable
-    sealed interface SignUpBase : Route {
-        @Serializable
-        data class RoleSelection(
-            val authId: String,
-            val authType: String,
-            val email: String,
-        ) : SignUpBase {
-            companion object {
-                val DEFAULT = RoleSelection(
-                    authId = "",
-                    authType = "",
-                    email = "",
-                )
-            }
-        }
+    data class TrainerSignUp(
+        val authId: String,
+        val authType: String,
+        val email: String,
+    ) : Route
 
-        @Serializable
-        data class TrainerSignUp(
-            val authId: String,
-            val authType: String,
-            val email: String,
-        ) : SignUpBase
-
-        @Serializable
-        data class TraineeSignUp(
-            val authId: String,
-            val authType: String,
-            val email: String,
-        ) : SignUpBase
-    }
+    @Serializable
+    data class TraineeSignUp(
+        val authId: String,
+        val authType: String,
+        val email: String,
+    ) : Route
 
     @Serializable
     data class TrainerConnect(val isFromMyPage: Boolean) : Route

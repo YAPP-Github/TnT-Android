@@ -14,7 +14,7 @@ fun NavController.navigateToTraineeSignUp(
     email: String,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.SignUpBase.TraineeSignUp(
+    route = Route.TraineeSignUp(
         authId = authId,
         authType = authType,
         email = email,
@@ -26,14 +26,14 @@ fun NavGraphBuilder.traineeSignUpScreen(
     navigateToPrevious: () -> Unit,
     navigateToConnect: () -> Unit,
 ) {
-    composable<Route.SignUpBase.TraineeSignUp> { backstackEntry ->
-        backstackEntry.toRoute<Route.SignUpBase.TraineeSignUp>().apply {
+    composable<Route.TraineeSignUp> { backstackEntry ->
+        backstackEntry.toRoute<Route.TraineeSignUp>().apply {
             TraineeSignUpRoute(
                 authId = authId,
                 authType = authType,
                 email = email,
                 navigateToPrevious = navigateToPrevious,
-                navigateToConnect = { navigateToConnect() },
+                navigateToConnect = navigateToConnect,
             )
         }
     }

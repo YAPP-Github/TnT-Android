@@ -4,7 +4,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import co.kr.tnt.navigation.Route
 
@@ -14,7 +13,7 @@ fun NavController.navigateToRoleSelection(
     email: String,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.SignUpBase.RoleSelection(
+    route = Route.RoleSelection(
         authId = authId,
         authType = authType,
         email = email,
@@ -22,20 +21,16 @@ fun NavController.navigateToRoleSelection(
     builder = navOptions,
 )
 
-fun NavGraphBuilder.signUpNavGraph(
+fun NavGraphBuilder.roleSelectionScreen(
     navigateToTraineeSignUp: (authId: String, authType: String, email: String) -> Unit,
     navigateToTrainerSignUp: (authId: String, authType: String, email: String) -> Unit,
-    signUpDestination: NavGraphBuilder.() -> Unit = { },
 ) {
-    navigation<Route.SignUpBaseRoute>(startDestination = Route.SignUpBase.RoleSelection.DEFAULT) {
-        composable<Route.SignUpBase.RoleSelection> { navBackstackEntry ->
-            navBackstackEntry.toRoute<Route.SignUpBase.RoleSelection>().apply {
-                RoleSelectionRoute(
-                    navigateToTraineeSignUp = { navigateToTraineeSignUp(authId, authType, email) },
-                    navigateToTrainerSignUp = { navigateToTrainerSignUp(authId, authType, email) },
-                )
-            }
+    composable<Route.RoleSelection> { navBackstackEntry ->
+        navBackstackEntry.toRoute<Route.RoleSelection>().apply {
+            RoleSelectionRoute(
+                navigateToTraineeSignUp = { navigateToTraineeSignUp(authId, authType, email) },
+                navigateToTrainerSignUp = { navigateToTrainerSignUp(authId, authType, email) },
+            )
         }
-        signUpDestination()
     }
 }
