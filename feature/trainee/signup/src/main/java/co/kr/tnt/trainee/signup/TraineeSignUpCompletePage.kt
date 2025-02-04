@@ -67,9 +67,10 @@ internal fun TraineeSignUpCompletePage(
                     textAlign = Center,
                 )
                 Spacer(Modifier.padding(top = 28.dp))
+                val painter = state.image?.let { rememberAsyncImagePainter(it) }
                 TnTProfileImage(
                     defaultImage = painterResource(DefaultUserProfile.Trainee.image),
-                    image = rememberAsyncImagePainter(state.image),
+                    image = painter,
                     imageSize = 200.dp,
                     showEditButton = false,
                 )
