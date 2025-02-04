@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- TimePicker   -->
+    <string name="morning">오전</string>
+    <string name="afternoon">오후</string>
+
     <!--  TextField  -->
     <string name="text_counter">%1$d/%2$d자</string>
     <string name="placeholder_content_input">내용을 입력해주세요</string>
@@ -11,4 +15,5 @@
 
     <!-- Calendar -->
     <string name="year_month_format">yyyy년 M월</string>
+
 </resources>
