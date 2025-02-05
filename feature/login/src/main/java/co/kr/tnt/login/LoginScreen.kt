@@ -47,6 +47,7 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.LoginResult
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.login.R
 import co.kr.tnt.login.LoginContract.LoginSideEffect
 import co.kr.tnt.login.LoginContract.LoginUiEvent
@@ -59,7 +60,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit,
+    navigateToHome: (UserType) -> Unit,
     navigateToSignup: (LoginResult) -> Unit,
 ) {
     val context = LocalContext.current
@@ -118,9 +119,9 @@ internal fun LoginRoute(
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
 
-                LoginSideEffect.NavigateToHome -> {
+                is LoginSideEffect.NavigateToHome -> {
                     showBottomSheet = false
-                    navigateToHome()
+                    navigateToHome(effect.userType)
                 }
 
                 is LoginSideEffect.NavigateToSignup -> {

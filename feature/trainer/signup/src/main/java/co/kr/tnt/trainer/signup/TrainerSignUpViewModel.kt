@@ -3,7 +3,7 @@ package co.kr.tnt.trainer.signup
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.SignUpRepository
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpEffect
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpPage
@@ -51,7 +51,7 @@ internal class TrainerSignUpViewModel @Inject constructor(
             runCatching {
                 signUpRepository.signUp(
                     profileImage = profileImagePart,
-                    userType = UserType.Trainer(
+                    user = User.Trainer(
                         id = id,
                         name = currentState.name,
                         image = currentState.image.toString(),

@@ -59,17 +59,7 @@ internal fun RoleSelectionRoute(
 fun RoleSelectionScreen(
     onNextClick: (RoleState) -> Unit = {},
 ) {
-    var selectedRole by remember {
-        mutableStateOf(
-            RoleState.fromDomain(
-                UserType.Trainer(
-                    id = "",
-                    name = "",
-                    image = "TODO()",
-                ),
-            ),
-        )
-    }
+    var selectedRole by remember { mutableStateOf(RoleState.fromDomain(UserType.TRAINER)) }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(

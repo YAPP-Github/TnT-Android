@@ -1,6 +1,6 @@
 package co.kr.tnt.trainer.connect
 
-import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectPage
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectSideEffect
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiEvent
@@ -43,12 +43,12 @@ internal class TrainerConnectViewModel @Inject constructor() :
             // TODO 화면에 보여줄 프로필 정보 불러오기
             updateState {
                 copy(
-                    trainerState = UserType.Trainer(
+                    trainerState = User.Trainer(
                         id = "trainer",
                         name = "김헬짱",
                         image = null,
                     ),
-                    traineeState = UserType.Trainee(
+                    traineeState = User.Trainee(
                         id = "trainee",
                         name = "김회원",
                         image = "https://buly.kr/3j7VVqN",

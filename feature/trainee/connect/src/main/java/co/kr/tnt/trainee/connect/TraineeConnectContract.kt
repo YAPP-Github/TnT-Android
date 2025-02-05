@@ -1,6 +1,6 @@
 package co.kr.tnt.trainee.connect
 
-import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import co.kr.tnt.ui.base.UiEvent
@@ -16,28 +16,14 @@ internal class TraineeConnectContract {
         val completedSession: Int = 0,
         val totalSession: Int = 0,
         val selectedStartDate: LocalDate = LocalDate.now(),
-        val trainerState: UserType.Trainer = UserType.Trainer(
-            id = "",
-            name = "",
-            image = null,
-        ),
-        val traineeState: UserType.Trainee = UserType.Trainee(
-            id = "",
-            name = "",
-            image = null,
-            birthday = null,
-            age = 0,
-            weight = 0.0,
-            height = 0,
-            ptPurpose = emptyList(),
-            caution = null,
-        ),
+        val trainerState: User.Trainer = User.Trainer.EMPTY,
+        val traineeState: User.Trainee = User.Trainee.EMPTY,
     ) : UiState
 
     sealed interface TraineeConnectUiEvent : UiEvent {
         data class UpdatePTSessionData(val data: PTSessionFormData) : TraineeConnectUiEvent
-        data class UpdateTrainerProfile(val profile: UserType.Trainer) : TraineeConnectUiEvent
-        data class UpdateTraineeProfile(val profile: UserType.Trainee) : TraineeConnectUiEvent
+        data class UpdateTrainerProfile(val profile: User.Trainer) : TraineeConnectUiEvent
+        data class UpdateTraineeProfile(val profile: User.Trainee) : TraineeConnectUiEvent
         data class OnCodeValidateClick(val code: String) : TraineeConnectUiEvent
         data class OnCodeChanged(val code: String) : TraineeConnectUiEvent
         data object OnNextClick : TraineeConnectUiEvent

@@ -14,7 +14,7 @@ internal class SessionInterceptor @Inject constructor(
         val requestBuilder = originRequest.newBuilder()
 
         requestBuilder.addHeader(
-            "AUTHORIZATION",
+            "Authorization",
             "SESSION-ID ${runBlocking { sessionProvider.getSessionId() }}",
         )
 

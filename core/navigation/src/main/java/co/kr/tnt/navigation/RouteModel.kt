@@ -43,6 +43,49 @@ sealed interface Route {
     data class TraineeConnect(val isSkippable: Boolean) : Route
 
     @Serializable
+    data object TrainerMain : Route
+
+    sealed interface TrainerMainTab : Route {
+        @Serializable
+        data object Home : TrainerMainTab
+
+        @Serializable
+        data object Members : TrainerMainTab
+
+        @Serializable
+        data object Feedback : TrainerMainTab
+
+        @Serializable
+        data object MyPage : TrainerMainTab
+    }
+
+    @Serializable
+    data object TrainerHome : Route
+
+    @Serializable
+    data object TrainerMembers : Route
+
+    @Serializable
+    data object TrainerFeedback : Route
+
+    @Serializable
+    data object TrainerMyPage : Route
+
+    @Serializable
+    data object TraineeMain : Route
+
+    sealed interface TraineeMainTab : Route {
+        @Serializable
+        data object Home : TraineeMainTab
+
+        @Serializable
+        data object MyPage : TraineeMainTab
+    }
+
+    @Serializable
+    data object TraineeHome : Route
+
+    @Serializable
     data object TraineeMyPage : Route
 
     @Serializable

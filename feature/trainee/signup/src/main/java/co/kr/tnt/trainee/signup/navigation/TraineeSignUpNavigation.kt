@@ -33,7 +33,7 @@ fun NavGraphBuilder.traineeSignUpScreen(
                 authType = authType,
                 email = email,
                 navigateToPrevious = navigateToPrevious,
-                navigateToConnect = { navigateToConnect() },
+                navigateToConnect = navigateToConnect,
             )
         }
     }

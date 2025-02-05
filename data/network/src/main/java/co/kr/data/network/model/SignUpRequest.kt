@@ -1,6 +1,6 @@
 package co.kr.data.network.model
 
-import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.model.User
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -21,14 +21,14 @@ data class SignUpRequest(
     val cautionNote: String? = "",
 )
 
-fun UserType.toSignUpRequest(
+fun User.toSignUpRequest(
     socialId: String,
     socialType: String,
     email: String,
     fcmToken: String,
 ): SignUpRequest {
     return when (this) {
-        is UserType.Trainer -> SignUpRequest(
+        is User.Trainer -> SignUpRequest(
             memberType = "trainer",
             name = name,
             birthday = null,
@@ -45,7 +45,7 @@ fun UserType.toSignUpRequest(
             advertisementAgreement = true,
         )
 
-        is UserType.Trainee -> SignUpRequest(
+        is User.Trainee -> SignUpRequest(
             memberType = "trainee",
             name = name,
             birthday = birthday?.toString(),

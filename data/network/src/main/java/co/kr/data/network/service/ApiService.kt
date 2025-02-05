@@ -1,5 +1,6 @@
 package co.kr.data.network.service
 
+import co.kr.data.network.model.CheckSessionResponse
 import co.kr.data.network.model.LoginRequest
 import co.kr.data.network.model.LoginResponse
 import co.kr.data.network.model.SignUpResponse
@@ -14,7 +15,7 @@ import retrofit2.http.Part
 
 interface ApiService {
     @GET(CHECK_SESSION_PATH)
-    suspend fun getCheckSession()
+    suspend fun getCheckSession(): CheckSessionResponse
 
     @POST("/login")
     suspend fun postLogin(

@@ -1,6 +1,7 @@
 package co.kr.tnt.main
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.domain.repository.LoginRepository
 import co.kr.tnt.main.MainContract.MainSideEffect
 import co.kr.tnt.main.MainContract.MainUiEvent
@@ -13,17 +14,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
-    loginRepository: LoginRepository,
+    private val loginRepository: LoginRepository,
 ) :
     BaseViewModel<MainUiState, MainUiEvent, MainSideEffect>(MainUiState()) {
         init {
             viewModelScope.launch {
-                val isNeedLogin = loginRepository.isNeedLogin()
-                val startDestination: Route = if (isNeedLogin) {
-                    Route.Login
-                } else {
-                    Route.HomeBase
-                }
+                val startDestination = getStartDestination()
 
                 updateState {
                     copy(
@@ -32,6 +28,22 @@ internal class MainViewModel @Inject constructor(
                     )
                 }
             }
+        }
+
+        private suspend fun getStartDestination(): Route {
+            return runCatching {
+                loginRepository.getUserType()
+            }.fold(
+                onSuccess = { userType ->
+                    when (userType) {
+                        UserType.TRAINER -> Route.TrainerMain
+                        UserType.TRAINEE -> Route.TraineeMain
+                    }
+                },
+                onFailure = {
+                    Route.Login
+                },
+            )
         }
 
         override suspend fun handleEvent(event: MainUiEvent) = Unit

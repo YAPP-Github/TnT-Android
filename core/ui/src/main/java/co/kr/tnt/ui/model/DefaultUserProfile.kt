@@ -2,7 +2,7 @@ package co.kr.tnt.ui.model
 
 import androidx.annotation.DrawableRes
 import co.kr.tnt.core.ui.R
-import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.model.User
 
 sealed class DefaultUserProfile(
     @DrawableRes val image: Int,
@@ -15,10 +15,10 @@ sealed class DefaultUserProfile(
     )
 
     companion object {
-        fun fromDomain(type: UserType): DefaultUserProfile {
+        fun fromDomain(type: User): DefaultUserProfile {
             return when (type) {
-                is UserType.Trainee -> Trainer
-                is UserType.Trainer -> Trainee
+                is User.Trainee -> Trainer
+                is User.Trainer -> Trainee
             }
         }
     }

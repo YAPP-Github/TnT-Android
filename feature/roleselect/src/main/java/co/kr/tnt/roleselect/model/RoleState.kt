@@ -21,10 +21,10 @@ sealed class RoleState(
     )
 
     companion object {
-        fun fromDomain(role: UserType): RoleState {
-            return when (role) {
-                is UserType.Trainer -> Trainer
-                is UserType.Trainee -> Trainee
+        fun fromDomain(type: UserType): RoleState {
+            return when (type) {
+                UserType.TRAINER -> Trainer
+                UserType.TRAINEE -> Trainee
             }
         }
     }

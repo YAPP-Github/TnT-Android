@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.feature.trainer.connect.R
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 import co.kr.tnt.ui.model.DefaultUserProfile
@@ -98,7 +98,7 @@ internal fun TrainerConnectCompletePage(
 
 @Composable
 private fun ProfileSection(
-    profile: UserType,
+    profile: User,
     modifier: Modifier = Modifier,
 ) {
     val painter = profile.image?.let { rememberAsyncImagePainter(it) }

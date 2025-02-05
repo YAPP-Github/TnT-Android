@@ -6,7 +6,7 @@ import co.kr.data.network.model.toSignUpRequest
 import co.kr.data.network.source.SignUpRemoteDataSource
 import co.kr.data.storage.source.SessionLocalDataSource
 import co.kr.tnt.domain.model.SignUpResult
-import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.SignUpRepository
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -25,7 +25,7 @@ class SignUpRepositoryImpl @Inject constructor(
 ) : SignUpRepository {
     override suspend fun signUp(
         profileImage: File?,
-        userType: UserType,
+        user: User,
         socialId: String,
         socialType: String,
         email: String,
@@ -36,13 +36,13 @@ class SignUpRepositoryImpl @Inject constructor(
         }
 
         // TODO FCM token
-        val signUpRequest = userType.toSignUpRequest(
+        val signUpRequest = user.toSignUpRequest(
             socialId = socialId,
             socialType = socialType,
             email = email,
             fcmToken = "EMPTY",
         )
-        val requestBody = signUpRequest.toRequestBody(Json)
+        val requestBody = signUpRequest.toRequestBody()
 
         val response = signupRemoteDataSource.postSignUp(
             profileImage = profileImagePart,
@@ -54,7 +54,7 @@ class SignUpRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 
-    private fun SignUpRequest.toRequestBody(json: Json): RequestBody {
+    private fun SignUpRequest.toRequestBody(): RequestBody {
         val jsonString = json.encodeToString(this)
         return jsonString.toRequestBody("application/json".toMediaTypeOrNull())
     }
