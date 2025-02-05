@@ -6,6 +6,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import co.kr.tnt.domain.model.LoginResult
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.login.LoginRoute
 import co.kr.tnt.navigation.Route
 
@@ -23,7 +24,7 @@ fun NavController.navigateToLogin(
 )
 
 fun NavGraphBuilder.loginScreen(
-    navigateToHome: () -> Unit,
+    navigateToHome: (UserType) -> Unit,
     navigateToSignup: (LoginResult) -> Unit,
 ) {
     composable<Route.Login> {

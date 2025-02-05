@@ -1,5 +1,7 @@
 package co.kr.data.network.model
 
+import co.kr.data.network.model.enum.MemberType
+import co.kr.data.network.model.enum.toDomain
 import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.LoginResult
 import kotlinx.serialization.Serializable
@@ -14,6 +16,7 @@ data class LoginResponse(
     val socialEmail: String,
     val socialType: AuthType,
     val isSignUp: Boolean,
+    val memberType: MemberType,
 )
 
 fun LoginResponse.toDomain(): LoginResult =
@@ -22,4 +25,5 @@ fun LoginResponse.toDomain(): LoginResult =
         email = socialEmail,
         authType = socialType,
         isSignUp = isSignUp,
+        userType = runCatching(memberType::toDomain).getOrNull(),
     )

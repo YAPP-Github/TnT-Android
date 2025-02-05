@@ -5,4 +5,5 @@ data class LoginResult(
     val email: String,
     val authType: AuthType,
     val isSignUp: Boolean,
+    val userType: UserType?,
 )

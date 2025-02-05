@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.login.navigation.loginScreen
 import co.kr.tnt.login.navigation.navigateToLogin
 import co.kr.tnt.roleselect.navigateToRoleSelection
@@ -39,8 +40,11 @@ fun TnTNavHost(
             startDestination = appState.startDestination,
         ) {
             loginScreen(
-                navigateToHome = {
-                    navController.navigateToTraineeMain(clearBackStack = true)
+                navigateToHome = { userType ->
+                    when (userType) {
+                        UserType.TRAINER -> navController.navigateToTrainerMain(clearBackStack = true)
+                        UserType.TRAINEE -> navController.navigateToTraineeMain(clearBackStack = true)
+                    }
                 },
                 navigateToSignup = { loginResult ->
                     navController.navigateToRoleSelection(

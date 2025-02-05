@@ -1,6 +1,7 @@
 package co.kr.data.repository
 
 import co.kr.data.network.model.LoginRequest
+import co.kr.data.network.model.enum.toDomain
 import co.kr.data.network.model.toDomain
 import co.kr.data.network.source.LoginRemoteDataSource
 import co.kr.data.storage.source.SessionLocalDataSource
@@ -17,7 +18,7 @@ internal class LoginRepositoryImpl @Inject constructor(
     private val sessionLocalDataSource: SessionLocalDataSource,
 ) : LoginRepository {
     override suspend fun getUserType(): UserType =
-        loginRemoteDataSource.getCheckSession().toDomain()
+        loginRemoteDataSource.getCheckSession().memberType.toDomain()
 
     override suspend fun login(
         authType: AuthType,

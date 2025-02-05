@@ -49,9 +49,11 @@ internal class LoginViewModel @Inject constructor(
                     accessToken = accessToken,
                 )
             }.onSuccess { loginResult ->
-                if (loginResult.isSignUp) {
-                    sendEffect(LoginSideEffect.NavigateToHome)
-                    return@onSuccess
+                loginResult.userType?.let { userType ->
+                    if (loginResult.isSignUp) {
+                        sendEffect(LoginSideEffect.NavigateToHome(userType))
+                        return@onSuccess
+                    }
                 }
 
                 this@LoginViewModel.loginResult = loginResult
