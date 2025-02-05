@@ -66,10 +66,7 @@ fun TnTNavHost(
             traineeSignUpScreen(
                 navigateToPrevious = navController::popBackStack,
                 navigateToConnect = {
-                    navController.navigateToTrainerConnect(
-                        isSkippable = true,
-                        isCompleted = false,
-                    )
+                    navController.navigateToTraineeConnect(isSkippable = true)
                 },
             )
             trainerConnectScreen(
