@@ -39,21 +39,35 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.designsystem.utils.nonScaledSp
 import java.time.LocalTime
 
+private fun getRoundedTime(inputTime: LocalTime): LocalTime {
+    if (inputTime.minute % 10 == 0) {
+        return inputTime
+    }
+    val roundedMinute = ((inputTime.minute / 10.0).toInt() + 1) * 10
+    val newHour = if (roundedMinute == 60) (inputTime.hour + 1) % 24 else inputTime.hour
+    val newMinute = if (roundedMinute == 60) 0 else roundedMinute
+
+    return LocalTime.of(newHour, newMinute)
+}
+
 @Composable
 fun TnTWheelTimePicker(
     modifier: Modifier = Modifier,
     initialTime: LocalTime = LocalTime.now(),
     onTimeSelected: (LocalTime) -> Unit,
 ) {
+    val roundedInitialTime by remember { mutableStateOf(getRoundedTime(initialTime)) }
     val am = stringResource(R.string.morning)
     val pm = stringResource(R.string.afternoon)
 
-    var selectedHour by remember { mutableIntStateOf(if (initialTime.hour % 12 == 0) 12 else initialTime.hour % 12) }
-    var selectedMinute by remember { mutableIntStateOf(initialTime.minute) }
-    var selectedDayPart by remember { mutableStateOf(if (initialTime.hour < 12) am else pm) }
+    var selectedHour by remember {
+        mutableIntStateOf(if (roundedInitialTime.hour % 12 == 0) 12 else roundedInitialTime.hour % 12)
+    }
+    var selectedMinute by remember { mutableIntStateOf(roundedInitialTime.minute) }
+    var selectedDayPart by remember { mutableStateOf(if (roundedInitialTime.hour < 12) am else pm) }
 
     val hourList = (1..12).toList()
-    val minuteList = (0..59).toList()
+    val minuteList = (0..50 step 10).toList()
     val dayPartList = listOf(am, pm)
 
     fun updateTime(
@@ -139,7 +153,7 @@ private fun TimeWheel(
 ) {
     val containerHeight = (itemHeight * 5) + (gap * 4)
     val scrollStartIndex = (Int.MAX_VALUE / 2) - ((Int.MAX_VALUE / 2) % items.size)
-    val initialScrollIndex = remember { scrollStartIndex - 2 + (selectedItem - items.first()) }
+    val initialScrollIndex = remember { scrollStartIndex - 2 + items.indexOf(selectedItem) }
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = initialScrollIndex)
 
     val snappingLayout = remember(listState) { SnapLayoutInfoProvider(listState) }
@@ -223,10 +237,12 @@ fun DayPartWheel(
         derivedStateOf { listState.firstVisibleItemIndex }
     }
 
-    LaunchedEffect(centeredItemIndex) {
-        val newSelectedItem = items[centeredItemIndex]
-        if (newSelectedItem != selectedItem) {
-            onItemSelected(newSelectedItem)
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (listState.isScrollInProgress.not()) {
+            val newSelectedItem = items[centeredItemIndex]
+            if (newSelectedItem != selectedItem) {
+                onItemSelected(newSelectedItem)
+            }
         }
     }
 
