@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="birthday_label">생년월일</string>
-    <string name="entered_wrong_number">잘못된 수치를 입력했어요</string>
 
     <string name="what_is_your_name">이름이 어떻게 되세요?</string>
     <string name="enter_your_name">이름을 입력해주세요</string>

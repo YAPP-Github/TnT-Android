@@ -99,7 +99,7 @@ internal fun TraineeBasicInfoPage(
                         placeholder = "0",
                         isSingleLine = true,
                         showWarning = state.height.isNotEmpty() && !state.isHeightValid,
-                        warningMessage = stringResource(R.string.entered_wrong_number),
+                        warningMessage = stringResource(uiResource.string.entered_wrong_text),
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
@@ -114,7 +114,7 @@ internal fun TraineeBasicInfoPage(
                         placeholder = "00.0",
                         isSingleLine = true,
                         showWarning = state.weight.isNotEmpty() && !state.isWeightValid,
-                        warningMessage = stringResource(R.string.entered_wrong_number),
+                        warningMessage = stringResource(uiResource.string.entered_wrong_text),
                         isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {

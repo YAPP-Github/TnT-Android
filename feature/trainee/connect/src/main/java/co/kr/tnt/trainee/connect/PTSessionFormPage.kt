@@ -72,7 +72,6 @@ internal fun PTSessionFormPage(
     }
 
     Scaffold(
-        // TODO 버튼 클릭 시 코드 입력 화면으로 이동
         topBar = {
             TnTTopBarWithBackButton(
                 title = stringResource(R.string.add_pt_info),
@@ -131,48 +130,72 @@ internal fun PTSessionFormPage(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
                 ) {
-                    TnTLabeledTextField(
-                        title = stringResource(R.string.completed_session_until_now),
-                        value = completedSession,
-                        placeholder = "0",
-                        isSingleLine = true,
-                        isRequired = true,
-                        keyboardType = KeyboardType.Number,
-                        trailingComponent = {
-                            UnitLabel(R.string.count_unit)
-                        },
-                        onValueChange = { newValue ->
-                            if (validateInput(newValue)) {
-                                completedSession = newValue
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                    )
+                    val showWarning by remember {
+                        derivedStateOf {
+                            completedSession.isNotEmpty() && totalSession.isNotEmpty() &&
+                                (completedSession.toIntOrNull() ?: 0) > (totalSession.toIntOrNull() ?: 0)
+                        }
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        TnTLabeledTextField(
+                            title = stringResource(R.string.completed_session_until_now),
+                            value = completedSession,
+                            placeholder = "0",
+                            isSingleLine = true,
+                            isRequired = true,
+                            keyboardType = KeyboardType.Number,
+                            showWarning = showWarning,
+                            trailingComponent = {
+                                UnitLabel(R.string.count_unit)
+                            },
+                            onValueChange = { newValue ->
+                                if (validateInput(newValue)) {
+                                    completedSession = newValue
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Text(
+                            text = if (showWarning) stringResource(uiResource.string.entered_wrong_text) else "",
+                            style = TnTTheme.typography.body2Medium,
+                            color = TnTTheme.colors.redColors.Red500,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
                     Text(
                         text = "/",
                         color = TnTTheme.colors.neutralColors.Neutral600,
                         style = TnTTheme.typography.body1Medium,
                         modifier = Modifier
                             .padding(8.dp)
-                            .align(Alignment.Bottom),
+                            .align(Alignment.CenterVertically),
                     )
-                    TnTLabeledTextField(
-                        title = stringResource(R.string.total_register_session),
-                        value = totalSession,
-                        placeholder = "0",
-                        isSingleLine = true,
-                        isRequired = true,
-                        keyboardType = KeyboardType.Number,
-                        trailingComponent = {
-                            UnitLabel(R.string.count_unit)
-                        },
-                        onValueChange = { newValue ->
-                            if (validateInput(newValue)) {
-                                totalSession = newValue
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        TnTLabeledTextField(
+                            title = stringResource(R.string.total_register_session),
+                            value = totalSession,
+                            placeholder = "0",
+                            isSingleLine = true,
+                            isRequired = true,
+                            keyboardType = KeyboardType.Number,
+                            showWarning = showWarning,
+                            trailingComponent = {
+                                UnitLabel(R.string.count_unit)
+                            },
+                            onValueChange = { newValue ->
+                                if (validateInput(newValue)) {
+                                    totalSession = newValue
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Text(
+                            text = if (showWarning) stringResource(uiResource.string.entered_wrong_text) else "",
+                            style = TnTTheme.typography.body2Medium,
+                            color = TnTTheme.colors.redColors.Red500,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
                 }
             }
             TnTBottomButton(
@@ -260,7 +283,7 @@ private fun validateInput(input: String): Boolean {
     return input.isEmpty() || (input.toIntOrNull() != null && !input.startsWith("0") && input.toInt() <= MAX_COUNT)
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun PTSessionFormPagePreview() {
     TnTTheme {
