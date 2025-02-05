@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,17 +35,7 @@ import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.designsystem.utils.nonScaledSp
 import java.time.LocalTime
-
-private fun getRoundedTime(inputTime: LocalTime): LocalTime {
-    if (inputTime.minute % 10 == 0) {
-        return inputTime
-    }
-    val roundedMinute = ((inputTime.minute / 10.0).toInt() + 1) * 10
-    val newHour = if (roundedMinute == 60) (inputTime.hour + 1) % 24 else inputTime.hour
-    val newMinute = if (roundedMinute == 60) 0 else roundedMinute
-
-    return LocalTime.of(newHour, newMinute)
-}
+import java.util.Locale
 
 @Composable
 fun TnTWheelTimePicker(
@@ -91,7 +78,6 @@ fun TnTWheelTimePicker(
                 .align(Alignment.Center)
                 .fillMaxWidth()
                 .height(36.dp)
-                .padding(horizontal = 24.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(TnTTheme.colors.neutralColors.Neutral100),
         )
@@ -99,7 +85,7 @@ fun TnTWheelTimePicker(
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         ) {
             TimeWheel(
                 items = hourList,
@@ -110,7 +96,7 @@ fun TnTWheelTimePicker(
                         updateTime(newHour = newHour)
                     }
                 },
-                modifier = Modifier.wrapContentSize(),
+                modifier = Modifier.weight(1f),
             )
             Text(
                 text = ":",
@@ -127,6 +113,8 @@ fun TnTWheelTimePicker(
                         updateTime(newMinute = newMinute)
                     }
                 },
+                isMinute = true,
+                modifier = Modifier.weight(1f),
             )
             DayPartWheel(
                 items = dayPartList,
@@ -137,9 +125,21 @@ fun TnTWheelTimePicker(
                         updateTime(newPeriod = newPeriod)
                     }
                 },
+                modifier = Modifier.weight(1f),
             )
         }
     }
+}
+
+private fun getRoundedTime(inputTime: LocalTime): LocalTime {
+    if (inputTime.minute % 10 == 0) {
+        return inputTime
+    }
+    val roundedMinute = ((inputTime.minute / 10.0).toInt() + 1) * 10
+    val newHour = if (roundedMinute == 60) (inputTime.hour + 1) % 24 else inputTime.hour
+    val newMinute = if (roundedMinute == 60) 0 else roundedMinute
+
+    return LocalTime.of(newHour, newMinute)
 }
 
 @Composable
@@ -148,12 +148,13 @@ private fun TimeWheel(
     selectedItem: Int,
     onItemSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    isMinute: Boolean = false,
     itemHeight: Dp = 27.dp,
     gap: Dp = 8.dp,
 ) {
     val containerHeight = (itemHeight * 5) + (gap * 4)
     val scrollStartIndex = (Int.MAX_VALUE / 2) - ((Int.MAX_VALUE / 2) % items.size)
-    val initialScrollIndex = remember { scrollStartIndex - 2 + items.indexOf(selectedItem) }
+    val initialScrollIndex = scrollStartIndex - 2 + items.indexOf(selectedItem)
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = initialScrollIndex)
 
     val snappingLayout = remember(listState) { SnapLayoutInfoProvider(listState) }
@@ -181,9 +182,7 @@ private fun TimeWheel(
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
-            .width(48.dp)
-            .height(containerHeight),
+        modifier = modifier.height(containerHeight),
     ) {
         LazyColumn(
             state = listState,
@@ -200,7 +199,11 @@ private fun TimeWheel(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = item.toString(),
+                        text = if (isMinute) {
+                            String.format(Locale.getDefault(), "%02d", item)
+                        } else {
+                            item.toString()
+                        },
                         textAlign = TextAlign.Center,
                         color = if (isSelected) {
                             TnTTheme.colors.neutralColors.Neutral900
@@ -209,6 +212,7 @@ private fun TimeWheel(
                         },
                         style = TnTTheme.typography.h4,
                         fontSize = 18.sp.nonScaledSp,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
@@ -249,13 +253,12 @@ fun DayPartWheel(
     val height = (itemHeight * 5) + (gap * 4)
     Column(
         verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.height(height),
     ) {
         Box(
-            modifier = Modifier
-                .width(48.dp)
-                .height(containerHeight),
             contentAlignment = Alignment.Center,
+            modifier = Modifier.height(containerHeight),
         ) {
             LazyColumn(
                 state = listState,
@@ -282,6 +285,7 @@ fun DayPartWheel(
                             },
                             style = TnTTheme.typography.h4,
                             fontSize = 18.sp.nonScaledSp,
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }
