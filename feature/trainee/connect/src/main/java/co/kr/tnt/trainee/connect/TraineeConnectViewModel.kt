@@ -1,6 +1,6 @@
 package co.kr.tnt.trainee.connect
 
-import co.kr.tnt.domain.model.UserType
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
@@ -38,12 +38,12 @@ internal class TraineeConnectViewModel @Inject constructor() :
             // TODO 연결 완료 화면에 보여줄 프로필 정보 불러오기
             updateState {
                 copy(
-                    trainerState = UserType.Trainer(
+                    trainerState = User.Trainer(
                         id = "trainer",
                         name = "김헬짱",
                         image = null,
                     ),
-                    traineeState = UserType.Trainee(
+                    traineeState = User.Trainee(
                         id = "trainee",
                         name = "김회원",
                         image = "https://buly.kr/3j7VVqN",
@@ -83,11 +83,11 @@ internal class TraineeConnectViewModel @Inject constructor() :
             navigateToNext()
         }
 
-        private fun updateTrainerProfile(profile: UserType.Trainer) {
+        private fun updateTrainerProfile(profile: User.Trainer) {
             updateState { copy(trainerState = profile) }
         }
 
-        private fun updateTraineeProfile(profile: UserType.Trainee) {
+        private fun updateTraineeProfile(profile: User.Trainee) {
             updateState { copy(traineeState = profile) }
         }
 
