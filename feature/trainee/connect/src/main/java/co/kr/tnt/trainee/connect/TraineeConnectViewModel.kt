@@ -1,15 +1,15 @@
 package co.kr.tnt.trainee.connect
 
-import co.kr.tnt.domain.model.User
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
+import co.kr.tnt.trainee.connect.model.FormData
 import co.kr.tnt.trainee.connect.model.InputState.INVALID
 import co.kr.tnt.trainee.connect.model.InputState.VALID
-import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,13 +28,10 @@ internal class TraineeConnectViewModel @Inject constructor(
 
         override suspend fun handleEvent(event: TraineeConnectUiEvent) {
             when (event) {
-                is TraineeConnectUiEvent.UpdateTrainerProfile -> updateTrainerProfile(event.profile)
-                is TraineeConnectUiEvent.UpdateTraineeProfile -> updateTraineeProfile(event.profile)
-                is TraineeConnectUiEvent.UpdatePTSessionData -> updatePTSessionForm(event.data)
                 is TraineeConnectUiEvent.OnCodeValidateClick -> validateCode(event.code)
                 is TraineeConnectUiEvent.OnCodeChanged -> resetCode(event.code)
+                is TraineeConnectUiEvent.OnNextClick -> navigateToNext(event.data)
                 TraineeConnectUiEvent.OnBackClick -> navigateToBack()
-                TraineeConnectUiEvent.OnNextClick -> navigateToNext()
                 TraineeConnectUiEvent.OnSkipClick -> navigateToHome()
             }
         }
@@ -43,21 +40,23 @@ internal class TraineeConnectViewModel @Inject constructor(
             // TODO 연결 완료 화면에 보여줄 프로필 정보 불러오기
             updateState {
                 copy(
-                    trainerState = User.Trainer(
-                        id = "trainer",
-                        name = "김헬짱",
-                        image = null,
-                    ),
-                    traineeState = User.Trainee(
-                        id = "trainee",
-                        name = "김회원",
-                        image = "https://buly.kr/3j7VVqN",
-                        birthday = null,
-                        age = 25,
-                        weight = 100.0,
-                        height = 165,
-                        ptPurpose = listOf("체중 감량", "자세 교정"),
-                        caution = "발목이 안좋아서 발목에 무리가는 행동을 하면 안돼요. 잘 부탁드려요!",
+                    formData = FormData.ProfileData(
+                        trainer = User.Trainer(
+                            id = "trainer",
+                            name = "김헬짱",
+                            image = null,
+                        ),
+                        trainee = User.Trainee(
+                            id = "trainee",
+                            name = "김회원",
+                            image = "https://buly.kr/3j7VVqN",
+                            birthday = null,
+                            age = 25,
+                            weight = 100.0,
+                            height = 165,
+                            ptPurpose = listOf("체중 감량", "자세 교정"),
+                            caution = "발목이 안좋아서 발목에 무리가는 행동을 하면 안돼요. 잘 부탁드려요!",
+                        ),
                     ),
                 )
             }
@@ -83,27 +82,13 @@ internal class TraineeConnectViewModel @Inject constructor(
             updateState { copy(inviteCode = code, isCodeValid = null) }
         }
 
-        private fun updatePTSessionForm(data: PTSessionFormData) {
-            updateState {
-                copy(
-                    completedSession = data.completedSession,
-                    totalSession = data.totalSession,
-                    selectedStartDate = data.selectedStartDate,
-                )
-            }
-            navigateToNext()
-        }
-
-        private fun updateTrainerProfile(profile: User.Trainer) {
-            updateState { copy(trainerState = profile) }
-        }
-
-        private fun updateTraineeProfile(profile: User.Trainee) {
-            updateState { copy(traineeState = profile) }
-        }
-
-        private fun navigateToNext() {
+        private fun navigateToNext(data: FormData?) {
             val nextPage = when (currentState.page) {
+                TraineeConnectPage.PTSessionForm -> {
+                    data?.let { updatePTSessionForm(it) }
+                    TraineeConnectPage.getNextPage(currentState.page)
+                }
+
                 TraineeConnectPage.TraineeConnectComplete -> {
                     sendEffect(TraineeConnectSideEffect.NavigateToHome)
                     return
@@ -112,6 +97,10 @@ internal class TraineeConnectViewModel @Inject constructor(
                 else -> TraineeConnectPage.getNextPage(currentState.page)
             }
             updateState { copy(page = nextPage) }
+        }
+
+        private fun updatePTSessionForm(data: FormData) {
+            updateState { copy(formData = data) }
         }
 
         private fun navigateToBack() {

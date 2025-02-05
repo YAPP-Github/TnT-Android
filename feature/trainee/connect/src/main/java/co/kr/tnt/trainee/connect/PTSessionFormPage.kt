@@ -37,7 +37,7 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
-import co.kr.tnt.trainee.connect.model.PTSessionFormData
+import co.kr.tnt.trainee.connect.model.FormData
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -48,7 +48,7 @@ private const val MAX_COUNT = 99
 @Composable
 internal fun PTSessionFormPage(
     state: TraineeConnectUiState,
-    onNextClick: (PTSessionFormData) -> Unit,
+    onNextClick: (FormData) -> Unit,
     onBackClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
@@ -92,7 +92,7 @@ internal fun PTSessionFormPage(
                 Text(
                     text = stringResource(
                         R.string.since_when_with_trainer,
-                        state.trainerState.name,
+                        state.trainer.name,
                     ),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h2,
@@ -180,7 +180,7 @@ internal fun PTSessionFormPage(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
                 onClick = {
-                    val formData = PTSessionFormData(
+                    val formData = FormData.PTSessionData(
                         completedSession = completedSession.toInt(),
                         totalSession = totalSession.toInt(),
                         selectedStartDate = selectedStartDate ?: LocalDate.now(),

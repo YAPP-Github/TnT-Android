@@ -11,7 +11,7 @@ import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
-import co.kr.tnt.trainee.connect.model.PTSessionFormData
+import co.kr.tnt.trainee.connect.model.FormData
 
 @Composable
 internal fun TraineeConnectRoute(
@@ -26,11 +26,10 @@ internal fun TraineeConnectRoute(
     TraineeConnectScreen(
         state = state,
         isSkippable = isSkippable,
-        onFormNextClick = { formData ->
-            viewModel.setEvent(TraineeConnectUiEvent.UpdatePTSessionData(formData))
-        },
         onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnBackClick) },
-        onNextClick = { viewModel.setEvent(TraineeConnectUiEvent.OnNextClick) },
+        onNextClick = { data ->
+            viewModel.setEvent(TraineeConnectUiEvent.OnNextClick(data))
+        },
         onSkipClick = { viewModel.setEvent(TraineeConnectUiEvent.OnSkipClick) },
         onCodeChanged = { code ->
             viewModel.setEvent(TraineeConnectUiEvent.OnCodeChanged(code))
@@ -59,8 +58,7 @@ private fun TraineeConnectScreen(
     isSkippable: Boolean,
     onCodeValidationClick: (String) -> Unit,
     onCodeChanged: (String) -> Unit,
-    onFormNextClick: (PTSessionFormData) -> Unit,
-    onNextClick: () -> Unit,
+    onNextClick: (FormData?) -> Unit,
     onBackClick: () -> Unit,
     onSkipClick: () -> Unit,
 ) {
@@ -81,9 +79,7 @@ private fun TraineeConnectScreen(
 
         TraineeConnectPage.PTSessionForm -> PTSessionFormPage(
             state = state,
-            onNextClick = { formData ->
-                onFormNextClick(formData)
-            },
+            onNextClick = onNextClick,
             onBackClick = onBackClick,
         )
 

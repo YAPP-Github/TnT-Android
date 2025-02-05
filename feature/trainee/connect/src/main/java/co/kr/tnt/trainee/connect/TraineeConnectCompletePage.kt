@@ -28,6 +28,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
+import co.kr.tnt.trainee.connect.model.FormData
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import co.kr.tnt.core.ui.R as uiResource
@@ -35,7 +36,7 @@ import co.kr.tnt.core.ui.R as uiResource
 @Composable
 internal fun TraineeConnectCompletePage(
     state: TraineeConnectUiState,
-    onNextClick: () -> Unit,
+    onNextClick: (FormData?) -> Unit,
     onBackClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
@@ -62,7 +63,7 @@ internal fun TraineeConnectCompletePage(
                     Text(
                         text = stringResource(
                             R.string.connected_with_trainer,
-                            state.trainerState.name,
+                            state.trainer.name,
                         ),
                         color = TnTTheme.colors.commonColors.Common0,
                         style = TnTTheme.typography.h1,
@@ -74,11 +75,11 @@ internal fun TraineeConnectCompletePage(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         ProfileSection(
-                            profile = state.trainerState,
+                            profile = state.trainer,
                             modifier = Modifier.padding(end = 16.dp),
                         )
                         ProfileSection(
-                            profile = state.traineeState,
+                            profile = state.trainee,
                         )
                     }
                     Image(
@@ -92,7 +93,7 @@ internal fun TraineeConnectCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
-                onClick = onNextClick,
+                onClick = { onNextClick(null) },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }

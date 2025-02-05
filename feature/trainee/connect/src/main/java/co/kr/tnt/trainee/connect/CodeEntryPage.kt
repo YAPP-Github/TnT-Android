@@ -24,6 +24,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
 import co.kr.tnt.trainee.connect.component.CodeTextField
+import co.kr.tnt.trainee.connect.model.FormData
 import co.kr.tnt.trainee.connect.model.InputState.VALID
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -33,7 +34,7 @@ internal fun CodeEntryPage(
     isSkippable: Boolean,
     onSkipClick: () -> Unit,
     onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onNextClick: (FormData?) -> Unit,
     onCodeChanged: (String) -> Unit,
     onValidateClick: (String) -> Unit,
 ) {
@@ -98,7 +99,7 @@ internal fun CodeEntryPage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 enabled = state.isCodeValid == VALID,
-                onClick = onNextClick,
+                onClick = { onNextClick(null) },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }

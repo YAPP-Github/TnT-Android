@@ -1,7 +1,7 @@
 package co.kr.tnt.trainer.connect
 
-import co.kr.tnt.domain.model.User
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectPage
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectSideEffect
