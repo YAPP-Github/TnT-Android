@@ -7,6 +7,8 @@ import co.kr.tnt.ui.model.NotificationState
 
 internal class TrainerNotificationContract {
     data class TrainerNotificationUiState(
+        val trainerId: String = "",
+        val traineeId: String = "",
         val notifications: List<NotificationState> = emptyList(),
     ) : UiState
 

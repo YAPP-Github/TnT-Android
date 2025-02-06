@@ -14,8 +14,8 @@ import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 
 @Composable
 internal fun TrainerConnectRoute(
-    isSkippable: Boolean,
-    isCompleted: Boolean,
+    trainerId: String,
+    traineeId: String,
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerConnectViewModel = hiltViewModel(),
@@ -23,22 +23,14 @@ internal fun TrainerConnectRoute(
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(isCompleted) {
-        val startPage = if (isCompleted) {
-            TrainerConnectContract.TrainerConnectPage.TrainerConnectComplete
-        } else {
-            TrainerConnectContract.TrainerConnectPage.CodeGeneration
-        }
-        viewModel.setStartPage(startPage)
+    LaunchedEffect(trainerId) {
+        viewModel.setEvent(TrainerConnectUiEvent.OnFetchInitialData(trainerId, traineeId))
     }
 
     TrainerConnectScreen(
         state = state,
-        isSkippable = isSkippable,
-        onRegenerateClick = { viewModel.setEvent(TrainerConnectUiEvent.OnRegenerateClick) },
         onBackClick = { viewModel.setEvent(TrainerConnectUiEvent.OnBackClick) },
         onNextClick = { viewModel.setEvent(TrainerConnectUiEvent.OnNextClick) },
-        onSkipClick = { viewModel.setEvent(TrainerConnectUiEvent.OnSkipClick) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -57,21 +49,10 @@ internal fun TrainerConnectRoute(
 @Composable
 private fun TrainerConnectScreen(
     state: TrainerConnectUiState,
-    isSkippable: Boolean,
-    onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
-    onSkipClick: () -> Unit,
 ) {
     when (state.page) {
-        TrainerConnectPage.CodeGeneration -> CodeGenerationPage(
-            state = state,
-            isSkippable = isSkippable,
-            onRegenerateClick = onRegenerateClick,
-            onBackClick = onBackClick,
-            onSkipClick = onSkipClick,
-        )
-
         TrainerConnectPage.TrainerConnectComplete -> TrainerConnectCompletePage(
             state = state,
             onBackClick = onBackClick,

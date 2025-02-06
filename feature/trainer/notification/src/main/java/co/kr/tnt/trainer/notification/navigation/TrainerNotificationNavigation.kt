@@ -16,7 +16,7 @@ fun NavController.navigateToTrainerNotification(
 
 fun NavGraphBuilder.trainerNotification(
     navigateToPrevious: () -> Unit,
-    navigateToConnect: () -> Unit,
+    navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
 ) {
     composable<Route.TrainerNotification> {
         TrainerNotificationRoute(

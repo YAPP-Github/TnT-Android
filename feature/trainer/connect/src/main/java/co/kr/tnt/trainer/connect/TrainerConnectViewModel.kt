@@ -20,40 +20,23 @@ internal class TrainerConnectViewModel @Inject constructor(
     ) {
     override suspend fun handleEvent(event: TrainerConnectUiEvent) {
         when (event) {
-            is TrainerConnectUiEvent.OnRegenerateClick -> regenerateCode()
+            is TrainerConnectUiEvent.OnFetchInitialData -> initProfile(
+                event.trainerId,
+                event.traineeId,
+            )
+
             TrainerConnectUiEvent.OnNextClick -> navigateToNext()
             TrainerConnectUiEvent.OnBackClick -> navigateToBack()
-            TrainerConnectUiEvent.OnSkipClick -> navigateToHome()
         }
     }
 
-    fun setStartPage(startPage: TrainerConnectPage) {
-        updateState { copy(page = startPage) }
-
-        if (startPage == TrainerConnectPage.CodeGeneration) {
-            generateCode()
-        } else {
-            initProfile()
-        }
-    }
-
-    private fun generateCode() {
+    private fun initProfile(trainerId: String, traineeId: String) {
         viewModelScope.launch {
             runCatching {
-                connectRepository.getInviteCode()
-            }.onSuccess { result ->
-                updateState { copy(inviteCode = result.invitationCode) }
-            }.onFailure {
-                // TODO 컴포넌트 사용
-                sendEffect(TrainerConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
-            }
-        }
-    }
-
-    private fun initProfile() {
-        viewModelScope.launch {
-            runCatching {
-                connectRepository.getConnectedTraineeInfo()
+                connectRepository.getConnectedTraineeInfo(
+                    trainerId = trainerId,
+                    traineeId = traineeId,
+                )
             }.onSuccess { result ->
                 updateState {
                     copy(
@@ -82,46 +65,20 @@ internal class TrainerConnectViewModel @Inject constructor(
         }
     }
 
-    private fun regenerateCode() {
-        viewModelScope.launch {
-            runCatching {
-                connectRepository.regenerateInviteCode()
-            }.onSuccess { result ->
-                updateState { copy(inviteCode = result.invitationCode) }
-            }.onFailure {
-                // TODO 컴포넌트 사용
-                sendEffect(TrainerConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
-            }
-        }
-    }
-
     private fun navigateToNext() {
-        val nextPage = when (currentState.page) {
-            TrainerConnectPage.TraineeProfile -> {
-                sendEffect(TrainerConnectSideEffect.NavigateToHome)
-                return
-            }
-
-            else -> TrainerConnectPage.getNextPage(currentState.page)
+        if (currentState.page == TrainerConnectPage.lastPage) {
+            sendEffect(TrainerConnectSideEffect.NavigateToHome)
+            return
         }
-        updateState { copy(page = nextPage) }
+        updateState { copy(page = TrainerConnectPage.getNextPage(currentState.page)) }
     }
 
     private fun navigateToBack() {
-        val previousPage = when (currentState.page) {
-            TrainerConnectPage.CodeGeneration,
-            TrainerConnectPage.TrainerConnectComplete,
-            -> {
-                sendEffect(TrainerConnectSideEffect.NavigateToBack)
-                return
-            }
-
-            else -> TrainerConnectPage.getPreviousPage(currentState.page)
+        if (currentState.page == TrainerConnectPage.firstPage) {
+            sendEffect(TrainerConnectSideEffect.NavigateToBack)
+            return
         }
-        updateState { copy(page = previousPage) }
-    }
 
-    private fun navigateToHome() {
-        sendEffect(TrainerConnectSideEffect.NavigateToHome)
+        updateState { copy(page = TrainerConnectPage.getPreviousPage(currentState.page)) }
     }
 }

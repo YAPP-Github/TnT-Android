@@ -1,10 +1,11 @@
-package co.kr.tnt.trainer.connect
+package co.kr.tnt.trainer.invite
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +31,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.component.TnTToast
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
@@ -36,13 +40,46 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.feature.trainer.connect.R
-import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
+import co.kr.tnt.feature.trainer.invite.R
+import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteSideEffect
+import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiEvent
+import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiState
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
-internal fun CodeGenerationPage(
-    state: TrainerConnectUiState,
+internal fun TrainerInviteRoute(
+    isSkippable: Boolean,
+    navigateToPrevious: () -> Unit,
+    navigateToHome: (Boolean) -> Unit,
+    viewModel: TrainerInviteViewModel = hiltViewModel(),
+) {
+    val context = LocalContext.current
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    TrainerInviteScreen(
+        state = state,
+        isSkippable = isSkippable,
+        onRegenerateClick = { viewModel.setEvent(TrainerInviteUiEvent.OnRegenerateClick) },
+        onBackClick = { viewModel.setEvent(TrainerInviteUiEvent.OnBackClick) },
+        onSkipClick = { viewModel.setEvent(TrainerInviteUiEvent.OnSkipClick) },
+    )
+
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                TrainerInviteSideEffect.NavigateToBack -> navigateToPrevious()
+                TrainerInviteSideEffect.NavigateToHome -> navigateToHome(true)
+                is TrainerInviteSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+internal fun TrainerInviteScreen(
+    state: TrainerInviteUiState,
     isSkippable: Boolean,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -77,7 +114,7 @@ internal fun CodeGenerationPage(
                 )
             } else {
                 TnTTopBarWithBackButton(
-                    title = stringResource(uiResource.string.connect),
+                    title = stringResource(R.string.add_member),
                     onBackClick = onBackClick,
                 )
             }
@@ -175,8 +212,8 @@ private fun copyToClipboard(context: Context, text: String) {
 @Composable
 private fun CodeGenerationPagePreview() {
     TnTTheme {
-        CodeGenerationPage(
-            state = TrainerConnectUiState(),
+        TrainerInviteScreen(
+            state = TrainerInviteUiState(),
             onBackClick = {},
             onSkipClick = {},
             onRegenerateClick = {},

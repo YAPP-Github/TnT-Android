@@ -18,6 +18,8 @@ import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
 import co.kr.tnt.trainer.connect.navigation.trainerConnectScreen
+import co.kr.tnt.trainer.invite.navigation.navigateToTrainerInvite
+import co.kr.tnt.trainer.invite.navigation.trainerInviteScreen
 import co.kr.tnt.trainer.main.navigation.navigateToTrainerMain
 import co.kr.tnt.trainer.main.navigation.trainerMainScreen
 import co.kr.tnt.trainer.signup.navigation.navigateToTrainerSignUp
@@ -60,18 +62,17 @@ fun TnTNavHost(
             )
             trainerSignUpScreen(
                 navigateToPrevious = navController::popBackStack,
-                navigateToConnect = {
-                    navController.navigateToTrainerConnect(
-                        isSkippable = true,
-                        isCompleted = false,
-                    )
-                },
+                navigateToInvite = navController::navigateToTrainerInvite,
             )
             traineeSignUpScreen(
                 navigateToPrevious = navController::popBackStack,
                 navigateToConnect = {
                     navController.navigateToTraineeConnect(isSkippable = true)
                 },
+            )
+            trainerInviteScreen(
+                navigateToPrevious = navController::popBackStack,
+                navigateToHome = { navController.navigateToTrainerMain(clearBackStack = true) },
             )
             trainerConnectScreen(
                 navigateToPrevious = navController::popBackStack,

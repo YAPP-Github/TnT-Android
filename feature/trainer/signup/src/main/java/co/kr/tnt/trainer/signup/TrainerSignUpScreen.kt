@@ -17,7 +17,7 @@ internal fun TrainerSignUpRoute(
     authType: String,
     email: String,
     navigateToPrevious: () -> Unit,
-    navigateToConnect: () -> Unit,
+    navigateToInvite: (Boolean) -> Unit,
     viewModel: TrainerSignUpViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -46,7 +46,7 @@ internal fun TrainerSignUpRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TrainerSignUpContract.TrainerSignUpEffect.NavigateToBack -> navigateToPrevious()
-                TrainerSignUpContract.TrainerSignUpEffect.NavigateToConnect -> navigateToConnect()
+                TrainerSignUpContract.TrainerSignUpEffect.NavigateToConnect -> navigateToInvite(true)
                 is TrainerSignUpContract.TrainerSignUpEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }

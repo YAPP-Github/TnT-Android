@@ -24,7 +24,7 @@ import co.kr.tnt.trainer.notification.navigation.trainerNotification
 
 @Composable
 internal fun TrainerMainRoute(
-    navigateToConnect: (isSkippable: Boolean, isCompleted: Boolean) -> Unit,
+    navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
     navController: NavHostController = rememberNavController(),
@@ -42,7 +42,7 @@ internal fun TrainerMainRoute(
 @Suppress("UnusedParameter")
 private fun TrainerMainScreen(
     navController: NavHostController,
-    navigateToConnect: (isSkippable: Boolean, isCompleted: Boolean) -> Unit,
+    navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {
@@ -72,7 +72,7 @@ private fun TrainerMainScreen(
             ) {
                 trainerNotification(
                     navigateToPrevious = navController::popBackStack,
-                    navigateToConnect = { navigateToConnect(false, true) },
+                    navigateToConnect = navigateToConnect,
                 )
             }
             trainerFeedbackNavGraph()

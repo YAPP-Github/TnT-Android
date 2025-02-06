@@ -34,9 +34,12 @@ sealed interface Route {
     ) : Route
 
     @Serializable
+    data class TrainerInvite(val isSkippable: Boolean) : Route
+
+    @Serializable
     data class TrainerConnect(
-        val isSkippable: Boolean,
-        val isCompleted: Boolean,
+        val trainerId: String,
+        val traineeId: String,
     ) : Route
 
     @Serializable
