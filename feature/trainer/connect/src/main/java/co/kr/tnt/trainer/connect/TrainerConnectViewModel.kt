@@ -51,26 +51,34 @@ internal class TrainerConnectViewModel @Inject constructor(
     }
 
     private fun initProfile() {
-        // TODO 화면에 보여줄 프로필 정보 불러오기
-        updateState {
-            copy(
-                trainerState = User.Trainer(
-                    id = "trainer",
-                    name = "김헬짱",
-                    image = null,
-                ),
-                traineeState = User.Trainee(
-                    id = "trainee",
-                    name = "김회원",
-                    image = "https://buly.kr/3j7VVqN",
-                    birthday = null,
-                    age = 25,
-                    weight = 100.0,
-                    height = 165,
-                    ptPurpose = listOf("체중 감량", "자세 교정"),
-                    caution = "발목이 안좋아서 발목에 무리가는 행동을 하면 안돼요. 잘 부탁드려요!",
-                ),
-            )
+        viewModelScope.launch {
+            runCatching {
+                connectRepository.getConnectedTraineeInfo()
+            }.onSuccess { result ->
+                updateState {
+                    copy(
+                        trainerState = User.Trainer(
+                            id = "",
+                            name = result.trainerName,
+                            image = result.trainerImage,
+                        ),
+                        traineeState = User.Trainee(
+                            id = "",
+                            name = result.traineeName,
+                            image = result.traineeImage,
+                            birthday = null,
+                            age = result.age,
+                            weight = result.weight,
+                            height = result.height.toInt(),
+                            ptPurpose = listOf(result.ptGoal),
+                            caution = result.cautionNote,
+                        ),
+                    )
+                }
+            }.onFailure {
+                // TODO 컴포넌트 사용
+                sendEffect(TrainerConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
+            }
         }
     }
 
