@@ -46,7 +46,7 @@ internal class TraineeConnectViewModel @Inject constructor(
         private fun validateInviteCode(code: String) {
             viewModelScope.launch {
                 runCatching {
-                    connectRepository.verifyInviteCode(code)
+                    connectRepository.getVerifyInviteCode(code)
                 }.onSuccess { result ->
                     if (result) {
                         updateState { copy(inviteCodeInputState = VALID) }

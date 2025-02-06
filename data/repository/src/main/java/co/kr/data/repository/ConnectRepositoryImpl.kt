@@ -3,7 +3,6 @@ package co.kr.data.repository
 import co.kr.data.network.model.ConnectRequest
 import co.kr.data.network.model.toDomain
 import co.kr.data.network.source.ConnectRemoteDataSource
-import co.kr.data.storage.source.UserLocalDataSource
 import co.kr.tnt.domain.model.ConnectRequestResult
 import co.kr.tnt.domain.model.ConnectedResult
 import co.kr.tnt.domain.model.InviteCodeResult
@@ -12,7 +11,6 @@ import javax.inject.Inject
 
 class ConnectRepositoryImpl @Inject constructor(
     private val connectRemoteDataSource: ConnectRemoteDataSource,
-    private val userLocalDataSource: UserLocalDataSource,
 ) : ConnectRepository {
     override suspend fun getInviteCode(): InviteCodeResult {
         val response = connectRemoteDataSource.getInviteCode()
@@ -26,8 +24,8 @@ class ConnectRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 
-    override suspend fun verifyInviteCode(code: String): Boolean {
-        val response = connectRemoteDataSource.verifyInviteCode(code = code)
+    override suspend fun getVerifyInviteCode(code: String): Boolean {
+        val response = connectRemoteDataSource.getVerifyInviteCode(code = code)
 
         return response.isVerified
     }
@@ -49,11 +47,10 @@ class ConnectRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 
-    override suspend fun getConnectedTraineeInfo(): ConnectedResult {
-        // TODO trainerId, traineeId 저장하기 (FCM, 알림 화면)
-        val trainerId = userLocalDataSource.getTrainerId()
-        val traineeId = userLocalDataSource.getTraineeId()
-
+    override suspend fun getConnectedTraineeInfo(
+        trainerId: String,
+        traineeId: String,
+    ): ConnectedResult {
         val response = connectRemoteDataSource.getConnectedTraineeInfo(
             trainerId = trainerId,
             traineeId = traineeId,

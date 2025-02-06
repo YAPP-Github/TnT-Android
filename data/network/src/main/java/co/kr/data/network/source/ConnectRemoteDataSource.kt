@@ -22,8 +22,8 @@ class ConnectRemoteDataSource @Inject constructor(
         apiService.regenerateInviteCode()
     }
 
-    suspend fun verifyInviteCode(code: String): VerifyCodeResponse = networkHandler {
-        apiService.verifyInviteCode(code = code)
+    suspend fun getVerifyInviteCode(code: String): VerifyCodeResponse = networkHandler {
+        apiService.getVerifyInviteCode(code = code)
     }
 
     suspend fun connectRequest(connectRequest: ConnectRequest): ConnectRequestResponse =

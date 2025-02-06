@@ -47,7 +47,7 @@ interface ApiService {
     suspend fun regenerateInviteCode(): InviteCodeResponse
 
     @GET("/trainers/invitation-code/verify/{code}")
-    suspend fun verifyInviteCode(
+    suspend fun getVerifyInviteCode(
         @Path("code") code: String,
     ): VerifyCodeResponse
 

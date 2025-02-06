@@ -9,7 +9,7 @@ interface ConnectRepository {
 
     suspend fun regenerateInviteCode(): InviteCodeResult
 
-    suspend fun verifyInviteCode(code: String): Boolean
+    suspend fun getVerifyInviteCode(code: String): Boolean
 
     suspend fun connectRequest(
         invitationCode: String,
@@ -18,5 +18,8 @@ interface ConnectRepository {
         completedSession: Int,
     ): ConnectRequestResult
 
-    suspend fun getConnectedTraineeInfo(): ConnectedResult
+    suspend fun getConnectedTraineeInfo(
+        trainerId: String,
+        traineeId: String,
+    ): ConnectedResult
 }
