@@ -14,8 +14,8 @@ interface ConnectRepository {
     suspend fun connectRequest(
         invitationCode: String,
         startDate: String,
-        totalPtCount: Int,
-        finishedPtCount: Int,
+        totalSession: Int,
+        completedSession: Int,
     ): ConnectRequestResult
 
     suspend fun getConnectedTraineeInfo(): ConnectedResult

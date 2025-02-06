@@ -1,18 +1,18 @@
 package co.kr.tnt.trainee.connect
 
 import androidx.lifecycle.viewModelScope
-import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
-import co.kr.tnt.trainee.connect.model.FormData
+import co.kr.tnt.trainee.connect.model.InputState.FOCUS
 import co.kr.tnt.trainee.connect.model.InputState.INVALID
 import co.kr.tnt.trainee.connect.model.InputState.VALID
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,23 +24,34 @@ internal class TraineeConnectViewModel @Inject constructor(
         ) {
         override suspend fun handleEvent(event: TraineeConnectUiEvent) {
             when (event) {
-                is TraineeConnectUiEvent.OnCodeValidateClick -> validateCode(event.code)
-                is TraineeConnectUiEvent.OnCodeChanged -> resetCode(event.code)
-                is TraineeConnectUiEvent.OnNextClick -> navigateToNext(event.data)
+                is TraineeConnectUiEvent.OnCodeValidateClick -> validateInviteCode(event.code)
+                is TraineeConnectUiEvent.OnChangeInviteCode -> handleChangeInviteCode(event.code)
+                is TraineeConnectUiEvent.OnChangeSessionStartDate -> updateState { copy(sessionStartDate = event.date) }
+                is TraineeConnectUiEvent.OnChangeCompletedSessionCount -> updateState {
+                    copy(
+                        completedSessionCount = event.count,
+                    )
+                }
+                is TraineeConnectUiEvent.OnChangeTotalSessionCount -> updateState {
+                    copy(
+                        totalSessionCount = event.count,
+                    )
+                }
+                is TraineeConnectUiEvent.OnNextClick -> handleNextClick()
                 TraineeConnectUiEvent.OnBackClick -> navigateToBack()
                 TraineeConnectUiEvent.OnSkipClick -> navigateToHome()
             }
         }
 
-        private fun validateCode(code: String) {
+        private fun validateInviteCode(code: String) {
             viewModelScope.launch {
                 runCatching {
                     connectRepository.verifyInviteCode(code)
                 }.onSuccess { result ->
                     if (result) {
-                        updateState { copy(inviteCode = code, isCodeValid = VALID) }
+                        updateState { copy(inviteCodeInputState = VALID) }
                     } else {
-                        updateState { copy(inviteCode = code, isCodeValid = INVALID) }
+                        updateState { copy(inviteCodeInputState = INVALID) }
                     }
                 }.onFailure {
                     sendEffect(TraineeConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
@@ -48,78 +59,69 @@ internal class TraineeConnectViewModel @Inject constructor(
             }
         }
 
-        private fun resetCode(code: String) {
-            updateState { copy(inviteCode = code, isCodeValid = null) }
+        private fun handleChangeInviteCode(inviteCode: String) {
+            updateState {
+                copy(
+                    inviteCode = inviteCode,
+                    inviteCodeInputState = FOCUS,
+                )
+            }
         }
 
-        private fun connectRequest(data: FormData) {
-            updateState { copy(formData = data) }
+        private fun handleNextClick() = when (currentState.page) {
+            TraineeConnectPage.CodeEntry -> navigateToNext()
+            TraineeConnectPage.PTSessionForm -> requestConnect()
+            TraineeConnectPage.TraineeConnectComplete -> navigateToNext()
+        }
+
+        private fun requestConnect() {
             viewModelScope.launch {
                 runCatching {
-                    connectRepository.connectRequest(
-                        invitationCode = currentState.inviteCode,
-                        startDate = currentState.selectedStartDate.toString(),
-                        totalPtCount = currentState.totalSession,
-                        finishedPtCount = currentState.completedSession,
-                    )
-                }.onSuccess { result ->
-                    val nextPage = TraineeConnectPage.getNextPage(currentState.page)
-                    updateState {
-                        copy(
-                            formData = FormData.ProfileData(
-                                trainer = User.Trainer(
-                                    name = result.trainerName,
-                                    image = result.trainerImage,
-                                    id = "",
-                                ),
-                                trainee = User.Trainee(
-                                    name = result.traineeName,
-                                    image = result.traineeImage,
-                                    id = "",
-                                    birthday = null,
-                                    age = 0,
-                                    weight = 0.0,
-                                    height = 0,
-                                    ptPurpose = emptyList(),
-                                    caution = null,
-                                ),
-                            ),
-                            page = nextPage,
+                    currentState.run {
+                        connectRepository.connectRequest(
+                            invitationCode = inviteCode,
+                            startDate = (sessionStartDate ?: LocalDate.now()).toString(),
+                            completedSession = completedSessionCount.toInt(),
+                            totalSession = totalSessionCount.toInt(),
                         )
                     }
+                }.onSuccess { result ->
+                    updateState {
+                        copy(
+                            trainerName = result.trainerName,
+                            trainerImage = result.trainerImage,
+                            traineeName = result.traineeName,
+                            traineeImage = result.traineeImage,
+                        )
+                    }
+                    navigateToNext()
                 }.onFailure {
                     sendEffect(TraineeConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
                 }
             }
-        }
-
-        private fun navigateToNext(data: FormData?) {
-            val nextPage = when (currentState.page) {
-                TraineeConnectPage.PTSessionForm -> {
-                    data?.let { connectRequest(it) }
-                    return
-                }
-
-                TraineeConnectPage.TraineeConnectComplete -> {
-                    sendEffect(TraineeConnectSideEffect.NavigateToHome)
-                    return
-                }
-
-                else -> TraineeConnectPage.getNextPage(currentState.page)
-            }
-            updateState { copy(page = nextPage) }
         }
 
         private fun navigateToBack() {
-            val previousPage = when (currentState.page) {
-                TraineeConnectPage.CodeEntry -> {
-                    sendEffect(TraineeConnectSideEffect.NavigateToBack)
-                    return
-                }
-
-                else -> TraineeConnectPage.getPreviousPage(currentState.page)
+            if (currentState.page == TraineeConnectPage.firstPage) {
+                sendEffect(TraineeConnectSideEffect.NavigateToBack)
+                return
             }
-            updateState { copy(page = previousPage) }
+
+            if (currentState.page == TraineeConnectPage.lastPage) {
+                navigateToHome()
+                return
+            }
+
+            updateState { copy(page = TraineeConnectPage.getPreviousPage(currentState.page)) }
+        }
+
+        private fun navigateToNext() {
+            if (currentState.page == TraineeConnectPage.lastPage) {
+                sendEffect(TraineeConnectSideEffect.NavigateToHome)
+                return
+            }
+
+            updateState { copy(page = TraineeConnectPage.getNextPage(currentState.page)) }
         }
 
         private fun navigateToHome() {

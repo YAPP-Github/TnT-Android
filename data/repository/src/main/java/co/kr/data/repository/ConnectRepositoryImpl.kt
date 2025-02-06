@@ -35,15 +35,15 @@ class ConnectRepositoryImpl @Inject constructor(
     override suspend fun connectRequest(
         invitationCode: String,
         startDate: String,
-        totalPtCount: Int,
-        finishedPtCount: Int,
+        totalSession: Int,
+        completedSession: Int,
     ): ConnectRequestResult {
         val response = connectRemoteDataSource.connectRequest(
             connectRequest = ConnectRequest(
                 invitationCode = invitationCode,
                 startDate = startDate,
-                totalPtCount = totalPtCount,
-                finishedPtCount = finishedPtCount,
+                totalPtCount = totalSession,
+                finishedPtCount = completedSession,
             ),
         )
         return response.toDomain()

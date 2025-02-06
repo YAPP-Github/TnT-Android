@@ -1,7 +1,5 @@
 package co.kr.tnt.trainee.connect
 
-import co.kr.tnt.domain.model.User
-import co.kr.tnt.trainee.connect.model.FormData
 import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
@@ -11,30 +9,24 @@ import java.time.LocalDate
 internal class TraineeConnectContract {
     data class TraineeConnectUiState(
         val page: TraineeConnectPage = TraineeConnectPage.CodeEntry,
+        val inviteCodeInputState: InputState = InputState.UNFOCUSED,
         val inviteCode: String = "",
-        val isCodeValid: InputState? = null,
-        val formData: FormData? = null,
-    ) : UiState {
-        val trainer: User.Trainer
-            get() = (formData as? FormData.ProfileData)?.trainer ?: User.Trainer.EMPTY
-
-        val trainee: User.Trainee
-            get() = (formData as? FormData.ProfileData)?.trainee ?: User.Trainee.EMPTY
-
-        val selectedStartDate: LocalDate
-            get() = (formData as? FormData.PTSessionData)?.selectedStartDate ?: LocalDate.now()
-
-        val totalSession: Int
-            get() = (formData as? FormData.PTSessionData)?.totalSession ?: 0
-
-        val completedSession: Int
-            get() = (formData as? FormData.PTSessionData)?.completedSession ?: 0
-    }
+        val sessionStartDate: LocalDate? = null,
+        val completedSessionCount: String = "",
+        val totalSessionCount: String = "",
+        val trainerName: String = "",
+        val trainerImage: String = "",
+        val traineeName: String = "",
+        val traineeImage: String = "",
+    ) : UiState
 
     sealed interface TraineeConnectUiEvent : UiEvent {
         data class OnCodeValidateClick(val code: String) : TraineeConnectUiEvent
-        data class OnCodeChanged(val code: String) : TraineeConnectUiEvent
-        data class OnNextClick(val data: FormData?) : TraineeConnectUiEvent
+        data class OnChangeInviteCode(val code: String) : TraineeConnectUiEvent
+        data class OnChangeSessionStartDate(val date: LocalDate) : TraineeConnectUiEvent
+        data class OnChangeCompletedSessionCount(val count: String) : TraineeConnectUiEvent
+        data class OnChangeTotalSessionCount(val count: String) : TraineeConnectUiEvent
+        data object OnNextClick : TraineeConnectUiEvent
         data object OnBackClick : TraineeConnectUiEvent
         data object OnSkipClick : TraineeConnectUiEvent
     }
@@ -52,6 +44,9 @@ internal class TraineeConnectContract {
         ;
 
         companion object {
+            val firstPage = CodeEntry
+            val lastPage = TraineeConnectComplete
+
             fun getPreviousPage(currentPage: TraineeConnectPage): TraineeConnectPage {
                 return when (currentPage) {
                     PTSessionForm -> CodeEntry

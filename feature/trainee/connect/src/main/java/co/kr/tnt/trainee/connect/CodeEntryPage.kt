@@ -22,21 +22,20 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
-import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
 import co.kr.tnt.trainee.connect.component.CodeTextField
-import co.kr.tnt.trainee.connect.model.FormData
-import co.kr.tnt.trainee.connect.model.InputState.VALID
+import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun CodeEntryPage(
-    state: TraineeConnectUiState,
+    inviteCode: String,
+    inputState: InputState,
     isSkippable: Boolean,
     onSkipClick: () -> Unit,
     onBackClick: () -> Unit,
-    onNextClick: (FormData?) -> Unit,
-    onCodeChanged: (String) -> Unit,
-    onValidateClick: (String) -> Unit,
+    onNextClick: () -> Unit,
+    onChangeInviteCode: (code: String) -> Unit,
+    onValidateClick: (code: String) -> Unit,
 ) {
     BackHandler {
         if (isSkippable) {
@@ -82,24 +81,24 @@ internal fun CodeEntryPage(
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 CodeTextField(
-                    value = state.inviteCode,
-                    onValueChange = onCodeChanged,
+                    value = inviteCode,
+                    onValueChange = onChangeInviteCode,
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    isCodeValid = state.isCodeValid,
+                    isCodeValid = inputState,
                     trailingComponent = {
                         TnTTextButton(
                             text = stringResource(R.string.verification),
                             size = ButtonSize.Small,
-                            enabled = state.inviteCode.isNotBlank(),
-                            onClick = { onValidateClick(state.inviteCode) },
+                            enabled = inviteCode.isNotBlank(),
+                            onClick = { onValidateClick(inviteCode) },
                         )
                     },
                 )
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
-                enabled = state.isCodeValid == VALID,
-                onClick = { onNextClick(null) },
+                enabled = inputState.isValid,
+                onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -111,12 +110,13 @@ internal fun CodeEntryPage(
 private fun CodeEntryPagePreview() {
     TnTTheme {
         CodeEntryPage(
+            inputState = InputState.FOCUS,
+            inviteCode = "23A4SDA31",
             isSkippable = false,
             onSkipClick = {},
             onNextClick = {},
-            state = TraineeConnectUiState(),
             onValidateClick = {},
-            onCodeChanged = {},
+            onChangeInviteCode = {},
             onBackClick = {},
         )
     }
