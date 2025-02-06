@@ -133,7 +133,7 @@ internal fun PTSessionFormPage(
                     val showWarning by remember {
                         derivedStateOf {
                             completedSession.isNotEmpty() && totalSession.isNotEmpty() &&
-                                (completedSession.toIntOrNull() ?: 0) > (totalSession.toIntOrNull() ?: 0)
+                                (completedSession.toIntOrNull() ?: 0) >= (totalSession.toIntOrNull() ?: 0)
                         }
                     }
                     Column(modifier = Modifier.weight(1f)) {
