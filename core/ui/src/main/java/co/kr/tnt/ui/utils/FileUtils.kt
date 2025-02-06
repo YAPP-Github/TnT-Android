@@ -1,4 +1,4 @@
-package co.kr.tnt.ui.util
+package co.kr.tnt.ui.utils
 
 import android.content.Context
 import android.database.Cursor

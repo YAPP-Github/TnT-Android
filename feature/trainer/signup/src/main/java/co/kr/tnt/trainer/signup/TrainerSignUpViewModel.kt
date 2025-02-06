@@ -10,7 +10,7 @@ import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpPage
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiEvent
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 import co.kr.tnt.ui.base.BaseViewModel
-import co.kr.tnt.ui.util.toFile
+import co.kr.tnt.ui.utils.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
