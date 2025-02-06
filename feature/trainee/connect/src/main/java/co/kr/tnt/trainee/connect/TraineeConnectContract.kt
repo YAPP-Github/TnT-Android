@@ -6,6 +6,7 @@ import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import java.time.LocalDate
 
 internal class TraineeConnectContract {
     data class TraineeConnectUiState(
@@ -19,6 +20,15 @@ internal class TraineeConnectContract {
 
         val trainee: User.Trainee
             get() = (formData as? FormData.ProfileData)?.trainee ?: User.Trainee.EMPTY
+
+        val selectedStartDate: LocalDate
+            get() = (formData as? FormData.PTSessionData)?.selectedStartDate ?: LocalDate.now()
+
+        val totalSession: Int
+            get() = (formData as? FormData.PTSessionData)?.totalSession ?: 0
+
+        val completedSession: Int
+            get() = (formData as? FormData.PTSessionData)?.completedSession ?: 0
     }
 
     sealed interface TraineeConnectUiEvent : UiEvent {
