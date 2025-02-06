@@ -10,7 +10,7 @@
     <string name="basic_info_for_pt">PT에 참고할 기본 정보예요!</string>
     <string name="birthday_placeholder">2001/01/01</string>
 
-    <string name="purpose_of_pt">PT를 받는 목적에 대해\n알려주세요!</string>
+    <string name="tell_purpose_of_pt">PT를 받는 목적에 대해\n알려주세요!</string>
     <string name="multiple_choices_available">다중 선택이 가능해요.</string>
     <string name="loss_weight">체중 감량</string>
     <string name="strength_improvement">근력 향상</string>
