@@ -1,6 +1,8 @@
 package co.kr.data.network.service
 
 import co.kr.data.network.model.CheckSessionResponse
+import co.kr.data.network.model.ConnectRequest
+import co.kr.data.network.model.ConnectRequestResponse
 import co.kr.data.network.model.InviteCodeResponse
 import co.kr.data.network.model.LoginRequest
 import co.kr.data.network.model.LoginResponse
@@ -46,4 +48,9 @@ interface ApiService {
     suspend fun verifyInviteCode(
         @Path("code") code: String,
     ): VerifyCodeResponse
+
+    @POST("/trainees/connect-trainer")
+    suspend fun postConnectRequest(
+        @Body request: ConnectRequest,
+    ): ConnectRequestResponse
 }

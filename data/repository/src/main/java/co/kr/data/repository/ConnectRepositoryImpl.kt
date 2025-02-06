@@ -1,7 +1,9 @@
 package co.kr.data.repository
 
+import co.kr.data.network.model.ConnectRequest
 import co.kr.data.network.model.toDomain
 import co.kr.data.network.source.ConnectRemoteDataSource
+import co.kr.tnt.domain.model.ConnectRequestResult
 import co.kr.tnt.domain.model.InviteCodeResult
 import co.kr.tnt.domain.repository.ConnectRepository
 import javax.inject.Inject
@@ -25,5 +27,23 @@ class ConnectRepositoryImpl @Inject constructor(
         val response = connectRemoteDataSource.verifyInviteCode(code = code)
 
         return response.isVerified
+    }
+
+    override suspend fun connectRequest(
+        invitationCode: String,
+        startDate: String,
+        totalPtCount: Int,
+        finishedPtCount: Int,
+    ): ConnectRequestResult {
+        val response = connectRemoteDataSource.connectRequest(
+            connectRequest = ConnectRequest(
+                invitationCode = invitationCode,
+                startDate = startDate,
+                totalPtCount = totalPtCount,
+                finishedPtCount = finishedPtCount,
+            ),
+        )
+
+        return response.toDomain()
     }
 }

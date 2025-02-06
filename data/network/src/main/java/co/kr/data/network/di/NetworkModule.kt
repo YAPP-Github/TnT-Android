@@ -21,7 +21,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
-    private const val TIME_OUT_SECONDS: Long = 10
+    private const val TIME_OUT_SECONDS: Long = 20
 
     @Provides
     @Singleton
