@@ -1,6 +1,7 @@
 package co.kr.tnt.domain.repository
 
 import co.kr.tnt.domain.model.ConnectRequestResult
+import co.kr.tnt.domain.model.ConnectedResult
 import co.kr.tnt.domain.model.InviteCodeResult
 
 interface ConnectRepository {
@@ -16,4 +17,6 @@ interface ConnectRepository {
         totalPtCount: Int,
         finishedPtCount: Int,
     ): ConnectRequestResult
+
+    suspend fun getConnectedTraineeInfo(): ConnectedResult
 }

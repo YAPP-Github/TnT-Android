@@ -3,6 +3,7 @@ package co.kr.data.network.service
 import co.kr.data.network.model.CheckSessionResponse
 import co.kr.data.network.model.ConnectRequest
 import co.kr.data.network.model.ConnectRequestResponse
+import co.kr.data.network.model.ConnectedTraineeResponse
 import co.kr.data.network.model.InviteCodeResponse
 import co.kr.data.network.model.LoginRequest
 import co.kr.data.network.model.LoginResponse
@@ -18,6 +19,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @GET(CHECK_SESSION_PATH)
@@ -53,4 +55,10 @@ interface ApiService {
     suspend fun postConnectRequest(
         @Body request: ConnectRequest,
     ): ConnectRequestResponse
+
+    @GET("/trainers/first-connected-trainee")
+    suspend fun getConnectedTraineeInfo(
+        @Query("trainerId") trainerId: String,
+        @Query("traineeId") traineeId: String,
+    ): ConnectedTraineeResponse
 }

@@ -2,6 +2,7 @@ package co.kr.data.network.source
 
 import co.kr.data.network.model.ConnectRequest
 import co.kr.data.network.model.ConnectRequestResponse
+import co.kr.data.network.model.ConnectedTraineeResponse
 import co.kr.data.network.model.InviteCodeResponse
 import co.kr.data.network.model.VerifyCodeResponse
 import co.kr.data.network.service.ApiService
@@ -29,4 +30,14 @@ class ConnectRemoteDataSource @Inject constructor(
         networkHandler {
             apiService.postConnectRequest(request = connectRequest)
         }
+
+    suspend fun getConnectedTraineeInfo(
+        trainerId: String,
+        traineeId: String,
+    ): ConnectedTraineeResponse = networkHandler {
+        apiService.getConnectedTraineeInfo(
+            trainerId = trainerId,
+            traineeId = traineeId,
+        )
+    }
 }
