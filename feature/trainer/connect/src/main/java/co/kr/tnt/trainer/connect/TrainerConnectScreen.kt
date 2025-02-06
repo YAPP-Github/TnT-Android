@@ -23,7 +23,7 @@ internal fun TrainerConnectRoute(
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(isCompleted) {
         val startPage = if (isCompleted) {
             TrainerConnectContract.TrainerConnectPage.TrainerConnectComplete
         } else {
