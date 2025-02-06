@@ -104,7 +104,7 @@ internal fun TraineeProfilePage(
                     }
                     Spacer(Modifier.height(32.dp))
                     Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         if (trainee.age.toString() != "null") {
@@ -112,16 +112,21 @@ internal fun TraineeProfilePage(
                                 label = stringResource(uiResource.string.age_label),
                                 text = trainee.age.toString() + stringResource(uiResource.string.age_unit),
                             )
+                            Spacer(Modifier.weight(1f))
                         }
                         TextWithLabel(
                             label = stringResource(uiResource.string.height_label),
                             text = trainee.height.toString() + stringResource(uiResource.string.height_unit),
                         )
+                        Spacer(Modifier.weight(1f))
                         val formattedWeight = trainee.weight.toString().removeSuffix(".0")
                         TextWithLabel(
                             label = stringResource(uiResource.string.weight_label),
                             text = formattedWeight + stringResource(uiResource.string.weight_unit),
                         )
+                        if (trainee.age.toString() == "null") {
+                            Spacer(Modifier.weight(1f))
+                        }
                     }
                     Spacer(Modifier.height(32.dp))
                     TextWithBackground(
@@ -196,7 +201,7 @@ private fun TextWithBackground(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 360)
 @Composable
 private fun TraineeProfilePagePreview() {
     TnTTheme {
@@ -211,7 +216,7 @@ private fun TraineeProfilePagePreview() {
                     weight = 55.0,
                     height = 150,
                     ptPurpose = listOf("체중 감량", "자세 교정"),
-                    caution = null,
+                    caution = "손목이 안 좋습니다.",
                 ),
             ),
             onNextClick = {},
