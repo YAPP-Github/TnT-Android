@@ -1,37 +1,109 @@
 package co.kr.tnt.trainer.home
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.designsystem.component.calendar.TnTIndicatorMonthCalendar
+import co.kr.tnt.designsystem.component.calendar.model.DayState
+import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
+import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
+import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
+import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
+import co.kr.tnt.ui.component.TnTHomeTopBar
+import com.kizitonwose.calendar.compose.rememberCalendarState
+import kotlinx.coroutines.launch
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.YearMonth
 
 @Composable
-@Suppress("UnusedParameter")
 internal fun TrainerHomeRoute(
     viewModel: TrainerHomeViewModel = hiltViewModel(),
     navigateToNotification: () -> Unit,
 ) {
-    TrainerHomeScreen(navigateToNotification)
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    TrainerHomeScreen(
+        state = state,
+        onClickNotification = { viewModel.setEvent(TrainerHomeUiEvent.OnClickNotification) },
+        onChangeVisibleMonth = { viewModel.setEvent(TrainerHomeUiEvent.OnChangeVisibleMonth(it)) },
+        onClickDay = { viewModel.setEvent(TrainerHomeUiEvent.OnClickDay(it)) },
+    )
+
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collect {
+            when (it) {
+                TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
+            }
+        }
+    }
 }
 
 @Composable
 private fun TrainerHomeScreen(
-    navigateToNotification: () -> Unit,
+    state: TrainerHomeUiState,
+    onClickNotification: () -> Unit,
+    onChangeVisibleMonth: (yearMonth: YearMonth) -> Unit,
+    onClickDay: (date: LocalDate) -> Unit,
 ) {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column {
-            Text(
-                text = "trainer home",
-                modifier = Modifier.padding(innerPadding),
-            )
-            Button(onClick = navigateToNotification) {
-                Text("navigate to notification")
+    val now = remember { YearMonth.now() }
+    val calendarState = rememberCalendarState(
+        firstVisibleMonth = now,
+        firstDayOfWeek = DayOfWeek.SUNDAY,
+        startMonth = now.minusYears(10),
+        endMonth = now.plusYears(10),
+    )
+    val coroutineScope = rememberCoroutineScope()
+    val visibleYearMonth = rememberMostVisibleMonth(calendarState)
+
+    Scaffold(
+        topBar = {
+            Column {
+                Spacer(modifier = Modifier.height(12.dp))
+                TnTHomeTopBar(
+                    yearMonth = visibleYearMonth,
+                    onClickNotification = onClickNotification,
+                    onClickSelectorPrevious = {
+                        coroutineScope.launch {
+                            calendarState.animateScrollToMonth(visibleYearMonth.minusMonths(1))
+                        }
+                    },
+                    onClickSelectorNext = {
+                        coroutineScope.launch {
+                            calendarState.animateScrollToMonth(visibleYearMonth.plusMonths(1))
+                        }
+                    },
+                )
             }
+        },
+        containerColor = TnTTheme.colors.commonColors.Common0,
+        modifier = Modifier.fillMaxSize(),
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            Spacer(modifier = Modifier.height(16.dp))
+            TnTIndicatorMonthCalendar(
+                state = calendarState,
+                onClickDay = onClickDay,
+                dayState = { day -> DayState(isSelected = day == state.selectedDay) },
+            )
         }
+    }
+
+    LaunchedEffect(calendarState.firstVisibleMonth) {
+        val currentCalendarYearMonth = calendarState.firstVisibleMonth.yearMonth
+        onChangeVisibleMonth(currentCalendarYearMonth)
     }
 }
