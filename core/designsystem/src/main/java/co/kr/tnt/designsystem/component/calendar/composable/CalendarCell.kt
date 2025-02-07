@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -94,13 +95,22 @@ private fun CalendarDay(
     isSelected: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val today = remember { LocalDate.now() }
+    val isToday = date == today
+
+    val backgroundColor = when {
+        isSelected -> TnTTheme.colors.neutralColors.Neutral900
+        isToday -> TnTTheme.colors.neutralColors.Neutral200
+        else -> null
+    }
+
     Box(
         modifier = modifier
             .size(32.dp)
             .then(
-                if (isSelected) {
+                if (backgroundColor != null) {
                     Modifier.background(
-                        color = TnTTheme.colors.neutralColors.Neutral900,
+                        color = backgroundColor,
                         shape = RoundedCornerShape(8.dp),
                     )
                 } else {
@@ -154,6 +164,19 @@ private fun CalendarIndicator(
 @Preview(showBackground = true)
 @Composable
 private fun CalendarCellPreview() {
+    TnTTheme {
+        CalendarCell(
+            date = LocalDate.now().minusDays(1),
+            state = DayState(
+                isSelected = false,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CalendarTodayCellPreview() {
     TnTTheme {
         CalendarCell(
             date = LocalDate.now(),
