@@ -9,6 +9,11 @@
     <string name="verification_fail">인증에 실패했어요</string>
     <string name="verification_success">인증되었어요</string>
 
+    <string name="stop_connecting_trainer">트레이너 연결을 중단하시겠어요?</string>
+    <string name="warning_reconnect_needed">중단 시 연결을 처음부터 다시 설정해야 해요</string>
+    <string name="action_cancel">중단하기</string>
+    <string name="action_continue">계속 진행</string>
+
     <string name="invite_trainee_with_code">생성된 초대코드로\n트레이니가 로그인할 수 있어요</string>
     <string name="my_invite_code">내 초대 코드</string>
     <string name="code_reissue">코드 재발급</string>

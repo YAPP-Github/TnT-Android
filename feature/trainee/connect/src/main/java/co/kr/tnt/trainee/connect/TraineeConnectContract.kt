@@ -11,6 +11,7 @@ internal class TraineeConnectContract {
         val page: TraineeConnectPage = TraineeConnectPage.CodeEntry,
         val inviteCodeInputState: InputState = InputState.UNFOCUSED,
         val inviteCode: String = "",
+        val showDialog: Boolean = false,
         val sessionStartDate: LocalDate? = null,
         val completedSessionCount: String = "",
         val totalSessionCount: String = "",
@@ -23,6 +24,7 @@ internal class TraineeConnectContract {
     sealed interface TraineeConnectUiEvent : UiEvent {
         data class OnCodeValidateClick(val code: String) : TraineeConnectUiEvent
         data class OnChangeInviteCode(val code: String) : TraineeConnectUiEvent
+        data object OnChangeDialogState : TraineeConnectUiEvent
         data class OnChangeSessionStartDate(val date: LocalDate) : TraineeConnectUiEvent
         data class OnChangeCompletedSessionCount(val count: String) : TraineeConnectUiEvent
         data class OnChangeTotalSessionCount(val count: String) : TraineeConnectUiEvent

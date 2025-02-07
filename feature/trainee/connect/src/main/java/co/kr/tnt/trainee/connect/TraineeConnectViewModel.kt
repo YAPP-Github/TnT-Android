@@ -27,6 +27,7 @@ internal class TraineeConnectViewModel @Inject constructor(
                 is TraineeConnectUiEvent.OnCodeValidateClick -> validateInviteCode(event.code)
                 is TraineeConnectUiEvent.OnChangeInviteCode -> handleChangeInviteCode(event.code)
                 is TraineeConnectUiEvent.OnChangeSessionStartDate -> updateState { copy(sessionStartDate = event.date) }
+                TraineeConnectUiEvent.OnChangeDialogState -> handleChangeDialogState()
                 is TraineeConnectUiEvent.OnChangeCompletedSessionCount -> updateState {
                     copy(
                         completedSessionCount = event.count,
@@ -103,6 +104,7 @@ internal class TraineeConnectViewModel @Inject constructor(
 
         private fun navigateToBack() {
             if (currentState.page == TraineeConnectPage.firstPage) {
+                handleChangeDialogState()
                 sendEffect(TraineeConnectSideEffect.NavigateToBack)
                 return
             }
@@ -113,6 +115,10 @@ internal class TraineeConnectViewModel @Inject constructor(
             }
 
             updateState { copy(page = TraineeConnectPage.getPreviousPage(currentState.page)) }
+        }
+
+        private fun handleChangeDialogState() {
+            updateState { copy(showDialog = !showDialog) }
         }
 
         private fun navigateToNext() {

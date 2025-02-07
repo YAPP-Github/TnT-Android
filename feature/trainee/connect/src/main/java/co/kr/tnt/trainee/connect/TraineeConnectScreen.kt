@@ -26,7 +26,7 @@ internal fun TraineeConnectRoute(
     TraineeConnectScreen(
         state = state,
         isSkippable = isSkippable,
-        onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnBackClick) },
+        onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
         onNextClick = { viewModel.setEvent(TraineeConnectUiEvent.OnNextClick) },
         onSkipClick = { viewModel.setEvent(TraineeConnectUiEvent.OnSkipClick) },
         onChangeInviteCode = { code ->
@@ -35,6 +35,8 @@ internal fun TraineeConnectRoute(
         onCodeValidationClick = { code ->
             viewModel.setEvent(TraineeConnectUiEvent.OnCodeValidateClick(code))
         },
+        onCancelConnectClick = { viewModel.setEvent(TraineeConnectUiEvent.OnBackClick) },
+        onDismissPopUp = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
         onChangeSessionStartDate = { date ->
             viewModel.setEvent(TraineeConnectUiEvent.OnChangeSessionStartDate(date))
         },
@@ -65,6 +67,8 @@ private fun TraineeConnectScreen(
     isSkippable: Boolean,
     onChangeInviteCode: (code: String) -> Unit,
     onCodeValidationClick: (code: String) -> Unit,
+    onCancelConnectClick: () -> Unit,
+    onDismissPopUp: () -> Unit,
     onChangeSessionStartDate: (date: LocalDate) -> Unit,
     onChangeCompletedSessionCount: (count: String) -> Unit,
     onChangeTotalSessionCount: (count: String) -> Unit,
@@ -74,6 +78,7 @@ private fun TraineeConnectScreen(
 ) {
     when (state.page) {
         TraineeConnectPage.CodeEntry -> CodeEntryPage(
+            showDialog = state.showDialog,
             inputState = state.inviteCodeInputState,
             inviteCode = state.inviteCode,
             isSkippable = isSkippable,
@@ -82,6 +87,8 @@ private fun TraineeConnectScreen(
             onSkipClick = onSkipClick,
             onChangeInviteCode = onChangeInviteCode,
             onValidateClick = onCodeValidationClick,
+            onCancelClick = onCancelConnectClick,
+            onDismissPopup = onDismissPopUp,
         )
 
         TraineeConnectPage.PTSessionForm -> PTSessionFormPage(

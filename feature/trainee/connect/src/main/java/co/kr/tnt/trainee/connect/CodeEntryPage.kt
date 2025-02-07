@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
@@ -28,6 +29,7 @@ import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun CodeEntryPage(
+    showDialog: Boolean,
     inviteCode: String,
     inputState: InputState,
     isSkippable: Boolean,
@@ -36,6 +38,8 @@ internal fun CodeEntryPage(
     onNextClick: () -> Unit,
     onChangeInviteCode: (code: String) -> Unit,
     onValidateClick: (code: String) -> Unit,
+    onCancelClick: () -> Unit,
+    onDismissPopup: () -> Unit,
 ) {
     BackHandler {
         if (isSkippable) {
@@ -103,6 +107,18 @@ internal fun CodeEntryPage(
             )
         }
     }
+
+    if (showDialog) {
+        TnTIconPopupDialog(
+            title = stringResource(R.string.stop_connecting_trainer),
+            content = stringResource(R.string.warning_reconnect_needed),
+            leftButtonText = stringResource(R.string.action_cancel),
+            rightButtonText = stringResource(R.string.action_continue),
+            onLeftButtonClick = onCancelClick,
+            onRightButtonClick = onDismissPopup,
+            onDismiss = onDismissPopup,
+        )
+    }
 }
 
 @Preview(showBackground = true)
@@ -110,6 +126,7 @@ internal fun CodeEntryPage(
 private fun CodeEntryPagePreview() {
     TnTTheme {
         CodeEntryPage(
+            showDialog = true,
             inputState = InputState.FOCUS,
             inviteCode = "23A4SDA31",
             isSkippable = false,
@@ -118,6 +135,8 @@ private fun CodeEntryPagePreview() {
             onValidateClick = {},
             onChangeInviteCode = {},
             onBackClick = {},
+            onDismissPopup = {},
+            onCancelClick = {},
         )
     }
 }
