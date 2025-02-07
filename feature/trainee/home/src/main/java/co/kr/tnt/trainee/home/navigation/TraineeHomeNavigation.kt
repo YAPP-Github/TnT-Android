@@ -21,6 +21,7 @@ fun NavGraphBuilder.traineeHomeNavGraph(
     navigateToNotification: () -> Unit,
     navigateToMealRecord: () -> Unit,
     navigateToMealDetail: (id: Long) -> Unit,
+    navigateToConnect: () -> Unit,
     homeDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TraineeMainTab.Home>(startDestination = Route.TraineeHome) {
@@ -31,6 +32,7 @@ fun NavGraphBuilder.traineeHomeNavGraph(
                 navigateToExerciseRecord = { /* TODO */ },
                 navigateToMealRecord = navigateToMealRecord,
                 navigateToMealDetail = navigateToMealDetail,
+                navigateToConnect = navigateToConnect,
             )
         }
         homeDestination()

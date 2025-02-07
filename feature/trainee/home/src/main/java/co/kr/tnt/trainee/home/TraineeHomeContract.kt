@@ -15,6 +15,9 @@ internal class TraineeHomeContract {
         val recordedDates: TraineeDailyRecordStatus? = null,
         val ptSessions: TraineePtSession? = null,
         val recordList: List<DailyRecord> = emptyList(),
+        val isConnected: Boolean = false,
+        val isDialogHiddenForThreeDays: Boolean = false,
+        val showConnectDialog: Boolean = false,
     ) : UiState
 
     sealed interface TraineeHomeUiEvent : UiEvent {
@@ -24,9 +27,13 @@ internal class TraineeHomeContract {
         data object OnClickExerciseRecord : TraineeHomeUiEvent
         data object OnClickMealRecord : TraineeHomeUiEvent
         data class OnClickDay(val date: LocalDate) : TraineeHomeUiEvent
+        data object OnChangeHideDialogOption : TraineeHomeUiEvent
+        data object OnConfirmConnectDialog : TraineeHomeUiEvent
+        data object OnDismissPopup : TraineeHomeUiEvent
     }
 
     sealed interface TraineeHomeEffect : UiSideEffect {
+        data object NavigateToConnect : TraineeHomeEffect
         data object NavigateToExerciseRecord : TraineeHomeEffect
         data object NavigateToMealRecord : TraineeHomeEffect
         data class ShowToast(val message: String) : TraineeHomeEffect

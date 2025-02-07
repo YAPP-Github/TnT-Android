@@ -1,5 +1,9 @@
 package co.kr.tnt.trainee.home
 
+import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeEffect
+import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
+import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
+import co.kr.tnt.ui.base.BaseViewModel
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
 import co.kr.tnt.domain.repository.TraineeRepository
@@ -21,6 +25,10 @@ internal class TraineeHomeViewModel @Inject constructor(
 ) : BaseViewModel<TraineeHomeUiState, TraineeHomeUiEvent, TraineeHomeEffect>(
         TraineeHomeUiState(),
     ) {
+    init {
+        showConnectDialog()
+    }
+
     private val cachedMonthlyRecordState: ConcurrentHashMap<YearMonth, TraineeDailyRecordStatus> =
         ConcurrentHashMap()
 
@@ -32,6 +40,9 @@ internal class TraineeHomeViewModel @Inject constructor(
             is TraineeHomeUiEvent.OnClickPtSessionCard -> checkSessionRecord(event.ptSessionId)
             TraineeHomeUiEvent.OnClickExerciseRecord -> sendEffect(TraineeHomeEffect.NavigateToExerciseRecord)
             TraineeHomeUiEvent.OnClickMealRecord -> sendEffect(TraineeHomeEffect.NavigateToMealRecord)
+            TraineeHomeUiEvent.OnChangeHideDialogOption -> clickHideDialog()
+            TraineeHomeUiEvent.OnConfirmConnectDialog -> navigateToConnect()
+            TraineeHomeUiEvent.OnDismissPopup -> dismissPopup()
         }
     }
 
@@ -99,6 +110,27 @@ internal class TraineeHomeViewModel @Inject constructor(
                 sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요"))
             }
         }
+    }
+
+    private fun showConnectDialog() {
+        // TODO 3일간 보지 않기 설정한 마지막 시간 가져와서 3일 지났으면 띄워주기
+        if (currentState.isConnected.not()) {
+            updateState { copy(showConnectDialog = !showConnectDialog) }
+        }
+    }
+
+    private fun clickHideDialog() {
+        // TODO 3일간 보지 않기 설정 저장
+        updateState { copy(isDialogHiddenForThreeDays = !isDialogHiddenForThreeDays) }
+    }
+
+    private fun navigateToConnect() {
+        updateState { copy(showConnectDialog = !showConnectDialog) }
+        sendEffect(TraineeHomeEffect.NavigateToConnect)
+    }
+
+    private fun dismissPopup() {
+        updateState { copy(showConnectDialog = !showConnectDialog) }
     }
 
     private fun refresh() {

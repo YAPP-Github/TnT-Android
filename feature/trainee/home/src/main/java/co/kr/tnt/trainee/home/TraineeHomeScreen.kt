@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -62,6 +61,7 @@ import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeEffect
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
 import co.kr.tnt.ui.coil.ResizeTransformation
+import co.kr.tnt.ui.component.TnTCheckToggleDialog
 import co.kr.tnt.ui.component.TnTHomeTopBar
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.model.RecordChip
@@ -74,12 +74,14 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
+import co.kr.tnt.core.ui.R as uiResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TraineeHomeRoute(
     viewModel: TraineeHomeViewModel = hiltViewModel(),
     padding: PaddingValues,
+    navigateToConnect: () -> Unit,
     navigateToNotification: () -> Unit,
     navigateToExerciseRecord: () -> Unit,
     navigateToMealRecord: () -> Unit,
@@ -108,6 +110,10 @@ internal fun TraineeHomeRoute(
         },
         onClickMealCard = navigateToMealDetail,
         onClickFloatingButton = { showBottomSheet = true },
+        onHideDialogOptionClick = { viewModel.setEvent(TraineeHomeUiEvent.OnChangeHideDialogOption) },
+        onConfirmConnectDialog = navigateToConnect,
+        onDismissConnectDialog = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissPopup) },
+        navigateToNotification = navigateToNotification,
     )
 
     if (showBottomSheet) {
@@ -138,6 +144,8 @@ internal fun TraineeHomeRoute(
                     navigateToMealRecord()
                 }
 
+                TraineeHomeContract.TraineeHomeEffect.NavigateToConnect -> TODO()
+
                 is TraineeHomeEffect.ShowToast -> snackbar.show(effect.message)
             }
         }
@@ -158,6 +166,9 @@ private fun TraineeHomeScreen(
     onClickPtSessionCard: (id: Long) -> Unit,
     onClickMealCard: (id: Long) -> Unit,
     onClickFloatingButton: () -> Unit,
+    onHideDialogOptionClick: () -> Unit,
+    onConfirmConnectDialog: () -> Unit,
+    onDismissConnectDialog: () -> Unit,
 ) {
     val dateFormatter = remember { DateFormatter() }
     val coroutineScope = rememberCoroutineScope()
@@ -285,6 +296,21 @@ private fun TraineeHomeScreen(
                 tint = Color.White,
             )
         }
+    }
+
+    if (state.showConnectDialog) {
+        TnTCheckToggleDialog(
+            title = stringResource(R.string.please_connect_trainer),
+            content = stringResource(R.string.connect_dialog_warning),
+            isChecked = state.isDialogHiddenForThreeDays,
+            checkToggleText = stringResource(uiResource.string.do_not_see_for_three_days),
+            leftButtonText = stringResource(uiResource.string.next_time),
+            rightButtonText = stringResource(uiResource.string.connect),
+            onLeftButtonClick = onDismissConnectDialog,
+            onRightButtonClick = onConfirmConnectDialog,
+            onCheckClick = onHideDialogOptionClick,
+            onDismiss = onDismissConnectDialog,
+        )
     }
 
     LaunchedEffect(visibleYearMonth) {
@@ -522,6 +548,9 @@ private fun TraineeHomeScreenPreview() {
             onChangeVisibleMonth = { },
             onClickFloatingButton = { },
             onClickMealCard = { },
+            onHideDialogOptionClick = { },
+            onConfirmConnectDialog = { },
+            onDismissConnectDialog = { },
         )
     }
 }
