@@ -3,24 +3,29 @@ package co.kr.tnt.ui.model
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import co.kr.tnt.core.ui.R
+import co.kr.tnt.designsystem.component.chip.model.ChipStyle
 import co.kr.tnt.domain.model.RecordType
 
 sealed interface RecordChip {
     val title: String
     val emoji: String?
+    val chipStyle: ChipStyle
 
     data class MealChip(
         override val title: String,
         override val emoji: String,
+        override val chipStyle: ChipStyle,
     ) : RecordChip
     data class ExerciseChip(
         override val title: String,
         override val emoji: String? = null,
+        override val chipStyle: ChipStyle,
     ) : RecordChip
     data class PTSessionChip(
         override val title: String,
         val sessionCount: Int,
         override val emoji: String,
+        override val chipStyle: ChipStyle,
     ) : RecordChip
 
     companion object {
@@ -40,7 +45,7 @@ sealed interface RecordChip {
                         RecordType.MealType.DINNER -> "🌙"
                         RecordType.MealType.SNACK -> "🍰"
                     }
-                    MealChip(title, emoji)
+                    MealChip(title, emoji, ChipStyle.PINK)
                 }
 
                 is RecordType.ExerciseType -> {
@@ -51,13 +56,16 @@ sealed interface RecordChip {
                         RecordType.ExerciseType.SHOULDER -> stringResource(R.string.exercise_shoulder)
                         RecordType.ExerciseType.CARDIO -> stringResource(R.string.exercise_cardio)
                     }
-                    ExerciseChip(title)
+                    ExerciseChip(
+                        title = title,
+                        chipStyle = ChipStyle.BLUE,
+                    )
                 }
 
                 is RecordType.PTSessionType -> {
                     val title = stringResource(R.string.pt_session, type.sessionCount)
                     val emoji = "💪"
-                    PTSessionChip(title, type.sessionCount, emoji)
+                    PTSessionChip(title, type.sessionCount, emoji, ChipStyle.BLUE)
                 }
             }
         }

@@ -12,6 +12,7 @@
     <string name="received_feedback">받은 피드백</string>
     <string name="make_pt_session_record">PT 수업 기록 남기기</string>
     <string name="see_pt_session_record">수업 기록 보기</string>
+    <string name="lesson_count">%s회차 수업</string>
 
     <!-- Calendar -->
     <string name="year_month_format">yyyy년 M월</string>
