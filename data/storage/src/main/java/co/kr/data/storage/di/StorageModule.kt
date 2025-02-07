@@ -21,6 +21,9 @@ internal object StorageModule {
     const val SETTING_STORAGE_NAME = "SETTING_STORAGE"
     private val Context.settingDataStore by preferencesDataStore(name = SETTING_STORAGE_NAME)
 
+    private const val HOME_STORAGE_NAME = "SESSION_STORAGE"
+    private val Context.homeDataStore by preferencesDataStore(name = HOME_STORAGE_NAME)
+
     @Provides
     @Singleton
     @Named(SESSION_STORAGE_NAME)
@@ -34,4 +37,11 @@ internal object StorageModule {
     fun provideSettingDataStore(
         @ApplicationContext context: Context,
     ): DataStore<Preferences> = context.settingDataStore
+
+    @Provides
+    @Singleton
+    @Named(HOME_STORAGE_NAME)
+    fun provideHomeSessionDataStore(
+        @ApplicationContext context: Context,
+    ): DataStore<Preferences> = context.homeDataStore
 }
