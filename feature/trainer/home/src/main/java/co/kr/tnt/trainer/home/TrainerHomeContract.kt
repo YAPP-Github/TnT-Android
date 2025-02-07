@@ -8,13 +8,12 @@ import java.time.YearMonth
 
 internal class TrainerHomeContract {
     data class TrainerHomeUiState(
-        val yearMonth: YearMonth = YearMonth.now(),
         val selectedDay: LocalDate = LocalDate.now(),
     ) : UiState
 
     sealed interface TrainerHomeUiEvent : UiEvent {
         data object OnClickNotification : TrainerHomeUiEvent
-        data class OnChangeYearMonth(val yearMonth: YearMonth) : TrainerHomeUiEvent
+        data class OnChangeVisibleMonth(val yearMonth: YearMonth) : TrainerHomeUiEvent
         data class OnClickDay(val day: LocalDate) : TrainerHomeUiEvent
     }
 
