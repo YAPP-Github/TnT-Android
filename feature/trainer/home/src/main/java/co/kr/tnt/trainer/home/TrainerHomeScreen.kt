@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.home
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,10 +13,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorMonthCalendar
+import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -34,6 +37,7 @@ internal fun TrainerHomeRoute(
     viewModel: TrainerHomeViewModel = hiltViewModel(),
     navigateToNotification: () -> Unit,
 ) {
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerHomeScreen(
@@ -44,9 +48,10 @@ internal fun TrainerHomeRoute(
     )
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect {
-            when (it) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
                 TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
+                is TrainerHomeSideEffect.ShowToast -> Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -98,6 +103,15 @@ private fun TrainerHomeScreen(
                 state = calendarState,
                 onClickDay = onClickDay,
                 dayState = { day -> DayState(isSelected = day == state.selectedDay) },
+                indicatorState = { day ->
+                    val count = state.dailyPtSessionCount[day] ?: 0
+
+                    DayIndicatorState(
+                        count = count,
+                        showIcon = count != 0,
+                        showText = count != 0,
+                    )
+                },
             )
         }
     }

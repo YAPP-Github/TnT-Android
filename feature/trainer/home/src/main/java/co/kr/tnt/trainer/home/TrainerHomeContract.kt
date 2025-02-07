@@ -9,6 +9,7 @@ import java.time.YearMonth
 internal class TrainerHomeContract {
     data class TrainerHomeUiState(
         val selectedDay: LocalDate = LocalDate.now(),
+        val dailyPtSessionCount: Map<LocalDate, Int> = mapOf(),
     ) : UiState
 
     sealed interface TrainerHomeUiEvent : UiEvent {
@@ -19,5 +20,6 @@ internal class TrainerHomeContract {
 
     sealed interface TrainerHomeSideEffect : UiSideEffect {
         data object NavigateToNotification : TrainerHomeSideEffect
+        data class ShowToast(val message: String) : TrainerHomeSideEffect
     }
 }
