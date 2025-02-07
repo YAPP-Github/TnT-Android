@@ -23,7 +23,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.designsystem.component.button.TnTTextButton
+import co.kr.tnt.designsystem.component.button.model.ButtonSize
+import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.trainee.connect.model.InputState
@@ -84,7 +88,7 @@ fun CodeTextField(
                             codeState = UNFOCUSED
                         }
                     }
-                    .padding(8.dp),
+                    .padding(horizontal = 8.dp),
                 decorationBox = { innerTextField ->
                     if (value.isEmpty()) {
                         Text(
@@ -102,8 +106,7 @@ fun CodeTextField(
             Box(
                 modifier = Modifier
                     .wrapContentSize(Alignment.Center)
-                    .align(Alignment.CenterVertically)
-                    .padding(vertical = 4.dp),
+                    .align(Alignment.CenterVertically),
                 content = trailingComponent,
             )
         }
@@ -127,5 +130,30 @@ fun CodeTextField(
                 modifier = Modifier.padding(top = 6.dp),
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CodeTextFieldPreview() {
+    TnTTheme {
+        var text by remember { mutableStateOf("") }
+        val isValid = if (text.length == 8) VALID else INVALID
+
+        CodeTextField(
+            value = text,
+            onValueChange = {
+                text = it
+            },
+            isCodeValid = isValid,
+            trailingComponent = {
+                TnTTextButton(
+                    text = "인증하기",
+                    onClick = {},
+                    type = ButtonType.Primary,
+                    size = ButtonSize.Small,
+                )
+            },
+        )
     }
 }

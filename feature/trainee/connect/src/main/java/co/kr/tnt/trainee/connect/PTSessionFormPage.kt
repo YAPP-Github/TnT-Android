@@ -18,11 +18,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,8 +31,6 @@ import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
-import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
-import co.kr.tnt.trainee.connect.model.PTSessionFormData
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -47,16 +40,19 @@ private const val MAX_COUNT = 99
 
 @Composable
 internal fun PTSessionFormPage(
-    state: TraineeConnectUiState,
-    onNextClick: (PTSessionFormData) -> Unit,
+    trainerName: String,
+    sessionStartDate: LocalDate?,
+    completedSessionCount: String,
+    totalSessionCount: String,
+    onChangeSessionStartDate: (date: LocalDate) -> Unit,
+    onChangeCompletedSessionCount: (count: String) -> Unit,
+    onChangeTotalSessionCount: (count: String) -> Unit,
+    onNextClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
 
     val today = LocalDate.now()
-    var completedSession by remember { mutableStateOf("") }
-    var totalSession by remember { mutableStateOf("") }
-    var selectedStartDate by remember { mutableStateOf<LocalDate?>(null) }
 
     /**
      * 모든 입력 값의 유효성을 확인
@@ -64,15 +60,14 @@ internal fun PTSessionFormPage(
      * 1. 모든 항목(완료된 회차, 총 등록 회차, 시작일)이 입력되어야 한다
      * 2. 완료된 회차가 총 등록 회차보다 크지 않아야 한다
      */
-    val isFormValid by remember {
-        derivedStateOf {
-            completedSession.isNotEmpty() && totalSession.isNotEmpty() && selectedStartDate != null &&
-                (completedSession.toIntOrNull() ?: 0) < (totalSession.toIntOrNull() ?: 0)
-        }
-    }
+    val isFormValid = completedSessionCount.isNotEmpty() &&
+        totalSessionCount.isNotEmpty() && sessionStartDate != null &&
+        (completedSessionCount.toIntOrNull() ?: 0) < (totalSessionCount.toIntOrNull() ?: 0)
+
+    val showWarning = completedSessionCount.isNotEmpty() && totalSessionCount.isNotEmpty() &&
+        (completedSessionCount.toIntOrNull() ?: 0) >= (totalSessionCount.toIntOrNull() ?: 0)
 
     Scaffold(
-        // TODO 버튼 클릭 시 코드 입력 화면으로 이동
         topBar = {
             TnTTopBarWithBackButton(
                 title = stringResource(R.string.add_pt_info),
@@ -92,7 +87,7 @@ internal fun PTSessionFormPage(
                 Text(
                     text = stringResource(
                         R.string.since_when_with_trainer,
-                        state.trainerState.name,
+                        trainerName,
                     ),
                     color = TnTTheme.colors.neutralColors.Neutral950,
                     style = TnTTheme.typography.h2,
@@ -115,8 +110,8 @@ internal fun PTSessionFormPage(
                 DatePicker(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     today = today,
-                    selectedDate = selectedStartDate,
-                    onDateSelected = { selectedStartDate = it },
+                    selectedDate = sessionStartDate,
+                    onDateSelected = onChangeSessionStartDate,
                 )
                 HorizontalDivider(
                     thickness = 1.dp,
@@ -131,62 +126,73 @@ internal fun PTSessionFormPage(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
                 ) {
-                    TnTLabeledTextField(
-                        title = stringResource(R.string.completed_session_until_now),
-                        value = completedSession,
-                        placeholder = "0",
-                        isSingleLine = true,
-                        isRequired = true,
-                        keyboardType = KeyboardType.Number,
-                        trailingComponent = {
-                            UnitLabel(R.string.count_unit)
-                        },
-                        onValueChange = { newValue ->
-                            if (validateInput(newValue)) {
-                                completedSession = newValue
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        TnTLabeledTextField(
+                            title = stringResource(R.string.completed_session_until_now),
+                            value = completedSessionCount,
+                            placeholder = "0",
+                            isSingleLine = true,
+                            isRequired = true,
+                            keyboardType = KeyboardType.Number,
+                            showWarning = showWarning,
+                            trailingComponent = {
+                                UnitLabel(R.string.count_unit)
+                            },
+                            onValueChange = { newValue ->
+                                if (validateInput(newValue)) {
+                                    onChangeCompletedSessionCount(newValue)
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Text(
+                            text = if (showWarning) stringResource(uiResource.string.entered_wrong_text) else "",
+                            style = TnTTheme.typography.body2Medium,
+                            color = TnTTheme.colors.redColors.Red500,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
                     Text(
                         text = "/",
                         color = TnTTheme.colors.neutralColors.Neutral600,
                         style = TnTTheme.typography.body1Medium,
                         modifier = Modifier
                             .padding(8.dp)
-                            .align(Alignment.Bottom),
+                            .align(Alignment.CenterVertically),
                     )
-                    TnTLabeledTextField(
-                        title = stringResource(R.string.total_register_session),
-                        value = totalSession,
-                        placeholder = "0",
-                        isSingleLine = true,
-                        isRequired = true,
-                        keyboardType = KeyboardType.Number,
-                        trailingComponent = {
-                            UnitLabel(R.string.count_unit)
-                        },
-                        onValueChange = { newValue ->
-                            if (validateInput(newValue)) {
-                                totalSession = newValue
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        TnTLabeledTextField(
+                            title = stringResource(R.string.total_register_session),
+                            value = totalSessionCount,
+                            placeholder = "0",
+                            isSingleLine = true,
+                            isRequired = true,
+                            keyboardType = KeyboardType.Number,
+                            showWarning = showWarning,
+                            trailingComponent = {
+                                UnitLabel(R.string.count_unit)
+                            },
+                            onValueChange = { newValue ->
+                                if (validateInput(newValue)) {
+                                    onChangeTotalSessionCount(newValue)
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Text(
+                            text = if (showWarning) stringResource(uiResource.string.entered_wrong_text) else "",
+                            style = TnTTheme.typography.body2Medium,
+                            color = TnTTheme.colors.redColors.Red500,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
                 }
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
-                onClick = {
-                    val formData = PTSessionFormData(
-                        completedSession = completedSession.toInt(),
-                        totalSession = totalSession.toInt(),
-                        selectedStartDate = selectedStartDate ?: LocalDate.now(),
-                    )
-                    onNextClick(formData)
-                },
+                onClick = onNextClick,
             )
         }
     }
@@ -260,14 +266,20 @@ private fun validateInput(input: String): Boolean {
     return input.isEmpty() || (input.toIntOrNull() != null && !input.startsWith("0") && input.toInt() <= MAX_COUNT)
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun PTSessionFormPagePreview() {
     TnTTheme {
         PTSessionFormPage(
-            onNextClick = {},
-            onBackClick = {},
-            state = TraineeConnectUiState(),
+            trainerName = "김헬짱",
+            sessionStartDate = LocalDate.now(),
+            completedSessionCount = "15",
+            totalSessionCount = "10",
+            onNextClick = { },
+            onBackClick = { },
+            onChangeSessionStartDate = { },
+            onChangeCompletedSessionCount = { },
+            onChangeTotalSessionCount = { },
         )
     }
 }

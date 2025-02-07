@@ -7,32 +7,35 @@ import co.kr.tnt.ui.base.UiState
 
 internal class TrainerConnectContract {
     data class TrainerConnectUiState(
-        val page: TrainerConnectPage = TrainerConnectPage.CodeGeneration,
-        val inviteCode: String = "",
+        val page: TrainerConnectPage = TrainerConnectPage.TrainerConnectComplete,
         val trainerState: User.Trainer = User.Trainer.EMPTY,
         val traineeState: User.Trainee = User.Trainee.EMPTY,
     ) : UiState
 
     sealed interface TrainerConnectUiEvent : UiEvent {
-        data object OnRegenerateClick : TrainerConnectUiEvent
+        data class OnFetchInitialData(
+            val trainerId: String,
+            val traineeId: String,
+        ) : TrainerConnectUiEvent
         data object OnNextClick : TrainerConnectUiEvent
         data object OnBackClick : TrainerConnectUiEvent
-        data object OnSkipClick : TrainerConnectUiEvent
     }
 
     sealed interface TrainerConnectSideEffect : UiSideEffect {
         data object NavigateToBack : TrainerConnectSideEffect
         data object NavigateToHome : TrainerConnectSideEffect
+        data class ShowToast(val message: String) : TrainerConnectSideEffect
     }
 
     enum class TrainerConnectPage {
-        CodeGeneration,
-
         TrainerConnectComplete,
         TraineeProfile,
         ;
 
         companion object {
+            val firstPage = TrainerConnectComplete
+            val lastPage = TraineeProfile
+
             fun getPreviousPage(currentPage: TrainerConnectPage): TrainerConnectPage {
                 return when (currentPage) {
                     TraineeProfile -> TrainerConnectComplete

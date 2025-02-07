@@ -21,7 +21,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
-    private const val TIME_OUT_SECONDS: Long = 10
+    private const val CONNECT_TIMEOUT_SECONDS: Long = 10
+    private const val READ_WRITE_TIMEOUT_SECONDS: Long = 20
 
     @Provides
     @Singleton
@@ -43,8 +44,9 @@ internal object NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor,
         authenticator: Authenticator,
     ): OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(TIME_OUT_SECONDS, TimeUnit.SECONDS)
-        .readTimeout(TIME_OUT_SECONDS, TimeUnit.SECONDS)
+        .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .readTimeout(READ_WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .writeTimeout(READ_WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .addInterceptor(sessionInterceptor)
         .addInterceptor(loggingInterceptor)
         .authenticator(authenticator)

@@ -50,6 +50,7 @@ include(
 include(
     ":feature:trainer:signup",
     ":feature:trainer:connect",
+    ":feature:trainer:invite",
     ":feature:trainer:main",
     ":feature:trainer:home",
     ":feature:trainer:feedback",

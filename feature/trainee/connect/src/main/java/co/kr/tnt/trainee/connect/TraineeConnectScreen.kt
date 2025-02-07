@@ -1,15 +1,17 @@
 package co.kr.tnt.trainee.connect
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
-import co.kr.tnt.trainee.connect.model.PTSessionFormData
+import java.time.LocalDate
 
 @Composable
 internal fun TraineeConnectRoute(
@@ -18,22 +20,31 @@ internal fun TraineeConnectRoute(
     navigateToHome: (Boolean) -> Unit,
     viewModel: TraineeConnectViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     TraineeConnectScreen(
         state = state,
         isSkippable = isSkippable,
-        onFormNextClick = { formData ->
-            viewModel.setEvent(TraineeConnectUiEvent.UpdatePTSessionData(formData))
-        },
-        onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnBackClick) },
+        onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
         onNextClick = { viewModel.setEvent(TraineeConnectUiEvent.OnNextClick) },
         onSkipClick = { viewModel.setEvent(TraineeConnectUiEvent.OnSkipClick) },
-        onCodeChanged = { code ->
-            viewModel.setEvent(TraineeConnectUiEvent.OnCodeChanged(code))
+        onChangeInviteCode = { code ->
+            viewModel.setEvent(TraineeConnectUiEvent.OnChangeInviteCode(code))
         },
         onCodeValidationClick = { code ->
             viewModel.setEvent(TraineeConnectUiEvent.OnCodeValidateClick(code))
+        },
+        onCancelConnectClick = { viewModel.setEvent(TraineeConnectUiEvent.OnBackClick) },
+        onDismissPopUp = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
+        onChangeSessionStartDate = { date ->
+            viewModel.setEvent(TraineeConnectUiEvent.OnChangeSessionStartDate(date))
+        },
+        onChangeCompletedSessionCount = { count ->
+            viewModel.setEvent(TraineeConnectUiEvent.OnChangeCompletedSessionCount(count))
+        },
+        onChangeTotalSessionCount = { count ->
+            viewModel.setEvent(TraineeConnectUiEvent.OnChangeTotalSessionCount(count))
         },
     )
 
@@ -42,6 +53,9 @@ internal fun TraineeConnectRoute(
             when (effect) {
                 TraineeConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TraineeConnectSideEffect.NavigateToHome -> navigateToHome(false)
+                is TraineeConnectSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -51,38 +65,49 @@ internal fun TraineeConnectRoute(
 private fun TraineeConnectScreen(
     state: TraineeConnectUiState,
     isSkippable: Boolean,
-    onCodeValidationClick: (String) -> Unit,
-    onCodeChanged: (String) -> Unit,
-    onFormNextClick: (PTSessionFormData) -> Unit,
+    onChangeInviteCode: (code: String) -> Unit,
+    onCodeValidationClick: (code: String) -> Unit,
+    onCancelConnectClick: () -> Unit,
+    onDismissPopUp: () -> Unit,
+    onChangeSessionStartDate: (date: LocalDate) -> Unit,
+    onChangeCompletedSessionCount: (count: String) -> Unit,
+    onChangeTotalSessionCount: (count: String) -> Unit,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
     onSkipClick: () -> Unit,
 ) {
     when (state.page) {
         TraineeConnectPage.CodeEntry -> CodeEntryPage(
-            state = state,
+            showDialog = state.showDialog,
+            inputState = state.inviteCodeInputState,
+            inviteCode = state.inviteCode,
             isSkippable = isSkippable,
             onNextClick = onNextClick,
             onBackClick = onBackClick,
             onSkipClick = onSkipClick,
-            onCodeChanged = { code ->
-                onCodeChanged(code)
-            },
-            onValidateClick = { code ->
-                onCodeValidationClick(code)
-            },
+            onChangeInviteCode = onChangeInviteCode,
+            onValidateClick = onCodeValidationClick,
+            onCancelClick = onCancelConnectClick,
+            onDismissPopup = onDismissPopUp,
         )
 
         TraineeConnectPage.PTSessionForm -> PTSessionFormPage(
-            state = state,
-            onNextClick = { formData ->
-                onFormNextClick(formData)
-            },
+            trainerName = state.trainerName,
+            sessionStartDate = state.sessionStartDate,
+            completedSessionCount = state.completedSessionCount,
+            totalSessionCount = state.totalSessionCount,
+            onChangeSessionStartDate = onChangeSessionStartDate,
+            onChangeCompletedSessionCount = onChangeCompletedSessionCount,
+            onChangeTotalSessionCount = onChangeTotalSessionCount,
+            onNextClick = onNextClick,
             onBackClick = onBackClick,
         )
 
         TraineeConnectPage.TraineeConnectComplete -> TraineeConnectCompletePage(
-            state = state,
+            trainerName = state.trainerName,
+            trainerImage = state.trainerImage,
+            traineeName = state.traineeName,
+            traineeImage = state.traineeImage,
             onNextClick = onNextClick,
             onBackClick = onBackClick,
         )

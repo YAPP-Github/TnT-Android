@@ -25,16 +25,18 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.trainee.connect.R
-import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun TraineeConnectCompletePage(
-    state: TraineeConnectUiState,
+    trainerName: String,
+    trainerImage: String,
+    traineeName: String,
+    traineeImage: String,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
@@ -62,7 +64,7 @@ internal fun TraineeConnectCompletePage(
                     Text(
                         text = stringResource(
                             R.string.connected_with_trainer,
-                            state.trainerState.name,
+                            trainerName,
                         ),
                         color = TnTTheme.colors.commonColors.Common0,
                         style = TnTTheme.typography.h1,
@@ -74,11 +76,15 @@ internal fun TraineeConnectCompletePage(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         ProfileSection(
-                            profile = state.trainerState,
+                            type = UserType.TRAINER,
+                            name = trainerName,
+                            image = trainerImage,
                             modifier = Modifier.padding(end = 16.dp),
                         )
                         ProfileSection(
-                            profile = state.traineeState,
+                            type = UserType.TRAINEE,
+                            name = traineeName,
+                            image = traineeImage,
                         )
                     }
                     Image(
@@ -101,11 +107,13 @@ internal fun TraineeConnectCompletePage(
 
 @Composable
 private fun ProfileSection(
-    profile: User,
+    type: UserType,
+    name: String,
+    image: String,
     modifier: Modifier = Modifier,
 ) {
-    val painter = profile.image?.let { rememberAsyncImagePainter(it) }
-    val defaultImage = painterResource(DefaultUserProfile.fromDomain(profile).image)
+    val painter = rememberAsyncImagePainter(image)
+    val defaultImage = painterResource(DefaultUserProfile.fromDomain(type).image)
 
     Column(
         modifier = modifier,
@@ -119,7 +127,7 @@ private fun ProfileSection(
             showEditButton = false,
         )
         Text(
-            text = profile.name,
+            text = name,
             color = TnTTheme.colors.neutralColors.Neutral300,
             style = TnTTheme.typography.body2Medium,
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -132,7 +140,10 @@ private fun ProfileSection(
 private fun TraineeConnectCompletePagePreview() {
     TnTTheme {
         TraineeConnectCompletePage(
-            state = TraineeConnectUiState(),
+            trainerName = "",
+            trainerImage = "",
+            traineeName = "",
+            traineeImage = "",
             onNextClick = {},
             onBackClick = {},
         )

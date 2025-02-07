@@ -1,8 +1,10 @@
 package co.kr.tnt.trainer.connect
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectPage
@@ -12,30 +14,23 @@ import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 
 @Composable
 internal fun TrainerConnectRoute(
-    isSkippable: Boolean,
-    isCompleted: Boolean,
+    trainerId: String,
+    traineeId: String,
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerConnectViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        val startPage = if (isCompleted) {
-            TrainerConnectContract.TrainerConnectPage.TrainerConnectComplete
-        } else {
-            TrainerConnectContract.TrainerConnectPage.CodeGeneration
-        }
-        viewModel.setStartPage(startPage)
+    LaunchedEffect(trainerId) {
+        viewModel.setEvent(TrainerConnectUiEvent.OnFetchInitialData(trainerId, traineeId))
     }
 
     TrainerConnectScreen(
         state = state,
-        isSkippable = isSkippable,
-        onRegenerateClick = { viewModel.setEvent(TrainerConnectUiEvent.OnRegenerateClick) },
         onBackClick = { viewModel.setEvent(TrainerConnectUiEvent.OnBackClick) },
         onNextClick = { viewModel.setEvent(TrainerConnectUiEvent.OnNextClick) },
-        onSkipClick = { viewModel.setEvent(TrainerConnectUiEvent.OnSkipClick) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -43,6 +38,9 @@ internal fun TrainerConnectRoute(
             when (effect) {
                 TrainerConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerConnectSideEffect.NavigateToHome -> navigateToHome(true)
+                is TrainerConnectSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -51,21 +49,10 @@ internal fun TrainerConnectRoute(
 @Composable
 private fun TrainerConnectScreen(
     state: TrainerConnectUiState,
-    isSkippable: Boolean,
-    onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
-    onSkipClick: () -> Unit,
 ) {
     when (state.page) {
-        TrainerConnectPage.CodeGeneration -> CodeGenerationPage(
-            state = state,
-            isSkippable = isSkippable,
-            onRegenerateClick = onRegenerateClick,
-            onBackClick = onBackClick,
-            onSkipClick = onSkipClick,
-        )
-
         TrainerConnectPage.TrainerConnectComplete -> TrainerConnectCompletePage(
             state = state,
             onBackClick = onBackClick,

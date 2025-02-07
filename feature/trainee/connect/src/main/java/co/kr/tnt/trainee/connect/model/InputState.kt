@@ -5,4 +5,8 @@ enum class InputState {
     FOCUS,
     VALID,
     INVALID,
+    ;
+
+    val isValid: Boolean
+        get() = this == VALID
 }

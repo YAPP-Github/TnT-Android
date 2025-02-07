@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
@@ -22,20 +23,23 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
-import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiState
 import co.kr.tnt.trainee.connect.component.CodeTextField
-import co.kr.tnt.trainee.connect.model.InputState.VALID
+import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun CodeEntryPage(
-    state: TraineeConnectUiState,
+    showDialog: Boolean,
+    inviteCode: String,
+    inputState: InputState,
     isSkippable: Boolean,
     onSkipClick: () -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
-    onCodeChanged: (String) -> Unit,
-    onValidateClick: (String) -> Unit,
+    onChangeInviteCode: (code: String) -> Unit,
+    onValidateClick: (code: String) -> Unit,
+    onCancelClick: () -> Unit,
+    onDismissPopup: () -> Unit,
 ) {
     BackHandler {
         if (isSkippable) {
@@ -81,27 +85,39 @@ internal fun CodeEntryPage(
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 CodeTextField(
-                    value = state.inviteCode,
-                    onValueChange = { onCodeChanged(it) },
+                    value = inviteCode,
+                    onValueChange = onChangeInviteCode,
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    isCodeValid = state.isCodeValid,
+                    isCodeValid = inputState,
                     trailingComponent = {
                         TnTTextButton(
                             text = stringResource(R.string.verification),
                             size = ButtonSize.Small,
-                            enabled = state.inviteCode.isNotBlank(),
-                            onClick = { onValidateClick(state.inviteCode) },
+                            enabled = inviteCode.isNotBlank(),
+                            onClick = { onValidateClick(inviteCode) },
                         )
                     },
                 )
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
-                enabled = state.isCodeValid == VALID,
+                enabled = inputState.isValid,
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
+    }
+
+    if (showDialog) {
+        TnTIconPopupDialog(
+            title = stringResource(R.string.stop_connecting_trainer),
+            content = stringResource(R.string.warning_reconnect_needed),
+            leftButtonText = stringResource(R.string.action_cancel),
+            rightButtonText = stringResource(R.string.action_continue),
+            onLeftButtonClick = onCancelClick,
+            onRightButtonClick = onDismissPopup,
+            onDismiss = onDismissPopup,
+        )
     }
 }
 
@@ -110,13 +126,17 @@ internal fun CodeEntryPage(
 private fun CodeEntryPagePreview() {
     TnTTheme {
         CodeEntryPage(
+            showDialog = true,
+            inputState = InputState.FOCUS,
+            inviteCode = "23A4SDA31",
             isSkippable = false,
             onSkipClick = {},
             onNextClick = {},
-            state = TraineeConnectUiState(),
             onValidateClick = {},
-            onCodeChanged = {},
+            onChangeInviteCode = {},
             onBackClick = {},
+            onDismissPopup = {},
+            onCancelClick = {},
         )
     }
 }

@@ -51,7 +51,7 @@ internal fun TraineePTPurposePage(
                 ProgressSteps(
                     currentStep = 3,
                     totalSteps = 4,
-                    title = stringResource(R.string.purpose_of_pt),
+                    title = stringResource(R.string.tell_purpose_of_pt),
                     subTitle = stringResource(R.string.multiple_choices_available),
                 )
                 Spacer(Modifier.padding(top = 32.dp))

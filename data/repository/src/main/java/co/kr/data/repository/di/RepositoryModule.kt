@@ -1,7 +1,9 @@
 package co.kr.data.repository.di
 
+import co.kr.data.repository.ConnectRepositoryImpl
 import co.kr.data.repository.LoginRepositoryImpl
 import co.kr.data.repository.SignUpRepositoryImpl
+import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.domain.repository.LoginRepository
 import co.kr.tnt.domain.repository.SignUpRepository
 import dagger.Binds
@@ -21,4 +23,9 @@ internal abstract class RepositoryModule {
     abstract fun bindsSignUpRepository(
         repository: SignUpRepositoryImpl,
     ): SignUpRepository
+
+    @Binds
+    abstract fun bindConnectRepository(
+        repository: ConnectRepositoryImpl,
+    ): ConnectRepository
 }

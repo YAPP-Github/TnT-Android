@@ -31,7 +31,7 @@ import co.kr.tnt.core.ui.R as uiResource
 @Composable
 internal fun TrainerNotificationRoute(
     navigateToPrevious: () -> Unit,
-    navigateToConnect: () -> Unit,
+    navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
     viewModel: TrainerNotificationViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -47,7 +47,11 @@ internal fun TrainerNotificationRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TrainerNotificationEffect.NavigateToPrevious -> navigateToPrevious()
-                TrainerNotificationEffect.NavigateToConnect -> navigateToConnect()
+                TrainerNotificationEffect.NavigateToConnect -> navigateToConnect(
+                    uiState.trainerId,
+                    uiState.traineeId,
+                )
+
                 is TrainerNotificationEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
