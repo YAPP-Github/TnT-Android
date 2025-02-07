@@ -1,40 +1,34 @@
 package co.kr.tnt.trainee.home
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorWeekCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
+import co.kr.tnt.ui.component.TnTHomeTopBar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
-import co.kr.tnt.core.designsystem.R as uiResource
 
 @Composable
 internal fun TraineeHomeRoute(
@@ -46,12 +40,12 @@ internal fun TraineeHomeRoute(
 
     TraineeHomeScreen(
         state = uiState,
-        navigateToNotification = navigateToNotification,
+        onClickNotification = navigateToNotification,
         onSelectDate = { date ->
-            viewModel.setEvent(TraineeHomeUiEvent.OnDayClick(date))
+            viewModel.setEvent(TraineeHomeUiEvent.OnClickDay(date))
         },
-        onNextWeekClick = { viewModel.setEvent(TraineeHomeUiEvent.OnNextWeekClick) },
-        onPreviousWeekClick = { viewModel.setEvent(TraineeHomeUiEvent.OnPreviousWeekClick) },
+        onClickNextWeek = { viewModel.setEvent(TraineeHomeUiEvent.OnClickNextWeek) },
+        onClickPreviousWeek = { viewModel.setEvent(TraineeHomeUiEvent.OnClickPreviousWeek) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -69,17 +63,18 @@ internal fun TraineeHomeRoute(
 private fun TraineeHomeScreen(
     state: TraineeHomeUiState,
     onSelectDate: (LocalDate) -> Unit,
-    onNextWeekClick: () -> Unit,
-    onPreviousWeekClick: () -> Unit,
-    navigateToNotification: () -> Unit,
+    onClickNextWeek: () -> Unit,
+    onClickPreviousWeek: () -> Unit,
+    onClickNotification: () -> Unit,
 ) {
     val now = LocalDate.now()
     val coroutineScope = rememberCoroutineScope()
 
     val weekCalendarState = rememberWeekCalendarState(
+        firstDayOfWeek = DayOfWeek.SUNDAY,
+        firstVisibleWeekDate = state.selectedDate,
         startDate = now.minusWeeks(6),
         endDate = now.plusWeeks(6),
-        firstVisibleWeekDate = state.selectedDate,
     )
 
     Scaffold(
@@ -87,39 +82,22 @@ private fun TraineeHomeScreen(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 8.dp),
-            ) {
-                Spacer(Modifier.height(8.dp))
-                TnTCalendarSelector(
-                    yearMonth = state.visibleYearMonth,
-                    onClickPrevious = {
-                        coroutineScope.launch {
-                            onPreviousWeekClick()
-                            weekCalendarState.animateScrollToWeek(state.selectedDate)
-                        }
-                    },
-                    onClickNext = {
-                        coroutineScope.launch {
-                            onNextWeekClick()
-                            weekCalendarState.animateScrollToWeek(state.selectedDate)
-                        }
-                    },
-                    modifier = Modifier.align(Alignment.Center),
-                )
-                IconButton(
-                    onClick = navigateToNotification,
-                    modifier = Modifier.align(Alignment.CenterEnd),
-                ) {
-                    Icon(
-                        painter = painterResource(uiResource.drawable.ic_alarm),
-                        contentDescription = "alarm",
-                    )
-                }
-            }
+            TnTHomeTopBar(
+                yearMonth = state.visibleYearMonth,
+                onClickSelectorPrevious = {
+                    coroutineScope.launch {
+                        onClickPreviousWeek()
+                        weekCalendarState.animateScrollToWeek(state.selectedDate)
+                    }
+                },
+                onClickSelectorNext = {
+                    coroutineScope.launch {
+                        onClickNextWeek()
+                        weekCalendarState.animateScrollToWeek(state.selectedDate)
+                    }
+                },
+                onClickNotification = onClickNotification,
+            )
             Spacer(modifier = Modifier.height(16.dp))
             TnTIndicatorWeekCalendar(
                 state = weekCalendarState,
@@ -152,10 +130,10 @@ private fun TraineeHomeScreenPreview() {
     TnTTheme {
         TraineeHomeScreen(
             state = dummyUiState,
-            navigateToNotification = { },
+            onClickNotification = { },
             onSelectDate = {},
-            onNextWeekClick = { },
-            onPreviousWeekClick = { },
+            onClickNextWeek = { },
+            onClickPreviousWeek = { },
         )
     }
 }

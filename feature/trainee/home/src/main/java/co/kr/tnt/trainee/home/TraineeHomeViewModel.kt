@@ -20,9 +20,9 @@ internal class TraineeHomeViewModel @Inject constructor() :
 
         override suspend fun handleEvent(event: TraineeHomeUiEvent) {
             when (event) {
-                TraineeHomeUiEvent.OnNextWeekClick -> moveToNextWeek()
-                TraineeHomeUiEvent.OnPreviousWeekClick -> moveToPreviousWeek()
-                is TraineeHomeUiEvent.OnDayClick -> selectDate(event.date)
+                TraineeHomeUiEvent.OnClickNextWeek -> moveToNextWeek()
+                TraineeHomeUiEvent.OnClickPreviousWeek -> moveToPreviousWeek()
+                is TraineeHomeUiEvent.OnClickDay -> selectDate(event.date)
             }
         }
 

@@ -16,9 +16,9 @@ class TraineeHomeContract {
     ) : UiState
 
     sealed interface TraineeHomeUiEvent : UiEvent {
-        data object OnNextWeekClick : TraineeHomeUiEvent
-        data object OnPreviousWeekClick : TraineeHomeUiEvent
-        data class OnDayClick(val date: LocalDate) : TraineeHomeUiEvent
+        data object OnClickNextWeek : TraineeHomeUiEvent
+        data object OnClickPreviousWeek : TraineeHomeUiEvent
+        data class OnClickDay(val date: LocalDate) : TraineeHomeUiEvent
     }
 
     sealed interface TraineeHomeEffect : UiSideEffect {
