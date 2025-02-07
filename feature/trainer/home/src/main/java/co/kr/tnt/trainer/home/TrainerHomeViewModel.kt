@@ -8,7 +8,10 @@ import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import java.time.YearMonth
 import javax.inject.Inject
 
@@ -19,6 +22,8 @@ internal class TrainerHomeViewModel @Inject constructor(
     BaseViewModel<TrainerHomeUiState, TrainerHomeUiEvent, TrainerHomeSideEffect>(
             TrainerHomeUiState(),
         ) {
+        private val cachedMonthlyPtSessionCounts: MutableMap<YearMonth, List<DailyPtSessionCount>> = mutableMapOf()
+
         override suspend fun handleEvent(event: TrainerHomeUiEvent) {
             when (event) {
                 TrainerHomeUiEvent.OnClickNotification -> sendEffect(TrainerHomeSideEffect.NavigateToNotification)
@@ -28,12 +33,29 @@ internal class TrainerHomeViewModel @Inject constructor(
         }
 
         private fun handleChangeVisibleMonth(yearMonth: YearMonth) {
+            // 현재 달을 기준으로 2개월 전부터 2개월 후까지의 데이터를 한 번에 요청합니다.
+            val targetRange = -2L..2L
+
             viewModelScope.launch {
-                runCatching { trainerRepository.getMonthlyPtSessionCounts(yearMonth) }
-                    .onSuccess(::updateMonthlyPtSessionCounts)
-                    .onFailure {
+                supervisorScope {
+                    runCatching {
+                        val results = targetRange.map { operationValue ->
+                            async {
+                                val targetMonth = yearMonth.plusMonths(operationValue)
+
+                                cachedMonthlyPtSessionCounts.getOrElse(targetMonth) {
+                                    trainerRepository.getMonthlyPtSessionCounts(targetMonth).also {
+                                        cachedMonthlyPtSessionCounts[targetMonth] = it
+                                    }
+                                }
+                            }
+                        }.awaitAll()
+
+                        results.forEach(::updateMonthlyPtSessionCounts)
+                    }.onFailure {
                         sendEffect(TrainerHomeSideEffect.ShowToast("알 수 없는 오류가 발생하였습니다."))
                     }
+                }
             }
         }
 
