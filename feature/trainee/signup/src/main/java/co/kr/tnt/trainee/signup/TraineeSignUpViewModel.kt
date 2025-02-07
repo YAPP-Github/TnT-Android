@@ -11,7 +11,7 @@ import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpPage
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiEvent
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.ui.base.BaseViewModel
-import co.kr.tnt.ui.util.toFile
+import co.kr.tnt.ui.utils.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
