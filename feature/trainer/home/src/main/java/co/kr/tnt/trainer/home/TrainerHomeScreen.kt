@@ -72,23 +72,23 @@ private fun TrainerHomeScreen(
         endMonth = now.plusYears(10),
     )
     val coroutineScope = rememberCoroutineScope()
-    val visibleYearMonth = rememberMostVisibleMonth(calendarState)
+    val visibleMonth = rememberMostVisibleMonth(calendarState)
 
     Scaffold(
         topBar = {
             Column {
                 Spacer(modifier = Modifier.height(12.dp))
                 TnTHomeTopBar(
-                    yearMonth = visibleYearMonth,
+                    yearMonth = visibleMonth,
                     onClickNotification = onClickNotification,
                     onClickSelectorPrevious = {
                         coroutineScope.launch {
-                            calendarState.animateScrollToMonth(visibleYearMonth.minusMonths(1))
+                            calendarState.animateScrollToMonth(visibleMonth.minusMonths(1))
                         }
                     },
                     onClickSelectorNext = {
                         coroutineScope.launch {
-                            calendarState.animateScrollToMonth(visibleYearMonth.plusMonths(1))
+                            calendarState.animateScrollToMonth(visibleMonth.plusMonths(1))
                         }
                     },
                 )
@@ -116,8 +116,7 @@ private fun TrainerHomeScreen(
         }
     }
 
-    LaunchedEffect(calendarState.firstVisibleMonth) {
-        val currentCalendarYearMonth = calendarState.firstVisibleMonth.yearMonth
-        onChangeVisibleMonth(currentCalendarYearMonth)
+    LaunchedEffect(visibleMonth) {
+        onChangeVisibleMonth(visibleMonth)
     }
 }
