@@ -17,8 +17,10 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class SignUpRepositoryImpl @Inject constructor(
+@Singleton
+internal class SignUpRepositoryImpl @Inject constructor(
     private val signupRemoteDataSource: SignUpRemoteDataSource,
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val json: Json,
