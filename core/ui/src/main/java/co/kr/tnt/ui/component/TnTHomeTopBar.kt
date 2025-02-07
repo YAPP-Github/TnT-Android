@@ -28,7 +28,7 @@ fun TnTHomeTopBar(
     onClickSelectorPrevious: () -> Unit = { },
     onClickSelectorNext: () -> Unit = { },
     onClickNotification: () -> Unit = { },
-    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    windowInsets: WindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
 ) {
     Column {
         CenterAlignedTopAppBar(
