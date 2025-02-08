@@ -5,11 +5,9 @@ import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
 import java.time.LocalDate
-import java.time.YearMonth
 
 class TraineeHomeContract {
     data class TraineeHomeUiState(
-        val visibleYearMonth: YearMonth = YearMonth.now(),
         val selectedDate: LocalDate = LocalDate.now(),
         val markedDates: List<LocalDate> = emptyList(),
         val recordList: List<RecordList> = emptyList(),

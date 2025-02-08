@@ -6,7 +6,6 @@ import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
-import java.time.YearMonth
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,12 +35,7 @@ internal class TraineeHomeViewModel @Inject constructor() :
         }
 
         private fun selectDate(date: LocalDate) {
-            updateState {
-                copy(
-                    selectedDate = date,
-                    visibleYearMonth = YearMonth.from(date),
-                )
-            }
+            updateState { copy(selectedDate = date) }
         }
 
         private fun moveToNextWeek() {

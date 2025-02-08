@@ -20,6 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorWeekCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
 import co.kr.tnt.designsystem.component.calendar.model.DayState
+import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleYearMonth
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
@@ -28,7 +29,6 @@ import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.YearMonth
 
 @Composable
 internal fun TraineeHomeRoute(
@@ -77,6 +77,8 @@ private fun TraineeHomeScreen(
         endDate = now.plusYears(10),
     )
 
+    val visibleYearMonth = rememberMostVisibleYearMonth(weekCalendarState)
+
     Scaffold(
         containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.fillMaxSize(),
@@ -85,7 +87,7 @@ private fun TraineeHomeScreen(
             item {
                 Spacer(modifier = Modifier.height(12.dp))
                 TnTHomeTopBar(
-                    yearMonth = state.visibleYearMonth,
+                    yearMonth = visibleYearMonth,
                     onClickSelectorPrevious = {
                         coroutineScope.launch {
                             onClickPreviousWeek()
@@ -126,7 +128,6 @@ private fun TraineeHomeScreenPreview() {
 
     val dummyUiState = TraineeHomeUiState(
         selectedDate = now,
-        visibleYearMonth = YearMonth.from(now),
         markedDates = List(5) { now.minusDays(it.toLong() * 2) },
     )
 
