@@ -21,8 +21,6 @@ internal class TraineeHomeViewModel @Inject constructor(
     override suspend fun handleEvent(event: TraineeHomeUiEvent) {
         when (event) {
             is TraineeHomeUiEvent.OnChangeVisibleMonth -> updateCalenderState(event.yearMonth)
-            TraineeHomeUiEvent.OnClickNextWeek -> moveToNextWeek()
-            TraineeHomeUiEvent.OnClickPreviousWeek -> moveToPreviousWeek()
             is TraineeHomeUiEvent.OnClickDay -> selectDate(event.date)
             is TraineeHomeUiEvent.OnClickPtSessionCard -> checkSessionRecord(event.ptSessionId)
         }
@@ -53,13 +51,5 @@ internal class TraineeHomeViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    private fun moveToNextWeek() {
-        selectDate(currentState.selectedDay.plusWeeks(1))
-    }
-
-    private fun moveToPreviousWeek() {
-        selectDate(currentState.selectedDay.minusWeeks(1))
     }
 }

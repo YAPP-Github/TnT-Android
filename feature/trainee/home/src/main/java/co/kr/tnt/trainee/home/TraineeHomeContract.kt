@@ -18,8 +18,6 @@ class TraineeHomeContract {
 
     sealed interface TraineeHomeUiEvent : UiEvent {
         data class OnChangeVisibleMonth(val yearMonth: YearMonth) : TraineeHomeUiEvent
-        data object OnClickNextWeek : TraineeHomeUiEvent
-        data object OnClickPreviousWeek : TraineeHomeUiEvent
         data class OnClickPtSessionCard(val ptSessionId: String) : TraineeHomeUiEvent
         data class OnClickDay(val date: LocalDate) : TraineeHomeUiEvent
     }

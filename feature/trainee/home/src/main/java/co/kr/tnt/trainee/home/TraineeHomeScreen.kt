@@ -74,8 +74,6 @@ internal fun TraineeHomeRoute(
         onClickDay = { day ->
             viewModel.setEvent(TraineeHomeUiEvent.OnClickDay(day))
         },
-        onClickNextWeek = { viewModel.setEvent(TraineeHomeUiEvent.OnClickNextWeek) },
-        onClickPreviousWeek = { viewModel.setEvent(TraineeHomeUiEvent.OnClickPreviousWeek) },
         onClickPtSessionCard = { id ->
             viewModel.setEvent(TraineeHomeUiEvent.OnClickPtSessionCard(id))
         },
@@ -98,8 +96,6 @@ private fun TraineeHomeScreen(
     onClickNotification: () -> Unit,
     onChangeVisibleMonth: (YearMonth) -> Unit,
     onClickDay: (LocalDate) -> Unit,
-    onClickNextWeek: () -> Unit,
-    onClickPreviousWeek: () -> Unit,
     onClickPtSessionCard: (String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -110,7 +106,7 @@ private fun TraineeHomeScreen(
         startDate = state.selectedDay.minusYears(10),
         endDate = state.selectedDay.plusYears(10),
     )
-    val visibleYearMonth = rememberMostVisibleYearMonth(weekCalendarState)
+    var visibleYearMonth = rememberMostVisibleYearMonth(weekCalendarState)
 
     LazyColumn(
         modifier = Modifier
@@ -128,14 +124,16 @@ private fun TraineeHomeScreen(
                     yearMonth = visibleYearMonth,
                     onClickSelectorPrevious = {
                         coroutineScope.launch {
-                            onClickPreviousWeek()
-                            weekCalendarState.animateScrollToWeek(state.selectedDay)
+                            val previousWeek = weekCalendarState.firstVisibleWeek.days.first().date.minusWeeks(1)
+                            visibleYearMonth = YearMonth.from(previousWeek)
+                            weekCalendarState.animateScrollToWeek(previousWeek)
                         }
                     },
                     onClickSelectorNext = {
                         coroutineScope.launch {
-                            onClickNextWeek()
-                            weekCalendarState.animateScrollToWeek(state.selectedDay)
+                            val nextWeek = weekCalendarState.firstVisibleWeek.days.first().date.plusWeeks(1)
+                            visibleYearMonth = YearMonth.from(nextWeek)
+                            weekCalendarState.animateScrollToWeek(nextWeek)
                         }
                     },
                     onClickNotification = onClickNotification,
@@ -368,8 +366,6 @@ private fun TraineeHomeScreenPreview() {
             state = dummyUiState,
             onClickNotification = { },
             onClickDay = { },
-            onClickNextWeek = { },
-            onClickPreviousWeek = { },
             onClickPtSessionCard = { },
             onChangeVisibleMonth = { },
         )
