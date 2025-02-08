@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -109,6 +110,9 @@ private fun TraineeHomeScreen(
     val filteredPTLesson = state.ptLessons.filter { it.date == state.selectedDate }
     val filteredRecord = state.recordList.filter { it.recordDate == state.selectedDate }
 
+    val markedDates: Set<LocalDate> =
+        (state.ptLessons.map { it.date } + state.recordList.map { it.recordDate }).toSet()
+
     Scaffold(
         containerColor = TnTTheme.colors.neutralColors.Neutral100,
         modifier = Modifier.fillMaxSize(),
@@ -144,7 +148,7 @@ private fun TraineeHomeScreen(
                             DayState(isSelected = date == state.selectedDate)
                         },
                         indicatorState = { date ->
-                            DayIndicatorState(showIcon = date in state.markedDates)
+                            DayIndicatorState(showIcon = date in markedDates)
                         },
                         onClickDay = { date ->
                             onSelectDate(date)
@@ -168,7 +172,11 @@ private fun TraineeHomeScreen(
                                 showSessionRecordCreation = false,
                                 showSessionRecordDetails = lesson.hasRecord,
                                 onClick = { onClickPtSessionCard(lesson.ptLessonId) },
-                                modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp),
+                                modifier = Modifier.padding(
+                                    start = 20.dp,
+                                    end = 20.dp,
+                                    bottom = 16.dp,
+                                ),
                             )
                         }
                     } else {
@@ -189,7 +197,9 @@ private fun TraineeHomeScreen(
                         }
                     }
                 }
-                // Record
+            }
+            // Record
+            item {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -202,24 +212,25 @@ private fun TraineeHomeScreen(
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
-                if (filteredRecord.isNotEmpty()) {
-                    filteredRecord.forEach { lesson ->
-                        val chip = RecordChip.create(lesson.recordType)
-                        TnTRecordCard(
-                            style = chip.chipStyle,
-                            record = lesson.recordContents,
-                            tagText = chip.title,
-                            time = formatTime(lesson.recordTime),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            image = lesson.recordImage?.let { rememberAsyncImagePainter(lesson.recordImage) },
-                            leadingEmoji = chip.emoji,
-                            feedbackCount = if (lesson.feedbackCount == 0) null else lesson.feedbackCount,
-                        )
-                        Spacer(Modifier.height(12.dp))
-                    }
-                } else {
+            }
+            items(filteredRecord) { record ->
+                val chip = RecordChip.create(record.recordType)
+                TnTRecordCard(
+                    style = chip.chipStyle,
+                    record = record.recordContents,
+                    tagText = chip.title,
+                    time = formatTime(record.recordTime),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    image = record.recordImage?.let { rememberAsyncImagePainter(it) },
+                    leadingEmoji = chip.emoji,
+                    feedbackCount = if (record.feedbackCount == 0) null else record.feedbackCount,
+                )
+                Spacer(Modifier.height(12.dp))
+            }
+            if (filteredRecord.isEmpty()) {
+                item {
                     Spacer(Modifier.height(80.dp))
                     Text(
                         text = stringResource(R.string.no_record_now),
@@ -236,9 +247,10 @@ private fun TraineeHomeScreen(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                     )
+                    Spacer(Modifier.height(100.dp))
                 }
-                Spacer(Modifier.height(100.dp))
             }
+            item { Spacer(Modifier.height(100.dp)) }
         }
     }
 }
@@ -275,7 +287,6 @@ private fun TraineeHomeScreenPreview() {
 
     val dummyUiState = TraineeHomeUiState(
         selectedDate = now,
-        markedDates = List(5) { now.minusDays(it.toLong() * 2) },
         recordList = listOf(
             TraineeHomeData.Record(
                 recordId = "VDF1D907",

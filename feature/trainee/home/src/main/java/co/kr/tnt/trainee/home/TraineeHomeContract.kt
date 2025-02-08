@@ -9,7 +9,6 @@ import java.time.LocalDate
 class TraineeHomeContract {
     data class TraineeHomeUiState(
         val selectedDate: LocalDate = LocalDate.now(),
-        val markedDates: List<LocalDate> = emptyList(),
         val ptLessons: List<TraineeHomeData.PTLesson> = emptyList(),
         val recordList: List<TraineeHomeData.Record> = emptyList(),
     ) : UiState

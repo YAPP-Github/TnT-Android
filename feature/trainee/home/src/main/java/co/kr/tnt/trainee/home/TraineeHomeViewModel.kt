@@ -30,11 +30,6 @@ internal class TraineeHomeViewModel @Inject constructor() :
 
         // TODO : 주간 캘린더 API 연동
         private fun updateCalenderState() {
-            val today = LocalDate.now()
-            val list = List(10) {
-                today.minusDays((0..30).random().toLong())
-            }
-
             // TODO : recordType -> RecordType 변환
             val recordList = listOf(
                 TraineeHomeData.Record(
@@ -126,7 +121,7 @@ internal class TraineeHomeViewModel @Inject constructor() :
                     hasRecord = true,
                 ),
             )
-            updateState { copy(markedDates = list, recordList = recordList, ptLessons = ptLessons) }
+            updateState { copy(recordList = recordList, ptLessons = ptLessons) }
         }
 
         private fun checkSessionRecord(ptSessionId: String) {
