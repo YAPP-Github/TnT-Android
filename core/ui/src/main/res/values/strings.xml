@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    permanentlyTitle
     <string name="alarm_permission_title">TnT에서 알림을 보내고자 합니다.</string>
     <string name="alarm_permission_description">해당 기기로 수업 일정 등 서비스 이용에 도움이 되는 안내 사항을 푸시 알림으로 보내드리겠습니다.
         \n앱 푸시 알림에 수신 동의 하시겠습니까?</string>
