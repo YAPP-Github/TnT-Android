@@ -60,6 +60,7 @@ private fun TraineeMainScreen(
     navigateToWebView: (url: String) -> Unit,
 ) {
     Scaffold(
+        containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             TraineeMainBottomBar(
@@ -78,8 +79,9 @@ private fun TraineeMainScreen(
                 },
             )
         },
-    ) { _ ->
+    ) { innerPadding ->
         NavHost(
+            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = Route.TraineeMainTab.Home,
         ) {

@@ -183,7 +183,7 @@ private fun TraineeHomeScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .height(150.dp)
+                    .height(100.dp)
                     .background(TnTTheme.colors.neutralColors.Neutral100),
             )
         }
