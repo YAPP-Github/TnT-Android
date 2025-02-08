@@ -1,11 +1,11 @@
 package co.kr.tnt.trainee.home
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -73,45 +73,48 @@ private fun TraineeHomeScreen(
     val weekCalendarState = rememberWeekCalendarState(
         firstDayOfWeek = DayOfWeek.SUNDAY,
         firstVisibleWeekDate = state.selectedDate,
-        startDate = now.minusWeeks(6),
-        endDate = now.plusWeeks(6),
+        startDate = now.minusYears(10),
+        endDate = now.plusYears(10),
     )
 
     Scaffold(
         containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            TnTHomeTopBar(
-                yearMonth = state.visibleYearMonth,
-                onClickSelectorPrevious = {
-                    coroutineScope.launch {
-                        onClickPreviousWeek()
-                        weekCalendarState.animateScrollToWeek(state.selectedDate)
-                    }
-                },
-                onClickSelectorNext = {
-                    coroutineScope.launch {
-                        onClickNextWeek()
-                        weekCalendarState.animateScrollToWeek(state.selectedDate)
-                    }
-                },
-                onClickNotification = onClickNotification,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            TnTIndicatorWeekCalendar(
-                state = weekCalendarState,
-                dayState = { date ->
-                    DayState(isSelected = date == state.selectedDate)
-                },
-                indicatorState = { date ->
-                    DayIndicatorState(showIcon = date in state.markedDates)
-                },
-                onClickDay = { date ->
-                    onSelectDate(date)
-                },
-            )
-            Spacer(modifier = Modifier.height(12.dp))
+        LazyColumn(modifier = Modifier.padding(innerPadding)) {
+            item {
+                Spacer(modifier = Modifier.height(12.dp))
+                TnTHomeTopBar(
+                    yearMonth = state.visibleYearMonth,
+                    onClickSelectorPrevious = {
+                        coroutineScope.launch {
+                            onClickPreviousWeek()
+                            weekCalendarState.animateScrollToWeek(state.selectedDate)
+                        }
+                    },
+                    onClickSelectorNext = {
+                        coroutineScope.launch {
+                            onClickNextWeek()
+                            weekCalendarState.animateScrollToWeek(state.selectedDate)
+                        }
+                    },
+                    onClickNotification = onClickNotification,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                TnTIndicatorWeekCalendar(
+                    state = weekCalendarState,
+                    dayState = { date ->
+                        DayState(isSelected = date == state.selectedDate)
+                    },
+                    indicatorState = { date ->
+                        DayIndicatorState(showIcon = date in state.markedDates)
+                    },
+                    onClickDay = { date ->
+                        onSelectDate(date)
+                    },
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
     }
 }
