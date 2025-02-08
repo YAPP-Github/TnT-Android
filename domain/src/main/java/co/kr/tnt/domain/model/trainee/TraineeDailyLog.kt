@@ -6,7 +6,7 @@ import java.time.LocalDate
 data class TraineeDailyLog(
     val date: LocalDate,
     val ptSession: PtSession?,
-    val record: List<DailyRecord>?,
+    val record: List<DailyRecord>,
 )
 
 data class PtSession(

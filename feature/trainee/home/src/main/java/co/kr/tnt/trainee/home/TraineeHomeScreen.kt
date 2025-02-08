@@ -170,10 +170,8 @@ private fun TraineeHomeScreen(
                 )
             }
         }
-        if (state.recordList.isNullOrEmpty()) {
-            item {
-                EmptyDailyRecords()
-            }
+        if (state.recordList.isEmpty()) {
+            item { EmptyDailyRecords() }
         } else {
             items(state.recordList) { record ->
                 DailyRecords(record)

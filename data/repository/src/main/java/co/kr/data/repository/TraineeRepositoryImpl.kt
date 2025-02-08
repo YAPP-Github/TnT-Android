@@ -131,7 +131,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     endTime = "2025-02-10T15:30:00.000Z",
                     hasRecord = false,
                 ),
-                record = null,
+                record = emptyList(),
             ),
             TraineeDailyLog(
                 date = LocalDate.of(2025, 2, 23),
@@ -144,7 +144,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     endTime = "2025-02-23T06:50:00.000Z",
                     hasRecord = true,
                 ),
-                record = null,
+                record = emptyList(),
             ),
         )
 
@@ -152,7 +152,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
         val noData = TraineeDailyLog(
             date = day,
             ptSession = null,
-            record = null,
+            record = emptyList(),
         )
 
         return filteredRecord ?: noData

@@ -13,7 +13,7 @@ class TraineeHomeContract {
         val selectedDay: LocalDate = LocalDate.now(),
         val dailyDataState: List<LocalDate> = emptyList(),
         val ptSessions: PtSession? = null,
-        val recordList: List<DailyRecord>? = emptyList(),
+        val recordList: List<DailyRecord> = emptyList(),
     ) : UiState
 
     sealed interface TraineeHomeUiEvent : UiEvent {
