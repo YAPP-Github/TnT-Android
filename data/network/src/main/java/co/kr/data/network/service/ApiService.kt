@@ -9,6 +9,7 @@ import co.kr.data.network.model.LoginRequest
 import co.kr.data.network.model.LoginResponse
 import co.kr.data.network.model.SignUpResponse
 import co.kr.data.network.model.VerifyCodeResponse
+import co.kr.data.network.model.trainer.DailyPtSessionsResponse
 import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
 import co.kr.data.network.util.WithoutSessionCheckPath.CHECK_SESSION_PATH
 import okhttp3.MultipartBody
@@ -68,4 +69,9 @@ interface ApiService {
         @Query("year") year: Int,
         @Query("month") month: Int,
     ): MonthlyPtSessionCountsResponse
+
+    @GET("/trainers/lessons/{date}")
+    suspend fun getDailyPtSessions(
+        @Path("date") date: String,
+    ): DailyPtSessionsResponse
 }

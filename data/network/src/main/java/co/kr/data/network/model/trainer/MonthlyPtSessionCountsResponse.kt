@@ -1,6 +1,6 @@
 package co.kr.data.network.model.trainer
 
-import co.kr.tnt.domain.model.trainer.DailyPtSessionCount
+import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.utils.DateFormatter
 import kotlinx.serialization.Serializable
 
@@ -16,7 +16,7 @@ data class PtSessionCountsResponse(
 )
 
 fun PtSessionCountsResponse.toDomain(dateFormatter: DateFormatter) =
-    DailyPtSessionCount(
+    TrainerDailyPtSessionCount(
         date = dateFormatter.parse(date),
         count = count,
     )

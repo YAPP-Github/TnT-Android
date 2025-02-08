@@ -1,7 +1,8 @@
 package co.kr.tnt.trainer.home
 
 import androidx.lifecycle.viewModelScope
-import co.kr.tnt.domain.model.trainer.DailyPtSessionCount
+import co.kr.tnt.domain.model.PtSession
+import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
@@ -12,23 +13,30 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
+import java.time.LocalDate
 import java.time.YearMonth
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 import javax.inject.Inject
 
 @HiltViewModel
 internal class TrainerHomeViewModel @Inject constructor(
     private val trainerRepository: TrainerRepository,
 ) :
-    BaseViewModel<TrainerHomeUiState, TrainerHomeUiEvent, TrainerHomeSideEffect>(
-            TrainerHomeUiState(),
-        ) {
-        private val cachedMonthlyPtSessionCounts: MutableMap<YearMonth, List<DailyPtSessionCount>> = mutableMapOf()
+    BaseViewModel<TrainerHomeUiState, TrainerHomeUiEvent, TrainerHomeSideEffect>(TrainerHomeUiState()) {
+        private val cachedMonthlyPtSessionCounts: ConcurrentMap<YearMonth, List<TrainerDailyPtSessionCount>> =
+            ConcurrentHashMap()
+        private val cachedDailyPtSession: ConcurrentMap<LocalDate, List<PtSession>> = ConcurrentHashMap()
+
+        init {
+            selectDay(LocalDate.now())
+        }
 
         override suspend fun handleEvent(event: TrainerHomeUiEvent) {
             when (event) {
                 TrainerHomeUiEvent.OnClickNotification -> sendEffect(TrainerHomeSideEffect.NavigateToNotification)
                 is TrainerHomeUiEvent.OnChangeVisibleMonth -> handleChangeVisibleMonth(event.yearMonth)
-                is TrainerHomeUiEvent.OnClickDay -> updateState { copy(selectedDay = event.day) }
+                is TrainerHomeUiEvent.OnClickDay -> selectDay(event.day)
             }
         }
 
@@ -59,7 +67,26 @@ internal class TrainerHomeViewModel @Inject constructor(
             }
         }
 
-        private fun updateMonthlyPtSessionCounts(monthlyPtSessionCounts: List<DailyPtSessionCount>) {
+        private fun selectDay(day: LocalDate) {
+            updateState { copy(selectedDay = day) }
+
+            viewModelScope.launch {
+                runCatching {
+                    cachedDailyPtSession.getOrElse(day) {
+                        trainerRepository.getDailyPtSessions(day).sessions.also {
+                            cachedDailyPtSession[day] = it
+                        }
+                    }
+                }.onSuccess { selectedDayPtSessions ->
+                    updateState { copy(selectedDayPtSessions = selectedDayPtSessions) }
+                }.onFailure {
+                    updateState { copy(selectedDayPtSessions = null) }
+                    sendEffect(TrainerHomeSideEffect.ShowToast("알 수 없는 오류가 발생하였습니다."))
+                }
+            }
+        }
+
+        private fun updateMonthlyPtSessionCounts(monthlyPtSessionCounts: List<TrainerDailyPtSessionCount>) {
             val updatedDailyPtSessionCount = currentState.dailyPtSessionCount.toMutableMap()
 
             monthlyPtSessionCounts.forEach {

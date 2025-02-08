@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -14,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.feedback.navigation.trainerFeedbackNavGraph
 import co.kr.tnt.trainer.home.navigation.trainerHomeNavGraph
@@ -47,6 +49,7 @@ private fun TrainerMainScreen(
     navigateToWebView: (url: String) -> Unit,
 ) {
     Scaffold(
+        containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             TrainerMainBottomBar { tab ->
@@ -62,8 +65,9 @@ private fun TrainerMainScreen(
                 )
             }
         },
-    ) { _ ->
+    ) { innerPadding ->
         NavHost(
+            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = Route.TrainerMainTab.Home,
         ) {
