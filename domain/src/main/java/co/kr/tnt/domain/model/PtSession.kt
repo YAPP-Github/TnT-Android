@@ -1,12 +1,6 @@
-package co.kr.tnt.domain.model.trainer
+package co.kr.tnt.domain.model
 
-import java.time.LocalDate
 import java.time.LocalDateTime
-
-data class DailyPtSession(
-    val date: LocalDate,
-    val sessions: List<PtSession>,
-)
 
 data class PtSession(
     val id: String,

@@ -42,7 +42,7 @@ import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.component.card.TnTSessionRecordCard
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.model.trainer.PtSession
+import co.kr.tnt.domain.model.PtSession
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent

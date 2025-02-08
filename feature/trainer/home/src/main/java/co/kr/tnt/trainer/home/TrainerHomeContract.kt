@@ -1,6 +1,6 @@
 package co.kr.tnt.trainer.home
 
-import co.kr.tnt.domain.model.trainer.PtSession
+import co.kr.tnt.domain.model.PtSession
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState

@@ -1,7 +1,7 @@
 package co.kr.data.network.model.trainer
 
-import co.kr.tnt.domain.model.trainer.DailyPtSession
-import co.kr.tnt.domain.model.trainer.PtSession
+import co.kr.tnt.domain.model.PtSession
+import co.kr.tnt.domain.model.trainer.TrainerDailyPtSession
 import co.kr.tnt.domain.utils.DateFormatter
 import kotlinx.serialization.Serializable
 
@@ -24,7 +24,7 @@ data class PtSessionResponse(
     val isCompleted: Boolean,
 )
 
-fun DailyPtSessionsResponse.toDomain(dateFormatter: DateFormatter): DailyPtSession = DailyPtSession(
+fun DailyPtSessionsResponse.toDomain(dateFormatter: DateFormatter): TrainerDailyPtSession = TrainerDailyPtSession(
     date = dateFormatter.parse(date),
     sessions = lessons.map { it.toDomain(dateFormatter) },
 )

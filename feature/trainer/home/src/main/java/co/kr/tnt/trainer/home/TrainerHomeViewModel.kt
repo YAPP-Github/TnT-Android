@@ -1,8 +1,8 @@
 package co.kr.tnt.trainer.home
 
 import androidx.lifecycle.viewModelScope
-import co.kr.tnt.domain.model.trainer.DailyPtSessionCount
-import co.kr.tnt.domain.model.trainer.PtSession
+import co.kr.tnt.domain.model.PtSession
+import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
@@ -24,7 +24,7 @@ internal class TrainerHomeViewModel @Inject constructor(
     private val trainerRepository: TrainerRepository,
 ) :
     BaseViewModel<TrainerHomeUiState, TrainerHomeUiEvent, TrainerHomeSideEffect>(TrainerHomeUiState()) {
-        private val cachedMonthlyPtSessionCounts: ConcurrentMap<YearMonth, List<DailyPtSessionCount>> =
+        private val cachedMonthlyPtSessionCounts: ConcurrentMap<YearMonth, List<TrainerDailyPtSessionCount>> =
             ConcurrentHashMap()
         private val cachedDailyPtSession: ConcurrentMap<LocalDate, List<PtSession>> = ConcurrentHashMap()
 
@@ -86,7 +86,7 @@ internal class TrainerHomeViewModel @Inject constructor(
             }
         }
 
-        private fun updateMonthlyPtSessionCounts(monthlyPtSessionCounts: List<DailyPtSessionCount>) {
+        private fun updateMonthlyPtSessionCounts(monthlyPtSessionCounts: List<TrainerDailyPtSessionCount>) {
             val updatedDailyPtSessionCount = currentState.dailyPtSessionCount.toMutableMap()
 
             monthlyPtSessionCounts.forEach {
