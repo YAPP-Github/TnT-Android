@@ -64,4 +64,7 @@
     <string name="logout">로그아웃</string>
     <string name="delete_account">계정 탈퇴</string>
 
+    <string name="logout_title">현재 계정을 로그아웃 할까요?</string>
+    <string name="logout_content">언제든지 다시 로그인 할 수 있어요!</string>
+    <string name="logout_complete_title">로그아웃이 완료되었어요</string>
 </resources>

@@ -8,13 +8,8 @@
     <string name="disconnect_complete_title">%s 트레이너와 연결이 해제되었어요</string>
     <string name="disconnect_complete_content">더 폭발적인 케미로 다시 만나요!</string>
 
-    <string name="logout_title">현재 계정을 로그아웃 할까요?</string>
-    <string name="logout_content">언제든지 다시 로그인 할 수 있어요!</string>
-    <string name="logout_complete_title">로그아웃이 완료되었어요</string>
-
     <string name="delete_account_title">계정을 탈퇴할까요?</string>
     <string name="delete_account_content">운동 및 식단 기록에 대한 데이터가 사라져요!</string>
     <string name="delete_account_complete_title">계정 탈퇴가 완료되었어요</string>
     <string name="delete_account_complete_content">다음에 더 폭발적인 케미로 다시 만나요! 💣</string>
-
 </resources>
