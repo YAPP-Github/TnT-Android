@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.home
 
+import co.kr.tnt.domain.model.trainer.PtSession
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -10,6 +11,7 @@ internal class TrainerHomeContract {
     data class TrainerHomeUiState(
         val selectedDay: LocalDate = LocalDate.now(),
         val dailyPtSessionCount: Map<LocalDate, Int> = mapOf(),
+        val selectedDayPtSessions: List<PtSession>? = null,
     ) : UiState
 
     sealed interface TrainerHomeUiEvent : UiEvent {

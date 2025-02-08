@@ -256,9 +256,9 @@ fun TnTSessionRecordCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
+                    .clickable(onClick = onClick)
                     .background(TnTTheme.colors.neutralColors.Neutral100)
-                    .padding(vertical = 12.dp)
-                    .clickable(onClick = onClick),
+                    .padding(vertical = 12.dp),
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_edit_gray),
