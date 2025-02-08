@@ -68,7 +68,7 @@ private fun TrainerMyPageScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         TnTProfileImage(
-            defaultImage = painterResource(DefaultUserProfile.Trainee.image),
+            defaultImage = painterResource(DefaultUserProfile.Trainer.image),
             imageSize = 132.dp,
             showEditButton = false,
             modifier = Modifier
