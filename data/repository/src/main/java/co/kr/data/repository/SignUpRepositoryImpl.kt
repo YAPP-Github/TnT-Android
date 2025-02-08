@@ -30,8 +30,6 @@ class SignUpRepositoryImpl @Inject constructor(
         socialType: String,
         email: String,
     ): SignUpResult {
-        val allowedExtensions = listOf("jpg", "jpeg", "png", "svg")
-
         val profileImagePart = profileImage?.let {
             val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
             MultipartBody.Part.createFormData("profileImage", it.name, requestFile)
