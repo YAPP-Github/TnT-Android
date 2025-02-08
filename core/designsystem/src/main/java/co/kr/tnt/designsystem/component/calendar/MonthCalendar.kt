@@ -1,9 +1,13 @@
 package co.kr.tnt.designsystem.component.calendar
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.calendar.composable.CalendarCell
 import co.kr.tnt.designsystem.component.calendar.composable.CalendarCellWithIndicator
 import co.kr.tnt.designsystem.component.calendar.composable.WeekLabels
@@ -13,9 +17,11 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.yearMonth
+import java.time.DayOfWeek
 import java.time.LocalDate
 
 @Composable
@@ -35,11 +41,16 @@ fun TnTMonthCalendar(
         },
         dayContent = { day ->
             if (day.position == DayPosition.MonthDate) {
-                CalendarCell(
-                    date = day.date,
-                    state = dayState(day.date),
-                    onClick = { onClickDay?.invoke(day.date) },
-                )
+                Column {
+                    if (isFirstWeekOfMonth(day, state.firstDayOfWeek).not()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                    CalendarCell(
+                        date = day.date,
+                        state = dayState(day.date),
+                        onClick = { onClickDay?.invoke(day.date) },
+                    )
+                }
             }
         },
     )
@@ -63,15 +74,38 @@ fun TnTIndicatorMonthCalendar(
         },
         dayContent = { day ->
             if (day.position == DayPosition.MonthDate) {
-                CalendarCellWithIndicator(
-                    date = day.date,
-                    dayState = dayState(day.date),
-                    indicatorState = indicatorState(day.date),
-                    onClick = { onClickDay?.invoke(day.date) },
-                )
+                Column {
+                    if (isFirstWeekOfMonth(day, state.firstDayOfWeek).not()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                    CalendarCellWithIndicator(
+                        date = day.date,
+                        dayState = dayState(day.date),
+                        indicatorState = indicatorState(day.date),
+                        onClick = { onClickDay?.invoke(day.date) },
+                    )
+                }
             }
         },
     )
+}
+
+private fun isFirstWeekOfMonth(
+    day: CalendarDay,
+    firstDayOfWeek: DayOfWeek,
+): Boolean {
+    val startOfMonth = day.date.withDayOfMonth(1)
+    val firstDayOfStartWeek = startOfMonth.minusDays(
+        (startOfMonth.dayOfWeek.value % firstDayOfWeek.value).toLong(),
+    )
+
+    val firstWeekDays = buildList<LocalDate> {
+        repeat(7) { day ->
+            add(firstDayOfStartWeek.plusDays(day.toLong()))
+        }
+    }
+
+    return firstWeekDays.contains(day.date)
 }
 
 @Preview(showBackground = true)

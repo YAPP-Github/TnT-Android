@@ -1,10 +1,11 @@
 package co.kr.tnt.trainer.home
 
-import androidx.compose.foundation.layout.Column
+import android.widget.Toast
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,10 +13,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorMonthCalendar
+import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -34,6 +38,7 @@ internal fun TrainerHomeRoute(
     viewModel: TrainerHomeViewModel = hiltViewModel(),
     navigateToNotification: () -> Unit,
 ) {
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerHomeScreen(
@@ -44,9 +49,10 @@ internal fun TrainerHomeRoute(
     )
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect {
-            when (it) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
                 TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
+                is TrainerHomeSideEffect.ShowToast -> Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -67,43 +73,62 @@ private fun TrainerHomeScreen(
         endMonth = now.plusYears(10),
     )
     val coroutineScope = rememberCoroutineScope()
-    val visibleYearMonth = rememberMostVisibleMonth(calendarState)
+    val visibleMonth = rememberMostVisibleMonth(calendarState)
 
     Scaffold(
-        topBar = {
-            Column {
+        containerColor = TnTTheme.colors.commonColors.Common0,
+        modifier = Modifier.fillMaxSize(),
+    ) { innerPadding ->
+        LazyColumn(modifier = Modifier.padding(innerPadding)) {
+            item {
                 Spacer(modifier = Modifier.height(12.dp))
                 TnTHomeTopBar(
-                    yearMonth = visibleYearMonth,
+                    yearMonth = visibleMonth,
                     onClickNotification = onClickNotification,
                     onClickSelectorPrevious = {
                         coroutineScope.launch {
-                            calendarState.animateScrollToMonth(visibleYearMonth.minusMonths(1))
+                            calendarState.animateScrollToMonth(visibleMonth.minusMonths(1))
                         }
                     },
                     onClickSelectorNext = {
                         coroutineScope.launch {
-                            calendarState.animateScrollToMonth(visibleYearMonth.plusMonths(1))
+                            calendarState.animateScrollToMonth(visibleMonth.plusMonths(1))
                         }
                     },
                 )
+                Spacer(modifier = Modifier.height(16.dp))
+                TnTIndicatorMonthCalendar(
+                    state = calendarState,
+                    onClickDay = onClickDay,
+                    dayState = { day -> DayState(isSelected = day == state.selectedDay) },
+                    indicatorState = { day ->
+                        val count = state.dailyPtSessionCount[day] ?: 0
+
+                        DayIndicatorState(
+                            count = count,
+                            showIcon = count != 0,
+                            showText = count != 0,
+                        )
+                    },
+                )
             }
-        },
-        containerColor = TnTTheme.colors.commonColors.Common0,
-        modifier = Modifier.fillMaxSize(),
-    ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            Spacer(modifier = Modifier.height(16.dp))
-            TnTIndicatorMonthCalendar(
-                state = calendarState,
-                onClickDay = onClickDay,
-                dayState = { day -> DayState(isSelected = day == state.selectedDay) },
-            )
         }
     }
 
-    LaunchedEffect(calendarState.firstVisibleMonth) {
-        val currentCalendarYearMonth = calendarState.firstVisibleMonth.yearMonth
-        onChangeVisibleMonth(currentCalendarYearMonth)
+    LaunchedEffect(visibleMonth) {
+        onChangeVisibleMonth(visibleMonth)
+    }
+}
+
+@Preview
+@Composable
+private fun TrainerHomeScreenPreview() {
+    TnTTheme {
+        TrainerHomeScreen(
+            state = TrainerHomeUiState(),
+            onClickNotification = { },
+            onChangeVisibleMonth = { },
+            onClickDay = { },
+        )
     }
 }

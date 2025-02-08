@@ -9,6 +9,7 @@ import co.kr.data.network.model.LoginRequest
 import co.kr.data.network.model.LoginResponse
 import co.kr.data.network.model.SignUpResponse
 import co.kr.data.network.model.VerifyCodeResponse
+import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
 import co.kr.data.network.util.WithoutSessionCheckPath.CHECK_SESSION_PATH
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -61,4 +62,10 @@ interface ApiService {
         @Query("trainerId") trainerId: String,
         @Query("traineeId") traineeId: String,
     ): ConnectedTraineeResponse
+
+    @GET("/trainers/lessons/calendar")
+    suspend fun getMonthlyPtSessionCounts(
+        @Query("year") year: Int,
+        @Query("month") month: Int,
+    ): MonthlyPtSessionCountsResponse
 }

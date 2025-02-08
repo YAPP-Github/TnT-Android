@@ -8,8 +8,10 @@ import co.kr.tnt.domain.model.ConnectedResult
 import co.kr.tnt.domain.model.InviteCodeResult
 import co.kr.tnt.domain.repository.ConnectRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class ConnectRepositoryImpl @Inject constructor(
+@Singleton
+internal class ConnectRepositoryImpl @Inject constructor(
     private val connectRemoteDataSource: ConnectRemoteDataSource,
 ) : ConnectRepository {
     override suspend fun getInviteCode(): InviteCodeResult {

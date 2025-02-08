@@ -3,9 +3,11 @@ package co.kr.data.repository.di
 import co.kr.data.repository.ConnectRepositoryImpl
 import co.kr.data.repository.LoginRepositoryImpl
 import co.kr.data.repository.SignUpRepositoryImpl
+import co.kr.data.repository.TrainerRepositoryImpl
 import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.domain.repository.LoginRepository
 import co.kr.tnt.domain.repository.SignUpRepository
+import co.kr.tnt.domain.repository.TrainerRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -28,4 +30,9 @@ internal abstract class RepositoryModule {
     abstract fun bindConnectRepository(
         repository: ConnectRepositoryImpl,
     ): ConnectRepository
+
+    @Binds
+    abstract fun bindTrainerRepository(
+        repository: TrainerRepositoryImpl,
+    ): TrainerRepository
 }
