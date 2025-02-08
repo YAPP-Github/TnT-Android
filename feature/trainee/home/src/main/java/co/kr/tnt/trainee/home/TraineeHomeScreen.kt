@@ -3,6 +3,7 @@ package co.kr.tnt.trainee.home
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -114,16 +115,12 @@ private fun TraineeHomeScreen(
         (state.ptLessons.map { it.date } + state.recordList.map { it.recordDate }).toSet()
 
     Scaffold(
-        containerColor = TnTTheme.colors.neutralColors.Neutral100,
+        containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(TnTTheme.colors.commonColors.Common0),
-                ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(Modifier.height(12.dp))
                     TnTHomeTopBar(
                         yearMonth = visibleYearMonth,
@@ -198,11 +195,12 @@ private fun TraineeHomeScreen(
                     }
                 }
             }
-            // Record
             item {
+                // Record
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .background(TnTTheme.colors.neutralColors.Neutral100)
                         .padding(horizontal = 20.dp, vertical = 20.dp),
                 ) {
                     Text(
@@ -222,35 +220,51 @@ private fun TraineeHomeScreen(
                     time = formatTime(record.recordTime),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .background(TnTTheme.colors.neutralColors.Neutral100)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
                     image = record.recordImage?.let { rememberAsyncImagePainter(it) },
                     leadingEmoji = chip.emoji,
                     feedbackCount = if (record.feedbackCount == 0) null else record.feedbackCount,
                 )
-                Spacer(Modifier.height(12.dp))
             }
             if (filteredRecord.isEmpty()) {
                 item {
-                    Spacer(Modifier.height(80.dp))
-                    Text(
-                        text = stringResource(R.string.no_record_now),
-                        color = TnTTheme.colors.neutralColors.Neutral600,
-                        style = TnTTheme.typography.body2Bold,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        text = stringResource(R.string.record_meal_and_exercise_by_click_button),
-                        color = TnTTheme.colors.neutralColors.Neutral400,
-                        style = TnTTheme.typography.label1Medium,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                    )
-                    Spacer(Modifier.height(100.dp))
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(TnTTheme.colors.neutralColors.Neutral100),
+                    ) {
+                        Column {
+                            Spacer(Modifier.height(80.dp))
+                            Text(
+                                text = stringResource(R.string.no_record_now),
+                                color = TnTTheme.colors.neutralColors.Neutral600,
+                                style = TnTTheme.typography.body2Bold,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                text = stringResource(R.string.record_meal_and_exercise_by_click_button),
+                                color = TnTTheme.colors.neutralColors.Neutral400,
+                                style = TnTTheme.typography.label1Medium,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                            )
+                            Spacer(Modifier.height(200.dp))
+                        }
+                    }
                 }
             }
-            item { Spacer(Modifier.height(100.dp)) }
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .background(TnTTheme.colors.neutralColors.Neutral100),
+                )
+            }
         }
     }
 }
