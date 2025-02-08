@@ -124,6 +124,7 @@ internal class TraineeHomeViewModel @Inject constructor() :
             updateState { copy(recordList = recordList, ptLessons = ptLessons) }
         }
 
+        @Suppress("UnusedParameter")
         private fun checkSessionRecord(ptSessionId: String) {
             // TODO: pt 수업 기록 확인 화면 이동
         }
