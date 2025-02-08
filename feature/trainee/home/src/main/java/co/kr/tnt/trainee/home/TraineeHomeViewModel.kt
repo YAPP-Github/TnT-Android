@@ -48,7 +48,7 @@ internal class TraineeHomeViewModel @Inject constructor(
             updateState {
                 copy(
                     selectedDay = date,
-                    ptLessons = result.ptSession,
+                    ptSessions = result.ptSession,
                     recordList = result.record,
                 )
             }

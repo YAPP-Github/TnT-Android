@@ -33,7 +33,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
             TraineeDailyLog(
                 date = LocalDate.of(2025, 2, 3),
                 ptSession = PtSession(
-                    ptLessonId = "CDE35K32",
+                    ptSessionId = "CDE35K32",
                     trainerName = "김헬스",
                     trainerImage = "https://buly.kr/44x6xFN",
                     session = 12,
@@ -93,7 +93,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
             TraineeDailyLog(
                 date = LocalDate.of(2025, 2, 15),
                 ptSession = PtSession(
-                    ptLessonId = "OSI93DG1",
+                    ptSessionId = "OSI93DG1",
                     trainerName = "이강사",
                     trainerImage = null,
                     session = 15,
@@ -123,7 +123,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
             TraineeDailyLog(
                 date = LocalDate.of(2025, 2, 10),
                 ptSession = PtSession(
-                    ptLessonId = "CDK392DF",
+                    ptSessionId = "CDK392DF",
                     trainerName = "박트레이너",
                     trainerImage = null,
                     session = 10,
@@ -136,7 +136,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
             TraineeDailyLog(
                 date = LocalDate.of(2025, 2, 23),
                 ptSession = PtSession(
-                    ptLessonId = "CDE35K32",
+                    ptSessionId = "CDE35K32",
                     trainerName = "정트레이너",
                     trainerImage = "https://buly.kr/44x6xFN",
                     session = 25,

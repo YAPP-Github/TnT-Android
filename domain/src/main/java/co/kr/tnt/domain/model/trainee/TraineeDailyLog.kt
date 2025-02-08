@@ -10,7 +10,7 @@ data class TraineeDailyLog(
 )
 
 data class PtSession(
-    val ptLessonId: String,
+    val ptSessionId: String,
     val trainerName: String,
     val trainerImage: String?,
     val session: Int,

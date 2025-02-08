@@ -12,7 +12,7 @@ class TraineeHomeContract {
     data class TraineeHomeUiState(
         val selectedDay: LocalDate = LocalDate.now(),
         val dailyDataState: List<LocalDate> = emptyList(),
-        val ptLessons: PtSession? = null,
+        val ptSessions: PtSession? = null,
         val recordList: List<DailyRecord>? = emptyList(),
     ) : UiState
 

@@ -46,6 +46,7 @@ import co.kr.tnt.ui.component.TnTHomeTopBar
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.model.RecordChip
 import coil.compose.rememberAsyncImagePainter
+import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -140,54 +141,20 @@ private fun TraineeHomeScreen(
                     onClickNotification = onClickNotification,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                TnTIndicatorWeekCalendar(
-                    state = weekCalendarState,
-                    dayState = { day -> DayState(isSelected = day == state.selectedDay) },
-                    indicatorState = { day ->
-                        DayIndicatorState(showIcon = day in state.dailyDataState)
-                    },
+                Calendar(
+                    weekCalendarState = weekCalendarState,
+                    selectedDay = state.selectedDay,
+                    dailyDataState = state.dailyDataState,
                     onClickDay = onClickDay,
-                    modifier = Modifier.background(TnTTheme.colors.commonColors.Common0),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                // PT Session
-                if (state.ptLessons != null) {
-                    val lesson = state.ptLessons
-                    val chip = RecordChip.create(PTSessionType(lesson.session))
-                    TnTSessionRecordCard(
-                        name = lesson.trainerName,
-                        tagText = chip.title,
-                        startTime = formatTime(lesson.startTime),
-                        endTime = formatTime(lesson.endTime),
-                        isTrainer = false,
-                        defaultImage = painterResource(DefaultUserProfile.Trainer.image),
-                        leadingEmoji = chip.emoji ?: "",
-                        profileImage = lesson.trainerImage?.let { rememberAsyncImagePainter(it) },
-                        showSessionRecordCreation = false,
-                        showSessionRecordDetails = lesson.hasRecord,
-                        onClick = { onClickPtSessionCard(lesson.ptLessonId) },
-                        modifier = Modifier.padding(
-                            start = 20.dp,
-                            end = 20.dp,
-                            bottom = 16.dp,
-                        ),
+                if (state.ptSessions != null) {
+                    DailyPtSession(
+                        session = state.ptSessions,
+                        onClickPtSessionCard = onClickPtSessionCard,
                     )
                 } else {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 28.dp),
-                    ) {
-                        Text(
-                            text = stringResource(R.string.no_scheduled_lesson),
-                            color = TnTTheme.colors.neutralColors.Neutral400,
-                            style = TnTTheme.typography.label1Medium,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                        )
-                    }
+                    EmptyPtSession()
                 }
             }
             Row(
@@ -203,48 +170,13 @@ private fun TraineeHomeScreen(
                 )
             }
         }
-        // Record
         if (state.recordList.isNullOrEmpty()) {
             item {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    Column {
-                        Spacer(Modifier.height(80.dp))
-                        Text(
-                            text = stringResource(R.string.no_record_now),
-                            color = TnTTheme.colors.neutralColors.Neutral600,
-                            style = TnTTheme.typography.body2Bold,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            text = stringResource(R.string.record_meal_and_exercise_by_click_button),
-                            color = TnTTheme.colors.neutralColors.Neutral400,
-                            style = TnTTheme.typography.label1Medium,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
+                EmptyDailyRecords()
             }
         } else {
             items(state.recordList) { record ->
-                val chip = RecordChip.create(record.recordType)
-                TnTRecordCard(
-                    style = chip.chipStyle,
-                    record = record.recordContents,
-                    tagText = chip.title,
-                    time = formatTime(record.recordTime),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
-                    image = record.recordImage?.let { rememberAsyncImagePainter(it) },
-                    leadingEmoji = chip.emoji,
-                    feedbackCount = if (record.feedbackCount == 0) null else record.feedbackCount,
-                )
+                DailyRecords(record)
             }
         }
         item {
@@ -259,6 +191,116 @@ private fun TraineeHomeScreen(
 
     LaunchedEffect(visibleYearMonth) {
         onChangeVisibleMonth(visibleYearMonth)
+    }
+}
+
+@Composable
+private fun Calendar(
+    weekCalendarState: WeekCalendarState,
+    selectedDay: LocalDate,
+    dailyDataState: List<LocalDate>,
+    onClickDay: (LocalDate) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    TnTIndicatorWeekCalendar(
+        state = weekCalendarState,
+        dayState = { day -> DayState(isSelected = day == selectedDay) },
+        indicatorState = { day ->
+            DayIndicatorState(showIcon = day in dailyDataState)
+        },
+        onClickDay = onClickDay,
+        modifier = modifier.background(TnTTheme.colors.commonColors.Common0),
+    )
+}
+
+@Composable
+private fun DailyPtSession(
+    session: PtSession,
+    onClickPtSessionCard: (sessionId: String) -> Unit,
+) {
+    val chip = RecordChip.create(PTSessionType(session.session))
+    TnTSessionRecordCard(
+        name = session.trainerName,
+        tagText = chip.title,
+        startTime = formatTime(session.startTime),
+        endTime = formatTime(session.endTime),
+        isTrainer = false,
+        defaultImage = painterResource(DefaultUserProfile.Trainer.image),
+        leadingEmoji = chip.emoji ?: "",
+        profileImage = session.trainerImage?.let { rememberAsyncImagePainter(it) },
+        showSessionRecordCreation = false,
+        showSessionRecordDetails = session.hasRecord,
+        onClick = { onClickPtSessionCard(session.ptSessionId) },
+        modifier = Modifier.padding(
+            start = 20.dp,
+            end = 20.dp,
+            bottom = 16.dp,
+        ),
+    )
+}
+
+@Composable
+private fun EmptyPtSession() {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 28.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.no_scheduled_lesson),
+            color = TnTTheme.colors.neutralColors.Neutral400,
+            style = TnTTheme.typography.label1Medium,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+private fun DailyRecords(
+    record: DailyRecord,
+) {
+    val chip = RecordChip.create(record.recordType)
+    TnTRecordCard(
+        style = chip.chipStyle,
+        record = record.recordContents,
+        tagText = chip.title,
+        time = formatTime(record.recordTime),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+        image = record.recordImage?.let { rememberAsyncImagePainter(it) },
+        leadingEmoji = chip.emoji,
+        feedbackCount = if (record.feedbackCount == 0) null else record.feedbackCount,
+    )
+}
+
+@Composable
+private fun EmptyDailyRecords() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        Column {
+            Spacer(Modifier.height(80.dp))
+            Text(
+                text = stringResource(R.string.no_record_now),
+                color = TnTTheme.colors.neutralColors.Neutral600,
+                style = TnTTheme.typography.body2Bold,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = stringResource(R.string.record_meal_and_exercise_by_click_button),
+                color = TnTTheme.colors.neutralColors.Neutral400,
+                style = TnTTheme.typography.label1Medium,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 
@@ -312,8 +354,8 @@ private fun TraineeHomeScreenPreview() {
                 feedbackCount = 0,
             ),
         ),
-        ptLessons = PtSession(
-            ptLessonId = "OSI93DG1",
+        ptSessions = PtSession(
+            ptSessionId = "OSI93DG1",
             trainerName = "이강사",
             trainerImage = "https://buly.kr/DaO1v4V",
             session = 15,
