@@ -1,5 +1,6 @@
 package co.kr.data.network.source
 
+import co.kr.data.network.model.trainer.DailyPtSessionsResponse
 import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
 import co.kr.data.network.service.ApiService
 import co.kr.data.network.util.networkHandler
@@ -18,5 +19,11 @@ class TrainerRemoteDataSource @Inject constructor(
             year = year,
             month = month,
         )
+    }
+
+    suspend fun getDailyPtSessions(
+        date: String,
+    ): DailyPtSessionsResponse = networkHandler {
+        apiService.getDailyPtSessions(date)
     }
 }

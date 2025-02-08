@@ -2,9 +2,11 @@ package co.kr.data.repository
 
 import co.kr.data.network.model.trainer.toDomain
 import co.kr.data.network.source.TrainerRemoteDataSource
+import co.kr.tnt.domain.model.trainer.DailyPtSession
 import co.kr.tnt.domain.model.trainer.DailyPtSessionCount
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.domain.utils.DateFormatter
+import java.time.LocalDate
 import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,4 +23,9 @@ internal class TrainerRepositoryImpl @Inject constructor(
         ).calendarPtLessonCounts.map { response ->
             response.toDomain(dateFormatter)
         }
+
+    override suspend fun getDailyPtSessions(day: LocalDate): DailyPtSession =
+        trainerRemoteDataSource.getDailyPtSessions(
+            date = dateFormatter.format(day, "yyyy-MM-dd"),
+        ).toDomain(dateFormatter)
 }
