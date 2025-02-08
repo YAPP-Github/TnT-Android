@@ -2,6 +2,7 @@ package co.kr.tnt.trainer.signup
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.SignUpRepository
@@ -10,9 +11,13 @@ import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpPage
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiEvent
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.utils.convertToAllowedImageFormat
+import co.kr.tnt.ui.utils.isAllowedImageFormat
 import co.kr.tnt.ui.utils.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -45,12 +50,18 @@ internal class TrainerSignUpViewModel @Inject constructor(
         email: String,
         authType: String,
     ) {
-        viewModelScope.launch {
-            val profileImagePart = imageUri?.toFile(context)
+        viewModelScope.launch(Dispatchers.IO) {
+            val profileImageFile: File? = imageUri?.toFile(context)?.let { file ->
+                if (!isAllowedImageFormat(file)) {
+                    file.toUri().convertToAllowedImageFormat(context)
+                } else {
+                    file
+                }
+            }
 
             runCatching {
                 signUpRepository.signUp(
-                    profileImage = profileImagePart,
+                    profileImage = profileImageFile,
                     user = User.Trainer(
                         id = id,
                         name = currentState.name,

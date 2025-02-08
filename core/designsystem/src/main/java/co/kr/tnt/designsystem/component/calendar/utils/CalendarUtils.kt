@@ -7,8 +7,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
+import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
 import kotlinx.coroutines.flow.filterNotNull
+import java.time.LocalDate
 import java.time.YearMonth
 
 /**
@@ -41,4 +43,32 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50
             }
         }?.month
     }
+}
+
+/**
+ * 화면에 보여지는 7일 중 과반 이상 보여지는 '월' 을 반환합니다.
+ */
+@Composable
+fun rememberMostVisibleYearMonth(
+    state: WeekCalendarState,
+): YearMonth {
+    val visibleYearMonth = remember { mutableStateOf(YearMonth.now()) }
+
+    LaunchedEffect(state) {
+        snapshotFlow { state.firstVisibleWeek.days.map { it.date } }
+            .collect { visibleDays ->
+                val mostVisibleYearMonth = getMostFrequentYearMonth(visibleDays)
+                visibleYearMonth.value = mostVisibleYearMonth
+            }
+    }
+
+    return visibleYearMonth.value
+}
+
+private fun getMostFrequentYearMonth(visibleDays: List<LocalDate>): YearMonth {
+    return visibleDays
+        .groupingBy { YearMonth.from(it) }
+        .eachCount()
+        .maxBy { it.value }
+        .key
 }
