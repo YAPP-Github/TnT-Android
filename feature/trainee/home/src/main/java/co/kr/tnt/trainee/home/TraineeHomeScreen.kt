@@ -37,7 +37,8 @@ import co.kr.tnt.designsystem.component.card.TnTSessionRecordCard
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.RecordType
 import co.kr.tnt.domain.model.RecordType.PTSessionType
-import co.kr.tnt.domain.model.TraineeHomeData
+import co.kr.tnt.domain.model.trainee.DailyRecord
+import co.kr.tnt.domain.model.trainee.PtSession
 import co.kr.tnt.feature.trainee.home.R
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
@@ -49,6 +50,7 @@ import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
@@ -65,8 +67,11 @@ internal fun TraineeHomeRoute(
     TraineeHomeScreen(
         state = uiState,
         onClickNotification = navigateToNotification,
-        onSelectDate = { date ->
-            viewModel.setEvent(TraineeHomeUiEvent.OnClickDay(date))
+        onChangeVisibleMonth = { yearMonth ->
+            viewModel.setEvent(TraineeHomeUiEvent.OnChangeVisibleMonth(yearMonth))
+        },
+        onClickDay = { day ->
+            viewModel.setEvent(TraineeHomeUiEvent.OnClickDay(day))
         },
         onClickNextWeek = { viewModel.setEvent(TraineeHomeUiEvent.OnClickNextWeek) },
         onClickPreviousWeek = { viewModel.setEvent(TraineeHomeUiEvent.OnClickPreviousWeek) },
@@ -89,11 +94,12 @@ internal fun TraineeHomeRoute(
 @Composable
 private fun TraineeHomeScreen(
     state: TraineeHomeUiState,
-    onSelectDate: (LocalDate) -> Unit,
+    onClickNotification: () -> Unit,
+    onChangeVisibleMonth: (YearMonth) -> Unit,
+    onClickDay: (LocalDate) -> Unit,
     onClickNextWeek: () -> Unit,
     onClickPreviousWeek: () -> Unit,
     onClickPtSessionCard: (String) -> Unit,
-    onClickNotification: () -> Unit,
 ) {
     val now = LocalDate.now()
     val coroutineScope = rememberCoroutineScope()
@@ -104,14 +110,7 @@ private fun TraineeHomeScreen(
         startDate = now.minusYears(10),
         endDate = now.plusYears(10),
     )
-
     val visibleYearMonth = rememberMostVisibleYearMonth(weekCalendarState)
-
-    val filteredPTLesson = state.ptLessons.filter { it.date == state.selectedDate }
-    val filteredRecord = state.recordList.filter { it.recordDate == state.selectedDate }
-
-    val markedDates: Set<LocalDate> =
-        (state.ptLessons.map { it.date } + state.recordList.map { it.recordDate }).toSet()
 
     LazyColumn(
         modifier = Modifier
@@ -144,41 +143,36 @@ private fun TraineeHomeScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 TnTIndicatorWeekCalendar(
                     state = weekCalendarState,
-                    dayState = { date ->
-                        DayState(isSelected = date == state.selectedDate)
+                    dayState = { day -> DayState(isSelected = day == state.selectedDate) },
+                    indicatorState = { day ->
+                        DayIndicatorState(showIcon = day in state.dailyDataState)
                     },
-                    indicatorState = { date ->
-                        DayIndicatorState(showIcon = date in markedDates)
-                    },
-                    onClickDay = { date ->
-                        onSelectDate(date)
-                    },
+                    onClickDay = onClickDay,
                     modifier = Modifier.background(TnTTheme.colors.commonColors.Common0),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 // PT Session
-                if (filteredPTLesson.isNotEmpty()) {
-                    filteredPTLesson.forEach { lesson ->
-                        val chip = RecordChip.create(PTSessionType(lesson.session))
-                        TnTSessionRecordCard(
-                            name = lesson.trainerName,
-                            tagText = chip.title,
-                            startTime = formatTime(lesson.startTime),
-                            endTime = formatTime(lesson.endTime),
-                            isTrainer = false,
-                            defaultImage = painterResource(DefaultUserProfile.Trainer.image),
-                            leadingEmoji = chip.emoji ?: "",
-                            profileImage = rememberAsyncImagePainter(lesson.trainerImage),
-                            showSessionRecordCreation = false,
-                            showSessionRecordDetails = lesson.hasRecord,
-                            onClick = { onClickPtSessionCard(lesson.ptLessonId) },
-                            modifier = Modifier.padding(
-                                start = 20.dp,
-                                end = 20.dp,
-                                bottom = 16.dp,
-                            ),
-                        )
-                    }
+                if (state.ptLessons != null) {
+                    val lesson = state.ptLessons
+                    val chip = RecordChip.create(PTSessionType(lesson.session))
+                    TnTSessionRecordCard(
+                        name = lesson.trainerName,
+                        tagText = chip.title,
+                        startTime = formatTime(lesson.startTime),
+                        endTime = formatTime(lesson.endTime),
+                        isTrainer = false,
+                        defaultImage = painterResource(DefaultUserProfile.Trainer.image),
+                        leadingEmoji = chip.emoji ?: "",
+                        profileImage = lesson.trainerImage?.let { rememberAsyncImagePainter(it) },
+                        showSessionRecordCreation = false,
+                        showSessionRecordDetails = lesson.hasRecord,
+                        onClick = { onClickPtSessionCard(lesson.ptLessonId) },
+                        modifier = Modifier.padding(
+                            start = 20.dp,
+                            end = 20.dp,
+                            bottom = 16.dp,
+                        ),
+                    )
                 } else {
                     Row(
                         horizontalArrangement = Arrangement.Center,
@@ -197,7 +191,6 @@ private fun TraineeHomeScreen(
                     }
                 }
             }
-            // Record
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -211,7 +204,8 @@ private fun TraineeHomeScreen(
                 )
             }
         }
-        if (filteredRecord.isEmpty()) {
+        // Record
+        if (state.recordList.isNullOrEmpty()) {
             item {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -238,7 +232,7 @@ private fun TraineeHomeScreen(
                 }
             }
         } else {
-            items(filteredRecord) { record ->
+            items(state.recordList) { record ->
                 val chip = RecordChip.create(record.recordType)
                 TnTRecordCard(
                     style = chip.chipStyle,
@@ -258,10 +252,14 @@ private fun TraineeHomeScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .height(200.dp)
+                    .height(150.dp)
                     .background(TnTTheme.colors.neutralColors.Neutral100),
             )
         }
+    }
+
+    LaunchedEffect(visibleYearMonth) {
+        onChangeVisibleMonth(visibleYearMonth)
     }
 }
 
@@ -293,90 +291,36 @@ private fun formatDateWithDay(date: LocalDate): String {
 @Preview
 @Composable
 private fun TraineeHomeScreenPreview() {
-    val now = LocalDate.now()
+    val date = LocalDate.of(2025, 2, 8)
 
     val dummyUiState = TraineeHomeUiState(
-        selectedDate = now,
+        selectedDate = date,
         recordList = listOf(
-            TraineeHomeData.Record(
+            DailyRecord(
                 recordId = "VDF1D907",
-                recordDate = LocalDate.of(2025, 2, 8),
                 recordType = RecordType.MealType.BREAKFAST,
-                recordTime = "2025-02-08T13:00:00.000Z",
-                recordImage = null,
+                recordTime = "2025-02-08T08:00:00.000Z",
+                recordImage = "https://buly.kr/BpESNP5",
                 recordContents = "아침으로 계란 2개 먹었습니다.",
-                feedbackCount = 0,
+                feedbackCount = 1,
             ),
-            TraineeHomeData.Record(
+            DailyRecord(
                 recordId = "VDF1D907",
-                recordDate = LocalDate.of(2025, 2, 8),
-                recordType = RecordType.MealType.DINNER,
-                recordTime = "2025-02-08T18:40:00.000Z",
-                recordImage = null,
-                recordContents = "저녁으로 소고기 먹었습니다.",
-                feedbackCount = 2,
-            ),
-            TraineeHomeData.Record(
-                recordId = "VDF1D907",
-                recordDate = LocalDate.of(2025, 2, 8),
-                recordType = RecordType.ExerciseType.CARDIO,
-                recordTime = "2025-02-08T19:40:00.000Z",
-                recordImage = null,
-                recordContents = "런닝머신 1시간",
+                recordType = RecordType.MealType.LUNCH,
+                recordTime = "2025-02-08T13:00:00.000Z",
+                recordImage = "https://buly.kr/BpESNP5",
+                recordContents = "점심으로 계란 5개 먹었습니다.",
                 feedbackCount = 0,
             ),
         ),
-        ptLessons = listOf(
-            TraineeHomeData.PTLesson(
-                ptLessonId = "VDF1D923",
-                trainerName = "김코치",
-                trainerImage = "https://buly.kr/DaO1v4V",
-                date = LocalDate.of(2025, 2, 8),
-                session = 7,
-                startTime = "2025-02-08T13:00:00.000Z",
-                endTime = "2025-02-08T13:50:00.000Z",
-                hasRecord = false,
-            ),
-            TraineeHomeData.PTLesson(
-                ptLessonId = "CDK392DF",
-                trainerName = "박트레이너",
-                trainerImage = "https://buly.kr/DaO1v4V",
-                date = LocalDate.of(2025, 2, 10),
-                session = 10,
-                startTime = "2025-02-10T14:30:00.000Z",
-                endTime = "2025-02-10T15:30:00.000Z",
-                hasRecord = false,
-            ),
-            TraineeHomeData.PTLesson(
-                ptLessonId = "OSI93DG1",
-                trainerName = "이강사",
-                trainerImage = "https://buly.kr/DaO1v4V",
-                date = LocalDate.of(2025, 2, 15),
-                session = 15,
-                startTime = "2025-02-15T18:00:00.000Z",
-                endTime = "2025-02-15T19:00:00.000Z",
-                hasRecord = true,
-            ),
-            TraineeHomeData.PTLesson(
-                ptLessonId = "ASD3F013",
-                trainerName = "최코치",
-                trainerImage = "https://buly.kr/DaO1v4V",
-                date = LocalDate.of(2025, 2, 20),
-                session = 20,
-                startTime = "2025-02-20T07:00:00.000Z",
-                endTime = "2025-02-20T08:00:00.000Z",
-                hasRecord = false,
-            ),
-            TraineeHomeData.PTLesson(
-                ptLessonId = "CDE35K32",
-                trainerName = "정트레이너",
-                trainerImage = "https://buly.kr/DaO1v4V",
-                date = LocalDate.of(2025, 2, 25),
-                session = 25,
-                startTime = "2025-02-25T16:00:00.000Z",
-                endTime = "2025-02-25T17:00:00.000Z",
-                hasRecord = true,
-            ),
+        ptLessons = PtSession(
+            ptLessonId = "OSI93DG1",
+            trainerName = "이강사",
+            trainerImage = "https://buly.kr/DaO1v4V",
+            session = 15,
+            startTime = "2025-02-03T18:00:00.000Z",
+            endTime = "2025-02-03T19:00:00.000Z",
+            hasRecord = true,
         ),
     )
 
@@ -384,10 +328,11 @@ private fun TraineeHomeScreenPreview() {
         TraineeHomeScreen(
             state = dummyUiState,
             onClickNotification = { },
-            onSelectDate = {},
+            onClickDay = { },
             onClickNextWeek = { },
             onClickPreviousWeek = { },
-            onClickPtSessionCard = {},
+            onClickPtSessionCard = { },
+            onChangeVisibleMonth = { },
         )
     }
 }

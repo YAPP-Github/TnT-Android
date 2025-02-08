@@ -35,7 +35,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                 ptSession = PtSession(
                     ptLessonId = "CDE35K32",
                     trainerName = "김헬스",
-                    trainerImage = "https://buly.kr/DaO1v4V",
+                    trainerImage = "https://buly.kr/44x6xFN",
                     session = 12,
                     startTime = "2025-02-03T08:00:00.000Z",
                     endTime = "2025-02-03T09:00:00.000Z",
@@ -95,7 +95,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                 ptSession = PtSession(
                     ptLessonId = "OSI93DG1",
                     trainerName = "이강사",
-                    trainerImage = "https://buly.kr/DaO1v4V",
+                    trainerImage = null,
                     session = 15,
                     startTime = "2025-02-15T18:00:00.000Z",
                     endTime = "2025-02-15T19:00:00.000Z",
@@ -113,7 +113,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     DailyRecord(
                         recordId = "VDF1D907",
                         recordType = RecordType.MealType.DINNER,
-                        recordTime = "2025-02-03T13:00:00.000Z",
+                        recordTime = "2025-02-03T20:00:00.000Z",
                         recordImage = "https://buly.kr/BpESNP5",
                         recordContents = "계란 5개 먹었습니다.",
                         feedbackCount = 0,
@@ -125,7 +125,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                 ptSession = PtSession(
                     ptLessonId = "CDK392DF",
                     trainerName = "박트레이너",
-                    trainerImage = "https://buly.kr/DaO1v4V",
+                    trainerImage = null,
                     session = 10,
                     startTime = "2025-02-10T14:30:00.000Z",
                     endTime = "2025-02-10T15:30:00.000Z",
@@ -138,7 +138,7 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                 ptSession = PtSession(
                     ptLessonId = "CDE35K32",
                     trainerName = "정트레이너",
-                    trainerImage = "https://buly.kr/DaO1v4V",
+                    trainerImage = "https://buly.kr/44x6xFN",
                     session = 25,
                     startTime = "2025-02-23T06:00:00.000Z",
                     endTime = "2025-02-23T06:50:00.000Z",
