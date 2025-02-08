@@ -101,14 +101,13 @@ private fun TraineeHomeScreen(
     onClickPreviousWeek: () -> Unit,
     onClickPtSessionCard: (String) -> Unit,
 ) {
-    val now = LocalDate.now()
     val coroutineScope = rememberCoroutineScope()
 
     val weekCalendarState = rememberWeekCalendarState(
         firstDayOfWeek = DayOfWeek.SUNDAY,
         firstVisibleWeekDate = state.selectedDay,
-        startDate = now.minusYears(10),
-        endDate = now.plusYears(10),
+        startDate = state.selectedDay.minusYears(10),
+        endDate = state.selectedDay.plusYears(10),
     )
     val visibleYearMonth = rememberMostVisibleYearMonth(weekCalendarState)
 
