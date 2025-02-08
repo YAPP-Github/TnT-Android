@@ -106,7 +106,7 @@ private fun TraineeHomeScreen(
 
     val weekCalendarState = rememberWeekCalendarState(
         firstDayOfWeek = DayOfWeek.SUNDAY,
-        firstVisibleWeekDate = state.selectedDate,
+        firstVisibleWeekDate = state.selectedDay,
         startDate = now.minusYears(10),
         endDate = now.plusYears(10),
     )
@@ -129,13 +129,13 @@ private fun TraineeHomeScreen(
                     onClickSelectorPrevious = {
                         coroutineScope.launch {
                             onClickPreviousWeek()
-                            weekCalendarState.animateScrollToWeek(state.selectedDate)
+                            weekCalendarState.animateScrollToWeek(state.selectedDay)
                         }
                     },
                     onClickSelectorNext = {
                         coroutineScope.launch {
                             onClickNextWeek()
-                            weekCalendarState.animateScrollToWeek(state.selectedDate)
+                            weekCalendarState.animateScrollToWeek(state.selectedDay)
                         }
                     },
                     onClickNotification = onClickNotification,
@@ -143,7 +143,7 @@ private fun TraineeHomeScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 TnTIndicatorWeekCalendar(
                     state = weekCalendarState,
-                    dayState = { day -> DayState(isSelected = day == state.selectedDate) },
+                    dayState = { day -> DayState(isSelected = day == state.selectedDay) },
                     indicatorState = { day ->
                         DayIndicatorState(showIcon = day in state.dailyDataState)
                     },
@@ -197,7 +197,7 @@ private fun TraineeHomeScreen(
                     .padding(horizontal = 20.dp, vertical = 20.dp),
             ) {
                 Text(
-                    text = formatDateWithDay(state.selectedDate),
+                    text = formatDateWithDay(state.selectedDay),
                     color = TnTTheme.colors.neutralColors.Neutral800,
                     style = TnTTheme.typography.h3,
                     modifier = Modifier.fillMaxWidth(),
@@ -294,7 +294,7 @@ private fun TraineeHomeScreenPreview() {
     val date = LocalDate.of(2025, 2, 8)
 
     val dummyUiState = TraineeHomeUiState(
-        selectedDate = date,
+        selectedDay = date,
         recordList = listOf(
             DailyRecord(
                 recordId = "VDF1D907",

@@ -47,7 +47,7 @@ internal class TraineeHomeViewModel @Inject constructor(
             val result = traineeRepository.getTraineeDailyLog(date)
             updateState {
                 copy(
-                    selectedDate = date,
+                    selectedDay = date,
                     ptLessons = result.ptSession,
                     recordList = result.record,
                 )
@@ -56,10 +56,10 @@ internal class TraineeHomeViewModel @Inject constructor(
     }
 
     private fun moveToNextWeek() {
-        selectDate(currentState.selectedDate.plusWeeks(1))
+        selectDate(currentState.selectedDay.plusWeeks(1))
     }
 
     private fun moveToPreviousWeek() {
-        selectDate(currentState.selectedDate.minusWeeks(1))
+        selectDate(currentState.selectedDay.minusWeeks(1))
     }
 }

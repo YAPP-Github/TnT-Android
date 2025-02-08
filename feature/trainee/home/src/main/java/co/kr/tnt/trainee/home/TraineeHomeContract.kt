@@ -10,7 +10,7 @@ import java.time.YearMonth
 
 class TraineeHomeContract {
     data class TraineeHomeUiState(
-        val selectedDate: LocalDate = LocalDate.now(),
+        val selectedDay: LocalDate = LocalDate.now(),
         val dailyDataState: List<LocalDate> = emptyList(),
         val ptLessons: PtSession? = null,
         val recordList: List<DailyRecord>? = emptyList(),
