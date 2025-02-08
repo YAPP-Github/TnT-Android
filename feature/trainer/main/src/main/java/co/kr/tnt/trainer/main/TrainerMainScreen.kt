@@ -81,7 +81,10 @@ private fun TrainerMainScreen(
             }
             trainerFeedbackNavGraph()
             trainerMembersNavGraph()
-            trainerMyPageNavGraph()
+            trainerMyPageNavGraph(
+                navigateToLogin = navigateToLogin,
+                navigateToWebView = navigateToWebView,
+            )
         }
     }
 }
