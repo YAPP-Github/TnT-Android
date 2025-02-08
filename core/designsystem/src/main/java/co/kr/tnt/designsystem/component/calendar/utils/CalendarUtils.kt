@@ -46,7 +46,7 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50
 }
 
 /**
- * 화면에 보여지는 7일 중 과반 이상 (4일) 보여지는 '월' 을 반환합니다.
+ * 화면에 보여지는 7일 중 과반 이상 보여지는 '월' 을 반환합니다.
  */
 @Composable
 fun rememberMostVisibleYearMonth(
@@ -57,19 +57,18 @@ fun rememberMostVisibleYearMonth(
     LaunchedEffect(state) {
         snapshotFlow { state.firstVisibleWeek.days.map { it.date } }
             .collect { visibleDays ->
-                val dominantYearMonth = getDominantYearMonth(visibleDays)
-                visibleYearMonth.value = dominantYearMonth
+                val mostVisibleYearMonth = getMostFrequentYearMonth(visibleDays)
+                visibleYearMonth.value = mostVisibleYearMonth
             }
     }
 
     return visibleYearMonth.value
 }
 
-private fun getDominantYearMonth(visibleDays: List<LocalDate>): YearMonth {
-    val yearMonthCount = visibleDays.groupingBy { YearMonth.from(it) }.eachCount()
-
-    return yearMonthCount.entries
-        .sortedByDescending { it.value }
-        .firstOrNull { it.value >= 4 }?.key
-        ?: YearMonth.from(visibleDays.first())
+private fun getMostFrequentYearMonth(visibleDays: List<LocalDate>): YearMonth {
+    return visibleDays
+        .groupingBy { YearMonth.from(it) }
+        .eachCount()
+        .maxBy { it.value }
+        .key
 }
