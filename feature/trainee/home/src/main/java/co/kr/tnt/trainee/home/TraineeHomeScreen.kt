@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -114,103 +113,131 @@ private fun TraineeHomeScreen(
     val markedDates: Set<LocalDate> =
         (state.ptLessons.map { it.date } + state.recordList.map { it.recordDate }).toSet()
 
-    Scaffold(
-        containerColor = TnTTheme.colors.commonColors.Common0,
-        modifier = Modifier.fillMaxSize(),
-    ) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            item {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Spacer(Modifier.height(12.dp))
-                    TnTHomeTopBar(
-                        yearMonth = visibleYearMonth,
-                        onClickSelectorPrevious = {
-                            coroutineScope.launch {
-                                onClickPreviousWeek()
-                                weekCalendarState.animateScrollToWeek(state.selectedDate)
-                            }
-                        },
-                        onClickSelectorNext = {
-                            coroutineScope.launch {
-                                onClickNextWeek()
-                                weekCalendarState.animateScrollToWeek(state.selectedDate)
-                            }
-                        },
-                        onClickNotification = onClickNotification,
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    TnTIndicatorWeekCalendar(
-                        state = weekCalendarState,
-                        dayState = { date ->
-                            DayState(isSelected = date == state.selectedDate)
-                        },
-                        indicatorState = { date ->
-                            DayIndicatorState(showIcon = date in markedDates)
-                        },
-                        onClickDay = { date ->
-                            onSelectDate(date)
-                        },
-                        modifier = Modifier.background(TnTTheme.colors.commonColors.Common0),
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    // PT Session
-                    if (filteredPTLesson.isNotEmpty()) {
-                        filteredPTLesson.forEach { lesson ->
-                            val chip = RecordChip.create(PTSessionType(lesson.session))
-                            TnTSessionRecordCard(
-                                name = lesson.trainerName,
-                                tagText = chip.title,
-                                startTime = formatTime(lesson.startTime),
-                                endTime = formatTime(lesson.endTime),
-                                isTrainer = false,
-                                defaultImage = painterResource(DefaultUserProfile.Trainer.image),
-                                leadingEmoji = chip.emoji ?: "",
-                                profileImage = rememberAsyncImagePainter(lesson.trainerImage),
-                                showSessionRecordCreation = false,
-                                showSessionRecordDetails = lesson.hasRecord,
-                                onClick = { onClickPtSessionCard(lesson.ptLessonId) },
-                                modifier = Modifier.padding(
-                                    start = 20.dp,
-                                    end = 20.dp,
-                                    bottom = 16.dp,
-                                ),
-                            )
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(TnTTheme.colors.neutralColors.Neutral100),
+    ) {
+        item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(TnTTheme.colors.commonColors.Common0),
+            ) {
+                Spacer(Modifier.height(12.dp))
+                TnTHomeTopBar(
+                    yearMonth = visibleYearMonth,
+                    onClickSelectorPrevious = {
+                        coroutineScope.launch {
+                            onClickPreviousWeek()
+                            weekCalendarState.animateScrollToWeek(state.selectedDate)
                         }
-                    } else {
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp, vertical = 28.dp),
-                        ) {
-                            Text(
-                                text = stringResource(R.string.no_scheduled_lesson),
-                                color = TnTTheme.colors.neutralColors.Neutral400,
-                                style = TnTTheme.typography.label1Medium,
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center,
-                            )
+                    },
+                    onClickSelectorNext = {
+                        coroutineScope.launch {
+                            onClickNextWeek()
+                            weekCalendarState.animateScrollToWeek(state.selectedDate)
                         }
+                    },
+                    onClickNotification = onClickNotification,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                TnTIndicatorWeekCalendar(
+                    state = weekCalendarState,
+                    dayState = { date ->
+                        DayState(isSelected = date == state.selectedDate)
+                    },
+                    indicatorState = { date ->
+                        DayIndicatorState(showIcon = date in markedDates)
+                    },
+                    onClickDay = { date ->
+                        onSelectDate(date)
+                    },
+                    modifier = Modifier.background(TnTTheme.colors.commonColors.Common0),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                // PT Session
+                if (filteredPTLesson.isNotEmpty()) {
+                    filteredPTLesson.forEach { lesson ->
+                        val chip = RecordChip.create(PTSessionType(lesson.session))
+                        TnTSessionRecordCard(
+                            name = lesson.trainerName,
+                            tagText = chip.title,
+                            startTime = formatTime(lesson.startTime),
+                            endTime = formatTime(lesson.endTime),
+                            isTrainer = false,
+                            defaultImage = painterResource(DefaultUserProfile.Trainer.image),
+                            leadingEmoji = chip.emoji ?: "",
+                            profileImage = rememberAsyncImagePainter(lesson.trainerImage),
+                            showSessionRecordCreation = false,
+                            showSessionRecordDetails = lesson.hasRecord,
+                            onClick = { onClickPtSessionCard(lesson.ptLessonId) },
+                            modifier = Modifier.padding(
+                                start = 20.dp,
+                                end = 20.dp,
+                                bottom = 16.dp,
+                            ),
+                        )
+                    }
+                } else {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp, vertical = 28.dp),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_scheduled_lesson),
+                            color = TnTTheme.colors.neutralColors.Neutral400,
+                            style = TnTTheme.typography.label1Medium,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
                     }
                 }
             }
+            // Record
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 20.dp),
+            ) {
+                Text(
+                    text = formatDateWithDay(state.selectedDate),
+                    color = TnTTheme.colors.neutralColors.Neutral800,
+                    style = TnTTheme.typography.h3,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+        if (filteredRecord.isEmpty()) {
             item {
-                // Record
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(TnTTheme.colors.neutralColors.Neutral100)
-                        .padding(horizontal = 20.dp, vertical = 20.dp),
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize(),
                 ) {
-                    Text(
-                        text = formatDateWithDay(state.selectedDate),
-                        color = TnTTheme.colors.neutralColors.Neutral800,
-                        style = TnTTheme.typography.h3,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+                    Column {
+                        Spacer(Modifier.height(80.dp))
+                        Text(
+                            text = stringResource(R.string.no_record_now),
+                            color = TnTTheme.colors.neutralColors.Neutral600,
+                            style = TnTTheme.typography.body2Bold,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = stringResource(R.string.record_meal_and_exercise_by_click_button),
+                            color = TnTTheme.colors.neutralColors.Neutral400,
+                            style = TnTTheme.typography.label1Medium,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                 }
             }
+        } else {
             items(filteredRecord) { record ->
                 val chip = RecordChip.create(record.recordType)
                 TnTRecordCard(
@@ -220,51 +247,20 @@ private fun TraineeHomeScreen(
                     time = formatTime(record.recordTime),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(TnTTheme.colors.neutralColors.Neutral100)
                         .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
                     image = record.recordImage?.let { rememberAsyncImagePainter(it) },
                     leadingEmoji = chip.emoji,
                     feedbackCount = if (record.feedbackCount == 0) null else record.feedbackCount,
                 )
             }
-            if (filteredRecord.isEmpty()) {
-                item {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(TnTTheme.colors.neutralColors.Neutral100),
-                    ) {
-                        Column {
-                            Spacer(Modifier.height(80.dp))
-                            Text(
-                                text = stringResource(R.string.no_record_now),
-                                color = TnTTheme.colors.neutralColors.Neutral600,
-                                style = TnTTheme.typography.body2Bold,
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center,
-                            )
-                            Spacer(Modifier.height(4.dp))
-                            Text(
-                                text = stringResource(R.string.record_meal_and_exercise_by_click_button),
-                                color = TnTTheme.colors.neutralColors.Neutral400,
-                                style = TnTTheme.typography.label1Medium,
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center,
-                            )
-                            Spacer(Modifier.height(200.dp))
-                        }
-                    }
-                }
-            }
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .background(TnTTheme.colors.neutralColors.Neutral100),
-                )
-            }
+        }
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .height(200.dp)
+                    .background(TnTTheme.colors.neutralColors.Neutral100),
+            )
         }
     }
 }
