@@ -143,7 +143,7 @@ private fun TraineeHomeScreen(
                 Calendar(
                     weekCalendarState = weekCalendarState,
                     selectedDay = state.selectedDay,
-                    dailyDataState = state.dailyDataState,
+                    dailyDataState = state.dailyRecordStatus,
                     onClickDay = onClickDay,
                 )
                 Spacer(modifier = Modifier.height(12.dp))

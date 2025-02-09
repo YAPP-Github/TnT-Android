@@ -30,7 +30,7 @@ internal class TraineeHomeViewModel @Inject constructor(
         // TODO : 주간 캘린더 일정 여부 확인 API 연동
         viewModelScope.launch {
             val result = traineeRepository.getDailyDataStatus(visibleYearMonth)
-            updateState { copy(dailyDataState = result) }
+            updateState { copy(dailyRecordStatus = result) }
         }
     }
 
