@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +40,8 @@ import co.kr.tnt.domain.model.RecordType
 import co.kr.tnt.domain.model.RecordType.PTSessionType
 import co.kr.tnt.domain.model.trainee.DailyRecord
 import co.kr.tnt.domain.model.trainee.PtSession
+import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
+import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.feature.trainee.home.R
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
@@ -51,11 +54,8 @@ import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.util.Locale
-import co.kr.tnt.core.designsystem.R as uiResource
 
 @Composable
 internal fun TraineeHomeRoute(
@@ -98,6 +98,7 @@ private fun TraineeHomeScreen(
     onClickDay: (LocalDate) -> Unit,
     onClickPtSessionCard: (String) -> Unit,
 ) {
+    val dateFormatter = remember { DateFormatter() }
     val coroutineScope = rememberCoroutineScope()
 
     val weekCalendarState = rememberWeekCalendarState(
@@ -149,6 +150,7 @@ private fun TraineeHomeScreen(
                 if (state.ptSessions != null) {
                     DailyPtSession(
                         session = state.ptSessions,
+                        dateFormatter = dateFormatter,
                         onClickPtSessionCard = onClickPtSessionCard,
                     )
                 } else {
@@ -161,7 +163,10 @@ private fun TraineeHomeScreen(
                     .padding(horizontal = 20.dp, vertical = 20.dp),
             ) {
                 Text(
-                    text = formatDateWithDay(state.selectedDay),
+                    text = dateFormatter.format(
+                        date = state.selectedDay,
+                        pattern = "M월 d일 EEEE",
+                    ),
                     color = TnTTheme.colors.neutralColors.Neutral800,
                     style = TnTTheme.typography.h3,
                     modifier = Modifier.fillMaxWidth(),
@@ -172,7 +177,10 @@ private fun TraineeHomeScreen(
             item { EmptyDailyRecords() }
         } else {
             items(state.recordList) { record ->
-                DailyRecords(record)
+                DailyRecords(
+                    record = record,
+                    dateFormatter = dateFormatter,
+                )
             }
         }
         item {
@@ -194,7 +202,7 @@ private fun TraineeHomeScreen(
 private fun Calendar(
     weekCalendarState: WeekCalendarState,
     selectedDay: LocalDate,
-    dailyDataState: List<LocalDate>,
+    dailyDataState: List<TraineeDailyRecordStatus>,
     onClickDay: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -202,7 +210,7 @@ private fun Calendar(
         state = weekCalendarState,
         dayState = { day -> DayState(isSelected = day == selectedDay) },
         indicatorState = { day ->
-            DayIndicatorState(showIcon = day in dailyDataState)
+            DayIndicatorState(showIcon = dailyDataState.any { it.date == day })
         },
         onClickDay = onClickDay,
         modifier = modifier.background(TnTTheme.colors.commonColors.Common0),
@@ -212,14 +220,15 @@ private fun Calendar(
 @Composable
 private fun DailyPtSession(
     session: PtSession,
+    dateFormatter: DateFormatter,
     onClickPtSessionCard: (sessionId: String) -> Unit,
 ) {
     val chip = RecordChip.create(PTSessionType(session.session))
     TnTSessionRecordCard(
         name = session.trainerName,
         tagText = chip.title,
-        startTime = formatTime(session.startTime),
-        endTime = formatTime(session.endTime),
+        startTime = dateFormatter.format(session.startTime, "a hh:mm"),
+        endTime = dateFormatter.format(session.endTime, "a hh:mm"),
         isTrainer = false,
         defaultImage = painterResource(DefaultUserProfile.Trainer.image),
         leadingEmoji = chip.emoji ?: "",
@@ -257,13 +266,14 @@ private fun EmptyPtSession() {
 @Composable
 private fun DailyRecords(
     record: DailyRecord,
+    dateFormatter: DateFormatter,
 ) {
     val chip = RecordChip.create(record.recordType)
     TnTRecordCard(
         style = chip.chipStyle,
         record = record.recordContents,
         tagText = chip.title,
-        time = formatTime(record.recordTime),
+        time = dateFormatter.format(record.recordTime, "a hh:mm"),
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
@@ -300,31 +310,6 @@ private fun EmptyDailyRecords() {
     }
 }
 
-// 시간을 "오후 14:00"의 형식으로 바꿔준다
-@Composable
-private fun formatTime(isoString: String): String {
-    val timePart = isoString.substringAfter('T').substring(0, 5)
-    val hour = timePart.substring(0, 2).toInt()
-
-    val amPm = if (hour < 12) {
-        stringResource(uiResource.string.morning)
-    } else {
-        stringResource(uiResource.string.afternoon)
-    }
-
-    return "$amPm $timePart"
-}
-
-// 선택된 날짜를 "0월 0일 0요일"의 형식으로 바꿔준다
-private fun formatDateWithDay(date: LocalDate): String {
-    val monthDayFormatter = DateTimeFormatter.ofPattern("M월 d일", Locale.KOREAN)
-    val monthDay = date.format(monthDayFormatter)
-
-    val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)
-
-    return "$monthDay $dayOfWeek"
-}
-
 @Preview
 @Composable
 private fun TraineeHomeScreenPreview() {
@@ -336,7 +321,7 @@ private fun TraineeHomeScreenPreview() {
             DailyRecord(
                 recordId = "VDF1D907",
                 recordType = RecordType.MealType.BREAKFAST,
-                recordTime = "2025-02-08T08:00:00.000Z",
+                recordTime = LocalDateTime.of(2025, 2, 8, 8, 0, 0),
                 recordImage = "https://buly.kr/BpESNP5",
                 recordContents = "아침으로 계란 2개 먹었습니다.",
                 feedbackCount = 1,
@@ -344,7 +329,7 @@ private fun TraineeHomeScreenPreview() {
             DailyRecord(
                 recordId = "VDF1D907",
                 recordType = RecordType.MealType.LUNCH,
-                recordTime = "2025-02-08T13:00:00.000Z",
+                recordTime = LocalDateTime.of(2025, 2, 8, 13, 0, 0),
                 recordImage = "https://buly.kr/BpESNP5",
                 recordContents = "점심으로 계란 5개 먹었습니다.",
                 feedbackCount = 0,
@@ -355,8 +340,8 @@ private fun TraineeHomeScreenPreview() {
             trainerName = "이강사",
             trainerImage = "https://buly.kr/DaO1v4V",
             session = 15,
-            startTime = "2025-02-03T18:00:00.000Z",
-            endTime = "2025-02-03T19:00:00.000Z",
+            startTime = LocalDateTime.of(2025, 2, 3, 18, 0, 0),
+            endTime = LocalDateTime.of(2025, 2, 3, 19, 0, 0),
             hasRecord = true,
         ),
     )

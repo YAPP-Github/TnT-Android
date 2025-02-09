@@ -30,7 +30,7 @@ internal class TraineeHomeViewModel @Inject constructor(
         // TODO : 주간 캘린더 일정 여부 확인 API 연동
         viewModelScope.launch {
             val result = traineeRepository.getDailyDataStatus(visibleYearMonth)
-            updateState { copy(dailyDataState = result.date) }
+            updateState { copy(dailyDataState = result) }
         }
     }
 
@@ -42,7 +42,7 @@ internal class TraineeHomeViewModel @Inject constructor(
     private fun selectDate(date: LocalDate) {
         // TODO : 선택된 날짜의 PT 수업, 기록 불러오기 API 연동
         viewModelScope.launch {
-            val result = traineeRepository.getTraineeDailyLog(date)
+            val result = traineeRepository.getTraineeDailyRecord(date)
             updateState {
                 copy(
                     selectedDay = date,

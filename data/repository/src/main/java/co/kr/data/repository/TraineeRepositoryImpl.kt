@@ -1,38 +1,46 @@
 package co.kr.data.repository
 
-import co.kr.tnt.domain.model.RecordType
-import co.kr.tnt.domain.model.trainee.DailyDataStatus
-import co.kr.tnt.domain.model.trainee.DailyRecord
-import co.kr.tnt.domain.model.trainee.PtSession
-import co.kr.tnt.domain.model.trainee.TraineeDailyLog
+import co.kr.data.network.model.trainee.DailyRecordsResponse
+import co.kr.data.network.model.trainee.MonthlyRecordedDatesResponse
+import co.kr.data.network.model.trainee.PtSessionResponse
+import co.kr.data.network.model.trainee.RecordResponse
+import co.kr.data.network.model.trainee.RecordedDateResponse
+import co.kr.data.network.model.trainee.toDomain
+import co.kr.tnt.domain.model.trainee.TraineeDailyRecord
+import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
 import co.kr.tnt.domain.repository.TraineeRepository
+import co.kr.tnt.domain.utils.DateFormatter
 import java.time.LocalDate
 import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
+internal class TraineeRepositoryImpl @Inject constructor(
+    private val dateFormatter: DateFormatter,
+) : TraineeRepository {
     // TODO : API에 맞춰 수정
-    override suspend fun getDailyDataStatus(yearMonth: YearMonth): DailyDataStatus {
-        val result = DailyDataStatus(
-            date = listOf(
-                LocalDate.of(2025, 2, 3),
-                LocalDate.of(2025, 2, 8),
-                LocalDate.of(2025, 2, 10),
-                LocalDate.of(2025, 2, 15),
-                LocalDate.of(2025, 2, 23),
+    override suspend fun getDailyDataStatus(yearMonth: YearMonth): List<TraineeDailyRecordStatus> {
+        val result = MonthlyRecordedDatesResponse(
+            listOf(
+                RecordedDateResponse(date = "2025-02-03"),
+                RecordedDateResponse(date = "2025-02-08"),
+                RecordedDateResponse(date = "2025-02-10"),
+                RecordedDateResponse(date = "2025-02-15"),
+                RecordedDateResponse(date = "2025-02-23"),
             ),
-        )
+        ).calendarRecordInfo.map { response ->
+            response.toDomain(dateFormatter)
+        }
 
         return result
     }
 
-    override suspend fun getTraineeDailyLog(day: LocalDate): TraineeDailyLog {
+    override suspend fun getTraineeDailyRecord(day: LocalDate): TraineeDailyRecord {
         val result = listOf(
-            TraineeDailyLog(
-                date = LocalDate.of(2025, 2, 3),
-                ptSession = PtSession(
+            DailyRecordsResponse(
+                date = "2025-02-03",
+                lessons = PtSessionResponse(
                     ptSessionId = "CDE35K32",
                     trainerName = "김헬스",
                     trainerImage = "https://buly.kr/44x6xFN",
@@ -41,18 +49,18 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     endTime = "2025-02-03T09:00:00.000Z",
                     hasRecord = true,
                 ),
-                record = listOf(
-                    DailyRecord(
+                records = listOf(
+                    RecordResponse(
                         recordId = "VDF1D907",
-                        recordType = RecordType.MealType.BREAKFAST,
+                        recordType = "BREAKFAST",
                         recordTime = "2025-02-03T08:00:00.000Z",
                         recordImage = "https://buly.kr/BpESNP5",
                         recordContents = "아침으로 계란 2개 먹었습니다.",
                         feedbackCount = 1,
                     ),
-                    DailyRecord(
+                    RecordResponse(
                         recordId = "VDF1D907",
-                        recordType = RecordType.MealType.LUNCH,
+                        recordType = "LUNCH",
                         recordTime = "2025-02-03T13:00:00.000Z",
                         recordImage = "https://buly.kr/BpESNP5",
                         recordContents = "점심으로 계란 5개 먹었습니다.",
@@ -60,29 +68,29 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     ),
                 ),
             ),
-            TraineeDailyLog(
-                date = LocalDate.of(2025, 2, 8),
-                ptSession = null,
-                record = listOf(
-                    DailyRecord(
+            DailyRecordsResponse(
+                date = "2025-02-08",
+                lessons = null,
+                records = listOf(
+                    RecordResponse(
                         recordId = "VDF1D907",
-                        recordType = RecordType.MealType.BREAKFAST,
+                        recordType = "BREAKFAST",
                         recordTime = "2025-02-08T13:00:00.000Z",
                         recordImage = "https://buly.kr/BpESNP5",
                         recordContents = "계란 2개 먹었습니다.",
                         feedbackCount = 1,
                     ),
-                    DailyRecord(
+                    RecordResponse(
                         recordId = "VDF1D907",
-                        recordType = RecordType.MealType.SNACK,
+                        recordType = "SNACK",
                         recordTime = "2025-02-08T15:00:00.000Z",
                         recordImage = "https://buly.kr/BpESNP5",
                         recordContents = "계란 반개 먹었습니다.",
                         feedbackCount = 0,
                     ),
-                    DailyRecord(
+                    RecordResponse(
                         recordId = "VDF1D907",
-                        recordType = RecordType.MealType.DINNER,
+                        recordType = "DINNER",
                         recordTime = "2025-02-08T18:40:00.000Z",
                         recordImage = null,
                         recordContents = "저녁으로 소고기 먹었습니다.",
@@ -90,9 +98,9 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     ),
                 ),
             ),
-            TraineeDailyLog(
-                date = LocalDate.of(2025, 2, 15),
-                ptSession = PtSession(
+            DailyRecordsResponse(
+                date = "2025-02-15",
+                lessons = PtSessionResponse(
                     ptSessionId = "OSI93DG1",
                     trainerName = "이강사",
                     trainerImage = null,
@@ -101,18 +109,18 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     endTime = "2025-02-15T19:00:00.000Z",
                     hasRecord = true,
                 ),
-                record = listOf(
-                    DailyRecord(
+                records = listOf(
+                    RecordResponse(
                         recordId = "VDF1D907",
-                        recordType = RecordType.MealType.LUNCH,
+                        recordType = "LUNCH",
                         recordTime = "2025-02-15T13:00:00.000Z",
                         recordImage = null,
                         recordContents = "비빔밥, 바나나 1개",
                         feedbackCount = 1,
                     ),
-                    DailyRecord(
+                    RecordResponse(
                         recordId = "VDF1D907",
-                        recordType = RecordType.MealType.DINNER,
+                        recordType = "DINNER",
                         recordTime = "2025-02-03T20:00:00.000Z",
                         recordImage = "https://buly.kr/BpESNP5",
                         recordContents = "계란 5개 먹었습니다.",
@@ -120,9 +128,9 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     ),
                 ),
             ),
-            TraineeDailyLog(
-                date = LocalDate.of(2025, 2, 10),
-                ptSession = PtSession(
+            DailyRecordsResponse(
+                date = "2025-02-10",
+                lessons = PtSessionResponse(
                     ptSessionId = "CDK392DF",
                     trainerName = "박트레이너",
                     trainerImage = null,
@@ -131,11 +139,11 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     endTime = "2025-02-10T15:30:00.000Z",
                     hasRecord = false,
                 ),
-                record = emptyList(),
+                records = emptyList(),
             ),
-            TraineeDailyLog(
-                date = LocalDate.of(2025, 2, 23),
-                ptSession = PtSession(
+            DailyRecordsResponse(
+                date = "2025-02-23",
+                lessons = PtSessionResponse(
                     ptSessionId = "CDE35K32",
                     trainerName = "정트레이너",
                     trainerImage = "https://buly.kr/44x6xFN",
@@ -144,17 +152,18 @@ internal class TraineeRepositoryImpl @Inject constructor() : TraineeRepository {
                     endTime = "2025-02-23T06:50:00.000Z",
                     hasRecord = true,
                 ),
-                record = emptyList(),
+                records = emptyList(),
             ),
-        )
+        ).map { response ->
+            response.toDomain(dateFormatter)
+        }.firstOrNull { it.date == day }
 
-        val filteredRecord = result.find { it.date == day }
-        val noData = TraineeDailyLog(
+        val noData = TraineeDailyRecord(
             date = day,
             ptSession = null,
             record = emptyList(),
         )
 
-        return filteredRecord ?: noData
+        return result ?: noData
     }
 }

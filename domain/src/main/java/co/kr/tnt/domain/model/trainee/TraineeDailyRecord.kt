@@ -2,8 +2,9 @@ package co.kr.tnt.domain.model.trainee
 
 import co.kr.tnt.domain.model.RecordType
 import java.time.LocalDate
+import java.time.LocalDateTime
 
-data class TraineeDailyLog(
+data class TraineeDailyRecord(
     val date: LocalDate,
     val ptSession: PtSession?,
     val record: List<DailyRecord>,
@@ -14,8 +15,8 @@ data class PtSession(
     val trainerName: String,
     val trainerImage: String?,
     val session: Int,
-    val startTime: String,
-    val endTime: String,
+    val startTime: LocalDateTime,
+    val endTime: LocalDateTime,
     val hasRecord: Boolean,
 )
 
@@ -23,7 +24,7 @@ data class PtSession(
 data class DailyRecord(
     val recordId: String,
     val recordType: RecordType,
-    val recordTime: String,
+    val recordTime: LocalDateTime,
     val recordImage: String?,
     val recordContents: String,
     val feedbackCount: Int,
