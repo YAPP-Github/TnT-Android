@@ -27,7 +27,6 @@ internal class TrainerMyPageViewModel @Inject constructor(
             TrainerMyPageUiEvent.OnClickDeleteAccount -> updateState {
                 copy(dialogState = DialogState.DELETE_ACCOUNT_CONFIRM)
             }
-
             TrainerMyPageUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
             TrainerMyPageUiEvent.OnClickDialogConfirm -> handleDialogConfirm()
         }
@@ -41,8 +40,11 @@ internal class TrainerMyPageViewModel @Inject constructor(
                 updateState { copy(dialogState = DialogState.NONE) }
                 sendEffect(TrainerMyPageSideEffect.NavigateToLogin)
             }
-            DialogState.DELETE_ACCOUNT_CONFIRM -> updateState { copy(dialogState = DialogState.DELETE_ACCOUNT) }
-            DialogState.DELETE_ACCOUNT -> TODO()
+            DialogState.DELETE_ACCOUNT_CONFIRM -> withdraw()
+            DialogState.DELETE_ACCOUNT -> {
+                updateState { copy(dialogState = DialogState.NONE) }
+                sendEffect(TrainerMyPageSideEffect.NavigateToLogin)
+            }
         }
     }
 
@@ -55,6 +57,19 @@ internal class TrainerMyPageViewModel @Inject constructor(
                 updateState { copy(dialogState = DialogState.LOGOUT) }
             }.onFailure {
                 sendEffect(TrainerMyPageSideEffect.ShowToast("로그아웃에 실패하였습니다."))
+            }
+        }
+    }
+
+    private fun withdraw() {
+        viewModelScope.launch {
+            runCatching {
+                loginRepository.withdraw()
+                kakaoLoginSdk.unlink()
+            }.onSuccess {
+                updateState { copy(dialogState = DialogState.DELETE_ACCOUNT) }
+            }.onFailure {
+                sendEffect(TrainerMyPageSideEffect.ShowToast("탈퇴에 실패하였습니다."))
             }
         }
     }

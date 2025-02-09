@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.mypage
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -81,7 +82,8 @@ internal fun TrainerMyPageRoute(
             when (effect) {
                 TrainerMyPageContract.TrainerMyPageSideEffect.NavigateToLogin -> navigateToLogin()
                 is TrainerMyPageContract.TrainerMyPageSideEffect.NavigateToWebView -> TODO()
-                is TrainerMyPageContract.TrainerMyPageSideEffect.ShowToast -> TODO()
+                is TrainerMyPageContract.TrainerMyPageSideEffect.ShowToast ->
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
