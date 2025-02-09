@@ -23,6 +23,12 @@ class SessionLocalDataSource @Inject constructor(
         }
     }
 
+    suspend fun removeSessionId() {
+        sessionPreferences.edit { preferences ->
+            preferences.remove(SESSION_ID)
+        }
+    }
+
     companion object {
         private val SESSION_ID = stringPreferencesKey("SESSION_ID")
     }

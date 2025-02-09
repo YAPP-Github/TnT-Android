@@ -33,6 +33,9 @@ interface ApiService {
         @Body request: LoginRequest,
     ): LoginResponse
 
+    @POST("/logout")
+    suspend fun postLogout()
+
     // SignUp
     @Multipart
     @POST("/members/sign-up")
