@@ -1,7 +1,7 @@
 package co.kr.tnt.trainer.members
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -56,49 +56,46 @@ private fun TrainerMembersScreen(
     state: TrainerMemberUiState,
     onClickInviteButton: () -> Unit,
 ) {
-    LazyColumn(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(TnTTheme.colors.neutralColors.Neutral100),
     ) {
-        item {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-            ) {
-                Text(
-                    text = "내 회원",
-                    color = TnTTheme.colors.neutralColors.Neutral900,
-                    style = TnTTheme.typography.h2,
-                )
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = state.memberList.size.toString(),
-                    color = TnTTheme.colors.redColors.Red500,
-                    style = TnTTheme.typography.h2,
-                )
-                Spacer(Modifier.weight(1f))
-                MemberInviteButton(onClickInviteButton)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            item {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                ) {
+                    Text(
+                        text = "내 회원",
+                        color = TnTTheme.colors.neutralColors.Neutral900,
+                        style = TnTTheme.typography.h2,
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        text = state.memberList.size.toString(),
+                        color = TnTTheme.colors.redColors.Red500,
+                        style = TnTTheme.typography.h2,
+                    )
+                    Spacer(Modifier.weight(1f))
+                    MemberInviteButton(onClickInviteButton)
+                }
+            }
+            if (state.memberList.isNotEmpty()) {
+                items(state.memberList) { member ->
+                    MemberList(member)
+                }
             }
         }
         if (state.memberList.isEmpty()) {
-            item {
-                Column(
-                    modifier = Modifier.fillParentMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Spacer(Modifier.weight(1f))
-                    EmptyMemberList()
-                    Spacer(Modifier.weight(1.5f))
-                }
-            }
-        } else {
-            items(state.memberList) { member ->
-                MemberList(member)
-            }
+            EmptyMemberList(
+                modifier = Modifier.align(Alignment.Center),
+            )
         }
     }
 }
@@ -133,21 +130,22 @@ private fun MemberInviteButton(
 }
 
 @Composable
-private fun EmptyMemberList() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun EmptyMemberList(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Text(
             text = "아직 연결된 회원이 없어요",
             color = TnTTheme.colors.neutralColors.Neutral600,
             style = TnTTheme.typography.body2Bold,
-            modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text = "아직 연결된 회원이 없어요",
+            text = "추가 버튼을 눌러 회원을 추가해 보세요",
             color = TnTTheme.colors.neutralColors.Neutral400,
             style = TnTTheme.typography.label1Medium,
-            modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
     }
