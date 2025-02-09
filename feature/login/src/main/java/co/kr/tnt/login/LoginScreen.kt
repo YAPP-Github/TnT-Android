@@ -75,6 +75,7 @@ internal fun LoginRoute(
     LoginScreen(
         onClickKakaoLogin = {
             coroutineScope.launch {
+                // TODO ViewModel 이관 검토
                 kakaoLoginSdk.login(context)
                     .onSuccess { accessToken ->
                         viewModel.setEvent(

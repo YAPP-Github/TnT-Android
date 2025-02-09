@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,6 +75,16 @@ internal fun TrainerMyPageRoute(
         onClickConfirm = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickDialogConfirm) },
         onDismissDialog = { viewModel.setEvent(TrainerMyPageUiEvent.OnDismissDialog) },
     )
+
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                TrainerMyPageContract.TrainerMyPageSideEffect.NavigateToLogin -> navigateToLogin()
+                is TrainerMyPageContract.TrainerMyPageSideEffect.NavigateToWebView -> TODO()
+                is TrainerMyPageContract.TrainerMyPageSideEffect.ShowToast -> TODO()
+            }
+        }
+    }
 }
 
 @Composable
@@ -272,6 +283,7 @@ private fun Dialog(
                 title = stringResource(coreR.string.logout_complete_title),
                 content = stringResource(coreR.string.logout_content),
                 buttonText = stringResource(coreR.string.ok),
+                cancelable = false,
                 onButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
             )
@@ -294,6 +306,7 @@ private fun Dialog(
                 title = stringResource(R.string.delete_account_complete_title),
                 content = stringResource(R.string.delete_account_complete_content),
                 buttonText = stringResource(coreR.string.ok),
+                cancelable = false,
                 onButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
             )
