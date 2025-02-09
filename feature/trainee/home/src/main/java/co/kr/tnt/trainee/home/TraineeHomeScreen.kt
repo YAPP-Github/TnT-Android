@@ -36,11 +36,11 @@ import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleYearMo
 import co.kr.tnt.designsystem.component.card.TnTRecordCard
 import co.kr.tnt.designsystem.component.card.TnTSessionRecordCard
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.model.DailyRecord
 import co.kr.tnt.domain.model.RecordType
 import co.kr.tnt.domain.model.RecordType.PTSessionType
-import co.kr.tnt.domain.model.trainee.DailyRecord
-import co.kr.tnt.domain.model.trainee.PtSession
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
+import co.kr.tnt.domain.model.trainee.TraineePtSession
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.feature.trainee.home.R
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
@@ -219,7 +219,7 @@ private fun Calendar(
 
 @Composable
 private fun DailyPtSession(
-    session: PtSession,
+    session: TraineePtSession,
     dateFormatter: DateFormatter,
     onClickPtSessionCard: (sessionId: String) -> Unit,
 ) {
@@ -335,7 +335,7 @@ private fun TraineeHomeScreenPreview() {
                 feedbackCount = 0,
             ),
         ),
-        ptSessions = PtSession(
+        ptSessions = TraineePtSession(
             ptSessionId = "OSI93DG1",
             trainerName = "이강사",
             trainerImage = "https://buly.kr/DaO1v4V",
