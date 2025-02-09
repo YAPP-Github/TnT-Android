@@ -4,14 +4,16 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import co.kr.data.storage.di.StorageModule.SESSION_STORAGE_NAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
 class SessionLocalDataSource @Inject constructor(
-    private val sessionPreferences: DataStore<Preferences>,
+    @Named(SESSION_STORAGE_NAME) private val sessionPreferences: DataStore<Preferences>,
 ) {
     val sessionId: Flow<String> = sessionPreferences.data.map { preferences ->
         preferences[SESSION_ID] ?: ""
