@@ -23,12 +23,14 @@ fun NavController.navigateToTrainerMain(
 
 fun NavGraphBuilder.trainerMainScreen(
     navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
+    navigateToInvite: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {
     composable<Route.TrainerMain> {
         TrainerMainRoute(
             navigateToConnect = navigateToConnect,
+            navigateToInvite = navigateToInvite,
             navigateToLogin = navigateToLogin,
             navigateToWebView = navigateToWebView,
         )

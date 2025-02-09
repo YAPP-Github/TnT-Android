@@ -5,7 +5,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.navOptions
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.members.TrainerMembersRoute
 
@@ -17,11 +16,14 @@ fun NavController.navigateToTrainerMembers(
 )
 
 fun NavGraphBuilder.trainerMembersNavGraph(
+    navigateToInvite: (Boolean) -> Unit,
     membersDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TrainerMainTab.Members>(startDestination = Route.TrainerMembers) {
         composable<Route.TrainerMembers> {
-            TrainerMembersRoute()
+            TrainerMembersRoute(
+                navigateToInvite = navigateToInvite,
+            )
         }
         membersDestination()
     }
