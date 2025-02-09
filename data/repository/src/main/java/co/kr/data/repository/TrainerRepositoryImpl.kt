@@ -3,10 +3,10 @@ package co.kr.data.repository
 import co.kr.data.network.model.toDomain
 import co.kr.data.network.model.trainer.toDomain
 import co.kr.data.network.source.TrainerRemoteDataSource
-import co.kr.tnt.domain.model.trainer.TrainerDailyPtSession
-import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.data.network.source.UserRemoteDataSource
 import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.trainer.TrainerDailyPtSession
+import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.domain.utils.DateFormatter
 import java.time.LocalDate
