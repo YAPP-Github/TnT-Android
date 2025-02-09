@@ -41,7 +41,9 @@ internal class TrainerMyPageViewModel @Inject constructor(
             TrainerMyPageUiEvent.OnClickTermsOfService -> sendEffect(
                 TrainerMyPageSideEffect.NavigateToWebView(AppUrls.TERMS_OF_SERVICE_URL),
             )
-            TrainerMyPageUiEvent.OnClickOpenSourceLicense -> TODO()
+            TrainerMyPageUiEvent.OnClickOpenSourceLicense -> sendEffect(
+                TrainerMyPageSideEffect.NavigateToOpenSourceLicense,
+            )
             TrainerMyPageUiEvent.OnClickLogout -> updateState { copy(dialogState = DialogState.LOGOUT_CONFIRM) }
             TrainerMyPageUiEvent.OnClickDeleteAccount -> updateState {
                 copy(dialogState = DialogState.DELETE_ACCOUNT_CONFIRM)

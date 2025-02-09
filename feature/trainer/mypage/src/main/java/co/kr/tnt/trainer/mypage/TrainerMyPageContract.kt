@@ -36,6 +36,7 @@ internal class TrainerMyPageContract {
     sealed interface TrainerMyPageSideEffect : UiSideEffect {
         data object NavigateToLogin : TrainerMyPageSideEffect
         data class NavigateToWebView(val url: String) : TrainerMyPageSideEffect
+        data object NavigateToOpenSourceLicense : TrainerMyPageSideEffect
         data class ShowToast(val message: String) : TrainerMyPageSideEffect
     }
 }

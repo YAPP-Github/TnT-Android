@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.mypage
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +49,7 @@ import co.kr.tnt.ui.extensions.getAppVersion
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import co.kr.tnt.core.designsystem.R as designSystemR
 import co.kr.tnt.core.ui.R as coreR
 
@@ -85,6 +87,9 @@ internal fun TrainerMyPageRoute(
                 is TrainerMyPageSideEffect.NavigateToWebView -> navigateToWebView(effect.url)
                 is TrainerMyPageSideEffect.ShowToast ->
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+
+                TrainerMyPageSideEffect.NavigateToOpenSourceLicense ->
+                    context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             }
         }
     }
