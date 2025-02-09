@@ -17,21 +17,35 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import co.kr.tnt.core.designsystem.R
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
+import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTSwitch
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.trainer.TrainerManagementMemberCount
+import co.kr.tnt.feature.trainer.mypage.R
+import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiEvent
+import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState
+import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState.DialogState
 import co.kr.tnt.ui.component.TnTMyPageButton
+import co.kr.tnt.ui.extensions.getAppVersion
 import co.kr.tnt.ui.model.DefaultUserProfile
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import co.kr.tnt.core.designsystem.R as designSystemR
 import co.kr.tnt.core.ui.R as coreR
 
 @Composable
@@ -41,18 +55,31 @@ internal fun TrainerMyPageRoute(
     navigateToWebView: (String) -> Unit,
     viewModel: TrainerMyPageViewModel = hiltViewModel(),
 ) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
     TrainerMyPageScreen(
+        state = state,
+        appVersion = context.getAppVersion(),
         onTogglePushNotification = { },
         onClickServiceTerm = { },
         onClickPrivacy = { },
         onClickOpenSourceLicense = { },
-        onClickLogout = { },
-        onClickDeleteAccount = { },
+        onClickLogout = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickLogout) },
+        onClickDeleteAccount = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickDeleteAccount) },
+    )
+
+    Dialog(
+        dialogState = state.dialogState,
+        onClickConfirm = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickDialogConfirm) },
+        onDismissDialog = { viewModel.setEvent(TrainerMyPageUiEvent.OnDismissDialog) },
     )
 }
 
 @Composable
 private fun TrainerMyPageScreen(
+    state: TrainerMyPageUiState,
+    appVersion: String,
     onTogglePushNotification: () -> Unit,
     onClickServiceTerm: () -> Unit,
     onClickPrivacy: () -> Unit,
@@ -60,6 +87,14 @@ private fun TrainerMyPageScreen(
     onClickLogout: () -> Unit,
     onClickDeleteAccount: () -> Unit,
 ) {
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(state.user.image)
+            .placeholder(DefaultUserProfile.Trainer.image)
+            .error(DefaultUserProfile.Trainer.image)
+            .build(),
+    )
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -67,8 +102,10 @@ private fun TrainerMyPageScreen(
             .background(TnTTheme.colors.neutralColors.Neutral50)
             .verticalScroll(rememberScrollState()),
     ) {
+        // TODO 컴포넌트 개선
         TnTProfileImage(
-            defaultImage = painterResource(DefaultUserProfile.Trainee.image),
+            image = painter,
+            defaultImage = painterResource(DefaultUserProfile.Trainer.image),
             imageSize = 132.dp,
             showEditButton = false,
             modifier = Modifier
@@ -76,7 +113,7 @@ private fun TrainerMyPageScreen(
                 .padding(vertical = 12.dp),
         )
         Text(
-            text = "회원명",
+            text = state.user.name,
             style = TnTTheme.typography.h2,
             color = TnTTheme.colors.neutralColors.Neutral950,
         )
@@ -87,12 +124,12 @@ private fun TrainerMyPageScreen(
         ) {
             ManagementMemberCount(
                 title = "관리 중인 회원",
-                count = 20,
+                count = state.managementMemberCount.activeCount,
             )
             Spacer(modifier = Modifier.width(8.dp))
             ManagementMemberCount(
                 title = "함께 했던 회원",
-                count = 24,
+                count = state.managementMemberCount.cumulativeCount,
             )
         }
         Spacer(Modifier.height(16.dp))
@@ -109,7 +146,7 @@ private fun TrainerMyPageScreen(
                 onClick = { },
                 trailingComponent = {
                     TnTSwitch(
-                        checked = true,
+                        checked = state.isEnablePushNotification,
                         onClick = onTogglePushNotification,
                     )
                 },
@@ -137,7 +174,7 @@ private fun TrainerMyPageScreen(
                     onClick = onTogglePushNotification,
                     trailingComponent = {
                         Text(
-                            text = "1.0.0",
+                            text = appVersion,
                             style = TnTTheme.typography.body2Medium,
                             color = TnTTheme.colors.neutralColors.Neutral400,
                         )
@@ -197,7 +234,7 @@ private fun ManagementMemberCount(
         ) {
             Icon(
                 modifier = Modifier.size(28.dp),
-                painter = painterResource(R.drawable.ic_bomb),
+                painter = painterResource(designSystemR.drawable.ic_bomb),
                 contentDescription = null,
                 tint = Color.Unspecified,
             )
@@ -210,11 +247,78 @@ private fun ManagementMemberCount(
     }
 }
 
+@Composable
+private fun Dialog(
+    dialogState: DialogState,
+    onClickConfirm: () -> Unit,
+    onDismissDialog: () -> Unit,
+) {
+    when (dialogState) {
+        DialogState.NONE -> Unit
+        DialogState.LOGOUT_CONFIRM -> {
+            TnTIconPopupDialog(
+                title = stringResource(coreR.string.logout_title),
+                content = stringResource(coreR.string.logout_content),
+                leftButtonText = stringResource(coreR.string.cancel),
+                rightButtonText = stringResource(coreR.string.ok),
+                onLeftButtonClick = onDismissDialog,
+                onRightButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+
+        DialogState.LOGOUT -> {
+            TnTSingleButtonPopupDialog(
+                title = stringResource(coreR.string.logout_complete_title),
+                content = stringResource(coreR.string.logout_content),
+                buttonText = stringResource(coreR.string.ok),
+                onButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+
+        DialogState.DELETE_ACCOUNT_CONFIRM -> {
+            TnTIconPopupDialog(
+                title = stringResource(R.string.delete_account_title),
+                content = stringResource(R.string.delete_account_content),
+                leftButtonText = stringResource(coreR.string.cancel),
+                rightButtonText = stringResource(coreR.string.ok),
+                onLeftButtonClick = onDismissDialog,
+                onRightButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+
+        DialogState.DELETE_ACCOUNT -> {
+            TnTSingleButtonPopupDialog(
+                title = stringResource(R.string.delete_account_complete_title),
+                content = stringResource(R.string.delete_account_complete_content),
+                buttonText = stringResource(coreR.string.ok),
+                onButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun TrainerMyPageScreenPreview() {
     TnTTheme {
         TrainerMyPageScreen(
+            state = TrainerMyPageUiState(
+                user = User.Trainer(
+                    id = "1",
+                    name = "김헬짱",
+                    image = null,
+                ),
+                isEnablePushNotification = false,
+                managementMemberCount = TrainerManagementMemberCount(
+                    activeCount = 23,
+                    cumulativeCount = 26,
+                ),
+            ),
+            appVersion = "1.0.0",
             onTogglePushNotification = { },
             onClickServiceTerm = { },
             onClickPrivacy = { },
