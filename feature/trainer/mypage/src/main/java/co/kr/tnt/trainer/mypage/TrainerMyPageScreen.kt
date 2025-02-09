@@ -39,6 +39,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainer.TrainerManagementMemberCount
 import co.kr.tnt.feature.trainer.mypage.R
+import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageSideEffect
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiEvent
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState.DialogState
@@ -64,8 +65,8 @@ internal fun TrainerMyPageRoute(
         state = state,
         appVersion = context.getAppVersion(),
         onTogglePushNotification = { },
-        onClickServiceTerm = { },
-        onClickPrivacy = { },
+        onClickTermsOfService = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickTermsOfService) },
+        onClickPrivacy = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickPrivacy) },
         onClickOpenSourceLicense = { },
         onClickLogout = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickLogout) },
         onClickDeleteAccount = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickDeleteAccount) },
@@ -80,9 +81,9 @@ internal fun TrainerMyPageRoute(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                TrainerMyPageContract.TrainerMyPageSideEffect.NavigateToLogin -> navigateToLogin()
-                is TrainerMyPageContract.TrainerMyPageSideEffect.NavigateToWebView -> TODO()
-                is TrainerMyPageContract.TrainerMyPageSideEffect.ShowToast ->
+                TrainerMyPageSideEffect.NavigateToLogin -> navigateToLogin()
+                is TrainerMyPageSideEffect.NavigateToWebView -> navigateToWebView(effect.url)
+                is TrainerMyPageSideEffect.ShowToast ->
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
             }
         }
@@ -94,7 +95,7 @@ private fun TrainerMyPageScreen(
     state: TrainerMyPageUiState,
     appVersion: String,
     onTogglePushNotification: () -> Unit,
-    onClickServiceTerm: () -> Unit,
+    onClickTermsOfService: () -> Unit,
     onClickPrivacy: () -> Unit,
     onClickOpenSourceLicense: () -> Unit,
     onClickLogout: () -> Unit,
@@ -172,7 +173,7 @@ private fun TrainerMyPageScreen(
             ) {
                 TnTMyPageButton(
                     text = stringResource(coreR.string.terms_of_service),
-                    onClick = onClickServiceTerm,
+                    onClick = onClickTermsOfService,
                     verticalPadding = 8.dp,
                 )
                 TnTMyPageButton(
@@ -335,7 +336,7 @@ private fun TrainerMyPageScreenPreview() {
             ),
             appVersion = "1.0.0",
             onTogglePushNotification = { },
-            onClickServiceTerm = { },
+            onClickTermsOfService = { },
             onClickPrivacy = { },
             onClickOpenSourceLicense = { },
             onClickLogout = { },

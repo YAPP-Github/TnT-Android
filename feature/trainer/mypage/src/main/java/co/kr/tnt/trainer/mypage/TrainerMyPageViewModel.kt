@@ -3,6 +3,7 @@ package co.kr.tnt.trainer.mypage
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.LoginRepository
 import co.kr.tnt.domain.repository.TrainerRepository
+import co.kr.tnt.domain.utils.AppUrls
 import co.kr.tnt.login.kakao.KakaoLoginSdk
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageSideEffect
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiEvent
@@ -34,8 +35,12 @@ internal class TrainerMyPageViewModel @Inject constructor(
     override suspend fun handleEvent(event: TrainerMyPageUiEvent) {
         when (event) {
             TrainerMyPageUiEvent.OnTogglePushNotification -> TODO()
-            TrainerMyPageUiEvent.OnClickPrivacy -> TODO()
-            TrainerMyPageUiEvent.OnClickServiceTerm -> TODO()
+            TrainerMyPageUiEvent.OnClickPrivacy -> sendEffect(
+                TrainerMyPageSideEffect.NavigateToWebView(AppUrls.PRIVACY_POLICY_URL),
+            )
+            TrainerMyPageUiEvent.OnClickTermsOfService -> sendEffect(
+                TrainerMyPageSideEffect.NavigateToWebView(AppUrls.TERMS_OF_SERVICE_URL),
+            )
             TrainerMyPageUiEvent.OnClickOpenSourceLicense -> TODO()
             TrainerMyPageUiEvent.OnClickLogout -> updateState { copy(dialogState = DialogState.LOGOUT_CONFIRM) }
             TrainerMyPageUiEvent.OnClickDeleteAccount -> updateState {

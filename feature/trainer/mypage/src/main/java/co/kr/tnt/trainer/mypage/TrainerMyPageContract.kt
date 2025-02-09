@@ -24,7 +24,7 @@ internal class TrainerMyPageContract {
 
     sealed interface TrainerMyPageUiEvent : UiEvent {
         data object OnTogglePushNotification : TrainerMyPageUiEvent
-        data object OnClickServiceTerm : TrainerMyPageUiEvent
+        data object OnClickTermsOfService : TrainerMyPageUiEvent
         data object OnClickPrivacy : TrainerMyPageUiEvent
         data object OnClickOpenSourceLicense : TrainerMyPageUiEvent
         data object OnClickLogout : TrainerMyPageUiEvent
