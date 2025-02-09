@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.kotlinx.immutable)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.accompanist.permissions)
     androidTestImplementation(libs.hilt.android.testing)
     kspAndroidTest(libs.hilt.android.compiler)
 }
