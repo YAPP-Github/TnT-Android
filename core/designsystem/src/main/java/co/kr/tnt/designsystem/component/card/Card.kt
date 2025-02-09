@@ -300,7 +300,7 @@ fun TnTSessionRecordCard(
 fun TnTMemberProfileCard(
     name: String,
     profileImage: Painter,
-    goal: String,
+    purpose: String,
     memo: String,
     completedSessions: String,
     totalSessions: String,
@@ -344,7 +344,7 @@ fun TnTMemberProfileCard(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        text = goal,
+                        text = purpose,
                         color = TnTTheme.colors.neutralColors.Neutral500,
                         style = TnTTheme.typography.label2Medium,
                         maxLines = 1,
@@ -484,7 +484,7 @@ private fun TnTMemberProfileCardPreview() {
         TnTMemberProfileCard(
             name = "김회원",
             profileImage = painterResource(R.drawable.img_default),
-            goal = "체중 감량, 근력 향상, 자세 교정, 바디프로필",
+            purpose = "체중 감량, 근력 향상, 자세 교정, 바디프로필",
             memo = "발목 안 좋고 식단 관리 원함. 하체가 약한 편임, 공복에 운동하면 쓰러질 위험 있음",
             completedSessions = "8",
             totalSessions = "60",
