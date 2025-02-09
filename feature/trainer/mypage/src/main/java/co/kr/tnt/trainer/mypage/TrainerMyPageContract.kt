@@ -9,7 +9,7 @@ import co.kr.tnt.ui.base.UiState
 internal class TrainerMyPageContract {
     data class TrainerMyPageUiState(
         val user: User.Trainer = User.Trainer.EMPTY,
-        val isEnablePushNotification: Boolean = false,
+        val isEnablePushNotification: Boolean = true,
         val dialogState: DialogState = DialogState.NONE,
         val managementMemberCount: TrainerManagementMemberCount = TrainerManagementMemberCount.ZERO,
     ) : UiState {

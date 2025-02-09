@@ -54,7 +54,6 @@ import co.kr.tnt.core.designsystem.R as designSystemR
 import co.kr.tnt.core.ui.R as coreR
 
 @Composable
-@Suppress("UnusedParameter")
 internal fun TrainerMyPageRoute(
     navigateToLogin: () -> Unit,
     navigateToWebView: (String) -> Unit,
@@ -66,10 +65,10 @@ internal fun TrainerMyPageRoute(
     TrainerMyPageScreen(
         state = state,
         appVersion = context.getAppVersion(),
-        onTogglePushNotification = { },
+        onTogglePushNotification = { viewModel.setEvent(TrainerMyPageUiEvent.OnTogglePushNotification) },
         onClickTermsOfService = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickTermsOfService) },
         onClickPrivacy = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickPrivacy) },
-        onClickOpenSourceLicense = { },
+        onClickOpenSourceLicense = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickOpenSourceLicense) },
         onClickLogout = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickLogout) },
         onClickDeleteAccount = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickDeleteAccount) },
     )

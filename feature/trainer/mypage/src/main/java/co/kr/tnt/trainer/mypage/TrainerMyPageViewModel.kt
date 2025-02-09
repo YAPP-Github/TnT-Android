@@ -2,6 +2,7 @@ package co.kr.tnt.trainer.mypage
 
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.LoginRepository
+import co.kr.tnt.domain.repository.SettingRepository
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.domain.utils.AppUrls
 import co.kr.tnt.login.kakao.KakaoLoginSdk
@@ -11,6 +12,8 @@ import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +21,7 @@ import javax.inject.Inject
 internal class TrainerMyPageViewModel @Inject constructor(
     private val trainerRepository: TrainerRepository,
     private val loginRepository: LoginRepository,
+    private val settingRepository: SettingRepository,
     private val kakaoLoginSdk: KakaoLoginSdk,
 ) : BaseViewModel<TrainerMyPageUiState, TrainerMyPageUiEvent, TrainerMyPageSideEffect>(TrainerMyPageUiState()) {
     init {
@@ -29,12 +33,20 @@ internal class TrainerMyPageViewModel @Inject constructor(
             }.onFailure {
                 sendEffect(TrainerMyPageSideEffect.ShowToast("서버 요청에 실패했어요"))
             }
+
+            settingRepository.isEnablePushNotification()
+                .onEach { isEnablePushNotification ->
+                    updateState { copy(isEnablePushNotification = isEnablePushNotification) }
+                }
+                .launchIn(viewModelScope)
         }
     }
 
     override suspend fun handleEvent(event: TrainerMyPageUiEvent) {
         when (event) {
-            TrainerMyPageUiEvent.OnTogglePushNotification -> TODO()
+            TrainerMyPageUiEvent.OnTogglePushNotification -> {
+                settingRepository.setEnablePushNotification(currentState.isEnablePushNotification.not())
+            }
             TrainerMyPageUiEvent.OnClickPrivacy -> sendEffect(
                 TrainerMyPageSideEffect.NavigateToWebView(AppUrls.PRIVACY_POLICY_URL),
             )
