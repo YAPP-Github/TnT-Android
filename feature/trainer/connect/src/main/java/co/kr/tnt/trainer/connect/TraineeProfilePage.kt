@@ -34,6 +34,7 @@ import co.kr.tnt.feature.trainer.connect.R
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
+import java.time.LocalDate
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
@@ -211,8 +212,7 @@ private fun TraineeProfilePagePreview() {
                     id = "",
                     name = "김회원",
                     image = null,
-                    birthday = null,
-                    age = null,
+                    birthday = LocalDate.now().minusYears(19),
                     weight = 55.0,
                     height = 150,
                     ptPurpose = listOf("체중 감량", "자세 교정"),

@@ -73,7 +73,6 @@ internal class TraineeSignUpViewModel @Inject constructor(
                         name = state.name,
                         image = state.image.toString(),
                         birthday = state.birthday,
-                        age = null,
                         weight = state.weight.toDouble(),
                         height = state.height.toInt(),
                         ptPurpose = state.ptPurpose,

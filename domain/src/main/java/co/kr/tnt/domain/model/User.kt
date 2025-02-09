@@ -26,19 +26,25 @@ sealed class User {
         override val name: String,
         override val image: String?,
         val birthday: LocalDate?,
-        val age: Int?,
         val weight: Double,
         val height: Int,
         val ptPurpose: List<String>,
         val caution: String?,
     ) : User() {
+        /** 한국식 나이 */
+        val age: Int? =
+            if (birthday == null) {
+                null
+            } else {
+                LocalDate.now().year - birthday.year + 1
+            }
+
         companion object {
             val EMPTY = Trainee(
                 id = "",
                 name = "",
                 image = null,
                 birthday = null,
-                age = 0,
                 weight = 0.0,
                 height = 0,
                 ptPurpose = emptyList(),
