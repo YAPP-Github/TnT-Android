@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_scheduled_lesson">예정된 수업이 없어요</string>
+    <string name="no_record_now">아직 기록이 없어요</string>
+    <string name="record_meal_and_exercise_by_click_button">추가 버튼을 눌러 식사와 운동을 기록해보세요</string>
+</resources>

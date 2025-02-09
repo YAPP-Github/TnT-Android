@@ -363,7 +363,7 @@ private fun TnTTrainerSessionRecordCardPreview() {
     TnTTheme {
         TnTSessionRecordCard(
             name = "김회원",
-            tagText = "8회차 수업",
+            tagText = "8",
             startTime = "오후 17:00",
             endTime = "오후 18:00",
             defaultImage = painterResource(R.drawable.img_default),
@@ -382,7 +382,7 @@ private fun TnTTraineeSessionRecordCardPreview() {
     TnTTheme {
         TnTSessionRecordCard(
             name = "김민수 트레이너",
-            tagText = "6회차 수업",
+            tagText = "6",
             startTime = "오후 17:00",
             endTime = "오후 18:00",
             defaultImage = painterResource(R.drawable.img_default),
