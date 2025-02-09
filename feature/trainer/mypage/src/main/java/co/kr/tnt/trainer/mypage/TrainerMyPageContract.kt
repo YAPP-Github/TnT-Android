@@ -19,11 +19,16 @@ internal class TrainerMyPageContract {
             LOGOUT,
             DELETE_ACCOUNT_CONFIRM,
             DELETE_ACCOUNT,
+            SHOULD_ALLOW_PERMISSION,
         }
     }
 
     sealed interface TrainerMyPageUiEvent : UiEvent {
-        data object OnTogglePushNotification : TrainerMyPageUiEvent
+        data class OnTogglePushNotification(
+            val isGrantedPermission: Boolean,
+            val shouldShowRationale: Boolean,
+        ) : TrainerMyPageUiEvent
+
         data object OnClickTermsOfService : TrainerMyPageUiEvent
         data object OnClickPrivacy : TrainerMyPageUiEvent
         data object OnClickOpenSourceLicense : TrainerMyPageUiEvent
@@ -37,6 +42,7 @@ internal class TrainerMyPageContract {
         data object NavigateToLogin : TrainerMyPageSideEffect
         data class NavigateToWebView(val url: String) : TrainerMyPageSideEffect
         data object NavigateToOpenSourceLicense : TrainerMyPageSideEffect
+        data class RequestPermission(val isExplicitlyDenied: Boolean) : TrainerMyPageSideEffect
         data class ShowToast(val message: String) : TrainerMyPageSideEffect
     }
 }

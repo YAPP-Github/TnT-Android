@@ -44,24 +44,56 @@ internal class TrainerMyPageViewModel @Inject constructor(
 
     override suspend fun handleEvent(event: TrainerMyPageUiEvent) {
         when (event) {
-            TrainerMyPageUiEvent.OnTogglePushNotification -> {
-                settingRepository.setEnablePushNotification(currentState.isEnablePushNotification.not())
-            }
+            is TrainerMyPageUiEvent.OnTogglePushNotification -> handleToggleNotification(
+                isGrantedPermission = event.isGrantedPermission,
+                shouldShowRationale = event.shouldShowRationale,
+            )
+
             TrainerMyPageUiEvent.OnClickPrivacy -> sendEffect(
                 TrainerMyPageSideEffect.NavigateToWebView(AppUrls.PRIVACY_POLICY_URL),
             )
+
             TrainerMyPageUiEvent.OnClickTermsOfService -> sendEffect(
                 TrainerMyPageSideEffect.NavigateToWebView(AppUrls.TERMS_OF_SERVICE_URL),
             )
+
             TrainerMyPageUiEvent.OnClickOpenSourceLicense -> sendEffect(
                 TrainerMyPageSideEffect.NavigateToOpenSourceLicense,
             )
+
             TrainerMyPageUiEvent.OnClickLogout -> updateState { copy(dialogState = DialogState.LOGOUT_CONFIRM) }
             TrainerMyPageUiEvent.OnClickDeleteAccount -> updateState {
                 copy(dialogState = DialogState.DELETE_ACCOUNT_CONFIRM)
             }
+
             TrainerMyPageUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
             TrainerMyPageUiEvent.OnClickDialogConfirm -> handleDialogConfirm()
+        }
+    }
+
+    private fun handleToggleNotification(
+        isGrantedPermission: Boolean,
+        shouldShowRationale: Boolean,
+    ) {
+        viewModelScope.launch {
+            if (currentState.isEnablePushNotification) {
+                settingRepository.setEnablePushNotification(isEnable = false)
+                return@launch
+            }
+
+            if (isGrantedPermission) {
+                settingRepository.setEnablePushNotification(isEnable = currentState.isEnablePushNotification.not())
+                return@launch
+            }
+
+            if (shouldShowRationale.not()) {
+                sendEffect(TrainerMyPageSideEffect.RequestPermission(isExplicitlyDenied = false))
+                return@launch
+            }
+
+            if (shouldShowRationale) {
+                updateState { copy(dialogState = DialogState.SHOULD_ALLOW_PERMISSION) }
+            }
         }
     }
 
@@ -73,10 +105,16 @@ internal class TrainerMyPageViewModel @Inject constructor(
                 updateState { copy(dialogState = DialogState.NONE) }
                 sendEffect(TrainerMyPageSideEffect.NavigateToLogin)
             }
+
             DialogState.DELETE_ACCOUNT_CONFIRM -> withdraw()
             DialogState.DELETE_ACCOUNT -> {
                 updateState { copy(dialogState = DialogState.NONE) }
                 sendEffect(TrainerMyPageSideEffect.NavigateToLogin)
+            }
+
+            DialogState.SHOULD_ALLOW_PERMISSION -> {
+                updateState { copy(dialogState = DialogState.NONE) }
+                sendEffect(TrainerMyPageSideEffect.RequestPermission(isExplicitlyDenied = true))
             }
         }
     }

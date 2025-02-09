@@ -4,8 +4,8 @@
     <string name="alarm_permission_description">해당 기기로 수업 일정 등 서비스 이용에 도움이 되는 안내 사항을 푸시 알림으로 보내드리겠습니다.
         \n앱 푸시 알림에 수신 동의 하시겠습니까?</string>
 
-    <string name="alarm_permission_permanently_title">알림 설정 권한 명시 거부</string>
-    <string name="alarm_permission_permanently_description">권한 설정을 위해 설정창으로 이동해주세요.</string>
+    <string name="alarm_permission_permanently_title">TnT에서 알림 권한이 필요합니다.</string>
+    <string name="alarm_permission_permanently_description">수업 일정 및 중요한 공지 알림을 받기 위해 알림 권한이 필요합니다.\n설정에서 알림 권한을 활성화해주세요.</string>
 
     <string name="media_permission_title">프로필 사진 설정을 위해 사진 접근 권한이 필요해요</string>
     <string name="media_permission_description">사진 추가는 프로필 말고도 운동과 식단 기록에도 사용돼요</string>
@@ -14,6 +14,7 @@
     <string name="media_permission_permanently_description">권한 설정을 위해 설정창으로 이동해주세요.</string>
     <string name="close">닫기</string>
     <string name="ok">확인</string>
+    <string name="move_to_setting">설정으로 이동</string>
 
     <string name="error_server_request_failed">서버 요청에 실패했어요</string>
     <string name="entered_wrong_text">잘못된 수치를 입력했어요</string>

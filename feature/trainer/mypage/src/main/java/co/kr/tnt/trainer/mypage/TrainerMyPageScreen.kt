@@ -46,13 +46,19 @@ import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState.DialogState
 import co.kr.tnt.ui.component.TnTMyPageButton
 import co.kr.tnt.ui.extensions.getAppVersion
+import co.kr.tnt.ui.extensions.moveToAppSetting
 import co.kr.tnt.ui.model.DefaultUserProfile
+import co.kr.tnt.ui.permission.PermissionRequestDialog
+import co.kr.tnt.ui.permission.TnTPermission
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import co.kr.tnt.core.designsystem.R as designSystemR
 import co.kr.tnt.core.ui.R as coreR
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun TrainerMyPageRoute(
     navigateToLogin: () -> Unit,
@@ -61,11 +67,19 @@ internal fun TrainerMyPageRoute(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val permissionState = rememberMultiplePermissionsState(TnTPermission.NOTIFICATION.values)
 
     TrainerMyPageScreen(
         state = state,
         appVersion = context.getAppVersion(),
-        onTogglePushNotification = { viewModel.setEvent(TrainerMyPageUiEvent.OnTogglePushNotification) },
+        onTogglePushNotification = {
+            viewModel.setEvent(
+                TrainerMyPageUiEvent.OnTogglePushNotification(
+                    isGrantedPermission = TnTPermission.NOTIFICATION.isRequireGranted(permissionState),
+                    shouldShowRationale = permissionState.shouldShowRationale,
+                ),
+            )
+        },
         onClickTermsOfService = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickTermsOfService) },
         onClickPrivacy = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickPrivacy) },
         onClickOpenSourceLicense = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickOpenSourceLicense) },
@@ -87,6 +101,14 @@ internal fun TrainerMyPageRoute(
                 is TrainerMyPageSideEffect.ShowToast ->
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
 
+                is TrainerMyPageSideEffect.RequestPermission -> {
+                    if (effect.isExplicitlyDenied) {
+                        context.moveToAppSetting()
+                        return@collect
+                    }
+
+                    permissionState.launchMultiplePermissionRequest()
+                }
                 TrainerMyPageSideEffect.NavigateToOpenSourceLicense ->
                     context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             }
@@ -315,6 +337,15 @@ private fun Dialog(
                 buttonText = stringResource(coreR.string.ok),
                 cancelable = false,
                 onButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+
+        DialogState.SHOULD_ALLOW_PERMISSION -> {
+            PermissionRequestDialog(
+                permission = TnTPermission.NOTIFICATION,
+                isPermanentlyDenied = true,
+                onClickConfirm = onClickConfirm,
                 onDismiss = onDismissDialog,
             )
         }
