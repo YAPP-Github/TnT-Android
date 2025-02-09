@@ -11,7 +11,9 @@ internal class MainContract {
         val startDestination: Route = Route.Login,
     ) : UiState
 
-    data object MainUiEvent : UiEvent
+    sealed class MainUiEvent : UiEvent {
+        data object OnNotificationPermissionRevoked : MainUiEvent()
+    }
 
     data object MainSideEffect : UiSideEffect
 }
