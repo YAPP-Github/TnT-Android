@@ -2,6 +2,7 @@ package co.kr.tnt.trainer.mypage
 
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.LoginRepository
+import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.login.kakao.KakaoLoginSdk
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageSideEffect
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiEvent
@@ -14,9 +15,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class TrainerMyPageViewModel @Inject constructor(
+    private val trainerRepository: TrainerRepository,
     private val loginRepository: LoginRepository,
     private val kakaoLoginSdk: KakaoLoginSdk,
 ) : BaseViewModel<TrainerMyPageUiState, TrainerMyPageUiEvent, TrainerMyPageSideEffect>(TrainerMyPageUiState()) {
+    init {
+        viewModelScope.launch {
+            runCatching {
+                trainerRepository.getMyInfo()
+            }.onSuccess { user ->
+                updateState { copy(user = user) }
+            }.onFailure {
+                sendEffect(TrainerMyPageSideEffect.ShowToast("서버 요청에 실패했어요"))
+            }
+        }
+    }
+
     override suspend fun handleEvent(event: TrainerMyPageUiEvent) {
         when (event) {
             TrainerMyPageUiEvent.OnTogglePushNotification -> TODO()

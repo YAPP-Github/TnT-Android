@@ -103,7 +103,7 @@ private fun TrainerMyPageScreen(
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(state.user.image)
-            .placeholder(DefaultUserProfile.Trainer.image)
+            .placeholder(designSystemR.drawable.img_default)
             .error(DefaultUserProfile.Trainer.image)
             .build(),
     )
