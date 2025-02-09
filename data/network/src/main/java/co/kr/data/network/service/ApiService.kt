@@ -8,6 +8,7 @@ import co.kr.data.network.model.InviteCodeResponse
 import co.kr.data.network.model.LoginRequest
 import co.kr.data.network.model.LoginResponse
 import co.kr.data.network.model.SignUpResponse
+import co.kr.data.network.model.UserResponse
 import co.kr.data.network.model.VerifyCodeResponse
 import co.kr.data.network.model.trainer.DailyPtSessionsResponse
 import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
@@ -80,4 +81,7 @@ interface ApiService {
     suspend fun getDailyPtSessions(
         @Path("date") date: String,
     ): DailyPtSessionsResponse
+
+    @GET("/members")
+    suspend fun getMyInfo(): UserResponse
 }
