@@ -36,6 +36,9 @@ interface ApiService {
     @POST("/logout")
     suspend fun postLogout()
 
+    @POST("/members/withdraw")
+    suspend fun postWithdraw()
+
     // SignUp
     @Multipart
     @POST("/members/sign-up")

@@ -22,4 +22,8 @@ class LoginRemoteDataSource @Inject constructor(
     suspend fun postLogout() = networkHandler {
         apiService.postLogout()
     }
+
+    suspend fun postWithdraw() = networkHandler {
+        apiService.postWithdraw()
+    }
 }

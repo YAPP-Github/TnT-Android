@@ -13,4 +13,6 @@ interface LoginRepository {
     ): LoginResult
 
     suspend fun logout()
+
+    suspend fun withdraw()
 }
