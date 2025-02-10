@@ -26,10 +26,14 @@ internal class TrainerMembersViewModel @Inject constructor(
     }
 
     private fun setMemberList() {
-        // TODO : 회원 목록 불러오기 API 연동
         viewModelScope.launch {
-            val result = trainerRepository.getMemberList()
-            updateState { copy(memberList = result) }
+            runCatching {
+                trainerRepository.getMemberList()
+            }.onSuccess { members ->
+                updateState { copy(memberList = members) }
+            }.onFailure {
+                sendEffect(TrainerMemberSideEffect.ShowToast("서버 요청에 실패했어요"))
+            }
         }
     }
 }
