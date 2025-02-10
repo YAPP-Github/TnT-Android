@@ -27,6 +27,7 @@ import co.kr.tnt.trainer.notification.navigation.trainerNotification
 @Composable
 internal fun TrainerMainRoute(
     navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
+    navigateToInvite: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
     navController: NavHostController = rememberNavController(),
@@ -34,6 +35,7 @@ internal fun TrainerMainRoute(
     TrainerMainScreen(
         navController = navController,
         navigateToConnect = navigateToConnect,
+        navigateToInvite = navigateToInvite,
         navigateToLogin = navigateToLogin,
         navigateToWebView = navigateToWebView,
     )
@@ -45,6 +47,7 @@ internal fun TrainerMainRoute(
 private fun TrainerMainScreen(
     navController: NavHostController,
     navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
+    navigateToInvite: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {
@@ -80,7 +83,9 @@ private fun TrainerMainScreen(
                 )
             }
             trainerFeedbackNavGraph()
-            trainerMembersNavGraph()
+            trainerMembersNavGraph(
+                navigateToInvite = navigateToInvite,
+            )
             trainerMyPageNavGraph()
         }
     }

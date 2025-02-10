@@ -1,8 +1,8 @@
 package co.kr.tnt.trainee.home
 
-import co.kr.tnt.domain.model.trainee.DailyRecord
-import co.kr.tnt.domain.model.trainee.PtSession
+import co.kr.tnt.domain.model.DailyRecord
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
+import co.kr.tnt.domain.model.trainee.TraineePtSession
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -13,7 +13,7 @@ class TraineeHomeContract {
     data class TraineeHomeUiState(
         val selectedDay: LocalDate = LocalDate.now(),
         val dailyRecordStatus: List<TraineeDailyRecordStatus> = emptyList(),
-        val ptSessions: PtSession? = null,
+        val ptSessions: TraineePtSession? = null,
         val recordList: List<DailyRecord> = emptyList(),
     ) : UiState
 

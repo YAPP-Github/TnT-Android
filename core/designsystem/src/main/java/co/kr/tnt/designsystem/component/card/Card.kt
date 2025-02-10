@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.chip.TnTChip
+import co.kr.tnt.designsystem.component.chip.TnTProfileSessionChip
 import co.kr.tnt.designsystem.component.chip.model.ChipStyle
 import co.kr.tnt.designsystem.theme.TnTTheme
 
@@ -295,7 +296,87 @@ fun TnTSessionRecordCard(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF000000, widthDp = 358)
+@Composable
+fun TnTMemberProfileCard(
+    name: String,
+    profileImage: Painter,
+    purpose: String,
+    memo: String,
+    completedSessions: String,
+    totalSessions: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(TnTTheme.colors.commonColors.Common0)
+            .clickable(onClick = onClick)
+            .padding(12.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Image(
+                painter = profileImage,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+            )
+            Spacer(Modifier.width(12.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 9.dp),
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = name,
+                        color = TnTTheme.colors.neutralColors.Neutral900,
+                        style = TnTTheme.typography.body1Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = purpose,
+                        color = TnTTheme.colors.neutralColors.Neutral500,
+                        style = TnTTheme.typography.label2Medium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+                Spacer(Modifier.width(4.dp))
+                TnTProfileSessionChip(
+                    completedSessions = completedSessions,
+                    totalSessions = totalSessions,
+                )
+            }
+        }
+        Spacer(Modifier.height(12.dp))
+        Text(
+            text = "메모",
+            color = TnTTheme.colors.neutralColors.Neutral600,
+            style = TnTTheme.typography.label2Bold,
+        )
+        Spacer(Modifier.height(4.dp))
+        Text(
+            text = memo,
+            color = TnTTheme.colors.neutralColors.Neutral500,
+            style = TnTTheme.typography.label2Medium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Preview(widthDp = 358)
 @Composable
 private fun TnTRecordCardPreview() {
     TnTTheme {
@@ -309,7 +390,7 @@ private fun TnTRecordCardPreview() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF000000, widthDp = 358)
+@Preview(widthDp = 358)
 @Composable
 private fun TnTRecordCardWithFeedbackPreview() {
     TnTTheme {
@@ -324,7 +405,7 @@ private fun TnTRecordCardWithFeedbackPreview() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF000000, widthDp = 358)
+@Preview(widthDp = 358)
 @Composable
 private fun TnTRecordCardWithImagePreview() {
     TnTTheme {
@@ -340,7 +421,7 @@ private fun TnTRecordCardWithImagePreview() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF000000, widthDp = 358)
+@Preview(widthDp = 358)
 @Composable
 private fun TnTRecordCardWithImageAndFeedbackPreview() {
     TnTTheme {
@@ -357,13 +438,13 @@ private fun TnTRecordCardWithImageAndFeedbackPreview() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF000000, widthDp = 358)
+@Preview(widthDp = 358)
 @Composable
 private fun TnTTrainerSessionRecordCardPreview() {
     TnTTheme {
         TnTSessionRecordCard(
             name = "김회원",
-            tagText = "8",
+            tagText = "8회차 수업",
             startTime = "오후 17:00",
             endTime = "오후 18:00",
             defaultImage = painterResource(R.drawable.img_default),
@@ -371,18 +452,18 @@ private fun TnTTrainerSessionRecordCardPreview() {
             modifier = Modifier.padding(10.dp),
             leadingEmoji = "\uD83D\uDCAA",
             showSessionRecordCreation = true,
-            onClick = {},
+            onClick = { },
         )
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF000000, widthDp = 358)
+@Preview(widthDp = 358)
 @Composable
 private fun TnTTraineeSessionRecordCardPreview() {
     TnTTheme {
         TnTSessionRecordCard(
             name = "김민수 트레이너",
-            tagText = "6",
+            tagText = "6회차 수업",
             startTime = "오후 17:00",
             endTime = "오후 18:00",
             defaultImage = painterResource(R.drawable.img_default),
@@ -391,7 +472,23 @@ private fun TnTTraineeSessionRecordCardPreview() {
             leadingEmoji = "\uD83D\uDCAA",
             profileImage = painterResource(R.drawable.ic_edit),
             showSessionRecordDetails = true,
-            onClick = {},
+            onClick = { },
+        )
+    }
+}
+
+@Preview(widthDp = 358)
+@Composable
+private fun TnTMemberProfileCardPreview() {
+    TnTTheme {
+        TnTMemberProfileCard(
+            name = "김회원",
+            profileImage = painterResource(R.drawable.img_default),
+            purpose = "체중 감량, 근력 향상, 자세 교정, 바디프로필",
+            memo = "발목 안 좋고 식단 관리 원함. 하체가 약한 편임, 공복에 운동하면 쓰러질 위험 있음",
+            completedSessions = "8",
+            totalSessions = "60",
+            onClick = { },
         )
     }
 }
