@@ -1,7 +1,9 @@
 package co.kr.tnt.trainee.mypage
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
-import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.repository.SettingRepository
+import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.AppUrls
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
@@ -9,20 +11,30 @@ import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class TraineeMyPageViewModel @Inject constructor() :
+internal class TraineeMyPageViewModel @Inject constructor(
+    private val traineeRepository: TraineeRepository,
+    private val settingRepository: SettingRepository,
+) :
     BaseViewModel<TraineeMyPageUiState, TraineeMyPageUiEvent, TraineeMyPageEffect>(
-        TraineeMyPageUiState(),
-    ) {
+            TraineeMyPageUiState(),
+        ) {
+        init {
+            loadUserData()
+        }
+
         override suspend fun handleEvent(event: TraineeMyPageUiEvent) {
             when (event) {
                 TraineeMyPageUiEvent.OnClickConnect -> navigateToConnect()
                 TraineeMyPageUiEvent.OnClickDisconnect -> updateState {
                     copy(dialogState = DialogState.DISCONNECT_CONFIRM)
                 }
+
                 TraineeMyPageUiEvent.ToggleNotification -> togglePushNotification()
                 TraineeMyPageUiEvent.OnClickTermsOfService -> sendEffect(
                     TraineeMyPageEffect.NavigateToWebView(AppUrls.TERMS_OF_SERVICE_URL),
@@ -45,20 +57,22 @@ internal class TraineeMyPageViewModel @Inject constructor() :
             }
         }
 
-        init {
-            loadUserData()
-        }
-
         private fun loadUserData() {
             viewModelScope.launch {
-                // TODO 유저 정보 API 호출
-                updateState {
-                    copy(
-                        user = User.Trainee.EMPTY,
-                        trainerName = "",
-                        isConnected = true,
-                    )
+                runCatching {
+                    traineeRepository.getMyInfo()
+                }.onSuccess { user ->
+                    updateState { copy(user = user) }
+                }.onFailure {
+                    sendEffect(TraineeMyPageEffect.ShowToast("서버 요청에 실패했어요"))
+                    Log.d("debugginh", it.toString())
                 }
+
+                settingRepository.isEnablePushNotification()
+                    .onEach { isEnablePushNotification ->
+                        updateState { copy(isEnablePushNotification = isEnablePushNotification) }
+                    }
+                    .launchIn(viewModelScope)
             }
         }
 
