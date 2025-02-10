@@ -14,8 +14,6 @@ internal class TraineeMyPageContract {
     ) : UiState {
         enum class DialogState {
             NONE,
-            DISCONNECT_CONFIRM,
-            DISCONNECT,
             LOGOUT_CONFIRM,
             LOGOUT,
             DELETE_ACCOUNT_CONFIRM,
@@ -25,9 +23,12 @@ internal class TraineeMyPageContract {
     }
 
     sealed interface TraineeMyPageUiEvent : UiEvent {
+        data class OnToggleNotification(
+            val isGrantedPermission: Boolean,
+            val shouldShowRationale: Boolean,
+        ) : TraineeMyPageUiEvent
+
         data object OnClickConnect : TraineeMyPageUiEvent
-        data object OnClickDisconnect : TraineeMyPageUiEvent
-        data object ToggleNotification : TraineeMyPageUiEvent
         data object OnClickTermsOfService : TraineeMyPageUiEvent
         data object OnClickPrivacy : TraineeMyPageUiEvent
         data object OnClickOpenSource : TraineeMyPageUiEvent
@@ -42,5 +43,6 @@ internal class TraineeMyPageContract {
         data object NavigateToConnect : TraineeMyPageEffect
         data object NavigateToLogin : TraineeMyPageEffect
         data class NavigateToWebView(val url: String) : TraineeMyPageEffect
+        data class RequestPermission(val isExplicitlyDenied: Boolean) : TraineeMyPageEffect
     }
 }

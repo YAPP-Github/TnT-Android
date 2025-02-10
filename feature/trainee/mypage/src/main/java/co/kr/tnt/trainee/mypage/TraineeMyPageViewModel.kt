@@ -1,7 +1,6 @@
 package co.kr.tnt.trainee.mypage
 
 import androidx.lifecycle.viewModelScope
-import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.LoginRepository
 import co.kr.tnt.domain.repository.SettingRepository
 import co.kr.tnt.domain.repository.TraineeRepository
@@ -35,11 +34,11 @@ internal class TraineeMyPageViewModel @Inject constructor(
         override suspend fun handleEvent(event: TraineeMyPageUiEvent) {
             when (event) {
                 TraineeMyPageUiEvent.OnClickConnect -> navigateToConnect()
-                TraineeMyPageUiEvent.OnClickDisconnect -> updateState {
-                    copy(dialogState = DialogState.DISCONNECT_CONFIRM)
-                }
 
-                TraineeMyPageUiEvent.ToggleNotification -> togglePushNotification()
+                is TraineeMyPageUiEvent.OnToggleNotification -> handleToggleNotification(
+                    isGrantedPermission = event.isGrantedPermission,
+                    shouldShowRationale = event.shouldShowRationale,
+                )
                 TraineeMyPageUiEvent.OnClickTermsOfService -> sendEffect(
                     TraineeMyPageEffect.NavigateToWebView(AppUrls.TERMS_OF_SERVICE_URL),
                 )
@@ -83,8 +82,30 @@ internal class TraineeMyPageViewModel @Inject constructor(
             sendEffect(TraineeMyPageEffect.NavigateToConnect)
         }
 
-        private fun togglePushNotification() {
-            updateState { copy(isEnablePushNotification = !isEnablePushNotification) }
+        private fun handleToggleNotification(
+            isGrantedPermission: Boolean,
+            shouldShowRationale: Boolean,
+        ) {
+            viewModelScope.launch {
+                if (currentState.isEnablePushNotification) {
+                    settingRepository.setEnablePushNotification(isEnable = false)
+                    return@launch
+                }
+
+                if (isGrantedPermission) {
+                    settingRepository.setEnablePushNotification(isEnable = currentState.isEnablePushNotification.not())
+                    return@launch
+                }
+
+                if (shouldShowRationale.not()) {
+                    sendEffect(TraineeMyPageEffect.RequestPermission(isExplicitlyDenied = false))
+                    return@launch
+                }
+
+                if (shouldShowRationale) {
+                    updateState { copy(dialogState = DialogState.SHOULD_ALLOW_PERMISSION) }
+                }
+            }
         }
 
         private fun navigateToOpenSource() {
@@ -106,8 +127,6 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     sendEffect(TraineeMyPageEffect.NavigateToLogin)
                 }
 
-                DialogState.DISCONNECT_CONFIRM -> disconnect()
-                DialogState.DISCONNECT -> updateState { copy(dialogState = DialogState.NONE) }
                 DialogState.SHOULD_ALLOW_PERMISSION -> {
                     updateState { copy(dialogState = DialogState.NONE) }
                     // TODO 알림 권한 설정
@@ -137,18 +156,6 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     updateState { copy(dialogState = DialogState.DELETE_ACCOUNT) }
                 }.onFailure {
                     sendEffect(TraineeMyPageEffect.ShowToast("탈퇴에 실패하였습니다."))
-                }
-            }
-        }
-
-        private fun disconnect() {
-            viewModelScope.launch {
-                // TODO 연결 해제 API 호출
-                updateState {
-                    copy(
-                        user = (user as? User.Trainee)?.copy(isConnected = false) ?: user,
-                        dialogState = DialogState.DISCONNECT,
-                    )
                 }
             }
         }

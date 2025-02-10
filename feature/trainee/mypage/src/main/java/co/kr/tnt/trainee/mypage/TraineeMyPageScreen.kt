@@ -39,14 +39,18 @@ import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState.DialogState
 import co.kr.tnt.ui.component.TnTMyPageButton
 import co.kr.tnt.ui.extensions.getAppVersion
+import co.kr.tnt.ui.extensions.moveToAppSetting
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.permission.PermissionRequestDialog
 import co.kr.tnt.ui.permission.TnTPermission
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import java.time.LocalDate
 import co.kr.tnt.core.ui.R as coreR
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun TraineeMyPageRoute(
     navigateToConnect: (Boolean) -> Unit,
@@ -56,13 +60,20 @@ internal fun TraineeMyPageRoute(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val permissionState = rememberMultiplePermissionsState(TnTPermission.NOTIFICATION.values)
 
     TraineeMyPageScreen(
         state = uiState,
         appVersion = context.getAppVersion(),
         onClickConnect = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickConnect) },
-        onClickDisconnect = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickDisconnect) },
-        onTogglePushNotification = { viewModel.setEvent(TraineeMyPageUiEvent.ToggleNotification) },
+        onTogglePushNotification = {
+            viewModel.setEvent(
+                TraineeMyPageUiEvent.OnToggleNotification(
+                    isGrantedPermission = TnTPermission.NOTIFICATION.isRequireGranted(permissionState),
+                    shouldShowRationale = permissionState.shouldShowRationale,
+                ),
+            )
+        },
         onClickTermsOfService = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickTermsOfService) },
         onClickPrivacy = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickPrivacy) },
         onClickOpenSource = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickOpenSource) },
@@ -86,6 +97,14 @@ internal fun TraineeMyPageRoute(
                 }
 
                 is TraineeMyPageEffect.NavigateToWebView -> navigateToWebView(effect.url)
+                is TraineeMyPageEffect.RequestPermission -> {
+                    if (effect.isExplicitlyDenied) {
+                        context.moveToAppSetting()
+                        return@collect
+                    }
+
+                    permissionState.launchMultiplePermissionRequest()
+                }
             }
         }
     }
@@ -96,7 +115,6 @@ private fun TraineeMyPageScreen(
     state: TraineeMyPageUiState,
     appVersion: String,
     onClickConnect: () -> Unit,
-    onClickDisconnect: () -> Unit,
     onTogglePushNotification: () -> Unit,
     onClickTermsOfService: () -> Unit,
     onClickPrivacy: () -> Unit,
@@ -193,13 +211,6 @@ private fun TraineeMyPageScreen(
                     verticalPadding = 8.dp,
                 )
             }
-            if (state.user.isConnected) {
-                TnTMyPageButton(
-                    text = stringResource(R.string.disconnect_with_trainer),
-                    onClick = onClickDisconnect,
-                    verticalPadding = 14.dp,
-                )
-            }
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -276,29 +287,6 @@ private fun Dialog(
             )
         }
 
-        DialogState.DISCONNECT_CONFIRM -> {
-            TnTIconPopupDialog(
-                title = stringResource(R.string.disconnect_title, state.trainerName),
-                content = stringResource(R.string.disconnect_content),
-                leftButtonText = stringResource(coreR.string.cancel),
-                rightButtonText = stringResource(coreR.string.ok),
-                onLeftButtonClick = onDismissDialog,
-                onRightButtonClick = onClickConfirm,
-                onDismiss = onDismissDialog,
-            )
-        }
-
-        DialogState.DISCONNECT -> {
-            TnTSingleButtonPopupDialog(
-                title = stringResource(R.string.disconnect_complete_title, state.trainerName),
-                content = stringResource(R.string.disconnect_complete_content),
-                buttonText = stringResource(coreR.string.ok),
-                cancelable = false,
-                onButtonClick = onClickConfirm,
-                onDismiss = onDismissDialog,
-            )
-        }
-
         DialogState.SHOULD_ALLOW_PERMISSION -> {
             PermissionRequestDialog(
                 permission = TnTPermission.NOTIFICATION,
@@ -325,13 +313,12 @@ private fun TraineeMyPageScreenPreview() {
                     height = 100,
                     ptPurpose = listOf("체중 감량"),
                     caution = "약해요",
-                    isConnected = false,
+                    isConnected = true,
                 ),
                 isEnablePushNotification = true,
             ),
             appVersion = "1.0",
             onClickConnect = { },
-            onClickDisconnect = { },
             onTogglePushNotification = { },
             onClickTermsOfService = { },
             onClickPrivacy = { },
