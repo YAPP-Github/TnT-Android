@@ -49,7 +49,7 @@ import co.kr.tnt.core.ui.R as coreR
 @Composable
 internal fun TraineeMyPageRoute(
     navigateToPrevious: () -> Unit,
-    navigateToConnect: () -> Unit,
+    navigateToConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (String) -> Unit,
     viewModel: TraineeMyPageViewModel = hiltViewModel(),
@@ -80,7 +80,7 @@ internal fun TraineeMyPageRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TraineeMyPageEffect.NavigateToPrevious -> navigateToPrevious()
-                TraineeMyPageEffect.NavigateToConnect -> navigateToConnect()
+                TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(false)
                 TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
                 is TraineeMyPageEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()

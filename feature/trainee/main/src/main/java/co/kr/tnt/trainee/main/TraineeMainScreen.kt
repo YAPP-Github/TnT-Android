@@ -38,7 +38,7 @@ import co.kr.tnt.trainee.notification.navigation.traineeNotification
 
 @Composable
 internal fun TraineeMainRoute(
-    navigateToConnect: () -> Unit,
+    navigateToConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
     navController: NavHostController = rememberNavController(),
@@ -55,7 +55,7 @@ internal fun TraineeMainRoute(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 private fun TraineeMainScreen(
     navController: NavHostController,
-    navigateToConnect: () -> Unit,
+    navigateToConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {

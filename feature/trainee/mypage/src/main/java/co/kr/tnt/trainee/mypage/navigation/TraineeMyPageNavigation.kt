@@ -17,7 +17,7 @@ fun NavController.navigateToTraineeMyPage(
 
 fun NavGraphBuilder.traineeMyPageNavGraph(
     navigateToPrevious: () -> Unit,
-    navigateToTraineeConnect: () -> Unit,
+    navigateToTraineeConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (String) -> Unit,
     myPageDestination: NavGraphBuilder.() -> Unit = { },
