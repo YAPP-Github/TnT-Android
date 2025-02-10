@@ -47,7 +47,10 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     TraineeMyPageEffect.NavigateToWebView(AppUrls.PRIVACY_POLICY_URL),
                 )
 
-                TraineeMyPageUiEvent.OnClickOpenSource -> navigateToOpenSource()
+                TraineeMyPageUiEvent.OnClickOpenSource -> sendEffect(
+                    TraineeMyPageEffect.NavigateToOpenSourceLicense,
+                )
+
                 TraineeMyPageUiEvent.OnClickLogout -> updateState { copy(dialogState = DialogState.LOGOUT_CONFIRM) }
                 TraineeMyPageUiEvent.OnClickDeleteAccount -> updateState {
                     copy(
@@ -106,10 +109,6 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     updateState { copy(dialogState = DialogState.SHOULD_ALLOW_PERMISSION) }
                 }
             }
-        }
-
-        private fun navigateToOpenSource() {
-            // TODO 오픈소스 텍스트 띄우기
         }
 
         private fun handleDialogConfirm() {

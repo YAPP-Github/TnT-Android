@@ -43,6 +43,7 @@ internal class TraineeMyPageContract {
         data object NavigateToConnect : TraineeMyPageEffect
         data object NavigateToLogin : TraineeMyPageEffect
         data class NavigateToWebView(val url: String) : TraineeMyPageEffect
+        data object NavigateToOpenSourceLicense : TraineeMyPageEffect
         data class RequestPermission(val isExplicitlyDenied: Boolean) : TraineeMyPageEffect
     }
 }

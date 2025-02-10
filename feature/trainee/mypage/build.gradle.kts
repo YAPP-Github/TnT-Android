@@ -13,4 +13,5 @@ dependencies {
 
     implementation(libs.kotlinx.immutable)
     implementation(libs.accompanist.permissions)
+    implementation(libs.play.services.oss.licenses)
 }

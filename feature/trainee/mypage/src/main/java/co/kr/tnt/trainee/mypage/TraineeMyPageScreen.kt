@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.mypage
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -47,6 +48,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import java.time.LocalDate
 import co.kr.tnt.core.ui.R as coreR
 
@@ -105,6 +107,9 @@ internal fun TraineeMyPageRoute(
 
                     permissionState.launchMultiplePermissionRequest()
                 }
+
+                TraineeMyPageEffect.NavigateToOpenSourceLicense ->
+                    context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             }
         }
     }
