@@ -1,11 +1,12 @@
 package co.kr.tnt.trainee.mypage
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.repository.LoginRepository
 import co.kr.tnt.domain.repository.SettingRepository
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.AppUrls
+import co.kr.tnt.login.kakao.KakaoLoginSdk
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
@@ -21,6 +22,8 @@ import javax.inject.Inject
 internal class TraineeMyPageViewModel @Inject constructor(
     private val traineeRepository: TraineeRepository,
     private val settingRepository: SettingRepository,
+    private val loginRepository: LoginRepository,
+    private val kakaoLoginSdk: KakaoLoginSdk,
 ) :
     BaseViewModel<TraineeMyPageUiState, TraineeMyPageUiEvent, TraineeMyPageEffect>(
             TraineeMyPageUiState(),
@@ -66,7 +69,6 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     updateState { copy(user = user) }
                 }.onFailure {
                     sendEffect(TraineeMyPageEffect.ShowToast("서버 요청에 실패했어요"))
-                    Log.d("debugginh", it.toString())
                 }
 
                 settingRepository.isEnablePushNotification()
@@ -115,8 +117,14 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
         private fun logout() {
             viewModelScope.launch {
-                // TODO 로그아웃 API 호출
-                updateState { copy(dialogState = DialogState.LOGOUT) }
+                runCatching {
+                    loginRepository.logout()
+                    kakaoLoginSdk.logout()
+                }.onSuccess {
+                    updateState { copy(dialogState = DialogState.LOGOUT) }
+                }.onFailure {
+                    sendEffect(TraineeMyPageEffect.ShowToast("로그아웃에 실패하였습니다."))
+                }
             }
         }
 
