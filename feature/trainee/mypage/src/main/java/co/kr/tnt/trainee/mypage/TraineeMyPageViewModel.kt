@@ -128,7 +128,7 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
                 DialogState.SHOULD_ALLOW_PERMISSION -> {
                     updateState { copy(dialogState = DialogState.NONE) }
-                    // TODO 알림 권한 설정
+                    sendEffect(TraineeMyPageEffect.RequestPermission(isExplicitlyDenied = true))
                 }
             }
         }
