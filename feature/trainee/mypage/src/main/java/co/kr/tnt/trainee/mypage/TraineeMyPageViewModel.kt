@@ -130,8 +130,14 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
         private fun withdraw() {
             viewModelScope.launch {
-                // TODO 회원 탈퇴 API 호출
-                updateState { copy(dialogState = DialogState.DELETE_ACCOUNT) }
+                runCatching {
+                    loginRepository.withdraw()
+                    kakaoLoginSdk.unlink()
+                }.onSuccess {
+                    updateState { copy(dialogState = DialogState.DELETE_ACCOUNT) }
+                }.onFailure {
+                    sendEffect(TraineeMyPageEffect.ShowToast("탈퇴에 실패하였습니다."))
+                }
             }
         }
 
