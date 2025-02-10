@@ -1,10 +1,12 @@
 package co.kr.tnt.trainee.mypage
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.utils.AppUrls
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
-import co.kr.tnt.trainee.mypage.model.DialogState
+import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,18 +19,29 @@ internal class TraineeMyPageViewModel @Inject constructor() :
     ) {
         override suspend fun handleEvent(event: TraineeMyPageUiEvent) {
             when (event) {
-                TraineeMyPageUiEvent.OnEditButtonClick -> navigateToPersonalInfo()
-                TraineeMyPageUiEvent.OnConnectButtonClick -> navigateToConnect()
-                TraineeMyPageUiEvent.OnDisconnectButtonClick -> showDisconnectPopup()
+                TraineeMyPageUiEvent.OnClickConnect -> navigateToConnect()
+                TraineeMyPageUiEvent.OnClickDisconnect -> updateState {
+                    copy(dialogState = DialogState.DISCONNECT_CONFIRM)
+                }
                 TraineeMyPageUiEvent.ToggleNotification -> togglePushNotification()
-                TraineeMyPageUiEvent.OnServiceTermClick -> openWebView()
-                TraineeMyPageUiEvent.OnPrivacyClick -> openWebView()
-                TraineeMyPageUiEvent.OnOpenSourceClick -> navigateToOpenSource()
-                TraineeMyPageUiEvent.OnLogoutClick -> logout()
-                TraineeMyPageUiEvent.OnDeleteAccountClick -> deleteAccount()
-                TraineeMyPageUiEvent.OnConfirmWarningDialog -> confirmWarningDialog()
-                TraineeMyPageUiEvent.OnConfirmCompleteDialog -> handleCompleteDialogConfirm()
-                TraineeMyPageUiEvent.OnDismissPopup -> dismissPopup()
+                TraineeMyPageUiEvent.OnClickTermsOfService -> sendEffect(
+                    TraineeMyPageEffect.NavigateToWebView(AppUrls.TERMS_OF_SERVICE_URL),
+                )
+
+                TraineeMyPageUiEvent.OnClickPrivacy -> sendEffect(
+                    TraineeMyPageEffect.NavigateToWebView(AppUrls.PRIVACY_POLICY_URL),
+                )
+
+                TraineeMyPageUiEvent.OnClickOpenSource -> navigateToOpenSource()
+                TraineeMyPageUiEvent.OnClickLogout -> updateState { copy(dialogState = DialogState.LOGOUT_CONFIRM) }
+                TraineeMyPageUiEvent.OnClickDeleteAccount -> updateState {
+                    copy(
+                        dialogState = DialogState.DELETE_ACCOUNT_CONFIRM,
+                    )
+                }
+
+                TraineeMyPageUiEvent.OnClickDialogConfirm -> handleDialogConfirm()
+                TraineeMyPageUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
             }
         }
 
@@ -41,125 +54,68 @@ internal class TraineeMyPageViewModel @Inject constructor() :
                 // TODO 유저 정보 API 호출
                 updateState {
                     copy(
-                        image = null,
-                        name = "김회원",
+                        user = User.Trainee.EMPTY,
                         trainerName = "",
                         isConnected = true,
-                        isPushEnabled = true,
-                        appVersion = "0.0.0",
                     )
                 }
             }
-        }
-
-        private fun navigateToPersonalInfo() {
-            // TODO 개인 정보 수정 화면 연결
         }
 
         private fun navigateToConnect() {
             sendEffect(TraineeMyPageEffect.NavigateToConnect)
         }
 
-        private fun showDisconnectPopup() {
-            // TODO 트레이너 이름 불러오기? -> API 나오면 수정
-            updateState {
-                copy(
-                    trainerName = "김피티",
-                    showWarningDialog = true,
-                    dialogState = DialogState.DISCONNECT,
-                )
-            }
-        }
-
         private fun togglePushNotification() {
-            updateState { copy(isPushEnabled = !isPushEnabled) }
-        }
-
-        private fun openWebView() {
-            // TODO Url API 호출?
-            val url = "https://www.naver.com"
-            updateState {
-                copy(
-                    showWebView = !showWebView,
-                    url = url,
-                )
-            }
-            sendEffect(TraineeMyPageEffect.NavigateToWebView(url))
+            updateState { copy(isEnablePushNotification = !isEnablePushNotification) }
         }
 
         private fun navigateToOpenSource() {
             // TODO 오픈소스 텍스트 띄우기
         }
 
-        private fun logout() {
-            updateState {
-                copy(
-                    showWarningDialog = true,
-                    dialogState = DialogState.LOGOUT,
-                )
-            }
-        }
-
-        private fun deleteAccount() {
-            updateState {
-                copy(
-                    showWarningDialog = true,
-                    dialogState = DialogState.DELETE_ACCOUNT,
-                )
-            }
-        }
-
-        private fun confirmWarningDialog() {
-            updateState {
-                copy(
-                    showWarningDialog = false,
-                    showCompleteDialog = true,
-                )
-            }
-        }
-
-        private fun handleCompleteDialogConfirm() {
+        private fun handleDialogConfirm() {
             when (currentState.dialogState) {
-                DialogState.LOGOUT -> performLogout()
-                DialogState.DELETE_ACCOUNT -> performAccountDeletion()
-                DialogState.DISCONNECT -> performDisconnect()
+                DialogState.NONE -> Unit
+                DialogState.LOGOUT_CONFIRM -> logout()
+                DialogState.LOGOUT -> {
+                    updateState { copy(dialogState = DialogState.NONE) }
+                    sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                }
+
+                DialogState.DELETE_ACCOUNT_CONFIRM -> withdraw()
+                DialogState.DELETE_ACCOUNT -> {
+                    updateState { copy(dialogState = DialogState.NONE) }
+                    sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                }
+
+                DialogState.DISCONNECT_CONFIRM -> disconnect()
+                DialogState.DISCONNECT -> updateState { copy(dialogState = DialogState.NONE) }
+                DialogState.SHOULD_ALLOW_PERMISSION -> {
+                    updateState { copy(dialogState = DialogState.NONE) }
+                    // TODO 알림 권한 설정
+                }
             }
         }
 
-        private fun dismissPopup() {
-            updateState {
-                copy(
-                    showWarningDialog = false,
-                    showCompleteDialog = false,
-                )
-            }
-        }
-
-        private fun performLogout() {
+        private fun logout() {
             viewModelScope.launch {
                 // TODO 로그아웃 API 호출
-                updateState { copy(showCompleteDialog = false) }
-                sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                updateState { copy(dialogState = DialogState.LOGOUT) }
             }
         }
 
-        private fun performAccountDeletion() {
+        private fun withdraw() {
             viewModelScope.launch {
                 // TODO 회원 탈퇴 API 호출
-                updateState { copy(showCompleteDialog = false) }
-                sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                updateState { copy(dialogState = DialogState.DELETE_ACCOUNT) }
             }
         }
 
-        private fun performDisconnect() {
+        private fun disconnect() {
             viewModelScope.launch {
                 // TODO 연결 해제 API 호출
-                updateState {
-                    copy(
-                        isConnected = false,
-                        showCompleteDialog = false,
-                    )
-                }
+                updateState { copy(isConnected = false, dialogState = DialogState.DISCONNECT) }
             }
         }
     }
