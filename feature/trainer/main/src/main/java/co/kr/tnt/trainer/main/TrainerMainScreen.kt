@@ -9,6 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import co.kr.tnt.designsystem.component.bottombar.TnTBottomBar
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.trainer.addptsession.navigation.addPtSession
+import co.kr.tnt.trainer.addptsession.navigation.navigateToAddPtSession
 import co.kr.tnt.trainer.feedback.navigation.trainerFeedbackNavGraph
 import co.kr.tnt.trainer.home.navigation.trainerHomeNavGraph
 import co.kr.tnt.trainer.members.navigation.trainerMembersNavGraph
@@ -67,11 +69,13 @@ private fun TrainerMainScreen(
         ) {
             trainerHomeNavGraph(
                 navigateToNotification = navController::navigateToTrainerNotification,
+                navigateToAddPtSession = navController::navigateToAddPtSession,
             ) {
                 trainerNotification(
                     navigateToPrevious = navController::popBackStack,
                     navigateToConnect = navigateToConnect,
                 )
+                addPtSession()
             }
             trainerFeedbackNavGraph()
             trainerMembersNavGraph(

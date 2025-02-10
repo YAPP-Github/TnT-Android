@@ -37,6 +37,7 @@ internal class TrainerHomeViewModel @Inject constructor(
                 TrainerHomeUiEvent.OnClickNotification -> sendEffect(TrainerHomeSideEffect.NavigateToNotification)
                 is TrainerHomeUiEvent.OnChangeVisibleMonth -> handleChangeVisibleMonth(event.yearMonth)
                 is TrainerHomeUiEvent.OnClickDay -> selectDay(event.day)
+                TrainerHomeUiEvent.OnClickAddPtSession -> sendEffect(TrainerHomeSideEffect.NavigateToAddPtSession)
             }
         }
 
