@@ -27,8 +27,8 @@ data class TrainerResponse(
 data class TraineeResponse(
     val birthday: String?,
     val age: Int?,
-    val height: Double?,
-    val weight: Double?,
+    val height: Double,
+    val weight: Double,
     val cautionNote: String?,
     val ptGoals: List<String>,
 )
