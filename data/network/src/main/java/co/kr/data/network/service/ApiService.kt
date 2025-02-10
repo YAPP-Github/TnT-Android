@@ -10,6 +10,7 @@ import co.kr.data.network.model.LoginResponse
 import co.kr.data.network.model.SignUpResponse
 import co.kr.data.network.model.UserResponse
 import co.kr.data.network.model.VerifyCodeResponse
+import co.kr.data.network.model.trainer.ActiveTraineesResponse
 import co.kr.data.network.model.trainer.DailyPtSessionsResponse
 import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
 import co.kr.data.network.util.WithoutSessionCheckPath.CHECK_SESSION_PATH
@@ -84,4 +85,7 @@ interface ApiService {
 
     @GET("/members")
     suspend fun getMyInfo(): UserResponse
+
+    @GET("/trainers/active-trainees")
+    suspend fun getActiveTraineeList(): ActiveTraineesResponse
 }

@@ -4,25 +4,27 @@ import co.kr.tnt.domain.model.MemberInfo
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MemberListResponse(
-    val memberList: List<MemberResponse>,
+data class ActiveTraineesResponse(
+    val traineeCount: Int,
+    val memberList: List<TraineeInfoResponse>,
 )
 
 @Serializable
-data class MemberResponse(
-    val traineeName: String,
+data class TraineeInfoResponse(
+    val id: Int,
+    val name: String,
     val profileUrl: String,
-    val ptPurpose: String,
-    val memo: String,
     val finishedPtCount: Int,
     val totalPtCount: Int,
+    val memo: String?,
+    val goalContents: String,
 )
 
-fun MemberResponse.toDomain() =
+fun TraineeInfoResponse.toDomain() =
     MemberInfo(
-        traineeName = traineeName,
+        traineeName = name,
         profileUrl = profileUrl,
-        ptPurpose = ptPurpose,
+        ptPurpose = goalContents,
         memo = memo,
         finishedPtCount = finishedPtCount,
         totalPtCount = totalPtCount,

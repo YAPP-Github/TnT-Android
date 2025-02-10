@@ -1,5 +1,6 @@
 package co.kr.data.network.source
 
+import co.kr.data.network.model.trainer.ActiveTraineesResponse
 import co.kr.data.network.model.trainer.DailyPtSessionsResponse
 import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
 import co.kr.data.network.service.ApiService
@@ -25,5 +26,9 @@ class TrainerRemoteDataSource @Inject constructor(
         date: String,
     ): DailyPtSessionsResponse = networkHandler {
         apiService.getDailyPtSessions(date)
+    }
+
+    suspend fun getActiveTraineeList(): ActiveTraineesResponse = networkHandler {
+        apiService.getActiveTraineeList()
     }
 }
