@@ -23,7 +23,7 @@ internal enum class TrainerMainTab(
         route = Route.TrainerFeedback,
     ),
     MEMBERS(
-        contentDescription = "회원 목록",
+        contentDescription = "회원목록",
         icon = R.drawable.ic_navbar_members,
         baseRoute = Route.TrainerMainTab.Members,
         route = Route.TrainerMembers,
