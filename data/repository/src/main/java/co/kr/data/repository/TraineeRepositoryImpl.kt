@@ -1,11 +1,14 @@
 package co.kr.data.repository
 
+import co.kr.data.network.model.toDomain
 import co.kr.data.network.model.trainee.DailyRecordsResponse
 import co.kr.data.network.model.trainee.MonthlyRecordedDatesResponse
 import co.kr.data.network.model.trainee.PtSessionResponse
 import co.kr.data.network.model.trainee.RecordResponse
 import co.kr.data.network.model.trainee.RecordedDateResponse
 import co.kr.data.network.model.trainee.toDomain
+import co.kr.data.network.source.UserRemoteDataSource
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecord
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
 import co.kr.tnt.domain.repository.TraineeRepository
@@ -17,8 +20,15 @@ import javax.inject.Singleton
 
 @Singleton
 internal class TraineeRepositoryImpl @Inject constructor(
+    private val userRemoteDataSource: UserRemoteDataSource,
     private val dateFormatter: DateFormatter,
 ) : TraineeRepository {
+    override suspend fun getMyInfo(): User.Trainee {
+        val user = userRemoteDataSource.getMyInfo().toDomain(dateFormatter)
+        require(user is User.Trainee)
+        return user
+    }
+
     // TODO : API에 맞춰 수정
     override suspend fun getDailyDataStatus(yearMonth: YearMonth): List<TraineeDailyRecordStatus> {
         val result = MonthlyRecordedDatesResponse(
@@ -36,6 +46,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
         return result
     }
 
+    // TODO : API에 맞춰 수정
     override suspend fun getTraineeDailyRecord(day: LocalDate): TraineeDailyRecord {
         val result = listOf(
             DailyRecordsResponse(

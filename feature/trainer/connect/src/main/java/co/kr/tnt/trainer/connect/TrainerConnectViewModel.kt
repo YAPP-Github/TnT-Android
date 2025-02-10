@@ -54,6 +54,7 @@ internal class TrainerConnectViewModel @Inject constructor(
                             height = result.height.toInt(),
                             ptPurpose = listOf(result.ptGoal),
                             caution = result.cautionNote,
+                            isConnected = true,
                         ),
                     )
                 }

@@ -1,18 +1,18 @@
 package co.kr.tnt.trainee.mypage
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,57 +31,85 @@ import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTSwitch
-import co.kr.tnt.designsystem.component.button.TnTTextButton
-import co.kr.tnt.designsystem.component.button.model.ButtonSize
-import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.feature.trainee.mypage.R
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
-import co.kr.tnt.trainee.mypage.model.DialogState
+import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState.DialogState
 import co.kr.tnt.ui.component.TnTMyPageButton
+import co.kr.tnt.ui.extensions.getAppVersion
+import co.kr.tnt.ui.extensions.moveToAppSetting
 import co.kr.tnt.ui.model.DefaultUserProfile
+import co.kr.tnt.ui.permission.PermissionRequestDialog
+import co.kr.tnt.ui.permission.TnTPermission
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import java.time.LocalDate
 import co.kr.tnt.core.ui.R as coreR
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun TraineeMyPageRoute(
-    navigateToPrevious: () -> Unit,
-    navigateToConnect: () -> Unit,
+    navigateToConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
-    navigateToWebView: (String) -> Unit,
+    navigateToWebView: (url: String) -> Unit,
     viewModel: TraineeMyPageViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val permissionState = rememberMultiplePermissionsState(TnTPermission.NOTIFICATION.values)
 
     TraineeMyPageScreen(
         state = uiState,
-        onEditButtonClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnEditButtonClick) },
-        onConnectButtonClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnConnectButtonClick) },
-        onDisconnectButtonClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnDisconnectButtonClick) },
-        onPushNotificationToggle = { viewModel.setEvent(TraineeMyPageUiEvent.ToggleNotification) },
-        onServiceTermClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnServiceTermClick) },
-        onPrivacyClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnPrivacyClick) },
-        onOpenSourceClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnOpenSourceClick) },
-        onLogoutClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnLogoutClick) },
-        onDeleteAccountClick = { viewModel.setEvent(TraineeMyPageUiEvent.OnDeleteAccountClick) },
-        onDismissPopup = { viewModel.setEvent(TraineeMyPageUiEvent.OnDismissPopup) },
-        onConfirmWarningDialog = { viewModel.setEvent(TraineeMyPageUiEvent.OnConfirmWarningDialog) },
-        onConfirmCompleteDialog = { viewModel.setEvent(TraineeMyPageUiEvent.OnConfirmCompleteDialog) },
+        appVersion = context.getAppVersion(),
+        onClickConnect = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickConnect) },
+        onTogglePushNotification = {
+            viewModel.setEvent(
+                TraineeMyPageUiEvent.OnToggleNotification(
+                    isGrantedPermission = TnTPermission.NOTIFICATION.isRequireGranted(permissionState),
+                    shouldShowRationale = permissionState.shouldShowRationale,
+                ),
+            )
+        },
+        onClickTermsOfService = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickTermsOfService) },
+        onClickPrivacy = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickPrivacy) },
+        onClickOpenSource = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickOpenSource) },
+        onClickLogout = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickLogout) },
+        onClickDeleteAccount = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickDeleteAccount) },
+    )
+
+    Dialog(
+        state = uiState,
+        onClickConfirm = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickDialogConfirm) },
+        onDismissDialog = { viewModel.setEvent(TraineeMyPageUiEvent.OnDismissDialog) },
     )
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                TraineeMyPageEffect.NavigateToPrevious -> navigateToPrevious()
-                TraineeMyPageEffect.NavigateToConnect -> navigateToConnect()
+                TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(false)
                 TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
                 is TraineeMyPageEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
 
                 is TraineeMyPageEffect.NavigateToWebView -> navigateToWebView(effect.url)
+                is TraineeMyPageEffect.RequestPermission -> {
+                    if (effect.isExplicitlyDenied) {
+                        context.moveToAppSetting()
+                        return@collect
+                    }
+
+                    permissionState.launchMultiplePermissionRequest()
+                }
+
+                TraineeMyPageEffect.NavigateToOpenSourceLicense ->
+                    context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             }
         }
     }
@@ -90,168 +118,188 @@ internal fun TraineeMyPageRoute(
 @Composable
 private fun TraineeMyPageScreen(
     state: TraineeMyPageUiState,
-    onEditButtonClick: () -> Unit,
-    onConnectButtonClick: () -> Unit,
-    onDisconnectButtonClick: () -> Unit,
-    onPushNotificationToggle: () -> Unit,
-    onServiceTermClick: () -> Unit,
-    onPrivacyClick: () -> Unit,
-    onOpenSourceClick: () -> Unit,
-    onLogoutClick: () -> Unit,
-    onDeleteAccountClick: () -> Unit,
-    onConfirmWarningDialog: () -> Unit,
-    onConfirmCompleteDialog: () -> Unit,
-    onDismissPopup: () -> Unit,
+    appVersion: String,
+    onClickConnect: () -> Unit,
+    onTogglePushNotification: () -> Unit,
+    onClickTermsOfService: () -> Unit,
+    onClickPrivacy: () -> Unit,
+    onClickOpenSource: () -> Unit,
+    onClickLogout: () -> Unit,
+    onClickDeleteAccount: () -> Unit,
 ) {
-    Scaffold(containerColor = TnTTheme.colors.neutralColors.Neutral50) { innerPadding ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(state.user.image)
+            .placeholder(co.kr.tnt.core.designsystem.R.drawable.img_default)
+            .error(DefaultUserProfile.Trainer.image)
+            .build(),
+    )
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(TnTTheme.colors.neutralColors.Neutral50)
+            .verticalScroll(rememberScrollState()),
+    ) {
+        TnTProfileImage(
+            image = painter,
+            defaultImage = painterResource(DefaultUserProfile.Trainee.image),
+            imageSize = 132.dp,
+            showEditButton = false,
             modifier = Modifier
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState()),
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+        )
+        Text(
+            text = state.user.name,
+            color = TnTTheme.colors.neutralColors.Neutral950,
+            style = TnTTheme.typography.h2,
+        )
+        Spacer(Modifier.height(16.dp))
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
         ) {
-            TnTProfileImage(
-                defaultImage = painterResource(DefaultUserProfile.Trainee.image),
-                imageSize = 132.dp,
-                showEditButton = false,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-            )
-            Text(
-                text = state.name,
-                color = TnTTheme.colors.neutralColors.Neutral950,
-                style = TnTTheme.typography.h2,
-            )
-            Spacer(Modifier.height(8.dp))
-            TnTTextButton(
-                text = stringResource(coreR.string.modifying_personal_info),
-                size = ButtonSize.Small,
-                type = ButtonType.Gray,
-                onClick = onEditButtonClick,
+            if (state.user.isConnected.not()) {
+                TnTMyPageButton(
+                    text = stringResource(R.string.connect_with_trainer),
+                    onClick = onClickConnect,
+                    verticalPadding = 14.dp,
+                )
+            }
+            TnTMyPageButton(
+                text = stringResource(coreR.string.app_push_notification),
+                verticalPadding = 12.dp,
+                enabled = false,
+                onClick = { },
+                trailingComponent = {
+                    TnTSwitch(
+                        checked = state.isEnablePushNotification,
+                        onClick = onTogglePushNotification,
+                    )
+                },
             )
             Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(TnTTheme.colors.commonColors.Common0)
+                    .padding(vertical = 12.dp),
             ) {
-                if (state.isConnected.not()) {
-                    TnTMyPageButton(
-                        text = stringResource(R.string.connect_with_trainer),
-                        onClick = onConnectButtonClick,
-                        verticalPadding = 14.dp,
-                    )
-                }
                 TnTMyPageButton(
-                    text = stringResource(coreR.string.app_push_notification),
+                    text = stringResource(coreR.string.terms_of_service),
+                    onClick = onClickTermsOfService,
+                    verticalPadding = 8.dp,
+                )
+                TnTMyPageButton(
+                    text = stringResource(coreR.string.privacy_policy),
+                    onClick = onClickPrivacy,
+                    verticalPadding = 8.dp,
+                )
+                TnTMyPageButton(
+                    text = stringResource(coreR.string.app_version),
                     verticalPadding = 12.dp,
                     enabled = false,
-                    onClick = { },
                     trailingComponent = {
-                        TnTSwitch(
-                            checked = state.isPushEnabled,
-                            onClick = onPushNotificationToggle,
+                        Text(
+                            text = appVersion,
+                            style = TnTTheme.typography.body2Medium,
+                            color = TnTTheme.colors.neutralColors.Neutral400,
                         )
                     },
                 )
-                Column(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(TnTTheme.colors.commonColors.Common0)
-                        .padding(vertical = 12.dp),
-                ) {
-                    TnTMyPageButton(
-                        text = stringResource(coreR.string.terms_of_service),
-                        onClick = onServiceTermClick,
-                        verticalPadding = 8.dp,
-                    )
-                    TnTMyPageButton(
-                        text = stringResource(coreR.string.privacy_policy),
-                        onClick = onPrivacyClick,
-                        verticalPadding = 8.dp,
-                    )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 8.dp),
-                    ) {
-                        Text(
-                            text = stringResource(coreR.string.app_version),
-                            color = TnTTheme.colors.neutralColors.Neutral700,
-                            style = TnTTheme.typography.body2Medium,
-                        )
-                        Text(
-                            text = state.appVersion,
-                            color = TnTTheme.colors.neutralColors.Neutral400,
-                            style = TnTTheme.typography.body2Medium,
-                        )
-                    }
-                    TnTMyPageButton(
-                        text = stringResource(coreR.string.open_source_license),
-                        onClick = onOpenSourceClick,
-                        verticalPadding = 8.dp,
-                    )
-                }
-                if (state.isConnected) {
-                    TnTMyPageButton(
-                        text = stringResource(R.string.disconnect_with_trainer),
-                        onClick = onDisconnectButtonClick,
-                        verticalPadding = 14.dp,
-                    )
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(TnTTheme.colors.commonColors.Common0)
-                        .padding(vertical = 12.dp),
-                ) {
-                    TnTMyPageButton(
-                        text = stringResource(coreR.string.logout),
-                        onClick = onLogoutClick,
-                        verticalPadding = 8.dp,
-                    )
-                    TnTMyPageButton(
-                        text = stringResource(coreR.string.delete_account),
-                        onClick = onDeleteAccountClick,
-                        verticalPadding = 8.dp,
-                    )
-                }
+                TnTMyPageButton(
+                    text = stringResource(coreR.string.open_source_license),
+                    onClick = onClickOpenSource,
+                    verticalPadding = 8.dp,
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(TnTTheme.colors.commonColors.Common0)
+                    .padding(vertical = 12.dp),
+            ) {
+                TnTMyPageButton(
+                    text = stringResource(coreR.string.logout),
+                    onClick = onClickLogout,
+                    verticalPadding = 8.dp,
+                )
+                TnTMyPageButton(
+                    text = stringResource(coreR.string.delete_account),
+                    onClick = onClickDeleteAccount,
+                    verticalPadding = 8.dp,
+                )
             }
         }
     }
+}
 
-    if (state.showWarningDialog) {
-        TnTIconPopupDialog(
-            title = if (state.dialogState == DialogState.DISCONNECT) {
-                stringResource(state.dialogState.warningDialogTitle, state.trainerName)
-            } else {
-                stringResource(state.dialogState.warningDialogTitle)
-            },
-            content = stringResource(state.dialogState.warningDialogContent),
-            leftButtonText = stringResource(coreR.string.cancel),
-            rightButtonText = stringResource(coreR.string.ok),
-            onLeftButtonClick = onDismissPopup,
-            onRightButtonClick = onConfirmWarningDialog,
-            onDismiss = onDismissPopup,
-        )
-    }
+@Composable
+private fun Dialog(
+    state: TraineeMyPageUiState,
+    onClickConfirm: () -> Unit,
+    onDismissDialog: () -> Unit,
+) {
+    when (state.dialogState) {
+        DialogState.NONE -> Unit
+        DialogState.LOGOUT_CONFIRM -> {
+            TnTIconPopupDialog(
+                title = stringResource(coreR.string.logout_title),
+                content = stringResource(coreR.string.logout_content),
+                leftButtonText = stringResource(coreR.string.cancel),
+                rightButtonText = stringResource(coreR.string.ok),
+                onLeftButtonClick = onDismissDialog,
+                onRightButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
 
-    if (state.showCompleteDialog) {
-        TnTSingleButtonPopupDialog(
-            title = if (state.dialogState == DialogState.DISCONNECT) {
-                stringResource(state.dialogState.completeDialogTitle, state.trainerName)
-            } else {
-                stringResource(state.dialogState.completeDialogTitle)
-            },
-            content = stringResource(state.dialogState.completeDialogContent),
-            buttonText = stringResource(coreR.string.ok),
-            onButtonClick = onConfirmCompleteDialog,
-            onDismiss = onConfirmCompleteDialog,
-        )
+        DialogState.LOGOUT -> {
+            TnTSingleButtonPopupDialog(
+                title = stringResource(coreR.string.logout_complete_title),
+                content = stringResource(coreR.string.logout_content),
+                buttonText = stringResource(coreR.string.ok),
+                cancelable = false,
+                onButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+
+        DialogState.DELETE_ACCOUNT_CONFIRM -> {
+            TnTIconPopupDialog(
+                title = stringResource(R.string.delete_account_title),
+                content = stringResource(R.string.delete_account_content),
+                leftButtonText = stringResource(coreR.string.cancel),
+                rightButtonText = stringResource(coreR.string.ok),
+                onLeftButtonClick = onDismissDialog,
+                onRightButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+
+        DialogState.DELETE_ACCOUNT -> {
+            TnTSingleButtonPopupDialog(
+                title = stringResource(R.string.delete_account_complete_title),
+                content = stringResource(R.string.delete_account_complete_content),
+                buttonText = stringResource(coreR.string.ok),
+                cancelable = false,
+                onButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+
+        DialogState.SHOULD_ALLOW_PERMISSION -> {
+            PermissionRequestDialog(
+                permission = TnTPermission.NOTIFICATION,
+                isPermanentlyDenied = true,
+                onClickConfirm = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
     }
 }
 
@@ -261,24 +309,27 @@ private fun TraineeMyPageScreenPreview() {
     TnTTheme {
         TraineeMyPageScreen(
             state = TraineeMyPageUiState(
-                image = null,
-                name = "김회원",
-                isConnected = false,
-                isPushEnabled = true,
-                appVersion = "0.0.0",
+                user = User.Trainee(
+                    id = "",
+                    name = "김헬스",
+                    image = null,
+                    birthday = LocalDate.of(2001, 1, 1),
+                    weight = 10.0,
+                    height = 100,
+                    ptPurpose = listOf("체중 감량"),
+                    caution = "약해요",
+                    isConnected = true,
+                ),
+                isEnablePushNotification = true,
             ),
-            onEditButtonClick = {},
-            onConnectButtonClick = {},
-            onPushNotificationToggle = {},
-            onServiceTermClick = {},
-            onPrivacyClick = {},
-            onOpenSourceClick = {},
-            onLogoutClick = {},
-            onDeleteAccountClick = {},
-            onDisconnectButtonClick = {},
-            onDismissPopup = {},
-            onConfirmWarningDialog = {},
-            onConfirmCompleteDialog = {},
+            appVersion = "1.0",
+            onClickConnect = { },
+            onTogglePushNotification = { },
+            onClickTermsOfService = { },
+            onClickPrivacy = { },
+            onClickOpenSource = { },
+            onClickLogout = { },
+            onClickDeleteAccount = { },
         )
     }
 }

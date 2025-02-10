@@ -9,5 +9,9 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.login)
+
     implementation(libs.kotlinx.immutable)
+    implementation(libs.accompanist.permissions)
+    implementation(libs.play.services.oss.licenses)
 }

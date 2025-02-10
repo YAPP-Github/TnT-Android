@@ -10,14 +10,27 @@ data class UserResponse(
     val name: String,
     val email: String,
     val profileImageUrl: String,
-    val birthday: String?,
     val memberType: MemberType,
     val socialType: String,
-    val invitationCode: String,
-    val height: Double?,
-    val weight: Double?,
+    val trainer: TrainerResponse?,
+    val trainee: TraineeResponse?,
+)
+
+@Serializable
+data class TrainerResponse(
+    val activeTraineeCount: Int?,
+    val totalTraineeCount: Int?,
+    val invitationCode: String?,
+)
+
+@Serializable
+data class TraineeResponse(
+    val birthday: String?,
+    val age: Int?,
+    val height: Double,
+    val weight: Double,
     val cautionNote: String?,
-    val goalContents: List<String>,
+    val ptGoals: List<String>,
 )
 
 fun UserResponse.toDomain(dateFormatter: DateFormatter): User {
@@ -32,11 +45,12 @@ fun UserResponse.toDomain(dateFormatter: DateFormatter): User {
             id = "TODO",
             name = name,
             image = profileImageUrl,
-            birthday = birthday?.let(dateFormatter::parse),
-            weight = requireNotNull(weight),
-            height = requireNotNull(height?.toInt()),
-            ptPurpose = goalContents,
-            caution = cautionNote,
+            birthday = trainee?.birthday?.let(dateFormatter::parse),
+            weight = requireNotNull(trainee?.weight),
+            height = requireNotNull(trainee?.height?.toInt()),
+            ptPurpose = trainee?.ptGoals ?: emptyList(),
+            caution = trainee?.cautionNote,
+            isConnected = false,
         )
 
         MemberType.UNREGISTERED -> error("등록되지 않은 유저입니다.")

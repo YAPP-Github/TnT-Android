@@ -22,7 +22,7 @@ fun NavController.navigateToTraineeMain(
 )
 
 fun NavGraphBuilder.traineeMainScreen(
-    navigateToConnect: () -> Unit,
+    navigateToConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {

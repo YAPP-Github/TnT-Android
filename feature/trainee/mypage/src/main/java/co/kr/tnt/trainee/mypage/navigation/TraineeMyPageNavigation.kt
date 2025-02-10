@@ -16,21 +16,17 @@ fun NavController.navigateToTraineeMyPage(
 )
 
 fun NavGraphBuilder.traineeMyPageNavGraph(
-    navigateToPrevious: () -> Unit,
-    navigateToTraineeConnect: () -> Unit,
+    navigateToTraineeConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
-    navigateToWebView: (String) -> Unit,
-    myPageDestination: NavGraphBuilder.() -> Unit = { },
+    navigateToWebView: (url: String) -> Unit,
 ) {
     navigation<Route.TraineeMainTab.MyPage>(startDestination = Route.TraineeMyPage) {
         composable<Route.TraineeMyPage> {
             TraineeMyPageRoute(
-                navigateToPrevious = navigateToPrevious,
                 navigateToConnect = navigateToTraineeConnect,
                 navigateToLogin = navigateToLogin,
                 navigateToWebView = navigateToWebView,
             )
         }
-        myPageDestination()
     }
 }
