@@ -49,10 +49,9 @@ import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TraineeMyPageRoute(
-    navigateToPrevious: () -> Unit,
     navigateToConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
-    navigateToWebView: (String) -> Unit,
+    navigateToWebView: (url: String) -> Unit,
     viewModel: TraineeMyPageViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -80,7 +79,6 @@ internal fun TraineeMyPageRoute(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                TraineeMyPageEffect.NavigateToPrevious -> navigateToPrevious()
                 TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(false)
                 TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
                 is TraineeMyPageEffect.ShowToast -> {

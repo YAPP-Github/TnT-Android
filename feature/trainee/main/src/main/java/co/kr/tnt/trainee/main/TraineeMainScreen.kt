@@ -93,7 +93,6 @@ private fun TraineeMainScreen(
                 )
             }
             traineeMyPageNavGraph(
-                navigateToPrevious = navController::popBackStack,
                 navigateToLogin = navigateToLogin,
                 navigateToWebView = navigateToWebView,
                 navigateToTraineeConnect = navigateToConnect,

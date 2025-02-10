@@ -40,7 +40,6 @@ internal class TraineeMyPageContract {
     sealed interface TraineeMyPageEffect : UiSideEffect {
         data class ShowToast(val message: String) : TraineeMyPageEffect
         data object NavigateToConnect : TraineeMyPageEffect
-        data object NavigateToPrevious : TraineeMyPageEffect
         data object NavigateToLogin : TraineeMyPageEffect
         data class NavigateToWebView(val url: String) : TraineeMyPageEffect
     }
