@@ -30,6 +30,7 @@ sealed class User {
         val height: Int,
         val ptPurpose: List<String>,
         val caution: String?,
+        val isConnected: Boolean,
     ) : User() {
         /** 한국식 나이 */
         val age: Int? =
@@ -49,6 +50,7 @@ sealed class User {
                 height = 0,
                 ptPurpose = emptyList(),
                 caution = null,
+                isConnected = false,
             )
         }
     }

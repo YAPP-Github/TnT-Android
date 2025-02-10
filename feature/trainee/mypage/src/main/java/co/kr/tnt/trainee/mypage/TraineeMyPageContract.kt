@@ -9,7 +9,6 @@ internal class TraineeMyPageContract {
     data class TraineeMyPageUiState(
         val user: User.Trainee = User.Trainee.EMPTY,
         val trainerName: String = "",
-        val isConnected: Boolean = false,
         val isEnablePushNotification: Boolean = true,
         val dialogState: DialogState = DialogState.NONE,
     ) : UiState {

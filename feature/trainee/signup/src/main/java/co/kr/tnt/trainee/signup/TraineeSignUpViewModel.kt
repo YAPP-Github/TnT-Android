@@ -77,6 +77,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
                         height = state.height.toInt(),
                         ptPurpose = state.ptPurpose,
                         caution = state.caution,
+                        isConnected = false,
                     ),
                     socialId = id,
                     socialType = authType,

@@ -44,6 +44,7 @@ import co.kr.tnt.ui.permission.PermissionRequestDialog
 import co.kr.tnt.ui.permission.TnTPermission
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import java.time.LocalDate
 import co.kr.tnt.core.ui.R as coreR
 
 @Composable
@@ -141,7 +142,7 @@ private fun TraineeMyPageScreen(
                 .fillMaxWidth()
                 .padding(20.dp),
         ) {
-            if (state.isConnected.not()) {
+            if (state.user.isConnected.not()) {
                 TnTMyPageButton(
                     text = stringResource(R.string.connect_with_trainer),
                     onClick = onClickConnect,
@@ -194,7 +195,7 @@ private fun TraineeMyPageScreen(
                     verticalPadding = 8.dp,
                 )
             }
-            if (state.isConnected) {
+            if (state.user.isConnected) {
                 TnTMyPageButton(
                     text = stringResource(R.string.disconnect_with_trainer),
                     onClick = onClickDisconnect,
@@ -317,8 +318,17 @@ private fun TraineeMyPageScreenPreview() {
     TnTTheme {
         TraineeMyPageScreen(
             state = TraineeMyPageUiState(
-                user = User.Trainee.EMPTY,
-                isConnected = false,
+                user = User.Trainee(
+                    id = "",
+                    name = "김헬스",
+                    image = null,
+                    birthday = LocalDate.of(2001, 1, 1),
+                    weight = 10.0,
+                    height = 100,
+                    ptPurpose = listOf("체중 감량"),
+                    caution = "약해요",
+                    isConnected = false,
+                ),
                 isEnablePushNotification = true,
             ),
             appVersion = "1.0",

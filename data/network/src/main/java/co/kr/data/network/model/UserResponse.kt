@@ -40,6 +40,7 @@ fun UserResponse.toDomain(dateFormatter: DateFormatter): User {
             height = requireNotNull(height?.toInt()),
             ptPurpose = goalContents,
             caution = cautionNote,
+            isConnected = trainerId != null,
         )
 
         MemberType.UNREGISTERED -> error("등록되지 않은 유저입니다.")

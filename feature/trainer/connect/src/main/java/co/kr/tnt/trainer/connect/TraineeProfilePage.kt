@@ -217,6 +217,7 @@ private fun TraineeProfilePagePreview() {
                     height = 150,
                     ptPurpose = listOf("체중 감량", "자세 교정"),
                     caution = "손목이 안 좋습니다.",
+                    isConnected = true,
                 ),
             ),
             onNextClick = {},

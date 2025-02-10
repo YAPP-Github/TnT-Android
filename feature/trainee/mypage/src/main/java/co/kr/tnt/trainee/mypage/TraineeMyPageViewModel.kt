@@ -2,6 +2,7 @@ package co.kr.tnt.trainee.mypage
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.SettingRepository
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.AppUrls
@@ -129,7 +130,12 @@ internal class TraineeMyPageViewModel @Inject constructor(
         private fun disconnect() {
             viewModelScope.launch {
                 // TODO 연결 해제 API 호출
-                updateState { copy(isConnected = false, dialogState = DialogState.DISCONNECT) }
+                updateState {
+                    copy(
+                        user = (user as? User.Trainee)?.copy(isConnected = false) ?: user,
+                        dialogState = DialogState.DISCONNECT,
+                    )
+                }
             }
         }
     }
