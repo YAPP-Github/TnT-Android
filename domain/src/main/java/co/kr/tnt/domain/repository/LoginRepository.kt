@@ -11,4 +11,8 @@ interface LoginRepository {
         authType: AuthType,
         accessToken: String,
     ): LoginResult
+
+    suspend fun logout()
+
+    suspend fun withdraw()
 }

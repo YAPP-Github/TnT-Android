@@ -37,4 +37,14 @@ internal class LoginRepositoryImpl @Inject constructor(
 
         return response.toDomain()
     }
+
+    override suspend fun logout() {
+        loginRemoteDataSource.postLogout()
+        sessionLocalDataSource.removeSessionId()
+    }
+
+    override suspend fun withdraw() {
+        loginRemoteDataSource.postWithdraw()
+        sessionLocalDataSource.removeSessionId()
+    }
 }

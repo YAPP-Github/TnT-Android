@@ -12,8 +12,8 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 fun PermissionRequestDialog(
     permission: TnTPermission,
     isPermanentlyDenied: Boolean,
-    onOkButtonClick: (isPermanentlyDenied: Boolean) -> Unit,
-    onDismissRequest: () -> Unit,
+    onClickConfirm: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TnTPopupDialog(
@@ -33,10 +33,16 @@ fun PermissionRequestDialog(
             },
         ),
         leftButtonText = stringResource(R.string.close),
-        rightButtonText = stringResource(R.string.ok),
-        onLeftButtonClick = onDismissRequest,
-        onRightButtonClick = { onOkButtonClick(isPermanentlyDenied) },
-        onDismiss = onDismissRequest,
+        rightButtonText = stringResource(
+            if (isPermanentlyDenied) {
+                R.string.move_to_setting
+            } else {
+                R.string.ok
+            },
+        ),
+        onLeftButtonClick = onDismiss,
+        onRightButtonClick = onClickConfirm,
+        onDismiss = onDismiss,
     )
 }
 
@@ -46,9 +52,9 @@ private fun PermissionRequestDialogPreview() {
     TnTTheme {
         PermissionRequestDialog(
             permission = TnTPermission.NOTIFICATION,
-            isPermanentlyDenied = false,
-            onOkButtonClick = { },
-            onDismissRequest = { },
+            isPermanentlyDenied = true,
+            onClickConfirm = { },
+            onDismiss = { },
         )
     }
 }

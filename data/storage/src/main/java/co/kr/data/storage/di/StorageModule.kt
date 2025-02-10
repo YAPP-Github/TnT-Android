@@ -9,17 +9,29 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object StorageModule {
-    private const val SESSION_STORAGE_NAME = "SESSION_STORAGE"
+    const val SESSION_STORAGE_NAME = "SESSION_STORAGE"
     private val Context.sessionDataStore by preferencesDataStore(name = SESSION_STORAGE_NAME)
+
+    const val SETTING_STORAGE_NAME = "SETTING_STORAGE"
+    private val Context.settingDataStore by preferencesDataStore(name = SETTING_STORAGE_NAME)
 
     @Provides
     @Singleton
+    @Named(SESSION_STORAGE_NAME)
     fun provideSessionDataStore(
         @ApplicationContext context: Context,
     ): DataStore<Preferences> = context.sessionDataStore
+
+    @Provides
+    @Singleton
+    @Named(SETTING_STORAGE_NAME)
+    fun provideSettingDataStore(
+        @ApplicationContext context: Context,
+    ): DataStore<Preferences> = context.settingDataStore
 }

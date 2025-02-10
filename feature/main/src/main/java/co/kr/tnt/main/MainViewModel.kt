@@ -3,6 +3,7 @@ package co.kr.tnt.main
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.domain.repository.LoginRepository
+import co.kr.tnt.domain.repository.SettingRepository
 import co.kr.tnt.main.MainContract.MainSideEffect
 import co.kr.tnt.main.MainContract.MainUiEvent
 import co.kr.tnt.main.MainContract.MainUiState
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
+    private val settingRepository: SettingRepository,
 ) :
     BaseViewModel<MainUiState, MainUiEvent, MainSideEffect>(MainUiState()) {
         init {
@@ -46,5 +48,9 @@ internal class MainViewModel @Inject constructor(
             )
         }
 
-        override suspend fun handleEvent(event: MainUiEvent) = Unit
+        override suspend fun handleEvent(event: MainUiEvent) {
+            when (event) {
+                MainUiEvent.OnNotificationPermissionRevoked -> settingRepository.setEnablePushNotification(false)
+            }
+        }
     }

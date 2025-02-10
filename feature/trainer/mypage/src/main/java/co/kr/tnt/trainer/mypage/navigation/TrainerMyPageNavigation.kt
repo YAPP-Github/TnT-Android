@@ -17,11 +17,16 @@ fun NavController.navigateToTrainerMyPage(
 )
 
 fun NavGraphBuilder.trainerMyPageNavGraph(
+    navigateToLogin: () -> Unit,
+    navigateToWebView: (String) -> Unit,
     myPageDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TrainerMainTab.MyPage>(startDestination = Route.TrainerMyPage) {
         composable<Route.TrainerMyPage> {
-            TrainerMyPageRoute()
+            TrainerMyPageRoute(
+                navigateToLogin = navigateToLogin,
+                navigateToWebView = navigateToWebView,
+            )
         }
         myPageDestination()
     }

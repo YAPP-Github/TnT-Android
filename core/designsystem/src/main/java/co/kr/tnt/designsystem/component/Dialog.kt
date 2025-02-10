@@ -34,13 +34,18 @@ fun TnTPopupDialog(
     content: String,
     leftButtonText: String,
     rightButtonText: String,
-    modifier: Modifier = Modifier,
+    cancelable: Boolean = true,
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Dialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = {
+            if (cancelable) {
+                onDismiss()
+            }
+        },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Card(
@@ -100,12 +105,17 @@ fun TnTSingleButtonPopupDialog(
     title: String,
     content: String,
     buttonText: String,
-    modifier: Modifier = Modifier,
+    cancelable: Boolean = true,
     onButtonClick: () -> Unit,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Dialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = {
+            if (cancelable) {
+                onDismiss()
+            }
+        },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Card(
@@ -159,13 +169,18 @@ fun TnTIconPopupDialog(
     topIcon: Painter = painterResource(R.drawable.ic_round_warning),
     leftButtonText: String,
     rightButtonText: String,
-    modifier: Modifier = Modifier,
+    cancelable: Boolean = true,
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Dialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = {
+            if (cancelable) {
+                onDismiss()
+            }
+        },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Card(
@@ -229,13 +244,18 @@ fun TnTIconSingleButtonPopupDialog(
     content: String,
     topIcon: Painter,
     buttonText: String,
-    modifier: Modifier = Modifier,
-    type: ButtonType = ButtonType.Gray,
+    cancelable: Boolean = true,
     onButtonClick: () -> Unit,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+    type: ButtonType = ButtonType.Gray,
 ) {
     Dialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = {
+            if (cancelable) {
+                onDismiss()
+            }
+        },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Card(

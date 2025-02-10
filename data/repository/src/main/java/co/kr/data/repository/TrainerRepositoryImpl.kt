@@ -1,10 +1,13 @@
 package co.kr.data.repository
 
+import co.kr.data.network.model.toDomain
 import co.kr.data.network.model.trainer.MemberListResponse
 import co.kr.data.network.model.trainer.MemberResponse
 import co.kr.data.network.model.trainer.toDomain
 import co.kr.data.network.source.TrainerRemoteDataSource
+import co.kr.data.network.source.UserRemoteDataSource
 import co.kr.tnt.domain.model.MemberInfo
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSession
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.TrainerRepository
@@ -16,6 +19,7 @@ import javax.inject.Singleton
 
 @Singleton
 internal class TrainerRepositoryImpl @Inject constructor(
+    private val userRemoteDataSource: UserRemoteDataSource,
     private val trainerRemoteDataSource: TrainerRemoteDataSource,
     private val dateFormatter: DateFormatter,
 ) : TrainerRepository {
@@ -26,6 +30,12 @@ internal class TrainerRepositoryImpl @Inject constructor(
         ).calendarPtLessonCounts.map { response ->
             response.toDomain(dateFormatter)
         }
+
+    override suspend fun getMyInfo(): User.Trainer {
+        val user = userRemoteDataSource.getMyInfo().toDomain(dateFormatter)
+        require(user is User.Trainer)
+        return user
+    }
 
     override suspend fun getDailyPtSessions(day: LocalDate): TrainerDailyPtSession =
         trainerRemoteDataSource.getDailyPtSessions(

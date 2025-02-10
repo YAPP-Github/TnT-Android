@@ -6,6 +6,7 @@ private val kakaoNativeAppKey: String =
 plugins {
     id("tnt.android.application")
     id("tnt.android.compose")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -59,4 +60,5 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.kakao.user)
+    implementation(libs.play.services.oss.licenses)
 }
