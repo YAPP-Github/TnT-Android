@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.button.TnTTextButton
@@ -239,6 +240,7 @@ fun TnTOutlinedTextField(
     placeholder: String? = stringResource(R.string.placeholder_content_input),
     maxLength: Int = 15,
     enabled: Boolean = true,
+    minHeight: Dp = 128.dp,
     isError: Boolean = false,
     warningMessage: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
@@ -273,7 +275,7 @@ fun TnTOutlinedTextField(
                     color = borderColor,
                     shape = RoundedCornerShape(8.dp),
                 )
-                .defaultMinSize(minHeight = 128.dp),
+                .defaultMinSize(minHeight = minHeight),
             cursorBrush = SolidColor(TnTTheme.colors.neutralColors.Neutral900),
             textStyle = TnTTheme.typography.body1Medium.copy(
                 color = TnTTheme.colors.neutralColors.Neutral800,
