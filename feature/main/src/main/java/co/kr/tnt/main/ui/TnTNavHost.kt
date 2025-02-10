@@ -85,6 +85,7 @@ fun TnTNavHost(
             trainerMainScreen(
                 navigateToConnect = navController::navigateToTrainerConnect,
                 navigateToWebView = navController::navigateToWebView,
+                navigateToInvite = navController::navigateToTrainerInvite,
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
             )
             traineeMainScreen(

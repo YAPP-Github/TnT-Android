@@ -208,7 +208,7 @@ private fun TrainerMyPageScreen(
                     verticalPadding = 8.dp,
                 )
                 TnTMyPageButton(
-                    text = stringResource(coreR.string.app_push_notification),
+                    text = stringResource(coreR.string.app_version),
                     verticalPadding = 12.dp,
                     enabled = false,
                     onClick = onTogglePushNotification,

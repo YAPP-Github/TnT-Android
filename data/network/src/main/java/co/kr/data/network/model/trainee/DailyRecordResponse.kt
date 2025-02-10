@@ -1,11 +1,11 @@
 package co.kr.data.network.model.trainee
 
+import co.kr.tnt.domain.model.DailyRecord
 import co.kr.tnt.domain.model.RecordType
 import co.kr.tnt.domain.model.RecordType.ExerciseType
 import co.kr.tnt.domain.model.RecordType.MealType
-import co.kr.tnt.domain.model.trainee.DailyRecord
-import co.kr.tnt.domain.model.trainee.PtSession
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecord
+import co.kr.tnt.domain.model.trainee.TraineePtSession
 import co.kr.tnt.domain.utils.DateFormatter
 import kotlinx.serialization.Serializable
 
@@ -44,7 +44,7 @@ fun DailyRecordsResponse.toDomain(dateFormatter: DateFormatter) =
         record = records.map { it.toDomain(dateFormatter) },
     )
 
-fun PtSessionResponse.toDomain(dateFormatter: DateFormatter) = PtSession(
+fun PtSessionResponse.toDomain(dateFormatter: DateFormatter) = TraineePtSession(
     ptSessionId = ptSessionId,
     trainerName = trainerName,
     trainerImage = trainerImage,
