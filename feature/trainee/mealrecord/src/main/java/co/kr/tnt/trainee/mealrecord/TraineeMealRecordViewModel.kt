@@ -1,8 +1,26 @@
 package co.kr.tnt.trainee.mealrecord
 
-import androidx.lifecycle.ViewModel
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordSideEffect
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiEvent
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState
+import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-internal class TraineeMealRecordViewModel @Inject constructor() : ViewModel()
+internal class TraineeMealRecordViewModel @Inject constructor() :
+    BaseViewModel<TraineeMealRecordUiState, TraineeMealRecordUiEvent, TraineeMealRecordSideEffect>(
+        TraineeMealRecordUiState(),
+    ) {
+        override suspend fun handleEvent(event: TraineeMealRecordUiEvent) {
+            when (event) {
+                is TraineeMealRecordUiEvent.OnSelectImage -> updateState { copy(image = event.imageUri) }
+                TraineeMealRecordUiEvent.OnClickDeleteImage -> updateState { copy(image = null) }
+                is TraineeMealRecordUiEvent.OnClickMealDate -> TODO()
+                is TraineeMealRecordUiEvent.OnClickMealTime -> TODO()
+                is TraineeMealRecordUiEvent.OnClickMealTypeButton -> TODO()
+                TraineeMealRecordUiEvent.OnClickSave -> TODO()
+                TraineeMealRecordUiEvent.OnClickBack -> sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
+            }
+        }
+    }

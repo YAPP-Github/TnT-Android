@@ -17,6 +17,8 @@ internal class TraineeMealRecordContract {
     ) : UiState
 
     sealed interface TraineeMealRecordUiEvent : UiEvent {
+        data class OnSelectImage(val imageUri: Uri) : TraineeMealRecordUiEvent
+        data object OnClickDeleteImage : TraineeMealRecordUiEvent
         data class OnClickMealDate(val date: LocalDate) : TraineeMealRecordUiEvent
         data class OnClickMealTime(val time: LocalTime) : TraineeMealRecordUiEvent
         data class OnClickMealTypeButton(val mealType: String) : TraineeMealRecordUiEvent
@@ -24,8 +26,8 @@ internal class TraineeMealRecordContract {
         data object OnClickBack : TraineeMealRecordUiEvent
     }
 
-    sealed interface TraineeMealRecordEffect : UiSideEffect {
-        data object NavigateToHome : TraineeMealRecordEffect
-        data class ShowToast(val message: String) : TraineeMealRecordEffect
+    sealed interface TraineeMealRecordSideEffect : UiSideEffect {
+        data object NavigateToHome : TraineeMealRecordSideEffect
+        data class ShowToast(val message: String) : TraineeMealRecordSideEffect
     }
 }
