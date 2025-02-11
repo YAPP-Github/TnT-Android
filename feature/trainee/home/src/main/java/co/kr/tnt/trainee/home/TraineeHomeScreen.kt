@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -109,86 +114,105 @@ private fun TraineeHomeScreen(
     )
     var visibleYearMonth = rememberMostVisibleYearMonth(weekCalendarState)
 
-    LazyColumn(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(TnTTheme.colors.neutralColors.Neutral100),
     ) {
-        item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(TnTTheme.colors.commonColors.Common0),
-            ) {
-                Spacer(Modifier.height(12.dp))
-                TnTHomeTopBar(
-                    yearMonth = visibleYearMonth,
-                    onClickSelectorPrevious = {
-                        coroutineScope.launch {
-                            val previousWeek = weekCalendarState.firstVisibleWeek.days.first().date.minusWeeks(1)
-                            visibleYearMonth = YearMonth.from(previousWeek)
-                            weekCalendarState.animateScrollToWeek(previousWeek)
-                        }
-                    },
-                    onClickSelectorNext = {
-                        coroutineScope.launch {
-                            val nextWeek = weekCalendarState.firstVisibleWeek.days.first().date.plusWeeks(1)
-                            visibleYearMonth = YearMonth.from(nextWeek)
-                            weekCalendarState.animateScrollToWeek(nextWeek)
-                        }
-                    },
-                    onClickNotification = onClickNotification,
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Calendar(
-                    weekCalendarState = weekCalendarState,
-                    selectedDay = state.selectedDay,
-                    dailyDataState = state.dailyRecordStatus,
-                    onClickDay = onClickDay,
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                if (state.ptSessions != null) {
-                    DailyPtSession(
-                        session = state.ptSessions,
-                        dateFormatter = dateFormatter,
-                        onClickPtSessionCard = onClickPtSessionCard,
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(TnTTheme.colors.commonColors.Common0),
+                ) {
+                    Spacer(Modifier.height(12.dp))
+                    TnTHomeTopBar(
+                        yearMonth = visibleYearMonth,
+                        onClickSelectorPrevious = {
+                            coroutineScope.launch {
+                                val previousWeek =
+                                    weekCalendarState.firstVisibleWeek.days.first().date.minusWeeks(1)
+                                visibleYearMonth = YearMonth.from(previousWeek)
+                                weekCalendarState.animateScrollToWeek(previousWeek)
+                            }
+                        },
+                        onClickSelectorNext = {
+                            coroutineScope.launch {
+                                val nextWeek =
+                                    weekCalendarState.firstVisibleWeek.days.first().date.plusWeeks(1)
+                                visibleYearMonth = YearMonth.from(nextWeek)
+                                weekCalendarState.animateScrollToWeek(nextWeek)
+                            }
+                        },
+                        onClickNotification = onClickNotification,
                     )
-                } else {
-                    EmptyPtSession()
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Calendar(
+                        weekCalendarState = weekCalendarState,
+                        selectedDay = state.selectedDay,
+                        dailyDataState = state.dailyRecordStatus,
+                        onClickDay = onClickDay,
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    if (state.ptSessions != null) {
+                        DailyPtSession(
+                            session = state.ptSessions,
+                            dateFormatter = dateFormatter,
+                            onClickPtSessionCard = onClickPtSessionCard,
+                        )
+                    } else {
+                        EmptyPtSession()
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 20.dp),
+                ) {
+                    Text(
+                        text = dateFormatter.format(
+                            date = state.selectedDay,
+                            pattern = "M월 d일 EEEE",
+                        ),
+                        color = TnTTheme.colors.neutralColors.Neutral800,
+                        style = TnTTheme.typography.h3,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp),
-            ) {
-                Text(
-                    text = dateFormatter.format(
-                        date = state.selectedDay,
-                        pattern = "M월 d일 EEEE",
-                    ),
-                    color = TnTTheme.colors.neutralColors.Neutral800,
-                    style = TnTTheme.typography.h3,
-                    modifier = Modifier.fillMaxWidth(),
+            if (state.recordList.isEmpty()) {
+                item { EmptyDailyRecords() }
+            } else {
+                items(state.recordList) { record ->
+                    DailyRecords(
+                        record = record,
+                        dateFormatter = dateFormatter,
+                    )
+                }
+            }
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .height(100.dp)
+                        .background(TnTTheme.colors.neutralColors.Neutral100),
                 )
             }
         }
-        if (state.recordList.isEmpty()) {
-            item { EmptyDailyRecords() }
-        } else {
-            items(state.recordList) { record ->
-                DailyRecords(
-                    record = record,
-                    dateFormatter = dateFormatter,
-                )
-            }
-        }
-        item {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .height(100.dp)
-                    .background(TnTTheme.colors.neutralColors.Neutral100),
+        FloatingActionButton(
+            onClick = { },
+            shape = RoundedCornerShape(12.dp),
+            containerColor = TnTTheme.colors.neutralColors.Neutral900,
+            elevation = FloatingActionButtonDefaults.elevation(0.dp),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 20.dp, end = 12.dp),
+        ) {
+            Icon(
+                painter = painterResource(co.kr.tnt.core.designsystem.R.drawable.ic_add),
+                contentDescription = null,
+                tint = Color.White,
             )
         }
     }
