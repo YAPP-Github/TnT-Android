@@ -1,6 +1,7 @@
 package co.kr.tnt.designsystem.component
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -18,6 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -34,11 +38,28 @@ fun TnTTopBarWithBackButton(
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    showShadow: Boolean = false,
     trailingComponent: @Composable RowScope.() -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier
             .fillMaxWidth()
+            .drawBehind {
+                if (showShadow) {
+                    drawRect(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Black.copy(alpha = 0.06f),
+                                Color.Transparent,
+                            ),
+                            startY = size.height,
+                            endY = size.height + 10.dp.toPx(),
+                        ),
+                        topLeft = Offset(0f, size.height),
+                        size = size.copy(height = 10.dp.toPx()),
+                    )
+                }
+            }
             // 디자인상으로는 16dp가 맞으나, 라이브러리에서 기본적으로
             // horizontal padding 으로 4dp 를 부여하고 있음.
             // 이에 따라 16dp - 4dp 계산값으로 적용
@@ -130,15 +151,18 @@ private fun TnTTopBarOnlyTitlePreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, heightDp = 100)
 @Composable
 private fun TnTTopBarBackButtonWithTitlePreview() {
     TnTTheme {
-        TnTTopBarWithBackButton(
-            modifier = Modifier.fillMaxWidth(),
-            title = "제목",
-            onBackClick = { },
-        )
+        Column {
+            TnTTopBarWithBackButton(
+                modifier = Modifier.fillMaxWidth(),
+                title = "제목",
+                onBackClick = { },
+                showShadow = true,
+            )
+        }
     }
 }
 
