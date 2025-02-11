@@ -17,14 +17,14 @@ data class TraineeInfoResponse(
     val finishedPtCount: Int,
     val totalPtCount: Int,
     val memo: String?,
-    val goalContents: String,
+    val ptGoals: String,
 )
 
 fun TraineeInfoResponse.toDomain() =
     MemberInfo(
         traineeName = name,
         profileUrl = profileUrl,
-        ptPurpose = goalContents,
+        ptPurpose = ptGoals,
         memo = memo,
         finishedPtCount = finishedPtCount,
         totalPtCount = totalPtCount,
