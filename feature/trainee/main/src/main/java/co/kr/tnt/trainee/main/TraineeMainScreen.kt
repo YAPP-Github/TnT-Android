@@ -20,6 +20,7 @@ internal fun TraineeMainRoute(
     navigateToConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
+    navigateToMealRecord: () -> Unit,
 ) {
     val state = rememberTraineeMainState(
         startDestination = TraineeMainTab.HOME.baseRoute,
@@ -30,6 +31,7 @@ internal fun TraineeMainRoute(
         navigateToConnect = navigateToConnect,
         navigateToLogin = navigateToLogin,
         navigateToWebView = navigateToWebView,
+        navigateToMealRecord = navigateToMealRecord,
     )
 }
 
@@ -40,6 +42,7 @@ private fun TraineeMainScreen(
     navigateToConnect: (Boolean) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
+    navigateToMealRecord: () -> Unit,
 ) {
     val navController = state.navController
 
@@ -64,6 +67,7 @@ private fun TraineeMainScreen(
         ) {
             traineeHomeNavGraph(
                 navigateToNotification = navController::navigateToTraineeNotification,
+                navigateToMealRecord = navigateToMealRecord,
             ) {
                 traineeNotification(
                     navigateToPrevious = navController::popBackStack,
