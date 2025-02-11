@@ -9,7 +9,7 @@ import co.kr.tnt.ui.base.UiState
 import java.time.LocalDate
 import java.time.YearMonth
 
-class TraineeHomeContract {
+internal class TraineeHomeContract {
     data class TraineeHomeUiState(
         val selectedDay: LocalDate = LocalDate.now(),
         val dailyRecordStatus: List<TraineeDailyRecordStatus> = emptyList(),
