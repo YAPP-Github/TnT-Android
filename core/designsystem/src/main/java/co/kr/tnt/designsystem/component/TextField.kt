@@ -1,6 +1,8 @@
 package co.kr.tnt.designsystem.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -15,8 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +28,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +41,7 @@ import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.theme.TnTTheme
+import java.time.LocalDate
 
 @Composable
 fun TnTTextField(
@@ -321,6 +329,139 @@ fun TnTOutlinedTextField(
     }
 }
 
+@Composable
+fun TnTSelectableTextField(
+    title: String,
+    value: String?,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String? = null,
+    isReadOnly: Boolean = true,
+    isSingleLine: Boolean = false,
+    isRequired: Boolean = false,
+    showWarning: Boolean = false,
+    warningMessage: String? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    shouldClearFocus: Boolean = false,
+    onClick: () -> Unit,
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
+
+    val lineColor = when {
+        showWarning -> TnTTheme.colors.redColors.Red500
+        isFocused -> TnTTheme.colors.neutralColors.Neutral600
+        else -> TnTTheme.colors.neutralColors.Neutral200
+    }
+    val iconColor = when {
+        isFocused -> TnTTheme.colors.neutralColors.Neutral600
+        else -> TnTTheme.colors.neutralColors.Neutral400
+    }
+
+    LaunchedEffect(shouldClearFocus) {
+        if (shouldClearFocus) {
+            focusManager.clearFocus()
+            isFocused = false
+        }
+    }
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(bottom = 8.dp, end = 4.dp)
+                .fillMaxWidth(),
+        ) {
+            Text(
+                text = title,
+                style = TnTTheme.typography.body1Bold,
+                color = TnTTheme.colors.neutralColors.Neutral900,
+            )
+            if (isRequired) {
+                Text(
+                    text = "*",
+                    style = TnTTheme.typography.body1Bold,
+                    color = TnTTheme.colors.redColors.Red500,
+                )
+            }
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = {
+                        isFocused = true
+                        onClick()
+                    },
+                ),
+        ) {
+            BasicTextField(
+                value = value ?: "",
+                onValueChange = onValueChange,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+                    .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
+                        if (focusState.isFocused) {
+                            onClick()
+                        }
+                    },
+                readOnly = isReadOnly,
+                textStyle = TnTTheme.typography.body1Medium.copy(
+                    color = if (value?.isNotEmpty() == true) {
+                        TnTTheme.colors.neutralColors.Neutral900
+                    } else {
+                        TnTTheme.colors.neutralColors.Neutral400
+                    },
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+                cursorBrush = SolidColor(Color.Transparent),
+                singleLine = isSingleLine,
+                decorationBox = { innerTextField ->
+                    if (value?.isEmpty() == true && placeholder != null) {
+                        Text(
+                            text = placeholder,
+                            style = TnTTheme.typography.body1Medium,
+                            color = TnTTheme.colors.neutralColors.Neutral400,
+                        )
+                    }
+                    innerTextField()
+                },
+            )
+            Box(
+                modifier = Modifier
+                    .wrapContentSize(Alignment.Center)
+                    .align(Alignment.CenterVertically)
+                    .padding(vertical = 4.dp),
+                content = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_arrow_down),
+                        tint = iconColor,
+                        contentDescription = null,
+                    )
+                },
+            )
+        }
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = lineColor,
+        )
+        if (showWarning && !warningMessage.isNullOrEmpty()) {
+            Text(
+                text = warningMessage,
+                style = TnTTheme.typography.body2Medium,
+                color = TnTTheme.colors.redColors.Red500,
+                modifier = Modifier.padding(top = 6.dp),
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true, heightDp = 100)
 @Composable
 private fun TnTTextFieldPreview() {
@@ -435,6 +576,37 @@ private fun TnTOutlinedTextFieldPreview() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TnTClickableTextFieldPreview() {
+    var date by remember { mutableStateOf("") }
+    var shouldClearFocus by remember { mutableStateOf(false) }
+
+    fun updateValue() {
+        date = LocalDate.of(2025, 3, 3).toString()
+        shouldClearFocus = true
+    }
+
+    fun onClickComponent() {
+        shouldClearFocus = false
+        updateValue()
+    }
+
+    TnTTheme {
+        TnTSelectableTextField(
+            title = "제목",
+            value = date,
+            placeholder = "2025-01-01",
+            isRequired = true,
+            isSingleLine = true,
+            onClick = { onClickComponent() },
+            onValueChange = { },
+            shouldClearFocus = shouldClearFocus,
+            modifier = Modifier.padding(10.dp),
         )
     }
 }
