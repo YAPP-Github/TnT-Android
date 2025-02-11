@@ -40,6 +40,7 @@ fun TnTTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String? = stringResource(R.string.placeholder_content_input),
+    enabled: Boolean = true,
     isSingleLine: Boolean = false,
     showWarning: Boolean = false,
     warningMessage: String? = null,
@@ -64,6 +65,7 @@ fun TnTTextField(
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
+                enabled = enabled,
                 singleLine = isSingleLine,
                 cursorBrush = SolidColor(TnTTheme.colors.neutralColors.Neutral900),
                 textStyle = TnTTheme.typography.body1Medium.copy(
@@ -185,6 +187,7 @@ fun TnTLabeledTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String? = stringResource(R.string.placeholder_content_input),
+    enabled: Boolean = true,
     isSingleLine: Boolean = false,
     showWarning: Boolean = false,
     isRequired: Boolean = false,
@@ -219,6 +222,7 @@ fun TnTLabeledTextField(
             onValueChange = onValueChange,
             isSingleLine = isSingleLine,
             showWarning = showWarning,
+            enabled = enabled,
             warningMessage = warningMessage,
             keyboardType = keyboardType,
             trailingComponent = trailingComponent,
@@ -234,6 +238,7 @@ fun TnTOutlinedTextField(
     modifier: Modifier = Modifier,
     placeholder: String? = stringResource(R.string.placeholder_content_input),
     maxLength: Int = 15,
+    enabled: Boolean = true,
     isError: Boolean = false,
     warningMessage: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
@@ -257,6 +262,7 @@ fun TnTOutlinedTextField(
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
+            enabled = enabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
