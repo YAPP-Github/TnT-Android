@@ -48,7 +48,9 @@ import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffect
+import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState
+import java.time.LocalDate
 import java.time.LocalTime
 
 @Composable
@@ -58,14 +60,29 @@ internal fun AddPtSessionRoute(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    AddPtSessionScreen(state = uiState)
+    AddPtSessionScreen(
+        state = uiState,
+        onClickBack = { viewModel.setEvent(AddPtSessionUiEvent.OnClickBack) },
+        onClickMember = { viewModel.setEvent(AddPtSessionUiEvent.OnClickMember) },
+        onClickDate = { viewModel.setEvent(AddPtSessionUiEvent.OnClickDate) },
+        onClickStartTime = { viewModel.setEvent(AddPtSessionUiEvent.OnClickStartTime) },
+        onClickEndTime = { viewModel.setEvent(AddPtSessionUiEvent.OnClickEndTime) },
+        onClickMinuteChip = { minute -> viewModel.setEvent(AddPtSessionUiEvent.OnClickMinuteChip(minute)) },
+        onChangeMemo = { memo -> viewModel.setEvent(AddPtSessionUiEvent.OnChangeMemo(memo)) },
+        onClickComplete = { viewModel.setEvent(AddPtSessionUiEvent.OnClickComplete) },
+    )
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
+                AddPtSessionSideEffect.ShowBottomSheet -> TODO()
+                AddPtSessionSideEffect.HideBottomSheet -> TODO()
+
                 is AddPtSessionSideEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
+
+                AddPtSessionSideEffect.NavigateToPrevious -> TODO()
             }
         }
     }
@@ -74,8 +91,17 @@ internal fun AddPtSessionRoute(
 @Composable
 private fun AddPtSessionScreen(
     state: AddPtSessionUiState,
+    onClickBack: () -> Unit,
+    onClickMember: () -> Unit,
+    onClickDate: () -> Unit,
+    onClickStartTime: () -> Unit,
+    onClickEndTime: () -> Unit,
+    onClickMinuteChip: (minute: Int) -> Unit,
+    onChangeMemo: (memo: String) -> Unit,
+    onClickComplete: () -> Unit,
 ) {
     val dateFormatter = remember { DateFormatter() }
+    val today = remember { LocalDate.now() }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -90,7 +116,7 @@ private fun AddPtSessionScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = "수업 추가하기",
                 windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
-                onBackClick = { },
+                onBackClick = onClickBack,
             )
             Column(
                 modifier = Modifier
@@ -102,38 +128,44 @@ private fun AddPtSessionScreen(
                 Spacer(modifier = Modifier.height(48.dp))
                 Selector(
                     title = "회원 선택",
-                    value = "",
+                    value = state.selectedMember.name,
                     placeholder = "회원을 입력해주세요",
-                    onClick = { },
+                    onClick = onClickMember,
                 )
                 Spacer(modifier = Modifier.height(48.dp))
                 Selector(
                     title = "PT 날짜",
-                    value = "",
-                    placeholder = "2025/01/30",
-                    onClick = { },
+                    value = state.selectedDate?.let { selectedDate ->
+                        dateFormatter.format(selectedDate, "yyyy/MM/dd")
+                    } ?: "",
+                    placeholder = dateFormatter.format(today, "yyyy/MM/dd"),
+                    onClick = onClickDate,
                 )
                 Spacer(modifier = Modifier.height(48.dp))
                 TimeSelector(
                     startTime = null,
                     endTime = null,
                     dateFormatter = dateFormatter,
-                    onClickStartTime = { },
-                    onClickEndTime = { },
+                    onClickStartTime = onClickStartTime,
+                    onClickEndTime = onClickEndTime,
                 )
-                Spacer(modifier = Modifier.height(48.dp))
-                MinuteChips(
-                    selectedMinute = 70,
-                    onClickChip = { minute -> },
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                TotalSessionMinute(
-                    minute = 50,
-                )
+                if (state.selectedStartTime != null && state.selectedEndTime == null) {
+                    Spacer(modifier = Modifier.height(48.dp))
+                    MinuteChips(
+                        selectedMinute = state.totalSessionMinute ?: 0,
+                        onClickChip = onClickMinuteChip,
+                    )
+                }
+                state.totalSessionMinute?.let { totalSessionMinute ->
+                    Spacer(modifier = Modifier.height(20.dp))
+                    TotalSessionMinute(
+                        minute = totalSessionMinute,
+                    )
+                }
                 Spacer(modifier = Modifier.height(48.dp))
                 Memo(
-                    value = "",
-                    onValueChanged = { value -> },
+                    value = state.memo,
+                    onValueChanged = onChangeMemo,
                 )
                 Spacer(modifier = Modifier.height(70.dp))
             }
@@ -142,7 +174,8 @@ private fun AddPtSessionScreen(
         TnTBottomButton(
             text = "완료",
             modifier = Modifier.align(Alignment.BottomCenter),
-        ) { }
+            onClick = onClickComplete,
+        )
     }
 }
 
@@ -356,6 +389,14 @@ private fun AddPtSessionScreenPreview() {
     TnTTheme {
         AddPtSessionScreen(
             state = AddPtSessionUiState(),
+            onClickBack = { },
+            onClickMember = { },
+            onClickDate = { },
+            onClickStartTime = { },
+            onClickEndTime = { },
+            onClickMinuteChip = { },
+            onChangeMemo = { },
+            onClickComplete = { },
         )
     }
 }

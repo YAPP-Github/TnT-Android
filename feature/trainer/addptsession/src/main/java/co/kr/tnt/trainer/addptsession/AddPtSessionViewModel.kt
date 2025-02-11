@@ -13,6 +13,19 @@ internal class AddPtSessionViewModel @Inject constructor() :
         AddPtSessionUiState(),
     ) {
         override suspend fun handleEvent(event: AddPtSessionUiEvent) {
-            TODO("Not yet implemented")
+            when (event) {
+                is AddPtSessionUiEvent.OnChangeMemo -> {}
+                AddPtSessionUiEvent.OnClickBack -> {}
+                AddPtSessionUiEvent.OnClickComplete -> {}
+                AddPtSessionUiEvent.OnClickDate -> {}
+                AddPtSessionUiEvent.OnClickEndTime -> {}
+                AddPtSessionUiEvent.OnClickMember -> {}
+                is AddPtSessionUiEvent.OnClickMinuteChip -> {}
+                AddPtSessionUiEvent.OnClickStartTime -> {}
+                is AddPtSessionUiEvent.OnSelectDate -> {}
+                is AddPtSessionUiEvent.OnSelectEndTime -> {}
+                is AddPtSessionUiEvent.OnSelectMember -> {}
+                is AddPtSessionUiEvent.OnSelectStartTime -> {}
+            }
         }
     }
