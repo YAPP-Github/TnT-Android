@@ -2,6 +2,7 @@ package co.kr.tnt.domain.utils
 
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,6 +38,11 @@ class DateFormatter @Inject constructor() {
     fun format(
         date: LocalDateTime,
         pattern: String = "yyyy-MM-ddTHH:mm:ss",
+    ): String = DateTimeFormatter.ofPattern(pattern).format(date)
+
+    fun format(
+        date: LocalTime,
+        pattern: String = "HH:mm",
     ): String = DateTimeFormatter.ofPattern(pattern).format(date)
 
     companion object {
