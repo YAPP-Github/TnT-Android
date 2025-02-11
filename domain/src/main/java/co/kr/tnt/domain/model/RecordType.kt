@@ -1,11 +1,11 @@
 package co.kr.tnt.domain.model
 
 sealed class RecordType {
-    sealed class MealType : RecordType() {
-        data object BREAKFAST : MealType()
-        data object LUNCH : MealType()
-        data object DINNER : MealType()
-        data object SNACK : MealType()
+    sealed class MealType(val name: String) : RecordType() {
+        data object BREAKFAST : MealType("BREAKFAST")
+        data object LUNCH : MealType("LUNCH")
+        data object DINNER : MealType("DINNER")
+        data object SNACK : MealType("SNACK")
     }
 
     sealed class ExerciseType : RecordType() {

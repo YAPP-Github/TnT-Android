@@ -18,9 +18,18 @@ internal class TraineeMealRecordViewModel @Inject constructor() :
                 TraineeMealRecordUiEvent.OnClickDeleteImage -> updateState { copy(image = null) }
                 is TraineeMealRecordUiEvent.OnClickMealDate -> TODO()
                 is TraineeMealRecordUiEvent.OnClickMealTime -> TODO()
-                is TraineeMealRecordUiEvent.OnClickMealTypeButton -> TODO()
+                is TraineeMealRecordUiEvent.OnSelectMealType -> updateState { copy(mealType = event.mealType) }
+                is TraineeMealRecordUiEvent.OnChangeMemo -> updateMemo(event.memo)
                 TraineeMealRecordUiEvent.OnClickSave -> TODO()
                 TraineeMealRecordUiEvent.OnClickBack -> sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
+            }
+        }
+
+        private fun updateMemo(value: String) {
+            if (value.length == 100) {
+                updateState { copy(showWarning = true, memo = value) }
+            } else {
+                updateState { copy(showWarning = false, memo = value) }
             }
         }
     }

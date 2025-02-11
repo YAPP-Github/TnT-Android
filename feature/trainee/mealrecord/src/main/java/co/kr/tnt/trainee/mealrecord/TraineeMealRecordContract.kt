@@ -14,6 +14,7 @@ internal class TraineeMealRecordContract {
         val time: LocalTime = LocalTime.now(),
         val mealType: String = "",
         val memo: String = "",
+        val showWarning: Boolean = false,
     ) : UiState
 
     sealed interface TraineeMealRecordUiEvent : UiEvent {
@@ -21,7 +22,8 @@ internal class TraineeMealRecordContract {
         data object OnClickDeleteImage : TraineeMealRecordUiEvent
         data class OnClickMealDate(val date: LocalDate) : TraineeMealRecordUiEvent
         data class OnClickMealTime(val time: LocalTime) : TraineeMealRecordUiEvent
-        data class OnClickMealTypeButton(val mealType: String) : TraineeMealRecordUiEvent
+        data class OnSelectMealType(val mealType: String) : TraineeMealRecordUiEvent
+        data class OnChangeMemo(val memo: String) : TraineeMealRecordUiEvent
         data object OnClickSave : TraineeMealRecordUiEvent
         data object OnClickBack : TraineeMealRecordUiEvent
     }
