@@ -23,6 +23,8 @@ fun NavGraphBuilder.traineeHomeNavGraph(
         composable<Route.TraineeHome> {
             TraineeHomeRoute(
                 navigateToNotification = navigateToNotification,
+                navigateToExerciseRecord = { },
+                navigateToMealRecord = { },
             )
         }
         homeDestination()

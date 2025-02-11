@@ -20,10 +20,14 @@ class TraineeHomeContract {
     sealed interface TraineeHomeUiEvent : UiEvent {
         data class OnChangeVisibleMonth(val yearMonth: YearMonth) : TraineeHomeUiEvent
         data class OnClickPtSessionCard(val ptSessionId: String) : TraineeHomeUiEvent
+        data object OnClickExerciseRecord : TraineeHomeUiEvent
+        data object OnClickMealRecord : TraineeHomeUiEvent
         data class OnClickDay(val date: LocalDate) : TraineeHomeUiEvent
     }
 
     sealed interface TraineeHomeEffect : UiSideEffect {
+        data object NavigateToExerciseRecord : TraineeHomeEffect
+        data object NavigateToMealRecord : TraineeHomeEffect
         data class ShowToast(val message: String) : TraineeHomeEffect
     }
 }

@@ -2,6 +2,7 @@ package co.kr.tnt.trainee.home
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,15 +15,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorWeekCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
 import co.kr.tnt.designsystem.component.calendar.model.DayState
@@ -48,6 +55,7 @@ import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
 import co.kr.tnt.domain.model.trainee.TraineePtSession
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.feature.trainee.home.R
+import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeEffect
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
 import co.kr.tnt.ui.component.TnTHomeTopBar
@@ -62,13 +70,19 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TraineeHomeRoute(
     viewModel: TraineeHomeViewModel = hiltViewModel(),
     navigateToNotification: () -> Unit,
+    navigateToExerciseRecord: () -> Unit,
+    navigateToMealRecord: () -> Unit,
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     TraineeHomeScreen(
         state = uiState,
@@ -82,13 +96,39 @@ internal fun TraineeHomeRoute(
         onClickPtSessionCard = { id ->
             viewModel.setEvent(TraineeHomeUiEvent.OnClickPtSessionCard(id))
         },
+        onClickFloatingButton = { showBottomSheet = true },
     )
+
+    if (showBottomSheet) {
+        TnTModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = {
+                showBottomSheet = false
+            },
+            content = {
+                RecordBottomSheetContent(
+                    onClickExercise = { viewModel.setEvent(TraineeHomeUiEvent.OnClickExerciseRecord) },
+                    onClickDiet = { viewModel.setEvent(TraineeHomeUiEvent.OnClickMealRecord) },
+                )
+            },
+        )
+    }
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is TraineeHomeContract.TraineeHomeEffect.ShowToast -> {
+                is TraineeHomeEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+
+                TraineeHomeEffect.NavigateToExerciseRecord -> {
+                    showBottomSheet = false
+                    navigateToExerciseRecord()
+                }
+
+                TraineeHomeEffect.NavigateToMealRecord -> {
+                    showBottomSheet = false
+                    navigateToMealRecord()
                 }
             }
         }
@@ -102,6 +142,7 @@ private fun TraineeHomeScreen(
     onChangeVisibleMonth: (YearMonth) -> Unit,
     onClickDay: (LocalDate) -> Unit,
     onClickPtSessionCard: (String) -> Unit,
+    onClickFloatingButton: () -> Unit,
 ) {
     val dateFormatter = remember { DateFormatter() }
     val coroutineScope = rememberCoroutineScope()
@@ -132,7 +173,9 @@ private fun TraineeHomeScreen(
                         onClickSelectorPrevious = {
                             coroutineScope.launch {
                                 val previousWeek =
-                                    weekCalendarState.firstVisibleWeek.days.first().date.minusWeeks(1)
+                                    weekCalendarState.firstVisibleWeek.days.first().date.minusWeeks(
+                                        1,
+                                    )
                                 visibleYearMonth = YearMonth.from(previousWeek)
                                 weekCalendarState.animateScrollToWeek(previousWeek)
                             }
@@ -201,7 +244,7 @@ private fun TraineeHomeScreen(
             }
         }
         FloatingActionButton(
-            onClick = { },
+            onClick = onClickFloatingButton,
             shape = RoundedCornerShape(12.dp),
             containerColor = TnTTheme.colors.neutralColors.Neutral900,
             elevation = FloatingActionButtonDefaults.elevation(0.dp),
@@ -334,6 +377,60 @@ private fun EmptyDailyRecords() {
     }
 }
 
+@Composable
+private fun RecordBottomSheetContent(
+    onClickExercise: () -> Unit,
+    onClickDiet: () -> Unit,
+) {
+    Column(
+        modifier = Modifier.padding(horizontal = 20.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.what_kind_of_record_would_you_like_to_make),
+            color = TnTTheme.colors.neutralColors.Neutral900,
+            style = TnTTheme.typography.h3,
+            modifier = Modifier.padding(vertical = 20.dp),
+        )
+        RecordItem(
+            icon = "\uD83C\uDFCB\uD83C\uDFFB\u200D♀\uFE0F",
+            text = "개인 운동",
+            modifier = Modifier.clickable(onClick = onClickExercise),
+        )
+        Spacer(Modifier.height(12.dp))
+        RecordItem(
+            icon = "\uD83E\uDD57",
+            text = "식단",
+            modifier = Modifier.clickable(onClick = onClickDiet),
+        )
+        Spacer(Modifier.height(54.dp))
+    }
+}
+
+@Composable
+private fun RecordItem(
+    icon: String,
+    text: String,
+    modifier: Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+    ) {
+        Text(
+            text = icon,
+            style = TnTTheme.typography.h3,
+        )
+        Text(
+            text = text,
+            color = TnTTheme.colors.neutralColors.Neutral600,
+            style = TnTTheme.typography.body1SemiBold,
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun TraineeHomeScreenPreview() {
@@ -377,6 +474,18 @@ private fun TraineeHomeScreenPreview() {
             onClickDay = { },
             onClickPtSessionCard = { },
             onChangeVisibleMonth = { },
+            onClickFloatingButton = { },
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun RecordBottomSheetContentPreview() {
+    TnTTheme {
+        RecordBottomSheetContent(
+            onClickExercise = { },
+            onClickDiet = { },
         )
     }
 }

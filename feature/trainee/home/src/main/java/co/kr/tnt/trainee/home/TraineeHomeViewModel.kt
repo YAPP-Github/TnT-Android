@@ -23,6 +23,8 @@ internal class TraineeHomeViewModel @Inject constructor(
             is TraineeHomeUiEvent.OnChangeVisibleMonth -> updateCalenderState(event.yearMonth)
             is TraineeHomeUiEvent.OnClickDay -> selectDate(event.date)
             is TraineeHomeUiEvent.OnClickPtSessionCard -> checkSessionRecord(event.ptSessionId)
+            TraineeHomeUiEvent.OnClickExerciseRecord -> sendEffect(TraineeHomeEffect.NavigateToExerciseRecord)
+            TraineeHomeUiEvent.OnClickMealRecord -> sendEffect(TraineeHomeEffect.NavigateToMealRecord)
         }
     }
 
