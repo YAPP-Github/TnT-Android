@@ -26,7 +26,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -219,10 +218,6 @@ private fun TraineeMealRecordScreen(
                 title = "식단 기록",
                 onBackClick = onClickBack,
                 showShadow = true,
-            )
-            HorizontalDivider(
-                thickness = 1.dp,
-                color = TnTTheme.colors.neutralColors.Neutral200,
             )
         },
         bottomBar = {

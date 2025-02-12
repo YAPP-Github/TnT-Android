@@ -1,5 +1,6 @@
 package co.kr.tnt.designsystem.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -41,58 +43,67 @@ fun TnTTopBarWithBackButton(
     showShadow: Boolean = false,
     trailingComponent: @Composable RowScope.() -> Unit = {},
 ) {
-    CenterAlignedTopAppBar(
-        modifier = modifier
-            .fillMaxWidth()
-            .drawBehind {
-                if (showShadow) {
-                    drawRect(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Black.copy(alpha = 0.06f),
-                                Color.Transparent,
+    Column {
+        CenterAlignedTopAppBar(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(TnTTheme.colors.commonColors.Common0)
+                .drawBehind {
+                    if (showShadow) {
+                        drawRect(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Black.copy(alpha = 0.06f),
+                                    Color.Transparent,
+                                ),
+                                startY = size.height,
+                                endY = size.height + 10.dp.toPx(),
                             ),
-                            startY = size.height,
-                            endY = size.height + 10.dp.toPx(),
-                        ),
-                        topLeft = Offset(0f, size.height),
-                        size = size.copy(height = 10.dp.toPx()),
+                            topLeft = Offset(0f, size.height),
+                            size = size.copy(height = 10.dp.toPx()),
+                        )
+                    }
+                }
+                // 디자인상으로는 16dp가 맞으나, 라이브러리에서 기본적으로
+                // horizontal padding 으로 4dp 를 부여하고 있음.
+                // 이에 따라 16dp - 4dp 계산값으로 적용
+                // see : TopAppBarLayout
+                .padding(horizontal = 12.dp),
+            title = {
+                Text(
+                    text = title,
+                    style = TnTTheme.typography.h4,
+                    color = TnTTheme.colors.neutralColors.Neutral900,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
+            actions = trailingComponent,
+            navigationIcon = {
+                IconButton(
+                    onClick = onBackClick,
+                    modifier = Modifier.size(32.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_arrow_left),
+                        contentDescription = "Go back",
                     )
                 }
-            }
-            // 디자인상으로는 16dp가 맞으나, 라이브러리에서 기본적으로
-            // horizontal padding 으로 4dp 를 부여하고 있음.
-            // 이에 따라 16dp - 4dp 계산값으로 적용
-            // see : TopAppBarLayout
-            .padding(horizontal = 12.dp),
-        title = {
-            Text(
-                text = title,
-                style = TnTTheme.typography.h4,
-                color = TnTTheme.colors.neutralColors.Neutral900,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+            },
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = TnTTheme.colors.commonColors.Common0,
+            ),
+            windowInsets = windowInsets,
+            expandedHeight = 60.dp,
+        )
+        if (showShadow) {
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = TnTTheme.colors.neutralColors.Neutral200,
             )
-        },
-        actions = trailingComponent,
-        navigationIcon = {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.size(32.dp),
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_left),
-                    contentDescription = "Go back",
-                )
-            }
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = TnTTheme.colors.commonColors.Common0,
-        ),
-        windowInsets = windowInsets,
-        expandedHeight = 60.dp,
-    )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
