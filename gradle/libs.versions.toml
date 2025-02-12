@@ -60,6 +60,9 @@ calendar = "2.6.2"
 ossLicensesPlugin = "0.10.6"
 ossLicenses = "17.1.0"
 
+## Bottom shset dialog
+bottomsheetdialogCompose = "1.4.2"
+
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -119,6 +122,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 kakao-user = { module = "com.kakao.sdk:v2-user", version.ref = "kakao" }
 
 calendar-compose = { module = "com.kizitonwose.calendar:compose", version.ref = "calendar" }
+bottomsheetdialog-compose = { module = "com.holix.android:bottomsheetdialog-compose", version.ref = "bottomsheetdialogCompose" }
 
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
