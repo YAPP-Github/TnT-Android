@@ -358,21 +358,23 @@ fun TnTMemberProfileCard(
                 )
             }
         }
-        Spacer(Modifier.height(12.dp))
-        Text(
-            text = "메모",
-            color = TnTTheme.colors.neutralColors.Neutral600,
-            style = TnTTheme.typography.label2Bold,
-        )
-        Spacer(Modifier.height(4.dp))
-        Text(
-            text = memo,
-            color = TnTTheme.colors.neutralColors.Neutral500,
-            style = TnTTheme.typography.label2Medium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.fillMaxWidth(),
-        )
+        if (memo.isNotEmpty()) {
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = "메모",
+                color = TnTTheme.colors.neutralColors.Neutral600,
+                style = TnTTheme.typography.label2Bold,
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = memo,
+                color = TnTTheme.colors.neutralColors.Neutral500,
+                style = TnTTheme.typography.label2Medium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 }
 
