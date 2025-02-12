@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -72,6 +73,7 @@ import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffec
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState.DialogState
+import co.kr.tnt.ui.extensions.clearFocusOnTap
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.coroutines.CoroutineScope
@@ -192,10 +194,11 @@ private fun AddPtSessionScreen(
     onClickComplete: () -> Unit,
 ) {
     val dateFormatter = remember { DateFormatter() }
-    val today = remember { LocalDate.now() }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .clearFocusOnTap()
+            .fillMaxSize(),
     ) {
         Column(
             modifier = Modifier
@@ -297,6 +300,8 @@ private fun Selector(
     modifier: Modifier = Modifier,
     isWarning: Boolean = false,
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -319,7 +324,10 @@ private fun Selector(
             placeholder = placeholder,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick),
+                .clickable {
+                    focusManager.clearFocus()
+                    onClick()
+                },
             trailingComponent = {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_down),
@@ -719,6 +727,7 @@ private fun Dialog(
                 title = "수업 일정이 추가됐어요",
                 content = "등록된 일정은 트레이니에게도 표시돼요!",
                 buttonText = stringResource(coreR.string.ok),
+                cancelable = false,
                 onButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
             )
