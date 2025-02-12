@@ -59,6 +59,10 @@ fun TnTWheelTimePicker(
     val minuteList = (0..59 step minuteInterval).toList()
     val dayPartList = listOf(am, pm)
 
+    LaunchedEffect(roundedInitialTime) {
+        onTimeSelected(roundedInitialTime)
+    }
+
     fun updateTime(
         newHour: Int = selectedHour,
         newMinute: Int = selectedMinute,
