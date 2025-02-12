@@ -167,6 +167,7 @@ private fun TrainerHomeScreen(
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
+                item { Spacer(modifier = Modifier.height(84.dp)) }
             }
         }
         TnTFabButton(
