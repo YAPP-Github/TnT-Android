@@ -173,12 +173,10 @@ private fun TimeWheel(
         }
     }
 
-    LaunchedEffect(listState.isScrollInProgress) {
-        if (listState.isScrollInProgress.not()) {
-            val newSelectedItem = items[centeredItemIndex]
-            if (newSelectedItem != selectedItem) {
-                onItemSelected(newSelectedItem)
-            }
+    LaunchedEffect(centeredItemIndex) {
+        val newSelectedItem = items[centeredItemIndex]
+        if (newSelectedItem != selectedItem) {
+            onItemSelected(newSelectedItem)
         }
     }
 
@@ -243,12 +241,10 @@ fun DayPartWheel(
         derivedStateOf { listState.firstVisibleItemIndex }
     }
 
-    LaunchedEffect(listState.isScrollInProgress) {
-        if (listState.isScrollInProgress.not()) {
-            val newSelectedItem = items[centeredItemIndex]
-            if (newSelectedItem != selectedItem) {
-                onItemSelected(newSelectedItem)
-            }
+    LaunchedEffect(centeredItemIndex) {
+        val newSelectedItem = items[centeredItemIndex]
+        if (newSelectedItem != selectedItem) {
+            onItemSelected(newSelectedItem)
         }
     }
 
