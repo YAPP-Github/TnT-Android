@@ -398,13 +398,14 @@ private fun MinuteChips(
     )
     Spacer(modifier = Modifier.height(16.dp))
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        for (minute in 40..60 step (10))
+        for (minute in 40..60 step (10)) {
             MinuteChip(
                 minute = minute,
                 isSelected = selectedMinute == minute,
                 modifier = Modifier.weight(1f),
                 onClick = onClickChip,
             )
+        }
     }
     Spacer(modifier = Modifier.height(12.dp))
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {

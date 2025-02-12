@@ -47,6 +47,5 @@ class DateFormatter @Inject constructor() {
 
     companion object {
         private val DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        private val DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     }
 }
