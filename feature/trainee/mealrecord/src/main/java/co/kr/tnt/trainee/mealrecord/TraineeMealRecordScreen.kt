@@ -20,18 +20,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,16 +46,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTSelectableTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
+import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
+import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
+import co.kr.tnt.designsystem.component.calendar.model.DayState
+import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.RecordType.MealType
@@ -59,27 +73,41 @@ import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.RecordChip
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.kizitonwose.calendar.compose.rememberCalendarState
+import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import co.kr.tnt.core.designsystem.R as uiResource
+import java.time.YearMonth
+import co.kr.tnt.core.ui.R as coreR
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TraineeMealRecordRoute(
     navigateToPrevious: () -> Unit,
     viewModel: TraineeMealRecordViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     TraineeMealRecordScreen(
-        state = uiState,
+        state = state,
         context = context,
         onImageSelect = { uri ->
             viewModel.setEvent(TraineeMealRecordUiEvent.OnSelectImage(imageUri = uri))
         },
         onClickDeleteImage = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickDeleteImage) },
-        onClickDate = { /* TODO: 달력 바텀시트 */ },
-        onClickTime = { /* TODO: 타임 피커 */ },
+        onClickDateSection = {
+            viewModel.setEvent(TraineeMealRecordUiEvent.OnClickMealDate)
+            showBottomSheet = true
+        },
+        onClickTimeSection = {
+            viewModel.setEvent(TraineeMealRecordUiEvent.OnClickMealTime)
+            // TODO : 타임 피커
+        },
         onSelectMealType = { type ->
             viewModel.setEvent(TraineeMealRecordUiEvent.OnSelectMealType(type))
         },
@@ -89,6 +117,25 @@ internal fun TraineeMealRecordRoute(
         onClickBack = navigateToPrevious,
         onClickSaveButton = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickSave) },
     )
+
+    if (showBottomSheet) {
+        TnTModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = {
+                showBottomSheet = false
+            },
+            content = {
+                CalendarBottomSheetContent(
+                    date = state.date,
+                    onClickClose = { showBottomSheet = false },
+                    onClickConfirm = { newDate ->
+                        viewModel.setEvent(TraineeMealRecordUiEvent.OnSelectMealDate(newDate))
+                        showBottomSheet = false
+                    },
+                )
+            },
+        )
+    }
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -108,8 +155,8 @@ private fun TraineeMealRecordScreen(
     context: Context,
     onImageSelect: (url: Uri) -> Unit,
     onClickDeleteImage: () -> Unit,
-    onClickDate: () -> Unit,
-    onClickTime: () -> Unit,
+    onClickDateSection: () -> Unit,
+    onClickTimeSection: () -> Unit,
     onSelectMealType: (type: String) -> Unit,
     onChangeMemo: (memo: String) -> Unit,
     onClickSaveButton: () -> Unit,
@@ -179,13 +226,15 @@ private fun TraineeMealRecordScreen(
                 ) {
                     MealDate(
                         date = state.date,
+                        focusState = state.isDateFieldFocused,
                         dateFormatter = dateFormatter,
-                        onClick = onClickDate,
+                        onClick = onClickDateSection,
                     )
                     MealTime(
                         time = state.time,
+                        focusState = state.isTimeFieldFocused,
                         dateFormatter = dateFormatter,
-                        onClick = onClickTime,
+                        onClick = onClickTimeSection,
                     )
                     MealTypes(
                         selectedType = state.mealType,
@@ -232,7 +281,7 @@ private fun MealImageSelector(
         ) {
             if (imageUri == null) {
                 Image(
-                    painter = painterResource(uiResource.drawable.ic_image),
+                    painter = painterResource(R.drawable.ic_image),
                     contentDescription = null,
                 )
                 Text(
@@ -253,7 +302,7 @@ private fun MealImageSelector(
                         modifier = Modifier.align(Alignment.TopEnd),
                     ) {
                         Icon(
-                            painter = painterResource(uiResource.drawable.ic_overlay_close),
+                            painter = painterResource(R.drawable.ic_overlay_close),
                             contentDescription = null,
                             tint = Color.Unspecified,
                         )
@@ -267,6 +316,7 @@ private fun MealImageSelector(
 @Composable
 private fun MealDate(
     date: LocalDate,
+    focusState: Boolean,
     dateFormatter: DateFormatter,
     onClick: () -> Unit,
 ) {
@@ -275,6 +325,7 @@ private fun MealDate(
         value = dateFormatter.format(date, "yyyy/MM/dd"),
         onValueChange = { },
         isRequired = true,
+        shouldClearFocus = focusState.not(),
         onClick = onClick,
     )
 }
@@ -282,6 +333,7 @@ private fun MealDate(
 @Composable
 private fun MealTime(
     time: LocalTime,
+    focusState: Boolean,
     dateFormatter: DateFormatter,
     onClick: () -> Unit,
 ) {
@@ -290,6 +342,7 @@ private fun MealTime(
         value = dateFormatter.format(time, "HH:mm"),
         onValueChange = { },
         isRequired = true,
+        shouldClearFocus = focusState.not(),
         onClick = onClick,
     )
 }
@@ -378,9 +431,98 @@ private fun MealMemo(
     }
 }
 
+@Composable
+private fun CalendarBottomSheetContent(
+    date: LocalDate,
+    onClickClose: () -> Unit,
+    onClickConfirm: (day: LocalDate) -> Unit,
+) {
+    var selectedDate by remember { mutableStateOf(date) }
+
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.wrapContentSize(),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(20.dp),
+        ) {
+            Text(
+                text = "식단 날짜 선택하기",
+                color = TnTTheme.colors.neutralColors.Neutral900,
+                style = TnTTheme.typography.h3,
+                modifier = Modifier.weight(1f),
+            )
+            Icon(
+                painter = painterResource(R.drawable.ic_close),
+                contentDescription = null,
+                modifier = Modifier.clickable(onClick = onClickClose),
+            )
+        }
+        CalenderItem(
+            selectedDay = selectedDate,
+            onClickDay = { newDate -> selectedDate = newDate },
+        )
+        TnTTextButton(
+            text = stringResource(coreR.string.ok),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            size = ButtonSize.Large,
+            type = ButtonType.Primary,
+            onClick = { onClickConfirm(selectedDate) },
+        )
+        Spacer(Modifier.height(54.dp))
+    }
+}
+
+@Composable
+private fun CalenderItem(
+    selectedDay: LocalDate,
+    onClickDay: (day: LocalDate) -> Unit,
+) {
+    val now = remember { YearMonth.now() }
+    val calendarState = rememberCalendarState(
+        firstVisibleMonth = now,
+        firstDayOfWeek = DayOfWeek.SUNDAY,
+        startMonth = now.minusYears(10),
+        endMonth = now.plusYears(10),
+    )
+    val coroutineScope = rememberCoroutineScope()
+    val visibleMonth = rememberMostVisibleMonth(calendarState)
+
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.height(446.dp),
+    ) {
+        TnTCalendarSelector(
+            yearMonth = visibleMonth,
+            onClickPrevious = {
+                coroutineScope.launch {
+                    calendarState.animateScrollToMonth(visibleMonth.minusMonths(1))
+                }
+            },
+            onClickNext = {
+                coroutineScope.launch {
+                    calendarState.animateScrollToMonth(visibleMonth.plusMonths(1))
+                }
+            },
+        )
+        Spacer(Modifier.height(12.dp))
+        TnTMonthCalendar(
+            state = calendarState,
+            onClickDay = onClickDay,
+            dayState = { day -> DayState(isSelected = day == selectedDay) },
+            modifier = Modifier.padding(horizontal = 16.dp),
+        )
+        Spacer(Modifier.height(40.dp))
+    }
+}
+
 @Preview
 @Composable
-private fun TraineeMEalRecordScreenPreview() {
+private fun TraineeMealRecordScreenPreview() {
     TnTTheme {
         TraineeMealRecordScreen(
             state = TraineeMealRecordUiState(
@@ -393,12 +535,24 @@ private fun TraineeMEalRecordScreenPreview() {
             context = LocalContext.current,
             onImageSelect = { },
             onClickDeleteImage = { },
-            onClickDate = { },
-            onClickTime = { },
+            onClickDateSection = { },
+            onClickTimeSection = { },
             onSelectMealType = { },
             onChangeMemo = { },
             onClickBack = { },
             onClickSaveButton = { },
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CalendarBottomSheetPreview() {
+    TnTTheme {
+        CalendarBottomSheetContent(
+            date = LocalDate.now(),
+            onClickClose = { },
+            onClickConfirm = { },
         )
     }
 }
