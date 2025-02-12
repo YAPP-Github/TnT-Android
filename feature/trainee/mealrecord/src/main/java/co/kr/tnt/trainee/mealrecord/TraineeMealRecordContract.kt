@@ -11,7 +11,7 @@ internal class TraineeMealRecordContract {
     data class TraineeMealRecordUiState(
         val image: Uri? = null,
         val date: LocalDate = LocalDate.now(),
-        val time: LocalTime = LocalTime.now(),
+        val time: LocalTime? = null,
         val mealType: String = "",
         val memo: String = "",
         val isDateFieldFocused: Boolean = false,
@@ -26,6 +26,7 @@ internal class TraineeMealRecordContract {
         data class OnSelectMealDate(val date: LocalDate) : TraineeMealRecordUiEvent
         data object OnClickMealTime : TraineeMealRecordUiEvent
         data class OnSelectMealTime(val time: LocalTime) : TraineeMealRecordUiEvent
+        data object OnClickCloseBottomSheet : TraineeMealRecordUiEvent
         data class OnSelectMealType(val mealType: String) : TraineeMealRecordUiEvent
         data class OnChangeMemo(val memo: String) : TraineeMealRecordUiEvent
         data object OnClickSave : TraineeMealRecordUiEvent

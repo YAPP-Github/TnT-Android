@@ -24,12 +24,29 @@ internal class TraineeMealRecordViewModel @Inject constructor() :
                     )
                 }
 
-                is TraineeMealRecordUiEvent.OnClickMealTime -> TODO()
-                is TraineeMealRecordUiEvent.OnSelectMealTime -> TODO()
+                is TraineeMealRecordUiEvent.OnClickMealTime -> updateState { copy(isTimeFieldFocused = true) }
+                is TraineeMealRecordUiEvent.OnSelectMealTime -> updateState {
+                    copy(
+                        time = event.time,
+                        isTimeFieldFocused = false,
+                    )
+                }
+
+                TraineeMealRecordUiEvent.OnClickCloseBottomSheet -> clearFocusState()
+
                 is TraineeMealRecordUiEvent.OnSelectMealType -> updateState { copy(mealType = event.mealType) }
                 is TraineeMealRecordUiEvent.OnChangeMemo -> updateMemo(event.memo)
-                TraineeMealRecordUiEvent.OnClickSave -> TODO()
                 TraineeMealRecordUiEvent.OnClickBack -> sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
+                TraineeMealRecordUiEvent.OnClickSave -> TODO()
+            }
+        }
+
+        private fun clearFocusState() {
+            updateState {
+                copy(
+                    isDateFieldFocused = false,
+                    isTimeFieldFocused = false,
+                )
             }
         }
 

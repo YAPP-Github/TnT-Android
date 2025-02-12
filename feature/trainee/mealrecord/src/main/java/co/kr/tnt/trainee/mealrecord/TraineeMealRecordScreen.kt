@@ -29,6 +29,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -56,6 +57,7 @@ import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTSelectableTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
+import co.kr.tnt.designsystem.component.TnTWheelTimePicker
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
@@ -93,6 +95,12 @@ internal fun TraineeMealRecordRoute(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
 
+    LaunchedEffect(sheetState.currentValue) {
+        if (sheetState.currentValue == SheetValue.Hidden) {
+            viewModel.setEvent(TraineeMealRecordUiEvent.OnClickCloseBottomSheet)
+        }
+    }
+
     TraineeMealRecordScreen(
         state = state,
         context = context,
@@ -106,7 +114,7 @@ internal fun TraineeMealRecordRoute(
         },
         onClickTimeSection = {
             viewModel.setEvent(TraineeMealRecordUiEvent.OnClickMealTime)
-            // TODO : 타임 피커
+            showBottomSheet = true
         },
         onSelectMealType = { type ->
             viewModel.setEvent(TraineeMealRecordUiEvent.OnSelectMealType(type))
@@ -125,14 +133,33 @@ internal fun TraineeMealRecordRoute(
                 showBottomSheet = false
             },
             content = {
-                CalendarBottomSheetContent(
-                    date = state.date,
-                    onClickClose = { showBottomSheet = false },
-                    onClickConfirm = { newDate ->
-                        viewModel.setEvent(TraineeMealRecordUiEvent.OnSelectMealDate(newDate))
-                        showBottomSheet = false
-                    },
-                )
+                if (state.isDateFieldFocused) {
+                    CalendarBottomSheetContent(
+                        date = state.date,
+                        onClickClose = {
+                            viewModel.setEvent(TraineeMealRecordUiEvent.OnClickCloseBottomSheet)
+                            showBottomSheet = false
+                        },
+                        onClickConfirm = { newDate ->
+                            viewModel.setEvent(TraineeMealRecordUiEvent.OnSelectMealDate(newDate))
+                            showBottomSheet = false
+                        },
+                    )
+                } else {
+                    TimePickerBottomSheetContent(
+                        time = state.time,
+                        onClickClose = {
+                            viewModel.setEvent(TraineeMealRecordUiEvent.OnClickCloseBottomSheet)
+                            showBottomSheet = false
+                        },
+                        onClickConfirm = { newTime ->
+                            viewModel.setEvent(
+                                TraineeMealRecordUiEvent.OnSelectMealTime(newTime),
+                            )
+                            showBottomSheet = false
+                        },
+                    )
+                }
             },
         )
     }
@@ -332,16 +359,18 @@ private fun MealDate(
 
 @Composable
 private fun MealTime(
-    time: LocalTime,
+    time: LocalTime?,
     focusState: Boolean,
     dateFormatter: DateFormatter,
     onClick: () -> Unit,
 ) {
+    val now = LocalTime.now()
     TnTSelectableTextField(
         title = "식사 시간",
-        value = dateFormatter.format(time, "HH:mm"),
+        value = time?.let { dateFormatter.format(it, "HH:mm") } ?: "",
         onValueChange = { },
         isRequired = true,
+        placeholder = dateFormatter.format(now, "HH:mm"),
         shouldClearFocus = focusState.not(),
         onClick = onClick,
     )
@@ -437,7 +466,7 @@ private fun CalendarBottomSheetContent(
     onClickClose: () -> Unit,
     onClickConfirm: (day: LocalDate) -> Unit,
 ) {
-    var selectedDate by remember { mutableStateOf(date) }
+    var selectedDate by rememberSaveable { mutableStateOf(date) }
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -481,12 +510,12 @@ private fun CalenderItem(
     selectedDay: LocalDate,
     onClickDay: (day: LocalDate) -> Unit,
 ) {
-    val now = remember { YearMonth.now() }
+    val selectedYearMonth = remember(selectedDay) { YearMonth.from(selectedDay) }
     val calendarState = rememberCalendarState(
-        firstVisibleMonth = now,
+        firstVisibleMonth = selectedYearMonth,
         firstDayOfWeek = DayOfWeek.SUNDAY,
-        startMonth = now.minusYears(10),
-        endMonth = now.plusYears(10),
+        startMonth = selectedYearMonth.minusYears(10),
+        endMonth = selectedYearMonth.plusYears(10),
     )
     val coroutineScope = rememberCoroutineScope()
     val visibleMonth = rememberMostVisibleMonth(calendarState)
@@ -517,6 +546,58 @@ private fun CalenderItem(
             modifier = Modifier.padding(horizontal = 16.dp),
         )
         Spacer(Modifier.height(40.dp))
+    }
+}
+
+@Composable
+private fun TimePickerBottomSheetContent(
+    time: LocalTime?,
+    onClickClose: () -> Unit,
+    onClickConfirm: (time: LocalTime) -> Unit,
+) {
+    val now = LocalTime.now()
+    var selectedTime by rememberSaveable { mutableStateOf(time ?: now) }
+
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.wrapContentSize(),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(20.dp),
+        ) {
+            Text(
+                text = "식단 시간 선택하기",
+                color = TnTTheme.colors.neutralColors.Neutral900,
+                style = TnTTheme.typography.h3,
+                modifier = Modifier.weight(1f),
+            )
+            Icon(
+                painter = painterResource(R.drawable.ic_close),
+                contentDescription = null,
+                modifier = Modifier.clickable(onClick = onClickClose),
+            )
+        }
+        Spacer(Modifier.height(24.dp))
+        TnTWheelTimePicker(
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp),
+            initialTime = time ?: LocalTime.now(),
+            minuteInterval = 1,
+            onTimeSelected = { newTime ->
+                selectedTime = newTime
+            },
+        )
+        Spacer(Modifier.height(40.dp))
+        TnTTextButton(
+            text = stringResource(coreR.string.ok),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            size = ButtonSize.Large,
+            type = ButtonType.Primary,
+            onClick = { onClickConfirm(selectedTime) },
+        )
+        Spacer(Modifier.height(54.dp))
     }
 }
 
@@ -551,6 +632,18 @@ private fun CalendarBottomSheetPreview() {
     TnTTheme {
         CalendarBottomSheetContent(
             date = LocalDate.now(),
+            onClickClose = { },
+            onClickConfirm = { },
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TimePickerBottomSheetPreview() {
+    TnTTheme {
+        TimePickerBottomSheetContent(
+            time = LocalTime.now(),
             onClickClose = { },
             onClickConfirm = { },
         )
