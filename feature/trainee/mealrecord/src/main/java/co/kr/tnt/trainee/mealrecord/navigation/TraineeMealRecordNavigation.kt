@@ -6,8 +6,8 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import co.kr.tnt.navigation.Route
-import co.kr.tnt.trainee.mealrecord.TraineeMealRecordDetailRoute
-import co.kr.tnt.trainee.mealrecord.TraineeMealRecordRoute
+import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailRoute
+import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordRoute
 
 fun NavController.navigateToTraineeMealRecord(
     navOptions: NavOptionsBuilder.() -> Unit = {},

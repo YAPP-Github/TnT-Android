@@ -1,4 +1,4 @@
-package co.kr.tnt.trainee.mealrecord
+package co.kr.tnt.trainee.mealrecord.record
 
 import android.content.Context
 import android.net.Uri
