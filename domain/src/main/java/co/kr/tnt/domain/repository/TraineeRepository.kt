@@ -3,6 +3,7 @@ package co.kr.tnt.domain.repository
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecord
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
+import co.kr.tnt.domain.model.trainee.TraineeMealRecordDetail
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -18,4 +19,7 @@ interface TraineeRepository {
         mealType: String,
         memo: String,
     )
+    suspend fun getMealRecord(
+        dietId: Long,
+    ): TraineeMealRecordDetail
 }

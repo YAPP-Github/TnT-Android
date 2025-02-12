@@ -10,6 +10,7 @@ import co.kr.data.network.model.LoginResponse
 import co.kr.data.network.model.SignUpResponse
 import co.kr.data.network.model.UserResponse
 import co.kr.data.network.model.VerifyCodeResponse
+import co.kr.data.network.model.trainee.MealRecordDetailResponse
 import co.kr.data.network.model.trainer.ActiveTraineesResponse
 import co.kr.data.network.model.trainer.DailyPtSessionsResponse
 import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
@@ -104,4 +105,9 @@ interface ApiService {
         @Part dietImage: MultipartBody.Part?,
         @Part("request") request: RequestBody,
     )
+
+    @GET("/trainees/diets/{dietId}")
+    suspend fun getMealRecord(
+        @Query("dietId") dietId: Long,
+    ): MealRecordDetailResponse
 }

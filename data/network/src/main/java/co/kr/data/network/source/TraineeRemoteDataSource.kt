@@ -17,4 +17,8 @@ class TraineeRemoteDataSource @Inject constructor(
     ) = networkHandler {
         apiService.postMealRecord(dietImage, request)
     }
+
+    suspend fun getMealRecord(dietId: Long) = networkHandler {
+        apiService.getMealRecord(dietId)
+    }
 }
