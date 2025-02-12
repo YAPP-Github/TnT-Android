@@ -47,7 +47,7 @@ import coil.request.ImageRequest
 
 @Composable
 internal fun TraineeMealRecordDetailRoute(
-    mealId: Int,
+    mealId: Long,
     navigateToPrevious: () -> Unit,
     viewModel: TraineeMealRecordDetailViewModel = hiltViewModel(),
 ) {

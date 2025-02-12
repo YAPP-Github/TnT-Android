@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 internal class TraineeMealRecordDetailContract {
     data class TraineeMealRecordDetailUiState(
-        val id: Int = 0,
+        val id: Long = 0,
         val image: String? = "",
         val date: LocalDateTime = LocalDateTime.now(),
         val mealType: String = "",
@@ -27,7 +27,7 @@ internal class TraineeMealRecordDetailContract {
     }
 
     sealed interface TraineeMealRecordDetailUiEvent : UiEvent {
-        data class LoadRecordDetail(val id: Int) : TraineeMealRecordDetailUiEvent
+        data class LoadRecordDetail(val id: Long) : TraineeMealRecordDetailUiEvent
         data object OnClickMore : TraineeMealRecordDetailUiEvent
     }
 

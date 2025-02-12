@@ -18,7 +18,7 @@ fun NavController.navigateToTraineeHome(
 fun NavGraphBuilder.traineeHomeNavGraph(
     navigateToNotification: () -> Unit,
     navigateToMealRecord: () -> Unit,
-    navigateToMealDetail: (id: Int) -> Unit,
+    navigateToMealDetail: (id: Long) -> Unit,
     homeDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TraineeMainTab.Home>(startDestination = Route.TraineeHome) {

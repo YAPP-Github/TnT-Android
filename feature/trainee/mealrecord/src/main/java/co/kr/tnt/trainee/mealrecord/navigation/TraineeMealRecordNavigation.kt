@@ -17,7 +17,7 @@ fun NavController.navigateToTraineeMealRecord(
 )
 
 fun NavController.navigateToTraineeMealRecordDetail(
-    id: Int,
+    id: Long,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
     route = Route.TraineeMealRecordDetail(id),

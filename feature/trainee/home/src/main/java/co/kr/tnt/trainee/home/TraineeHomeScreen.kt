@@ -77,7 +77,7 @@ internal fun TraineeHomeRoute(
     navigateToNotification: () -> Unit,
     navigateToExerciseRecord: () -> Unit,
     navigateToMealRecord: () -> Unit,
-    navigateToMealDetail: (id: Int) -> Unit,
+    navigateToMealDetail: (id: Long) -> Unit,
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -145,7 +145,7 @@ private fun TraineeHomeScreen(
     onChangeVisibleMonth: (YearMonth) -> Unit,
     onClickDay: (LocalDate) -> Unit,
     onClickPtSessionCard: (id: String) -> Unit,
-    onClickMealCard: (id: Int) -> Unit,
+    onClickMealCard: (id: Long) -> Unit,
     onClickFloatingButton: () -> Unit,
 ) {
     val dateFormatter = remember { DateFormatter() }
