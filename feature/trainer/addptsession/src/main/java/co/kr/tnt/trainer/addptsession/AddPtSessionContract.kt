@@ -16,6 +16,7 @@ internal class AddPtSessionContract {
         val selectedStartTime: LocalTime? = null,
         val selectedEndTime: LocalTime? = null,
         val memo: String = "",
+        val dialogState: DialogState = DialogState.NONE,
         val sheetType: BottomSheetType = BottomSheetType.NONE,
     ) : UiState {
         val totalSessionMinute: Int?
@@ -42,9 +43,8 @@ internal class AddPtSessionContract {
             get() = memo.length >= 30
 
         val isEnableComplete: Boolean
-            get() =
-                selectedMember != null && selectedDate != null && selectedStartTime != null &&
-                    selectedEndTime != null && isErrorTime.not()
+            get() = selectedMember != null && selectedDate != null && selectedStartTime != null &&
+                selectedEndTime != null && isErrorTime.not()
 
         enum class BottomSheetType {
             NONE,
@@ -52,6 +52,12 @@ internal class AddPtSessionContract {
             SELECT_DATE,
             SELECT_START_TIME,
             SELECT_END_TIME,
+        }
+
+        enum class DialogState {
+            NONE,
+            SUCCESS_ADD,
+            CHECK_CANCEL_ADD,
         }
     }
 
@@ -68,6 +74,8 @@ internal class AddPtSessionContract {
         data class OnClickMinuteChip(val minute: Int) : AddPtSessionUiEvent
         data class OnChangeMemo(val memo: String) : AddPtSessionUiEvent
         data object OnClickComplete : AddPtSessionUiEvent
+        data object OnClickDialogConfirm : AddPtSessionUiEvent
+        data object OnDismissDialog : AddPtSessionUiEvent
     }
 
     sealed interface AddPtSessionSideEffect : UiSideEffect {

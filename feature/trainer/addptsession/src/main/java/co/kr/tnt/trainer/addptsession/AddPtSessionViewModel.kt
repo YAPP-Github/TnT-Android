@@ -4,6 +4,7 @@ import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffec
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState.BottomSheetType
+import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,10 +17,10 @@ internal class AddPtSessionViewModel @Inject constructor() :
         override suspend fun handleEvent(event: AddPtSessionUiEvent) {
             when (event) {
                 is AddPtSessionUiEvent.OnChangeMemo -> updateState { copy(memo = event.memo) }
-                AddPtSessionUiEvent.OnClickBack -> sendEffect(AddPtSessionSideEffect.NavigateToPrevious)
+                AddPtSessionUiEvent.OnClickBack -> handleClickBack()
                 AddPtSessionUiEvent.OnClickComplete -> {
                     // TODO POST PT session
-                    sendEffect(AddPtSessionSideEffect.NavigateToPrevious)
+                    updateState { copy(dialogState = DialogState.SUCCESS_ADD) }
                 }
 
                 AddPtSessionUiEvent.OnClickMember -> showBottomSheet(BottomSheetType.SELECT_MEMBER)
@@ -52,12 +53,26 @@ internal class AddPtSessionViewModel @Inject constructor() :
                 }
 
                 is AddPtSessionUiEvent.OnClickMinuteChip -> handleClickMinuteChip(event.minute)
+                AddPtSessionUiEvent.OnClickDialogConfirm -> {
+                    updateState { copy(dialogState = DialogState.NONE) }
+                    sendEffect(AddPtSessionSideEffect.NavigateToPrevious)
+                }
+                AddPtSessionUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
             }
         }
 
         private fun showBottomSheet(sheetType: BottomSheetType) {
             updateState { copy(sheetType = sheetType) }
             sendEffect(AddPtSessionSideEffect.ShowBottomSheet)
+        }
+
+        private fun handleClickBack() {
+            if (currentState.isEnableComplete) {
+                updateState { copy(dialogState = DialogState.CHECK_CANCEL_ADD) }
+                return
+            }
+
+            sendEffect(AddPtSessionSideEffect.NavigateToPrevious)
         }
 
         private fun handleClickMinuteChip(minute: Int) {

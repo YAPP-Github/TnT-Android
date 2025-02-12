@@ -1,6 +1,7 @@
 package co.kr.tnt.trainer.addptsession
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +51,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
 import co.kr.tnt.designsystem.component.TnTDivider
+import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
+import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.TnTWheelTimePicker
@@ -68,6 +71,7 @@ import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffect
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState
+import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState.DialogState
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.coroutines.CoroutineScope
@@ -86,6 +90,10 @@ internal fun AddPtSessionRoute(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+
+    BackHandler {
+        viewModel.setEvent(AddPtSessionUiEvent.OnClickBack)
+    }
 
     AddPtSessionScreen(
         state = state,
@@ -143,6 +151,12 @@ internal fun AddPtSessionRoute(
             },
         )
     }
+
+    Dialog(
+        dialogState = state.dialogState,
+        onClickConfirm = { viewModel.setEvent(AddPtSessionUiEvent.OnClickDialogConfirm) },
+        onDismissDialog = { viewModel.setEvent(AddPtSessionUiEvent.OnDismissDialog) },
+    )
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -678,6 +692,38 @@ private fun SheetConfirm(
         type = ButtonType.Primary,
         onClick = onClick,
     )
+}
+
+@Composable
+private fun Dialog(
+    dialogState: DialogState,
+    onClickConfirm: () -> Unit,
+    onDismissDialog: () -> Unit,
+) {
+    when (dialogState) {
+        DialogState.NONE -> Unit
+        DialogState.CHECK_CANCEL_ADD -> {
+            TnTIconPopupDialog(
+                title = "수업 등록을 취소할까요?",
+                content = "일정이 저장되지 않아요",
+                leftButtonText = stringResource(coreR.string.cancel),
+                rightButtonText = stringResource(coreR.string.ok),
+                onLeftButtonClick = onDismissDialog,
+                onRightButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+
+        DialogState.SUCCESS_ADD -> {
+            TnTSingleButtonPopupDialog(
+                title = "수업 일정이 추가됐어요",
+                content = "등록된 일정은 트레이니에게도 표시돼요!",
+                buttonText = stringResource(coreR.string.ok),
+                onButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
