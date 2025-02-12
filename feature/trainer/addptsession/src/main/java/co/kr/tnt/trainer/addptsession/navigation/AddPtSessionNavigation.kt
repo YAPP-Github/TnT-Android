@@ -14,8 +14,10 @@ fun NavController.navigateToAddPtSession(
     builder = navOptions,
 )
 
-fun NavGraphBuilder.addPtSession() {
+fun NavGraphBuilder.addPtSession(
+    navigateToPrevious: () -> Unit,
+) {
     composable<Route.AddPtSession> {
-        AddPtSessionRoute()
+        AddPtSessionRoute(navigateToPrevious = navigateToPrevious)
     }
 }

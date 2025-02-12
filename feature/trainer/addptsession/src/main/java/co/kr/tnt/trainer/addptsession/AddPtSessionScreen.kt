@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,14 +35,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,6 +80,7 @@ import co.kr.tnt.core.ui.R as coreR
 @Composable
 internal fun AddPtSessionRoute(
     viewModel: AddPtSessionViewModel = hiltViewModel(),
+    navigateToPrevious: () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -120,6 +121,7 @@ internal fun AddPtSessionRoute(
                             viewModel.setEvent(AddPtSessionUiEvent.OnSelectDate(selectedDate))
                         },
                     )
+
                     AddPtSessionUiState.BottomSheetType.SELECT_START_TIME -> TimePickerBottomSheetContent(
                         title = "시작 시간 선택하기",
                         selectedTime = state.selectedStartTime,
@@ -157,7 +159,7 @@ internal fun AddPtSessionRoute(
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
 
-                AddPtSessionSideEffect.NavigateToPrevious -> TODO()
+                AddPtSessionSideEffect.NavigateToPrevious -> navigateToPrevious()
             }
         }
     }
@@ -213,13 +215,13 @@ private fun AddPtSessionScreen(
                     value = state.selectedDate?.let { selectedDate ->
                         dateFormatter.format(selectedDate, "yyyy/MM/dd")
                     } ?: "",
-                    placeholder = dateFormatter.format(today, "yyyy/MM/dd"),
+                    placeholder = "날짜를 입력해주세요",
                     onClick = onClickDate,
                 )
                 Spacer(modifier = Modifier.height(48.dp))
                 TimeSelector(
-                    startTime = null,
-                    endTime = null,
+                    startTime = state.selectedStartTime,
+                    endTime = state.selectedEndTime,
                     dateFormatter = dateFormatter,
                     onClickStartTime = onClickStartTime,
                     onClickEndTime = onClickEndTime,
@@ -467,7 +469,7 @@ private fun MembersBottomSheetContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.heightIn(max = 708.dp),
     ) {
         SheetTopBar(
             title = "회원 선택하기",
@@ -507,6 +509,8 @@ private fun MemberItem(
         Text(
             modifier = Modifier.weight(1f),
             text = member.name,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             style = TnTTheme.typography.body1SemiBold,
             color = TnTTheme.colors.neutralColors.Neutral600,
         )
@@ -590,7 +594,7 @@ private fun TimePickerBottomSheetContent(
     var selectTime by rememberSaveable { mutableStateOf(selectedTime ?: now) }
 
     Column(
-        modifier = modifier.nestedScroll(rememberNestedScrollInteropConnection()),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
     ) {
         SheetTopBar(

@@ -75,7 +75,9 @@ private fun TrainerMainScreen(
                     navigateToPrevious = navController::popBackStack,
                     navigateToConnect = navigateToConnect,
                 )
-                addPtSession()
+                addPtSession(
+                    navigateToPrevious = navController::popBackStack,
+                )
             }
             trainerFeedbackNavGraph()
             trainerMembersNavGraph(
