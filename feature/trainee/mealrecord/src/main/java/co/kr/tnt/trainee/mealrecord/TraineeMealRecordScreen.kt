@@ -137,6 +137,7 @@ internal fun TraineeMealRecordRoute(
         TnTModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = {
+                viewModel.setEvent(TraineeMealRecordUiEvent.OnClickCloseBottomSheet)
                 showBottomSheet = false
             },
             content = {
