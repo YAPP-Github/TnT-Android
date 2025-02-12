@@ -95,7 +95,7 @@ internal class AddPtSessionViewModel @Inject constructor(
 
     private fun postPtSession() {
         if (currentState.isEnableComplete.not()) {
-            sendEffect(AddPtSessionSideEffect.ShowToast("필수 입력 항목을 모두 입력해주세요."))
+            sendEffect(AddPtSessionSideEffect.ShowToast("필수 입력 항목을 모두 입력해주세요"))
             return
         }
 
@@ -112,8 +112,8 @@ internal class AddPtSessionViewModel @Inject constructor(
                 )
             }.onSuccess {
                 updateState { copy(dialogState = DialogState.SUCCESS_ADD) }
-            }.onFailure {
-                sendEffect(AddPtSessionSideEffect.ShowToast("서버 요청에 실패했어요"))
+            }.onFailure { throwable ->
+                sendEffect(AddPtSessionSideEffect.ShowToast(throwable.message ?: "서버 요청에 실패했어요"))
             }
         }
     }

@@ -85,6 +85,9 @@ internal fun TrainerHomeRoute(
             }
         }
     }
+
+    // TODO 홈 화면 진입 시마다 데이터 조회 재고 필요
+    LaunchedEffect(true) { viewModel.setEvent(TrainerHomeUiEvent.OnScreen) }
 }
 
 @Composable

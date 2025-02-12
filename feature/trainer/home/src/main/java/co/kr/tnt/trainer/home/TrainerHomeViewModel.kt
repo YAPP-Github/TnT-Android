@@ -34,6 +34,7 @@ internal class TrainerHomeViewModel @Inject constructor(
 
         override suspend fun handleEvent(event: TrainerHomeUiEvent) {
             when (event) {
+                TrainerHomeUiEvent.OnScreen -> refresh()
                 TrainerHomeUiEvent.OnClickNotification -> sendEffect(TrainerHomeSideEffect.NavigateToNotification)
                 is TrainerHomeUiEvent.OnChangeVisibleMonth -> handleChangeVisibleMonth(event.yearMonth)
                 is TrainerHomeUiEvent.OnClickDay -> selectDay(event.day)
@@ -95,5 +96,11 @@ internal class TrainerHomeViewModel @Inject constructor(
             }
 
             updateState { copy(dailyPtSessionCount = updatedDailyPtSessionCount) }
+        }
+
+        private fun refresh() {
+            cachedMonthlyPtSessionCounts.clear()
+            cachedDailyPtSession.clear()
+            selectDay(currentState.selectedDay)
         }
     }

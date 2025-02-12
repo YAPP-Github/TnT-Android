@@ -15,6 +15,7 @@ internal class TrainerHomeContract {
     ) : UiState
 
     sealed interface TrainerHomeUiEvent : UiEvent {
+        data object OnScreen : TrainerHomeUiEvent
         data object OnClickNotification : TrainerHomeUiEvent
         data class OnChangeVisibleMonth(val yearMonth: YearMonth) : TrainerHomeUiEvent
         data class OnClickDay(val day: LocalDate) : TrainerHomeUiEvent
