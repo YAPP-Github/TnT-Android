@@ -1,10 +1,12 @@
 package co.kr.tnt.trainee.mealrecord
 
+import android.content.Context
 import android.net.Uri
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 internal class TraineeMealRecordContract {
@@ -19,6 +21,9 @@ internal class TraineeMealRecordContract {
         val showWarning: Boolean = false,
         val isMealRecordValid: Boolean = false,
     ) : UiState {
+        val mealDateTime: LocalDateTime?
+            get() = time?.let { LocalDateTime.of(date, it) }
+
         fun validateMealRecord(): TraineeMealRecordUiState {
             return copy(
                 isMealRecordValid = date <= LocalDate.now() &&
@@ -39,7 +44,7 @@ internal class TraineeMealRecordContract {
         data object OnClickCloseBottomSheet : TraineeMealRecordUiEvent
         data class OnSelectMealType(val mealType: String) : TraineeMealRecordUiEvent
         data class OnChangeMemo(val memo: String) : TraineeMealRecordUiEvent
-        data object OnClickSave : TraineeMealRecordUiEvent
+        data class OnClickSave(val context: Context) : TraineeMealRecordUiEvent
         data object OnClickBack : TraineeMealRecordUiEvent
     }
 

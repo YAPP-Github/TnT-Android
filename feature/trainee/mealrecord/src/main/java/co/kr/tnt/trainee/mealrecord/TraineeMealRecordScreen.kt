@@ -123,7 +123,7 @@ internal fun TraineeMealRecordRoute(
             viewModel.setEvent(TraineeMealRecordUiEvent.OnChangeMemo(memo))
         },
         onClickBack = navigateToPrevious,
-        onClickSaveButton = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickSave) },
+        onClickSaveButton = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickSave(context)) },
     )
 
     if (showBottomSheet) {

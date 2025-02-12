@@ -1,17 +1,29 @@
 package co.kr.tnt.trainee.mealrecord
 
+import android.content.Context
+import androidx.core.net.toUri
+import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordSideEffect
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiEvent
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.utils.convertToAllowedImageFormat
+import co.kr.tnt.ui.utils.isAllowedImageFormat
+import co.kr.tnt.ui.utils.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import java.io.File
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-internal class TraineeMealRecordViewModel @Inject constructor() :
+internal class TraineeMealRecordViewModel @Inject constructor(
+    private val traineeRepository: TraineeRepository,
+) :
     BaseViewModel<TraineeMealRecordUiState, TraineeMealRecordUiEvent, TraineeMealRecordSideEffect>(
-        TraineeMealRecordUiState(),
-    ) {
+            TraineeMealRecordUiState(),
+        ) {
         override suspend fun handleEvent(event: TraineeMealRecordUiEvent) {
             when (event) {
                 is TraineeMealRecordUiEvent.OnSelectImage -> updateState { copy(image = event.imageUri) }
@@ -40,7 +52,7 @@ internal class TraineeMealRecordViewModel @Inject constructor() :
 
                 is TraineeMealRecordUiEvent.OnChangeMemo -> updateMemo(event.memo)
                 TraineeMealRecordUiEvent.OnClickBack -> sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
-                TraineeMealRecordUiEvent.OnClickSave -> postMealRecord()
+                is TraineeMealRecordUiEvent.OnClickSave -> postMealRecord(event.context)
             }
         }
 
@@ -61,7 +73,28 @@ internal class TraineeMealRecordViewModel @Inject constructor() :
             }
         }
 
-        private fun postMealRecord() {
-            // TODO 식단 기록 API 호출
+        private fun postMealRecord(context: Context) {
+            viewModelScope.launch {
+                val state = currentState
+                val imageFile: File? = state.image?.toFile(context)?.let { file ->
+                    if (!isAllowedImageFormat(file)) {
+                        file.toUri().convertToAllowedImageFormat(context)
+                    } else {
+                        file
+                    }
+                }
+                runCatching {
+                    traineeRepository.postMealRecord(
+                        mealImage = imageFile,
+                        date = state.mealDateTime ?: LocalDateTime.now(),
+                        mealType = state.mealType,
+                        memo = state.memo,
+                    )
+                }.onSuccess {
+                    // TODO 완료 dialog 띄우기
+                }.onFailure {
+                    sendEffect(TraineeMealRecordSideEffect.ShowToast("식단 기록에 실패했어요"))
+                }
+            }
         }
     }
