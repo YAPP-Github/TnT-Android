@@ -1,6 +1,5 @@
 package co.kr.tnt.trainer.addptsession
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffect
@@ -15,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class AddPtSessionViewModel @Inject constructor(
-    trainerRepository: TrainerRepository,
+    private val trainerRepository: TrainerRepository,
 ) : BaseViewModel<AddPtSessionUiState, AddPtSessionUiEvent, AddPtSessionSideEffect>(
         AddPtSessionUiState(),
     ) {
@@ -26,7 +25,6 @@ internal class AddPtSessionViewModel @Inject constructor(
             }.onSuccess { members ->
                 updateState { copy(members = members) }
             }.onFailure {
-                Log.w("Gaon Test", "failure : $it")
                 sendEffect(AddPtSessionSideEffect.ShowToast("서버 요청에 실패했어요"))
             }
         }
@@ -36,11 +34,7 @@ internal class AddPtSessionViewModel @Inject constructor(
         when (event) {
             is AddPtSessionUiEvent.OnChangeMemo -> updateState { copy(memo = event.memo) }
             AddPtSessionUiEvent.OnClickBack -> handleClickBack()
-            AddPtSessionUiEvent.OnClickComplete -> {
-                // TODO POST PT session
-                updateState { copy(dialogState = DialogState.SUCCESS_ADD) }
-            }
-
+            AddPtSessionUiEvent.OnClickComplete -> postPtSession()
             AddPtSessionUiEvent.OnClickMember -> showBottomSheet(BottomSheetType.SELECT_MEMBER)
             is AddPtSessionUiEvent.OnSelectMember -> {
                 updateState { copy(selectedMember = event.member) }
@@ -75,6 +69,7 @@ internal class AddPtSessionViewModel @Inject constructor(
                 updateState { copy(dialogState = DialogState.NONE) }
                 sendEffect(AddPtSessionSideEffect.NavigateToPrevious)
             }
+
             AddPtSessionUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
         }
     }
@@ -96,5 +91,30 @@ internal class AddPtSessionViewModel @Inject constructor(
     private fun handleClickMinuteChip(minute: Int) {
         val startTime = currentState.selectedStartTime ?: return
         updateState { copy(selectedEndTime = startTime.plusMinutes(minute.toLong())) }
+    }
+
+    private fun postPtSession() {
+        if (currentState.isEnableComplete.not()) {
+            sendEffect(AddPtSessionSideEffect.ShowToast("필수 입력 항목을 모두 입력해주세요."))
+            return
+        }
+
+        val startDateTime = currentState.selectedDate?.atTime(currentState.selectedStartTime) ?: return
+        val endDateTime = currentState.selectedDate?.atTime(currentState.selectedEndTime) ?: return
+
+        viewModelScope.launch {
+            runCatching {
+                trainerRepository.postPtSession(
+                    startDateTime = startDateTime,
+                    endLocalDateTime = endDateTime,
+                    memo = currentState.memo,
+                    traineeId = currentState.selectedMember?.id ?: return@launch,
+                )
+            }.onSuccess {
+                updateState { copy(dialogState = DialogState.SUCCESS_ADD) }
+            }.onFailure {
+                sendEffect(AddPtSessionSideEffect.ShowToast("서버 요청에 실패했어요"))
+            }
+        }
     }
 }

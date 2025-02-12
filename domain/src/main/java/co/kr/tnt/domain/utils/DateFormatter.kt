@@ -37,7 +37,7 @@ class DateFormatter @Inject constructor() {
 
     fun format(
         date: LocalDateTime,
-        pattern: String = "yyyy-MM-ddTHH:mm:ss",
+        pattern: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
     ): String = DateTimeFormatter.ofPattern(pattern).format(date)
 
     fun format(

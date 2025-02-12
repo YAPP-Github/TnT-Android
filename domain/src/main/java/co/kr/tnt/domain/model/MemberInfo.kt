@@ -1,6 +1,7 @@
 package co.kr.tnt.domain.model
 
 data class MemberInfo(
+    val id: Long,
     val traineeName: String,
     val profileUrl: String,
     val ptPurpose: String,

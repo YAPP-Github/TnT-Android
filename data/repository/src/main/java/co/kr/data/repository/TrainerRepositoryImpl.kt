@@ -1,6 +1,7 @@
 package co.kr.data.repository
 
 import co.kr.data.network.model.toDomain
+import co.kr.data.network.model.trainer.PtSessionRequest
 import co.kr.data.network.model.trainer.toDomain
 import co.kr.data.network.source.TrainerRemoteDataSource
 import co.kr.data.network.source.UserRemoteDataSource
@@ -11,6 +12,7 @@ import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.domain.utils.DateFormatter
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -44,4 +46,20 @@ internal class TrainerRepositoryImpl @Inject constructor(
         trainerRemoteDataSource.getActiveTrainees().trainees.map { response ->
             response.toDomain()
         }
+
+    override suspend fun postPtSession(
+        startDateTime: LocalDateTime,
+        endLocalDateTime: LocalDateTime,
+        memo: String,
+        traineeId: Long,
+    ) {
+        trainerRemoteDataSource.postPtSession(
+            PtSessionRequest(
+                start = dateFormatter.format(startDateTime),
+                end = dateFormatter.format(endLocalDateTime),
+                memo = memo,
+                traineeId = traineeId,
+            ),
+        )
+    }
 }

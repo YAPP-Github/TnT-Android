@@ -13,6 +13,7 @@ import co.kr.data.network.model.VerifyCodeResponse
 import co.kr.data.network.model.trainer.ActiveTraineesResponse
 import co.kr.data.network.model.trainer.DailyPtSessionsResponse
 import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
+import co.kr.data.network.model.trainer.PtSessionRequest
 import co.kr.data.network.util.WithoutSessionCheckPath.CHECK_SESSION_PATH
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -88,4 +89,9 @@ interface ApiService {
 
     @GET("/trainers/active-trainees")
     suspend fun getActiveTrainees(): ActiveTraineesResponse
+
+    @POST("/trainers/lessons")
+    suspend fun postPtSession(
+        @Body request: PtSessionRequest,
+    )
 }

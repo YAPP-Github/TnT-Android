@@ -22,6 +22,7 @@ data class TraineeInfoResponse(
 
 fun TraineeInfoResponse.toDomain() =
     MemberInfo(
+        id = id,
         traineeName = name,
         profileUrl = profileImageUrl,
         ptPurpose = ptGoals.joinToString(", "),

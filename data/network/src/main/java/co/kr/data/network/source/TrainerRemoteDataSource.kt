@@ -3,6 +3,7 @@ package co.kr.data.network.source
 import co.kr.data.network.model.trainer.ActiveTraineesResponse
 import co.kr.data.network.model.trainer.DailyPtSessionsResponse
 import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
+import co.kr.data.network.model.trainer.PtSessionRequest
 import co.kr.data.network.service.ApiService
 import co.kr.data.network.util.networkHandler
 import javax.inject.Inject
@@ -30,5 +31,9 @@ class TrainerRemoteDataSource @Inject constructor(
 
     suspend fun getActiveTrainees(): ActiveTraineesResponse = networkHandler {
         apiService.getActiveTrainees()
+    }
+
+    suspend fun postPtSession(request: PtSessionRequest) = networkHandler {
+        apiService.postPtSession(request)
     }
 }
