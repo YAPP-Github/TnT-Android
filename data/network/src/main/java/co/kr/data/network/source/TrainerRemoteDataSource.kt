@@ -28,7 +28,7 @@ class TrainerRemoteDataSource @Inject constructor(
         apiService.getDailyPtSessions(date)
     }
 
-    suspend fun getActiveTraineeList(): ActiveTraineesResponse = networkHandler {
-        apiService.getActiveTraineeList()
+    suspend fun getActiveTrainees(): ActiveTraineesResponse = networkHandler {
+        apiService.getActiveTrainees()
     }
 }

@@ -66,7 +66,7 @@ import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.MemberInfo
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffect
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
@@ -219,7 +219,7 @@ private fun AddPtSessionScreen(
                 Spacer(modifier = Modifier.height(48.dp))
                 Selector(
                     title = "회원 선택",
-                    value = state.selectedMember?.name ?: "",
+                    value = state.selectedMember?.traineeName ?: "",
                     placeholder = "회원을 입력해주세요",
                     onClick = onClickMember,
                 )
@@ -485,9 +485,9 @@ private fun Memo(
 
 @Composable
 private fun MembersBottomSheetContent(
-    members: List<User.Trainee>,
-    selectedMember: User.Trainee?,
-    onSelectMember: (member: User.Trainee) -> Unit,
+    members: List<MemberInfo>,
+    selectedMember: MemberInfo?,
+    onSelectMember: (member: MemberInfo) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -514,9 +514,9 @@ private fun MembersBottomSheetContent(
 
 @Composable
 private fun MemberItem(
-    member: User.Trainee,
+    member: MemberInfo,
     isSelected: Boolean,
-    onClick: (User.Trainee) -> Unit,
+    onClick: (MemberInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -531,7 +531,7 @@ private fun MemberItem(
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = member.name,
+            text = member.traineeName,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = TnTTheme.typography.body1SemiBold,
@@ -740,23 +740,6 @@ private fun AddPtSessionScreenPreview() {
             onClickMinuteChip = { },
             onChangeMemo = { },
             onClickComplete = { },
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MembersBottomSheetContentPreview() {
-    TnTTheme {
-        MembersBottomSheetContent(
-            members = listOf(
-                User.Trainee.EMPTY.copy(name = "김정호"),
-                User.Trainee.EMPTY.copy(name = "차희원"),
-                User.Trainee.EMPTY.copy(name = "우양"),
-            ),
-            selectedMember = User.Trainee.EMPTY.copy(name = "김정호"),
-            onSelectMember = { },
-            onDismissRequest = {},
         )
     }
 }

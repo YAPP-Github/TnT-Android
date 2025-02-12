@@ -17,7 +17,7 @@ internal class TrainerMembersViewModel @Inject constructor(
         TrainerMemberUiState(),
     ) {
     init {
-        setMemberList()
+        setMembers()
     }
     override suspend fun handleEvent(event: TrainerMemberUiEvent) {
         when (event) {
@@ -25,10 +25,10 @@ internal class TrainerMembersViewModel @Inject constructor(
         }
     }
 
-    private fun setMemberList() {
+    private fun setMembers() {
         viewModelScope.launch {
             runCatching {
-                trainerRepository.getMemberList()
+                trainerRepository.getActiveMembers()
             }.onSuccess { members ->
                 updateState { copy(memberList = members) }
             }.onFailure {

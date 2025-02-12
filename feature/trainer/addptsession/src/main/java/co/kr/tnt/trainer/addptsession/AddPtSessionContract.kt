@@ -1,6 +1,6 @@
 package co.kr.tnt.trainer.addptsession
 
-import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.MemberInfo
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -10,8 +10,8 @@ import java.time.temporal.ChronoUnit
 
 internal class AddPtSessionContract {
     data class AddPtSessionUiState(
-        val members: List<User.Trainee> = emptyList(),
-        val selectedMember: User.Trainee? = null,
+        val members: List<MemberInfo> = emptyList(),
+        val selectedMember: MemberInfo? = null,
         val selectedDate: LocalDate? = null,
         val selectedStartTime: LocalTime? = null,
         val selectedEndTime: LocalTime? = null,
@@ -64,7 +64,7 @@ internal class AddPtSessionContract {
     sealed interface AddPtSessionUiEvent : UiEvent {
         data object OnClickBack : AddPtSessionUiEvent
         data object OnClickMember : AddPtSessionUiEvent
-        data class OnSelectMember(val member: User.Trainee) : AddPtSessionUiEvent
+        data class OnSelectMember(val member: MemberInfo) : AddPtSessionUiEvent
         data object OnClickDate : AddPtSessionUiEvent
         data class OnSelectDate(val date: LocalDate) : AddPtSessionUiEvent
         data object OnClickStartTime : AddPtSessionUiEvent

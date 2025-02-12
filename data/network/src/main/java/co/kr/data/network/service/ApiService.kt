@@ -87,5 +87,5 @@ interface ApiService {
     suspend fun getMyInfo(): UserResponse
 
     @GET("/trainers/active-trainees")
-    suspend fun getActiveTraineeList(): ActiveTraineesResponse
+    suspend fun getActiveTrainees(): ActiveTraineesResponse
 }

@@ -40,8 +40,8 @@ internal class TrainerRepositoryImpl @Inject constructor(
             date = dateFormatter.format(day, "yyyy-MM-dd"),
         ).toDomain(dateFormatter)
 
-    override suspend fun getMemberList(): List<MemberInfo> =
-        trainerRemoteDataSource.getActiveTraineeList().memberList.map { response ->
+    override suspend fun getActiveMembers(): List<MemberInfo> =
+        trainerRemoteDataSource.getActiveTrainees().trainees.map { response ->
             response.toDomain()
         }
 }

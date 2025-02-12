@@ -6,25 +6,25 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ActiveTraineesResponse(
     val traineeCount: Int,
-    val memberList: List<TraineeInfoResponse>,
+    val trainees: List<TraineeInfoResponse>,
 )
 
 @Serializable
 data class TraineeInfoResponse(
-    val id: Int,
+    val id: Long,
     val name: String,
-    val profileUrl: String,
+    val profileImageUrl: String,
     val finishedPtCount: Int,
     val totalPtCount: Int,
     val memo: String?,
-    val ptGoals: String,
+    val ptGoals: List<String>,
 )
 
 fun TraineeInfoResponse.toDomain() =
     MemberInfo(
         traineeName = name,
-        profileUrl = profileUrl,
-        ptPurpose = ptGoals,
+        profileUrl = profileImageUrl,
+        ptPurpose = ptGoals.joinToString(", "),
         memo = memo,
         finishedPtCount = finishedPtCount,
         totalPtCount = totalPtCount,
