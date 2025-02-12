@@ -21,9 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -40,7 +37,7 @@ fun TnTTopBarWithBackButton(
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
-    showShadow: Boolean = false,
+    showStoke: Boolean = false,
     trailingComponent: @Composable RowScope.() -> Unit = {},
 ) {
     Column {
@@ -48,22 +45,6 @@ fun TnTTopBarWithBackButton(
             modifier = modifier
                 .fillMaxWidth()
                 .background(TnTTheme.colors.commonColors.Common0)
-                .drawBehind {
-                    if (showShadow) {
-                        drawRect(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Black.copy(alpha = 0.06f),
-                                    Color.Transparent,
-                                ),
-                                startY = size.height,
-                                endY = size.height + 10.dp.toPx(),
-                            ),
-                            topLeft = Offset(0f, size.height),
-                            size = size.copy(height = 10.dp.toPx()),
-                        )
-                    }
-                }
                 // 디자인상으로는 16dp가 맞으나, 라이브러리에서 기본적으로
                 // horizontal padding 으로 4dp 를 부여하고 있음.
                 // 이에 따라 16dp - 4dp 계산값으로 적용
@@ -97,7 +78,7 @@ fun TnTTopBarWithBackButton(
             windowInsets = windowInsets,
             expandedHeight = 60.dp,
         )
-        if (showShadow) {
+        if (showStoke) {
             HorizontalDivider(
                 thickness = 1.dp,
                 color = TnTTheme.colors.neutralColors.Neutral200,
@@ -171,7 +152,7 @@ private fun TnTTopBarBackButtonWithTitlePreview() {
                 modifier = Modifier.fillMaxWidth(),
                 title = "제목",
                 onBackClick = { },
-                showShadow = true,
+                showStoke = true,
             )
         }
     }

@@ -217,7 +217,7 @@ private fun TraineeMealRecordScreen(
             TnTTopBarWithBackButton(
                 title = "식단 기록",
                 onBackClick = onClickBack,
-                showShadow = true,
+                showStoke = true,
             )
         },
         bottomBar = {
