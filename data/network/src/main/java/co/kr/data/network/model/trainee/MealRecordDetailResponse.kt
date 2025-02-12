@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 data class MealRecordDetailResponse(
     val dietId: Long,
     val date: String,
-    val dietImageUrl: String,
+    val dietImageUrl: String?,
     val dietType: String,
     val memo: String,
 )

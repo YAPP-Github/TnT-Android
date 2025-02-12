@@ -108,6 +108,6 @@ interface ApiService {
 
     @GET("/trainees/diets/{dietId}")
     suspend fun getMealRecord(
-        @Query("dietId") dietId: Long,
+        @Path("dietId") dietId: Long,
     ): MealRecordDetailResponse
 }

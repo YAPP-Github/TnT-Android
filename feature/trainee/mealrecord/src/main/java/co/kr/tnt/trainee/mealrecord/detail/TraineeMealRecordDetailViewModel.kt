@@ -1,11 +1,13 @@
 package co.kr.tnt.trainee.mealrecord.detail
 
+import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailSideEffect
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiEvent
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,6 +25,21 @@ internal class TraineeMealRecordDetailViewModel @Inject constructor(
         }
 
         private fun fetchRecordDetail(id: Long) {
-            // TODO : 식단 정보 가져오기 API 호출
+            viewModelScope.launch {
+                runCatching {
+                    traineeRepository.getMealRecord(id)
+                }.onSuccess { result ->
+                    updateState {
+                        copy(
+                            image = result.imageUrl,
+                            date = result.date,
+                            mealType = result.dietType,
+                            memo = result.memo,
+                        )
+                    }
+                }.onFailure {
+                    sendEffect(TraineeMealRecordDetailSideEffect.ShowToast("데이터 불러오기에 실패했어요"))
+                }
+            }
         }
     }
