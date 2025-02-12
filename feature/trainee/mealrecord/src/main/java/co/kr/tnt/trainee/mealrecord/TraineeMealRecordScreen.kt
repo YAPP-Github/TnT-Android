@@ -3,6 +3,7 @@ package co.kr.tnt.trainee.mealrecord
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
@@ -53,9 +54,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTSelectableTextField
+import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.TnTWheelTimePicker
 import co.kr.tnt.designsystem.component.button.TnTTextButton
@@ -71,6 +74,7 @@ import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiEvent
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
 import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.RecordChip
 import coil.compose.rememberAsyncImagePainter
@@ -89,6 +93,8 @@ internal fun TraineeMealRecordRoute(
     navigateToPrevious: () -> Unit,
     viewModel: TraineeMealRecordViewModel = hiltViewModel(),
 ) {
+    BackHandler { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickBack) }
+
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -122,7 +128,9 @@ internal fun TraineeMealRecordRoute(
         onChangeMemo = { memo ->
             viewModel.setEvent(TraineeMealRecordUiEvent.OnChangeMemo(memo))
         },
-        onClickBack = navigateToPrevious,
+        onClickBack = {
+            viewModel.setEvent(TraineeMealRecordUiEvent.OnClickBack)
+        },
         onClickSaveButton = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickSave(context)) },
     )
 
@@ -163,6 +171,13 @@ internal fun TraineeMealRecordRoute(
             },
         )
     }
+
+    Dialog(
+        state = state,
+        onClickExit = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickBack) },
+        onClickConfirm = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickDialogConfirm) },
+        onDismissDialog = { viewModel.setEvent(TraineeMealRecordUiEvent.OnDismissDialog) },
+    )
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -274,6 +289,40 @@ private fun TraineeMealRecordScreen(
                     Spacer(Modifier.height(64.dp))
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun Dialog(
+    state: TraineeMealRecordUiState,
+    onClickExit: () -> Unit,
+    onClickConfirm: () -> Unit,
+    onDismissDialog: () -> Unit,
+) {
+    when (state.dialogState) {
+        DialogState.NONE -> Unit
+        DialogState.COMPLETED -> {
+            TnTSingleButtonPopupDialog(
+                title = "식단을 기록했어요!",
+                content = "내일도 기록해 주실 거죠?",
+                buttonText = stringResource(coreR.string.ok),
+                cancelable = false,
+                onButtonClick = onClickConfirm,
+                onDismiss = onDismissDialog,
+            )
+        }
+
+        DialogState.EXIT -> {
+            TnTIconPopupDialog(
+                title = "식단 기록을 종료할까요?",
+                content = "기록이 저장되지 않아요!",
+                leftButtonText = "종료",
+                rightButtonText = "계속 수정",
+                onLeftButtonClick = onClickExit,
+                onRightButtonClick = onDismissDialog,
+                onDismiss = onDismissDialog,
+            )
         }
     }
 }

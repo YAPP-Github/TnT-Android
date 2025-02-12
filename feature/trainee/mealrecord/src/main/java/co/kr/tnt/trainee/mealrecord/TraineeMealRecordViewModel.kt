@@ -7,6 +7,7 @@ import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordSideEffect
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiEvent
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import co.kr.tnt.ui.utils.isAllowedImageFormat
@@ -51,8 +52,14 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                 }
 
                 is TraineeMealRecordUiEvent.OnChangeMemo -> updateMemo(event.memo)
-                TraineeMealRecordUiEvent.OnClickBack -> sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
+                TraineeMealRecordUiEvent.OnClickBack -> handleBackClick()
                 is TraineeMealRecordUiEvent.OnClickSave -> postMealRecord(event.context)
+                TraineeMealRecordUiEvent.OnClickDialogConfirm -> {
+                    updateState { copy(dialogState = DialogState.NONE) }
+                    sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
+                }
+
+                TraineeMealRecordUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
             }
         }
 
@@ -70,6 +77,17 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                 updateState { copy(showWarning = true, memo = value).validateMealRecord() }
             } else {
                 updateState { copy(showWarning = false, memo = value).validateMealRecord() }
+            }
+        }
+
+        private fun handleBackClick() {
+            if (currentState.dialogState == DialogState.EXIT) {
+                updateState { copy(dialogState = DialogState.NONE) }
+                sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
+            } else if (currentState.isMealRecordValid) {
+                updateState { copy(dialogState = DialogState.EXIT) }
+            } else {
+                sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
             }
         }
 
@@ -91,7 +109,7 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                         memo = state.memo,
                     )
                 }.onSuccess {
-                    // TODO 완료 dialog 띄우기
+                    updateState { copy(dialogState = DialogState.COMPLETED) }
                 }.onFailure {
                     sendEffect(TraineeMealRecordSideEffect.ShowToast("식단 기록에 실패했어요"))
                 }

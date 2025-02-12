@@ -18,9 +18,16 @@ internal class TraineeMealRecordContract {
         val memo: String = "",
         val isDateFieldFocused: Boolean = false,
         val isTimeFieldFocused: Boolean = false,
-        val showWarning: Boolean = false,
         val isMealRecordValid: Boolean = false,
+        val showWarning: Boolean = false,
+        val dialogState: DialogState = DialogState.NONE,
     ) : UiState {
+        enum class DialogState {
+            NONE,
+            COMPLETED,
+            EXIT,
+        }
+
         val mealDateTime: LocalDateTime?
             get() = time?.let { LocalDateTime.of(date, it) }
 
@@ -46,6 +53,8 @@ internal class TraineeMealRecordContract {
         data class OnChangeMemo(val memo: String) : TraineeMealRecordUiEvent
         data class OnClickSave(val context: Context) : TraineeMealRecordUiEvent
         data object OnClickBack : TraineeMealRecordUiEvent
+        data object OnClickDialogConfirm : TraineeMealRecordUiEvent
+        data object OnDismissDialog : TraineeMealRecordUiEvent
     }
 
     sealed interface TraineeMealRecordSideEffect : UiSideEffect {
