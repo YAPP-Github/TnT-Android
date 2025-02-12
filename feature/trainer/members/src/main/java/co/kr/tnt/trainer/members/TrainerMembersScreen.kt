@@ -165,7 +165,7 @@ private fun MemberList(member: MemberInfo) {
         name = member.traineeName,
         profileImage = painter,
         purpose = member.ptPurpose,
-        memo = member.memo,
+        memo = member.memo ?: "",
         completedSessions = member.finishedPtCount.toString(),
         totalSessions = member.totalPtCount.toString(),
         modifier = Modifier.padding(horizontal = 16.dp),
