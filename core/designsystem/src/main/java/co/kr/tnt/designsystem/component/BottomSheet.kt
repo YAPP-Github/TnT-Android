@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -54,7 +53,6 @@ fun TnTModalBottomSheet(
 
 @Composable
 fun TnTBottomSheetDialog(
-    showDragHandle: Boolean = true,
     onDismissRequest: () -> Unit,
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -68,6 +66,7 @@ fun TnTBottomSheetDialog(
                 color = TnTTheme.colors.commonColors.Common0,
             ),
             behaviorProperties = BottomSheetBehaviorProperties(
+                isDraggable = false,
                 state = BottomSheetBehaviorProperties.State.Expanded,
                 skipCollapsed = true,
                 maxHeight = BottomSheetBehaviorProperties.Size(value = maxHeight),
@@ -86,11 +85,6 @@ fun TnTBottomSheetDialog(
                     )
                     .background(TnTTheme.colors.commonColors.Common0),
             ) {
-                if (showDragHandle) {
-                    TnTModalBottomSheetDragHandle(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                    )
-                }
                 content()
             }
         },
