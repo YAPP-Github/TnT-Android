@@ -62,7 +62,7 @@ internal class TrainerHomeViewModel @Inject constructor(
 
                         results.forEach(::updateMonthlyPtSessionCounts)
                     }.onFailure {
-                        sendEffect(TrainerHomeSideEffect.ShowToast("알 수 없는 오류가 발생하였습니다."))
+                        sendEffect(TrainerHomeSideEffect.ShowToast("서버 요청에 실패했어요"))
                     }
                 }
             }
@@ -82,7 +82,7 @@ internal class TrainerHomeViewModel @Inject constructor(
                     updateState { copy(selectedDayPtSessions = selectedDayPtSessions) }
                 }.onFailure {
                     updateState { copy(selectedDayPtSessions = null) }
-                    sendEffect(TrainerHomeSideEffect.ShowToast("알 수 없는 오류가 발생하였습니다."))
+                    sendEffect(TrainerHomeSideEffect.ShowToast("서버 요청에 실패했어요"))
                 }
             }
         }

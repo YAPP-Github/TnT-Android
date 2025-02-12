@@ -19,10 +19,10 @@ class DateFormatter @Inject constructor() {
 
     fun parseDateTime(
         rawDate: String,
-        formatter: DateTimeFormatter = DEFAULT_DATE_TIME_FORMATTER,
+        pattern: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
     ): LocalDateTime {
         require(rawDate.isNotBlank())
-        return LocalDateTime.parse(rawDate, formatter)
+        return LocalDateTime.parse(rawDate, DateTimeFormatter.ofPattern(pattern))
     }
 
     fun format(
