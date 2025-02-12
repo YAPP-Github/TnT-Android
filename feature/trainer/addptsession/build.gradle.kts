@@ -10,4 +10,5 @@ android {
 
 dependencies {
     implementation(libs.kotlinx.immutable)
+    implementation(libs.calendar.compose)
 }

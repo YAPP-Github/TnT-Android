@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -23,13 +25,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -39,29 +48,46 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
+import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
+import co.kr.tnt.designsystem.component.TnTWheelTimePicker
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
+import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
+import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
+import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
+import co.kr.tnt.designsystem.component.calendar.model.DayState
+import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffect
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState
+import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.core.yearMonth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun AddPtSessionRoute(
     viewModel: AddPtSessionViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     AddPtSessionScreen(
-        state = uiState,
+        state = state,
         onClickBack = { viewModel.setEvent(AddPtSessionUiEvent.OnClickBack) },
         onClickMember = { viewModel.setEvent(AddPtSessionUiEvent.OnClickMember) },
         onClickDate = { viewModel.setEvent(AddPtSessionUiEvent.OnClickDate) },
@@ -72,11 +98,60 @@ internal fun AddPtSessionRoute(
         onClickComplete = { viewModel.setEvent(AddPtSessionUiEvent.OnClickComplete) },
     )
 
+    if (showBottomSheet) {
+        TnTBottomSheetDialog(
+            onDismissRequest = { showBottomSheet = false },
+            content = {
+                when (state.sheetType) {
+                    AddPtSessionUiState.BottomSheetType.NONE -> Unit
+                    AddPtSessionUiState.BottomSheetType.SELECT_MEMBER -> MembersBottomSheetContent(
+                        members = state.members,
+                        selectedMember = User.Trainee.EMPTY.copy(name = "김정호"),
+                        onSelectMember = { member ->
+                            viewModel.setEvent(AddPtSessionUiEvent.OnSelectMember(member))
+                        },
+                        onDismissRequest = { showBottomSheet = false },
+                    )
+
+                    AddPtSessionUiState.BottomSheetType.SELECT_DATE -> CalendarBottomSheetContent(
+                        selectedDate = state.selectedDate,
+                        onDismissRequest = { showBottomSheet = false },
+                        onClickConfirm = { selectedDate ->
+                            viewModel.setEvent(AddPtSessionUiEvent.OnSelectDate(selectedDate))
+                        },
+                    )
+                    AddPtSessionUiState.BottomSheetType.SELECT_START_TIME -> TimePickerBottomSheetContent(
+                        title = "시작 시간 선택하기",
+                        selectedTime = state.selectedStartTime,
+                        onDismissRequest = { showBottomSheet = false },
+                        onClickConfirm = { selectTime ->
+                            viewModel.setEvent(AddPtSessionUiEvent.OnSelectStartTime(selectTime))
+                        },
+                    )
+
+                    AddPtSessionUiState.BottomSheetType.SELECT_END_TIME -> TimePickerBottomSheetContent(
+                        title = "종료 시간 선택하기",
+                        selectedTime = state.selectedEndTime,
+                        onDismissRequest = { showBottomSheet = false },
+                        onClickConfirm = { selectTime ->
+                            viewModel.setEvent(AddPtSessionUiEvent.OnSelectEndTime(selectTime))
+                        },
+                    )
+                }
+            },
+        )
+    }
+
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                AddPtSessionSideEffect.ShowBottomSheet -> TODO()
-                AddPtSessionSideEffect.HideBottomSheet -> TODO()
+                AddPtSessionSideEffect.ShowBottomSheet -> {
+                    showBottomSheet = true
+                }
+
+                AddPtSessionSideEffect.HideBottomSheet -> {
+                    showBottomSheet = false
+                }
 
                 is AddPtSessionSideEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
@@ -374,12 +449,221 @@ private fun Memo(
     )
     Spacer(modifier = Modifier.height(8.dp))
     TnTOutlinedTextField(
-        value = "",
+        value = value,
         onValueChange = onValueChanged,
         maxLength = 30,
         isError = value.length >= 30,
         warningMessage = "30자 미만으로 입력해주세요",
         modifier = Modifier.fillMaxWidth(),
+    )
+}
+
+@Composable
+private fun MembersBottomSheetContent(
+    members: List<User.Trainee>,
+    selectedMember: User.Trainee?,
+    onSelectMember: (member: User.Trainee) -> Unit,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        SheetTopBar(
+            title = "회원 선택하기",
+            onDismissRequest = onDismissRequest,
+        )
+        LazyColumn {
+            items(members.size) { index ->
+                members[index].let { member ->
+                    MemberItem(
+                        member = member,
+                        isSelected = member == selectedMember,
+                        onClick = onSelectMember,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MemberItem(
+    member: User.Trainee,
+    isSelected: Boolean,
+    onClick: (User.Trainee) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick(member) }
+            .padding(
+                vertical = 16.dp,
+                horizontal = 20.dp,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = member.name,
+            style = TnTTheme.typography.body1SemiBold,
+            color = TnTTheme.colors.neutralColors.Neutral600,
+        )
+        if (isSelected) {
+            Icon(
+                painter = painterResource(R.drawable.ic_check_true),
+                contentDescription = null,
+                tint = Color.Unspecified,
+            )
+        }
+    }
+}
+
+@Composable
+private fun CalendarBottomSheetContent(
+    onDismissRequest: () -> Unit,
+    onClickConfirm: (day: LocalDate) -> Unit,
+    modifier: Modifier = Modifier,
+    selectedDate: LocalDate? = null,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+) {
+    val now = remember { LocalDate.now() }
+    val initSelectedDate = selectedDate ?: now
+    var selectedDay by rememberSaveable { mutableStateOf(initSelectedDate) }
+    val calendarState = rememberCalendarState(
+        firstVisibleMonth = initSelectedDate.yearMonth,
+        firstDayOfWeek = DayOfWeek.SUNDAY,
+        startMonth = initSelectedDate.minusYears(10).yearMonth,
+        endMonth = initSelectedDate.plusYears(10).yearMonth,
+    )
+    val visibleMonth = rememberMostVisibleMonth(calendarState)
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        SheetTopBar(
+            title = "PT 날짜 선택하기",
+            onDismissRequest = onDismissRequest,
+        )
+        Column(
+            modifier = Modifier.height(446.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            TnTCalendarSelector(
+                yearMonth = visibleMonth,
+                onClickPrevious = {
+                    coroutineScope.launch {
+                        calendarState.animateScrollToMonth(visibleMonth.minusMonths(1))
+                    }
+                },
+                onClickNext = {
+                    coroutineScope.launch {
+                        calendarState.animateScrollToMonth(visibleMonth.plusMonths(1))
+                    }
+                },
+            )
+            Spacer(Modifier.height(20.dp))
+            TnTMonthCalendar(
+                state = calendarState,
+                onClickDay = { selectedDay = it },
+                dayState = { day -> DayState(isSelected = day == selectedDay) },
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+        }
+        SheetConfirm { onClickConfirm(selectedDay) }
+        Spacer(Modifier.height(54.dp))
+    }
+}
+
+@Composable
+private fun TimePickerBottomSheetContent(
+    title: String,
+    onDismissRequest: () -> Unit,
+    onClickConfirm: (time: LocalTime) -> Unit,
+    modifier: Modifier = Modifier,
+    selectedTime: LocalTime? = null,
+) {
+    val now = remember { LocalTime.now() }
+    var selectTime by rememberSaveable { mutableStateOf(selectedTime ?: now) }
+
+    Column(
+        modifier = modifier.nestedScroll(rememberNestedScrollInteropConnection()),
+        verticalArrangement = Arrangement.Center,
+    ) {
+        SheetTopBar(
+            title = title,
+            onDismissRequest = onDismissRequest,
+        )
+        Spacer(Modifier.height(24.dp))
+        TnTWheelTimePicker(
+            modifier = Modifier
+                .padding(
+                    vertical = 20.dp,
+                    horizontal = 24.dp,
+                ),
+            initialTime = selectTime ?: now,
+            onTimeSelected = { time ->
+                selectTime = time
+            },
+        )
+        Spacer(Modifier.height(40.dp))
+        SheetConfirm { onClickConfirm(selectTime) }
+        Spacer(Modifier.height(54.dp))
+    }
+}
+
+@Composable
+private fun SheetTopBar(
+    title: String,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = title,
+                style = TnTTheme.typography.h3,
+                color = TnTTheme.colors.neutralColors.Neutral900,
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Box(
+                modifier = Modifier
+                    .clickable(onClick = onDismissRequest)
+                    .size(32.dp),
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = null,
+                )
+            }
+        }
+        TnTDivider()
+    }
+}
+
+@Composable
+private fun SheetConfirm(
+    onClick: () -> Unit,
+) {
+    TnTTextButton(
+        text = stringResource(coreR.string.ok),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        size = ButtonSize.Large,
+        type = ButtonType.Primary,
+        onClick = onClick,
     )
 }
 
@@ -397,6 +681,23 @@ private fun AddPtSessionScreenPreview() {
             onClickMinuteChip = { },
             onChangeMemo = { },
             onClickComplete = { },
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MembersBottomSheetContentPreview() {
+    TnTTheme {
+        MembersBottomSheetContent(
+            members = listOf(
+                User.Trainee.EMPTY.copy(name = "김정호"),
+                User.Trainee.EMPTY.copy(name = "차희원"),
+                User.Trainee.EMPTY.copy(name = "우양"),
+            ),
+            selectedMember = User.Trainee.EMPTY.copy(name = "김정호"),
+            onSelectMember = { },
+            onDismissRequest = {},
         )
     }
 }
