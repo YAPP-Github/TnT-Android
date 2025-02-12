@@ -77,6 +77,7 @@ internal fun TraineeHomeRoute(
     navigateToNotification: () -> Unit,
     navigateToExerciseRecord: () -> Unit,
     navigateToMealRecord: () -> Unit,
+    navigateToMealDetail: () -> Unit,
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -96,6 +97,7 @@ internal fun TraineeHomeRoute(
         onClickPtSessionCard = { id ->
             viewModel.setEvent(TraineeHomeUiEvent.OnClickPtSessionCard(id))
         },
+        onClickMealCard = navigateToMealDetail,
         onClickFloatingButton = { showBottomSheet = true },
     )
 
@@ -136,12 +138,14 @@ internal fun TraineeHomeRoute(
 }
 
 @Composable
+@Suppress("UnusedParameter")
 private fun TraineeHomeScreen(
     state: TraineeHomeUiState,
     onClickNotification: () -> Unit,
     onChangeVisibleMonth: (YearMonth) -> Unit,
     onClickDay: (LocalDate) -> Unit,
     onClickPtSessionCard: (String) -> Unit,
+    onClickMealCard: () -> Unit,
     onClickFloatingButton: () -> Unit,
 ) {
     val dateFormatter = remember { DateFormatter() }
@@ -332,6 +336,7 @@ private fun EmptyPtSession() {
 
 @Composable
 private fun DailyRecords(
+    modifier: Modifier = Modifier,
     record: DailyRecord,
     dateFormatter: DateFormatter,
 ) {
@@ -341,7 +346,7 @@ private fun DailyRecords(
         record = record.recordContents,
         tagText = chip.title,
         time = dateFormatter.format(record.recordTime, "a hh:mm"),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
         image = record.recordImage?.let { rememberAsyncImagePainter(it) },
@@ -475,6 +480,7 @@ private fun TraineeHomeScreenPreview() {
             onClickPtSessionCard = { },
             onChangeVisibleMonth = { },
             onClickFloatingButton = { },
+            onClickMealCard = { },
         )
     }
 }
