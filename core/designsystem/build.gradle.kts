@@ -12,4 +12,5 @@ android {
 dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.calendar.compose)
+    implementation(libs.bottomsheetdialog.compose)
 }
