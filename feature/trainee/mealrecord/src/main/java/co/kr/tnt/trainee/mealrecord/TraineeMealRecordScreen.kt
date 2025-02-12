@@ -219,7 +219,7 @@ private fun TraineeMealRecordScreen(
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                 size = ButtonSize.XLarge,
                 type = ButtonType.Primary,
-                enabled = false,
+                enabled = state.isMealRecordValid,
                 onClick = onClickSaveButton,
             )
         },

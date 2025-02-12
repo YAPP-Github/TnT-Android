@@ -21,7 +21,7 @@ internal class TraineeMealRecordViewModel @Inject constructor() :
                     copy(
                         date = event.date,
                         isDateFieldFocused = false,
-                    )
+                    ).validateMealRecord()
                 }
 
                 is TraineeMealRecordUiEvent.OnClickMealTime -> updateState { copy(isTimeFieldFocused = true) }
@@ -29,15 +29,18 @@ internal class TraineeMealRecordViewModel @Inject constructor() :
                     copy(
                         time = event.time,
                         isTimeFieldFocused = false,
-                    )
+                    ).validateMealRecord()
                 }
 
                 TraineeMealRecordUiEvent.OnClickCloseBottomSheet -> clearFocusState()
 
-                is TraineeMealRecordUiEvent.OnSelectMealType -> updateState { copy(mealType = event.mealType) }
+                is TraineeMealRecordUiEvent.OnSelectMealType -> updateState {
+                    copy(mealType = event.mealType).validateMealRecord()
+                }
+
                 is TraineeMealRecordUiEvent.OnChangeMemo -> updateMemo(event.memo)
                 TraineeMealRecordUiEvent.OnClickBack -> sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
-                TraineeMealRecordUiEvent.OnClickSave -> TODO()
+                TraineeMealRecordUiEvent.OnClickSave -> postMealRecord()
             }
         }
 
@@ -52,9 +55,13 @@ internal class TraineeMealRecordViewModel @Inject constructor() :
 
         private fun updateMemo(value: String) {
             if (value.length == 100) {
-                updateState { copy(showWarning = true, memo = value) }
+                updateState { copy(showWarning = true, memo = value).validateMealRecord() }
             } else {
-                updateState { copy(showWarning = false, memo = value) }
+                updateState { copy(showWarning = false, memo = value).validateMealRecord() }
             }
+        }
+
+        private fun postMealRecord() {
+            // TODO 식단 기록 API 호출
         }
     }

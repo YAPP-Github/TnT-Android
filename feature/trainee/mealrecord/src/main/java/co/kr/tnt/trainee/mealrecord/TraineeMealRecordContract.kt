@@ -17,7 +17,17 @@ internal class TraineeMealRecordContract {
         val isDateFieldFocused: Boolean = false,
         val isTimeFieldFocused: Boolean = false,
         val showWarning: Boolean = false,
-    ) : UiState
+        val isMealRecordValid: Boolean = false,
+    ) : UiState {
+        fun validateMealRecord(): TraineeMealRecordUiState {
+            return copy(
+                isMealRecordValid = date <= LocalDate.now() &&
+                    time != null &&
+                    mealType.isNotBlank() &&
+                    memo.isNotBlank(),
+            )
+        }
+    }
 
     sealed interface TraineeMealRecordUiEvent : UiEvent {
         data class OnSelectImage(val imageUri: Uri) : TraineeMealRecordUiEvent
