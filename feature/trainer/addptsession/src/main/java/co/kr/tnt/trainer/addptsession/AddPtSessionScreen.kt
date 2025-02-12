@@ -107,7 +107,7 @@ internal fun AddPtSessionRoute(
                     AddPtSessionUiState.BottomSheetType.NONE -> Unit
                     AddPtSessionUiState.BottomSheetType.SELECT_MEMBER -> MembersBottomSheetContent(
                         members = state.members,
-                        selectedMember = User.Trainee.EMPTY.copy(name = "김정호"),
+                        selectedMember = state.selectedMember,
                         onSelectMember = { member ->
                             viewModel.setEvent(AddPtSessionUiEvent.OnSelectMember(member))
                         },
@@ -205,7 +205,7 @@ private fun AddPtSessionScreen(
                 Spacer(modifier = Modifier.height(48.dp))
                 Selector(
                     title = "회원 선택",
-                    value = state.selectedMember.name,
+                    value = state.selectedMember?.name ?: "",
                     placeholder = "회원을 입력해주세요",
                     onClick = onClickMember,
                 )
@@ -225,6 +225,7 @@ private fun AddPtSessionScreen(
                     dateFormatter = dateFormatter,
                     onClickStartTime = onClickStartTime,
                     onClickEndTime = onClickEndTime,
+                    isWarning = state.isErrorTime,
                 )
                 if (state.selectedStartTime != null && state.selectedEndTime == null) {
                     Spacer(modifier = Modifier.height(48.dp))
@@ -242,6 +243,7 @@ private fun AddPtSessionScreen(
                 Spacer(modifier = Modifier.height(48.dp))
                 Memo(
                     value = state.memo,
+                    isWarning = state.isErrorMemo,
                     onValueChanged = onChangeMemo,
                 )
                 Spacer(modifier = Modifier.height(70.dp))
@@ -250,6 +252,7 @@ private fun AddPtSessionScreen(
 
         TnTBottomButton(
             text = "완료",
+            enabled = state.isEnableComplete,
             modifier = Modifier.align(Alignment.BottomCenter),
             onClick = onClickComplete,
         )
@@ -278,6 +281,7 @@ private fun Selector(
     placeholder: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isWarning: Boolean = false,
 ) {
     Column(modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -297,6 +301,7 @@ private fun Selector(
             value = value,
             enabled = false,
             isSingleLine = true,
+            showWarning = isWarning,
             placeholder = placeholder,
             modifier = Modifier
                 .fillMaxWidth()
@@ -321,6 +326,7 @@ private fun TimeSelector(
     onClickStartTime: () -> Unit,
     onClickEndTime: () -> Unit,
     modifier: Modifier = Modifier,
+    isWarning: Boolean = false,
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
         Selector(
@@ -330,6 +336,7 @@ private fun TimeSelector(
             } ?: "",
             onClick = onClickStartTime,
             placeholder = "09:00",
+            isWarning = isWarning,
             modifier = Modifier.weight(1f),
         )
         Text(
@@ -351,6 +358,7 @@ private fun TimeSelector(
             } ?: "",
             onClick = onClickEndTime,
             placeholder = "10:00",
+            isWarning = isWarning,
             modifier = Modifier.weight(1f),
         )
     }
@@ -442,6 +450,7 @@ private fun TotalSessionMinute(
 @Composable
 private fun Memo(
     value: String,
+    isWarning: Boolean,
     onValueChanged: (String) -> Unit,
 ) {
     Text(
@@ -454,7 +463,7 @@ private fun Memo(
         value = value,
         onValueChange = onValueChanged,
         maxLength = 30,
-        isError = value.length >= 30,
+        isError = isWarning,
         warningMessage = "30자 미만으로 입력해주세요",
         modifier = Modifier.fillMaxWidth(),
     )

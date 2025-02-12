@@ -11,7 +11,7 @@ import java.time.temporal.ChronoUnit
 internal class AddPtSessionContract {
     data class AddPtSessionUiState(
         val members: List<User.Trainee> = emptyList(),
-        val selectedMember: User.Trainee = User.Trainee.EMPTY,
+        val selectedMember: User.Trainee? = null,
         val selectedDate: LocalDate? = null,
         val selectedStartTime: LocalTime? = null,
         val selectedEndTime: LocalTime? = null,
@@ -25,6 +25,26 @@ internal class AddPtSessionContract {
 
                 return ChronoUnit.MINUTES.between(selectedStartTime, selectedEndTime).toInt()
             }
+
+        val isErrorTime: Boolean
+            get() {
+                val selectedStartTime = selectedStartTime ?: return false
+                val selectedEndTime = selectedEndTime ?: return false
+
+                return selectedEndTime.isBefore(selectedStartTime) ||
+                    (
+                        selectedStartTime.hour == selectedEndTime.hour &&
+                            selectedStartTime.minute == selectedEndTime.minute
+                    )
+            }
+
+        val isErrorMemo: Boolean
+            get() = memo.length >= 30
+
+        val isEnableComplete: Boolean
+            get() =
+                selectedMember != null && selectedDate != null && selectedStartTime != null &&
+                    selectedEndTime != null && isErrorTime.not()
 
         enum class BottomSheetType {
             NONE,
