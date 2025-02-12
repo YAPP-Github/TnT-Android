@@ -17,9 +17,10 @@ fun NavController.navigateToTraineeMealRecord(
 )
 
 fun NavController.navigateToTraineeMealRecordDetail(
+    id: Int,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.TraineeMealRecordDetail,
+    route = Route.TraineeMealRecordDetail(id),
     builder = navOptions,
 )
 
@@ -37,6 +38,7 @@ fun NavGraphBuilder.traineeMealRecordScreen(
     composable<Route.TraineeMealRecordDetail> { backstackEntry ->
         backstackEntry.toRoute<Route.TraineeMealRecordDetail>().apply {
             TraineeMealRecordDetailRoute(
+                mealId = id,
                 navigateToPrevious = navigateToPrevious,
             )
         }

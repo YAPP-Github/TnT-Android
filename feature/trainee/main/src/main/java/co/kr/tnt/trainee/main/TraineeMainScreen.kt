@@ -21,7 +21,7 @@ internal fun TraineeMainRoute(
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
     navigateToMealRecord: () -> Unit,
-    navigateToMealDetail: () -> Unit,
+    navigateToMealDetail: (id: Int) -> Unit,
 ) {
     val state = rememberTraineeMainState(
         startDestination = TraineeMainTab.HOME.baseRoute,
@@ -45,7 +45,7 @@ private fun TraineeMainScreen(
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
     navigateToMealRecord: () -> Unit,
-    navigateToMealDetail: () -> Unit,
+    navigateToMealDetail: (id: Int) -> Unit,
 ) {
     val navController = state.navController
 
