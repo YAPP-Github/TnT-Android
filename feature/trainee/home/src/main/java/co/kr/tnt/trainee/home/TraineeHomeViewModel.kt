@@ -84,15 +84,19 @@ internal class TraineeHomeViewModel @Inject constructor(
     }
 
     private fun selectDate(date: LocalDate) {
-        // TODO : 선택된 날짜의 PT 수업, 기록 불러오기 API 연동
         viewModelScope.launch {
-            val result = traineeRepository.getTraineeDailyRecord(date)
-            updateState {
-                copy(
-                    selectedDay = date,
-                    ptSessions = result.ptSession,
-                    recordList = result.record,
-                )
+            kotlin.runCatching {
+                traineeRepository.getDailyRecord(date)
+            }.onSuccess { result ->
+                updateState {
+                    copy(
+                        selectedDay = date,
+                        ptSessions = result.ptSession,
+                        recordList = result.record,
+                    )
+                }
+            }.onFailure {
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요"))
             }
         }
     }
