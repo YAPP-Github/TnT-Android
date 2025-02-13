@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.TnT" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.TnT</item>
+    </style>
 </resources>
