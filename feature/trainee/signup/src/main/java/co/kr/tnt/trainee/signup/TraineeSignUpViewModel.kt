@@ -74,8 +74,8 @@ internal class TraineeSignUpViewModel @Inject constructor(
                         name = state.name,
                         image = state.image.toString(),
                         birthday = state.birthday,
-                        weight = state.weight.toDouble(),
-                        height = state.height.toInt(),
+                        weight = state.weight?.toDoubleOrNull(),
+                        height = state.height?.toIntOrNull(),
                         ptPurpose = state.ptPurpose,
                         caution = state.caution,
                         isConnected = false,
@@ -103,11 +103,11 @@ internal class TraineeSignUpViewModel @Inject constructor(
     }
 
     private fun updateHeight(height: String) {
-        updateState { copy(height = height) }
+        updateState { copy(height = height.takeIf { it.isNotEmpty() }) }
     }
 
     private fun updateWeight(weight: String) {
-        updateState { copy(weight = weight) }
+        updateState { copy(weight = weight.takeIf { it.isNotEmpty() }) }
     }
 
     private fun updateBirthday(birthday: LocalDate) {

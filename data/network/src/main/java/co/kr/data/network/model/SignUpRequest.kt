@@ -49,7 +49,7 @@ fun User.toSignUpRequest(
             memberType = "trainee",
             name = name,
             birthday = birthday?.toString(),
-            height = height.toDouble(),
+            height = height?.toDouble(),
             weight = weight,
             goalContents = ptPurpose,
             cautionNote = caution?.ifBlank { null },

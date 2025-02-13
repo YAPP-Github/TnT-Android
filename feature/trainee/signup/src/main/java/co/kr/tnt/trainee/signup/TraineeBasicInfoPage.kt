@@ -95,12 +95,11 @@ internal fun TraineeBasicInfoPage(
                 ) {
                     TnTLabeledTextField(
                         title = stringResource(uiResource.string.height_label),
-                        value = state.height,
+                        value = state.height ?: "",
                         placeholder = "0",
                         isSingleLine = true,
-                        showWarning = state.height.isNotEmpty() && !state.isHeightValid,
+                        showWarning = state.isHeightValid.not(),
                         warningMessage = stringResource(uiResource.string.entered_wrong_text),
-                        isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
                             UnitLabel(uiResource.string.height_unit)
@@ -110,12 +109,11 @@ internal fun TraineeBasicInfoPage(
                     )
                     TnTLabeledTextField(
                         title = stringResource(uiResource.string.weight_label),
-                        value = state.weight,
+                        value = state.weight ?: "",
                         placeholder = "00.0",
                         isSingleLine = true,
-                        showWarning = state.weight.isNotEmpty() && !state.isWeightValid,
+                        showWarning = state.isWeightValid.not(),
                         warningMessage = stringResource(uiResource.string.entered_wrong_text),
-                        isRequired = true,
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
                             UnitLabel(uiResource.string.weight_unit)
