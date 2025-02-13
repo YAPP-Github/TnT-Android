@@ -143,6 +143,7 @@ private fun TrainerHomeScreen(
                         dailyPtSessionCount = state.dailyPtSessionCount,
                         onClickDay = onClickDay,
                     )
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
                 Column {
                     Spacer(modifier = Modifier.height(24.dp))
