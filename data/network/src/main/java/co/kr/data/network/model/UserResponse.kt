@@ -25,6 +25,7 @@ data class TrainerResponse(
 
 @Serializable
 data class TraineeResponse(
+    val isConnected: Boolean,
     val birthday: String?,
     val age: Int?,
     val height: Double,
@@ -54,7 +55,7 @@ fun UserResponse.toDomain(dateFormatter: DateFormatter): User {
             height = requireNotNull(trainee?.height?.toInt()),
             ptPurpose = trainee?.ptGoals ?: emptyList(),
             caution = trainee?.cautionNote,
-            isConnected = false,
+            isConnected = trainee?.isConnected ?: false,
         )
 
         MemberType.UNREGISTERED -> error("등록되지 않은 유저입니다.")
