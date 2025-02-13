@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.trainer.TrainerManagementMemberCount
 import co.kr.tnt.domain.repository.SignUpRepository
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpEffect
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpPage
@@ -66,6 +67,7 @@ internal class TrainerSignUpViewModel @Inject constructor(
                         id = id,
                         name = currentState.name,
                         image = currentState.image.toString(),
+                        memberCounts = TrainerManagementMemberCount.ZERO,
                     ),
                     socialId = id,
                     socialType = authType,

@@ -2,6 +2,7 @@ package co.kr.tnt.trainer.connect
 
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.trainer.TrainerManagementMemberCount
 import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectPage
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectSideEffect
@@ -44,6 +45,7 @@ internal class TrainerConnectViewModel @Inject constructor(
                             id = "",
                             name = result.trainerName,
                             image = result.trainerImage,
+                            memberCounts = TrainerManagementMemberCount.ZERO,
                         ),
                         traineeState = User.Trainee(
                             id = "",

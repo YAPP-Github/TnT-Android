@@ -1,7 +1,6 @@
 package co.kr.tnt.trainer.mypage
 
 import co.kr.tnt.domain.model.User
-import co.kr.tnt.domain.model.trainer.TrainerManagementMemberCount
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -11,7 +10,6 @@ internal class TrainerMyPageContract {
         val user: User.Trainer = User.Trainer.EMPTY,
         val isEnablePushNotification: Boolean = true,
         val dialogState: DialogState = DialogState.NONE,
-        val managementMemberCount: TrainerManagementMemberCount = TrainerManagementMemberCount.ZERO,
     ) : UiState {
         enum class DialogState {
             NONE,

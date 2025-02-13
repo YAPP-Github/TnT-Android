@@ -2,6 +2,7 @@ package co.kr.data.network.model
 
 import co.kr.data.network.model.enum.MemberType
 import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.trainer.TrainerManagementMemberCount
 import co.kr.tnt.domain.utils.DateFormatter
 import kotlinx.serialization.Serializable
 
@@ -20,7 +21,6 @@ data class UserResponse(
 data class TrainerResponse(
     val activeTraineeCount: Int?,
     val totalTraineeCount: Int?,
-    val invitationCode: String?,
 )
 
 @Serializable
@@ -39,6 +39,10 @@ fun UserResponse.toDomain(dateFormatter: DateFormatter): User {
             id = "TODO",
             name = name,
             image = profileImageUrl,
+            memberCounts = TrainerManagementMemberCount(
+                activeCount = trainer?.activeTraineeCount ?: 0,
+                totalCount = trainer?.totalTraineeCount ?: 0,
+            ),
         )
 
         MemberType.TRAINEE -> User.Trainee(
