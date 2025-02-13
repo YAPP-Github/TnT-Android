@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 internal class TraineeMealRecordDetailContract {
     data class TraineeMealRecordDetailUiState(
         val id: Long = 0,
-        val image: String? = "",
+        val image: String? = null,
         val date: LocalDateTime = LocalDateTime.now(),
         val mealType: String = "",
         val memo: String = "",

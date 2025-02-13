@@ -20,7 +20,7 @@ internal class TraineeMealRecordDetailViewModel @Inject constructor(
         override suspend fun handleEvent(event: TraineeMealRecordDetailUiEvent) {
             when (event) {
                 is TraineeMealRecordDetailUiEvent.LoadRecordDetail -> fetchRecordDetail(event.id)
-                TraineeMealRecordDetailUiEvent.OnClickMore -> TODO()
+                TraineeMealRecordDetailUiEvent.OnClickMore -> { }
             }
         }
 
