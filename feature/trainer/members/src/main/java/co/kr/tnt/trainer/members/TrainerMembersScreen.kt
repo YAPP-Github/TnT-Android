@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.members
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -61,28 +62,23 @@ private fun TrainerMembersScreen(
             .fillMaxSize()
             .padding(padding),
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            item {
-                TnTCountTopBar(
-                    title = "내 회원",
-                    count = state.memberList.size,
-                    trailingComponent = {
-                        MemberInviteButton(onClickInviteButton)
-                    },
-                )
-            }
-            if (state.memberList.isNotEmpty()) {
-                items(state.memberList) { member ->
-                    MemberList(member)
+        Column(modifier = Modifier.fillMaxSize()) {
+            TnTCountTopBar(
+                title = "내 회원",
+                count = state.memberList.size,
+                trailingComponent = {
+                    MemberInviteButton(onClickInviteButton)
+                },
+            )
+            if (state.memberList.isEmpty()) {
+                EmptyMemberList()
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(state.memberList) { member ->
+                        MemberList(member)
+                    }
                 }
             }
-        }
-        if (state.memberList.isEmpty()) {
-            EmptyMemberList(
-                modifier = Modifier.align(Alignment.Center),
-            )
         }
     }
 }
@@ -119,7 +115,8 @@ private fun MemberInviteButton(
 @Composable
 private fun EmptyMemberList(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
