@@ -76,7 +76,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
                 ),
                 records = listOf(
                     RecordResponse(
-                        recordId = "VDF1D907",
+                        recordId = 0L,
                         recordType = "BREAKFAST",
                         recordTime = "2025-02-03T08:00:00",
                         recordImage = "https://buly.kr/BpESNP5",
@@ -84,7 +84,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
                         feedbackCount = 1,
                     ),
                     RecordResponse(
-                        recordId = "VDF1D907",
+                        recordId = 0L,
                         recordType = "LUNCH",
                         recordTime = "2025-02-03T13:00:00",
                         recordImage = "https://buly.kr/BpESNP5",
@@ -98,7 +98,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
                 lessons = null,
                 records = listOf(
                     RecordResponse(
-                        recordId = "VDF1D907",
+                        recordId = 0L,
                         recordType = "BREAKFAST",
                         recordTime = "2025-02-08T13:00:00",
                         recordImage = "https://buly.kr/BpESNP5",
@@ -106,7 +106,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
                         feedbackCount = 1,
                     ),
                     RecordResponse(
-                        recordId = "VDF1D907",
+                        recordId = 0L,
                         recordType = "SNACK",
                         recordTime = "2025-02-08T15:00:00",
                         recordImage = "https://buly.kr/BpESNP5",
@@ -114,7 +114,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
                         feedbackCount = 0,
                     ),
                     RecordResponse(
-                        recordId = "VDF1D907",
+                        recordId = 0L,
                         recordType = "DINNER",
                         recordTime = "2025-02-08T18:40:00",
                         recordImage = null,
@@ -136,7 +136,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
                 ),
                 records = listOf(
                     RecordResponse(
-                        recordId = "VDF1D907",
+                        recordId = 0L,
                         recordType = "LUNCH",
                         recordTime = "2025-02-15T13:00:00",
                         recordImage = null,
@@ -144,7 +144,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
                         feedbackCount = 1,
                     ),
                     RecordResponse(
-                        recordId = "VDF1D907",
+                        recordId = 0L,
                         recordType = "DINNER",
                         recordTime = "2025-02-03T20:00:00",
                         recordImage = "https://buly.kr/BpESNP5",
