@@ -65,13 +65,20 @@ private fun TrainerNotificationScreen(
     onLinkNotificationClick: () -> Unit,
 ) {
     Scaffold(
-        containerColor = TnTTheme.colors.commonColors.Common0,
-    ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
+        topBar = {
             TnTTopBarWithBackButton(
                 title = stringResource(uiResource.string.notification),
                 onBackClick = onBackClick,
+                showStoke = true,
             )
+        },
+        containerColor = TnTTheme.colors.commonColors.Common0,
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+        ) {
             if (state.notifications.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),

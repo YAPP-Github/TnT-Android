@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -191,6 +190,14 @@ private fun AddPtSessionScreen(
     val dateFormatter = remember { DateFormatter() }
 
     Scaffold(
+        topBar = {
+            TnTTopBarWithBackButton(
+                modifier = Modifier.fillMaxWidth(),
+                title = "수업 추가하기",
+                onBackClick = onClickBack,
+                showStoke = true,
+            )
+        },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(
@@ -205,12 +212,6 @@ private fun AddPtSessionScreen(
                     .imePadding()
                     .verticalScroll(state = rememberScrollState()),
             ) {
-                TnTTopBarWithBackButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = "수업 추가하기",
-                    windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
-                    onBackClick = onClickBack,
-                )
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()

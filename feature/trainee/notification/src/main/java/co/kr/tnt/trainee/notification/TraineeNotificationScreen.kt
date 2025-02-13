@@ -56,13 +56,16 @@ private fun TraineeNotificationScreen(
     onBackClick: () -> Unit,
 ) {
     Scaffold(
-        containerColor = TnTTheme.colors.commonColors.Common0,
-    ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
+        topBar = {
             TnTTopBarWithBackButton(
                 title = stringResource(uiResource.string.notification),
                 onBackClick = onBackClick,
+                showStoke = true,
             )
+        },
+        containerColor = TnTTheme.colors.commonColors.Common0,
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
             if (state.notifications.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
