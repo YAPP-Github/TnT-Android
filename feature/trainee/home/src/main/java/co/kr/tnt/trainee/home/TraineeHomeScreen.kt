@@ -246,9 +246,11 @@ private fun TraineeHomeScreen(
                         context = context,
                         modifier = Modifier
                             .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                            .clickable {
+                            .let {
                                 if (record.recordType is RecordType.MealType) {
-                                    onClickMealCard(record.recordId)
+                                    it.clickable { onClickMealCard(record.recordId) }
+                                } else {
+                                    it
                                 }
                             },
                     )
