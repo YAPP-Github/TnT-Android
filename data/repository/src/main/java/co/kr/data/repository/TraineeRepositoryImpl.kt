@@ -1,10 +1,7 @@
 package co.kr.data.repository
 
 import co.kr.data.network.model.toDomain
-import co.kr.data.network.model.trainee.DailyRecordsResponse
-import co.kr.data.network.model.trainee.DietRecordResponse
 import co.kr.data.network.model.trainee.MealRecordRequest
-import co.kr.data.network.model.trainee.PtSessionResponse
 import co.kr.data.network.model.trainee.toDomain
 import co.kr.data.network.source.TraineeRemoteDataSource
 import co.kr.data.network.source.UserRemoteDataSource
@@ -47,98 +44,11 @@ internal class TraineeRepositoryImpl @Inject constructor(
         return response.toDomain(dateFormatter)
     }
 
-    override suspend fun getTraineeDailyRecord(day: LocalDate): TraineeDailyRecord {
-        val result = listOf(
-            DailyRecordsResponse(
-                date = "2025-02-03",
-                ptInfo = PtSessionResponse(
-                    trainerName = "김헬스",
-                    trainerProfileImage = "https://buly.kr/44x6xFN",
-                    session = 12,
-                    lessonStart = "2025-02-03T08:00:00",
-                    lessonEnd = "2025-02-03T09:00:00",
-                ),
-                diets = listOf(
-                    DietRecordResponse(
-                        dietId = 1001L,
-                        date = "2025-02-03T08:00:00",
-                        dietImageUrl = "https://buly.kr/BpESNP5",
-                        dietType = "BREAKFAST",
-                        memo = "아침으로 계란 2개 먹었습니다.",
-                    ),
-                    DietRecordResponse(
-                        dietId = 1002L,
-                        date = "2025-02-03T13:00:00",
-                        dietImageUrl = "https://buly.kr/BpESNP5",
-                        dietType = "LUNCH",
-                        memo = "점심으로 계란 5개 먹었습니다.",
-                    ),
-                ),
-            ),
-            DailyRecordsResponse(
-                date = "2025-02-08",
-                ptInfo = null,
-                diets = listOf(
-                    DietRecordResponse(
-                        dietId = 2001L,
-                        date = "2025-02-08T13:00:00",
-                        dietImageUrl = "https://buly.kr/BpESNP5",
-                        dietType = "BREAKFAST",
-                        memo = "계란 2개 먹었습니다.",
-                    ),
-                    DietRecordResponse(
-                        dietId = 2002L,
-                        date = "2025-02-08T15:00:00",
-                        dietImageUrl = "https://buly.kr/BpESNP5",
-                        dietType = "SNACK",
-                        memo = "계란 반개 먹었습니다.",
-                    ),
-                    DietRecordResponse(
-                        dietId = 2003L,
-                        date = "2025-02-08T18:40:00",
-                        dietImageUrl = null,
-                        dietType = "DINNER",
-                        memo = "저녁으로 소고기 먹었습니다.",
-                    ),
-                ),
-            ),
-            DailyRecordsResponse(
-                date = "2025-02-15",
-                ptInfo = PtSessionResponse(
-                    trainerName = "이강사",
-                    trainerProfileImage = null,
-                    session = 15,
-                    lessonStart = "2025-02-15T18:00:00",
-                    lessonEnd = "2025-02-15T19:00:00",
-                ),
-                diets = listOf(
-                    DietRecordResponse(
-                        dietId = 3001L,
-                        date = "2025-02-15T13:00:00",
-                        dietImageUrl = null,
-                        dietType = "LUNCH",
-                        memo = "비빔밥, 바나나 1개",
-                    ),
-                    DietRecordResponse(
-                        dietId = 3002L,
-                        date = "2025-02-15T20:00:00",
-                        dietImageUrl = "https://buly.kr/BpESNP5",
-                        dietType = "DINNER",
-                        memo = "계란 5개 먹었습니다.",
-                    ),
-                ),
-            ),
-        ).map { response ->
-            response.toDomain(dateFormatter)
-        }.firstOrNull { it.date == day }
+    override suspend fun getDailyRecord(date: LocalDate): TraineeDailyRecord {
+        val selectedDate = dateFormatter.format(date, "yyyy-MM-dd")
+        val response = traineeRemoteDataSource.getDailyRecord(selectedDate)
 
-        val noData = TraineeDailyRecord(
-            date = day,
-            ptSession = null,
-            record = emptyList(),
-        )
-
-        return result ?: noData
+        return response.toDomain(dateFormatter)
     }
 
     override suspend fun postMealRecord(

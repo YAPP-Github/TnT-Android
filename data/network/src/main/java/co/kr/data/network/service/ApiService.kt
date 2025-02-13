@@ -10,6 +10,7 @@ import co.kr.data.network.model.LoginResponse
 import co.kr.data.network.model.SignUpResponse
 import co.kr.data.network.model.UserResponse
 import co.kr.data.network.model.VerifyCodeResponse
+import co.kr.data.network.model.trainee.DailyRecordsResponse
 import co.kr.data.network.model.trainee.WeeklyRecordedDatesResponse
 import co.kr.data.network.model.trainer.ActiveTraineesResponse
 import co.kr.data.network.model.trainer.DailyPtSessionsResponse
@@ -111,4 +112,9 @@ interface ApiService {
         @Query("startDate") startDate: String,
         @Query("endDate") endDate: String,
     ): WeeklyRecordedDatesResponse
+
+    @GET("/trainees/calendar/{date}")
+    suspend fun getDailyRecord(
+        @Path("date") date: String,
+    ): DailyRecordsResponse
 }

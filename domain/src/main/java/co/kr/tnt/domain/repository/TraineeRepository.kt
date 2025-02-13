@@ -9,7 +9,6 @@ import java.time.LocalDateTime
 
 interface TraineeRepository {
     suspend fun getMyInfo(): User.Trainee
-    suspend fun getTraineeDailyRecord(day: LocalDate): TraineeDailyRecord
     suspend fun postMealRecord(
         mealImage: File?,
         date: LocalDateTime,
@@ -20,4 +19,5 @@ interface TraineeRepository {
         startDate: String,
         endDate: String,
     ): TraineeDailyRecordStatus
+    suspend fun getDailyRecord(date: LocalDate): TraineeDailyRecord
 }

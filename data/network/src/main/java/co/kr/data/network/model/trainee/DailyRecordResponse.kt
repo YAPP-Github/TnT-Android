@@ -8,21 +8,22 @@ import co.kr.tnt.domain.model.trainee.TraineeDailyRecord
 import co.kr.tnt.domain.model.trainee.TraineePtSession
 import co.kr.tnt.domain.utils.DateFormatter
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 @Serializable
 data class DailyRecordsResponse(
     val date: String,
     val ptInfo: PtSessionResponse?,
-    val diets: List<DietRecordResponse>,
+    val diets: List<DietRecordResponse>?,
 )
 
 @Serializable
 data class PtSessionResponse(
-    val trainerName: String,
+    val trainerName: String?,
     val trainerProfileImage: String?,
-    val session: Int,
-    val lessonStart: String,
-    val lessonEnd: String,
+    val session: Int?,
+    val lessonStart: String?,
+    val lessonEnd: String?,
 )
 
 @Serializable
@@ -37,18 +38,22 @@ data class DietRecordResponse(
 fun DailyRecordsResponse.toDomain(dateFormatter: DateFormatter) =
     TraineeDailyRecord(
         date = dateFormatter.parse(date),
-        ptSession = ptInfo?.toDomain(dateFormatter),
-        record = diets.map { it.toDomain(dateFormatter) },
+        ptSession = ptInfo?.takeIf { it.hasValidData() }?.toDomain(dateFormatter),
+        record = diets?.map { it.toDomain(dateFormatter) } ?: emptyList(),
     )
+
+fun PtSessionResponse.hasValidData(): Boolean {
+    return session != null || lessonStart != null || lessonEnd != null
+}
 
 fun PtSessionResponse.toDomain(dateFormatter: DateFormatter) = TraineePtSession(
     // TODO : pt 수업 id
     ptSessionId = 0L,
-    trainerName = trainerName,
+    trainerName = trainerName ?: "",
     trainerImage = trainerProfileImage,
-    session = session,
-    startTime = dateFormatter.parseDateTime(lessonStart),
-    endTime = dateFormatter.parseDateTime(lessonEnd),
+    session = session ?: 0,
+    startTime = lessonStart?.let { dateFormatter.parseDateTime(it) } ?: LocalDateTime.MIN,
+    endTime = lessonEnd?.let { dateFormatter.parseDateTime(it) } ?: LocalDateTime.MIN,
     // TODO : 수업 기록 존재 여부 반영
     hasRecord = false,
 )

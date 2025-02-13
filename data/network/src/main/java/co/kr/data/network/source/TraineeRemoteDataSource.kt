@@ -24,4 +24,10 @@ class TraineeRemoteDataSource @Inject constructor(
     ) = networkHandler {
         apiService.getWeeklyRecordedDates(startDate, endDate)
     }
+
+    suspend fun getDailyRecord(
+        date: String,
+    ) = networkHandler {
+        apiService.getDailyRecord(date)
+    }
 }
