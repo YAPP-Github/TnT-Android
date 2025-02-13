@@ -25,13 +25,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -53,8 +50,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
+import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
-import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTSelectableTextField
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
@@ -86,7 +84,6 @@ import java.time.LocalTime
 import java.time.YearMonth
 import co.kr.tnt.core.ui.R as coreR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TraineeMealRecordRoute(
     navigateToPrevious: () -> Unit,
@@ -97,14 +94,7 @@ internal fun TraineeMealRecordRoute(
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
-
-    LaunchedEffect(sheetState.currentValue) {
-        if (sheetState.currentValue == SheetValue.Hidden) {
-            viewModel.setEvent(TraineeMealRecordUiEvent.OnClickCloseBottomSheet)
-        }
-    }
 
     TraineeMealRecordScreen(
         state = state,
@@ -134,8 +124,7 @@ internal fun TraineeMealRecordRoute(
     )
 
     if (showBottomSheet) {
-        TnTModalBottomSheet(
-            sheetState = sheetState,
+        TnTBottomSheetDialog(
             onDismissRequest = {
                 viewModel.setEvent(TraineeMealRecordUiEvent.OnClickCloseBottomSheet)
                 showBottomSheet = false
@@ -515,11 +504,12 @@ private fun CalendarBottomSheetContent(
 
     Column(
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.wrapContentSize(),
     ) {
         Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(20.dp),
         ) {
             Text(
                 text = "식단 날짜 선택하기",
@@ -533,6 +523,7 @@ private fun CalendarBottomSheetContent(
                 modifier = Modifier.clickable(onClick = onClickClose),
             )
         }
+        TnTDivider()
         CalenderItem(
             selectedDay = selectedDate,
             onClickDay = { newDate -> selectedDate = newDate },
@@ -566,9 +557,9 @@ private fun CalenderItem(
     val visibleMonth = rememberMostVisibleMonth(calendarState)
 
     Column(
+        modifier = Modifier.height(446.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.height(446.dp),
     ) {
         TnTCalendarSelector(
             yearMonth = visibleMonth,
@@ -623,6 +614,7 @@ private fun TimePickerBottomSheetContent(
                 modifier = Modifier.clickable(onClick = onClickClose),
             )
         }
+        TnTDivider()
         Spacer(Modifier.height(24.dp))
         TnTWheelTimePicker(
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp),

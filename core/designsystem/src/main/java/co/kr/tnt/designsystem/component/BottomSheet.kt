@@ -57,7 +57,7 @@ fun TnTBottomSheetDialog(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val context = LocalContext.current
-    val maxHeight = remember { (context.resources.displayMetrics.heightPixels * 0.8).toInt() }
+    val maxHeight = remember { (context.resources.displayMetrics.heightPixels * 0.85).toInt() }
 
     BottomSheetDialog(
         properties = BottomSheetDialogProperties(
