@@ -11,6 +11,7 @@ internal class TrainerInviteContract {
 
     sealed interface TrainerInviteUiEvent : UiEvent {
         data object OnRegenerateClick : TrainerInviteUiEvent
+        data class OnCodeClick(val code: String) : TrainerInviteUiEvent
         data object OnBackClick : TrainerInviteUiEvent
         data object OnSkipClick : TrainerInviteUiEvent
     }
@@ -19,5 +20,6 @@ internal class TrainerInviteContract {
         data object NavigateToBack : TrainerInviteSideEffect
         data object NavigateToHome : TrainerInviteSideEffect
         data class ShowToast(val message: String) : TrainerInviteSideEffect
+        data class CopyToClipBoard(val value: String) : TrainerInviteSideEffect
     }
 }

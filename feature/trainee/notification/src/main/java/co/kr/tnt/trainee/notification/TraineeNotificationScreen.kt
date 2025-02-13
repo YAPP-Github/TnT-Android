@@ -1,6 +1,5 @@
 package co.kr.tnt.trainee.notification
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.notification.TnTNotification
 import co.kr.tnt.designsystem.component.notification.model.NotificationIcon
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiEvent
 import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiState
@@ -32,7 +31,7 @@ internal fun TraineeNotificationRoute(
     navigateToPrevious: () -> Unit,
     viewModel: TraineeNotificationViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TraineeNotificationScreen(
@@ -44,9 +43,7 @@ internal fun TraineeNotificationRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TraineeNotificationContract.TraineeNotificationEffect.NavigateToPrevious -> navigateToPrevious()
-                is TraineeNotificationContract.TraineeNotificationEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
+                is TraineeNotificationContract.TraineeNotificationEffect.ShowToast -> snackbar.show(effect.message)
             }
         }
     }

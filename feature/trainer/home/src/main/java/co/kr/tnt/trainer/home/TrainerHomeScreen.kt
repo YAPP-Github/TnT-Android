@@ -1,6 +1,5 @@
 package co.kr.tnt.trainer.home
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +42,7 @@ import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.component.card.TnTSessionRecordCard
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.PtSession
 import co.kr.tnt.domain.utils.DateFormatter
@@ -65,7 +65,7 @@ internal fun TrainerHomeRoute(
     navigateToNotification: () -> Unit,
     navigateToAddPtSession: () -> Unit,
 ) {
-    val context = LocalContext.current
+    val toast = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerHomeScreen(
@@ -81,7 +81,7 @@ internal fun TrainerHomeRoute(
             when (effect) {
                 TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
                 TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession()
-                is TrainerHomeSideEffect.ShowToast -> Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                is TrainerHomeSideEffect.ShowToast -> toast.show(effect.message)
             }
         }
     }

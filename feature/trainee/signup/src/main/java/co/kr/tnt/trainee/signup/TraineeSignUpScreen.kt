@@ -1,13 +1,13 @@
 package co.kr.tnt.trainee.signup
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpEffect
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpPage
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiEvent
@@ -24,6 +24,7 @@ internal fun TraineeSignUpRoute(
     viewModel: TraineeSignUpViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TraineeSignUpScreen(
@@ -55,9 +56,7 @@ internal fun TraineeSignUpRoute(
             when (effect) {
                 TraineeSignUpEffect.NavigateToBack -> navigateToPrevious()
                 TraineeSignUpEffect.NavigateToConnect -> navigateToConnect()
-                is TraineeSignUpEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
+                is TraineeSignUpEffect.ShowToast -> snackbar.show(effect.message)
             }
         }
     }
