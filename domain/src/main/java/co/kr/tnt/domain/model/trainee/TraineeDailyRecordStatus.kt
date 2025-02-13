@@ -3,5 +3,5 @@ package co.kr.tnt.domain.model.trainee
 import java.time.LocalDate
 
 data class TraineeDailyRecordStatus(
-    val date: LocalDate,
+    val dates: List<LocalDate>,
 )
