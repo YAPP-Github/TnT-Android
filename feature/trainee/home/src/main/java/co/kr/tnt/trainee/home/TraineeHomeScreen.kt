@@ -244,7 +244,13 @@ private fun TraineeHomeScreen(
                         record = record,
                         dateFormatter = dateFormatter,
                         context = context,
-                        modifier = Modifier.clickable { onClickMealCard(record.recordId) },
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                            .clickable {
+                                if (record.recordType is RecordType.MealType) {
+                                    onClickMealCard(record.recordId)
+                                }
+                            },
                     )
                 }
             }
@@ -374,9 +380,7 @@ private fun DailyRecords(
         record = record.recordContents,
         tagText = chip.title,
         time = dateFormatter.format(record.recordTime, "a hh:mm"),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+        modifier = modifier.fillMaxWidth(),
         image = record.recordImage?.let { painter },
         leadingEmoji = chip.emoji,
         showFeedback = record.hasFeedback,
