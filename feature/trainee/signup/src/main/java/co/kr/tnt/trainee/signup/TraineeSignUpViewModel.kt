@@ -48,6 +48,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
         }
     }
 
+    // FIXME context 사용하지 않도록 개선
     private fun signUp(
         context: Context,
         imageUri: Uri?,

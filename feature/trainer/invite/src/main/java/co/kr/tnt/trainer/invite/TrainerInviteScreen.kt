@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Build
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -35,6 +34,7 @@ import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainer.invite.R
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteSideEffect
@@ -50,6 +50,8 @@ internal fun TrainerInviteRoute(
     viewModel: TrainerInviteViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
+
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerInviteScreen(
@@ -66,10 +68,7 @@ internal fun TrainerInviteRoute(
             when (effect) {
                 TrainerInviteSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerInviteSideEffect.NavigateToHome -> navigateToHome(true)
-                is TrainerInviteSideEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
-
+                is TrainerInviteSideEffect.ShowToast -> snackbar.show(effect.message)
                 is TrainerInviteSideEffect.CopyToClipBoard -> copyToClipboard(context, effect.value)
             }
         }

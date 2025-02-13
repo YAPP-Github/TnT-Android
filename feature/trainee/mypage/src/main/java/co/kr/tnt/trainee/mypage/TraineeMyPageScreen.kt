@@ -1,7 +1,6 @@
 package co.kr.tnt.trainee.mypage
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +30,7 @@ import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTSwitch
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.feature.trainee.mypage.R
@@ -61,6 +61,8 @@ internal fun TraineeMyPageRoute(
     viewModel: TraineeMyPageViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val permissionState = rememberMultiplePermissionsState(TnTPermission.NOTIFICATION.values)
 
@@ -94,10 +96,7 @@ internal fun TraineeMyPageRoute(
             when (effect) {
                 TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(false)
                 TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
-                is TraineeMyPageEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
-
+                is TraineeMyPageEffect.ShowToast -> snackbar.show(effect.message)
                 is TraineeMyPageEffect.NavigateToWebView -> navigateToWebView(effect.url)
                 is TraineeMyPageEffect.RequestPermission -> {
                     if (effect.isExplicitlyDenied) {
