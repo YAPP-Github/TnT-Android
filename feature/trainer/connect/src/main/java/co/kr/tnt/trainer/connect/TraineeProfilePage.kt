@@ -104,32 +104,33 @@ internal fun TraineeProfilePage(
                         )
                     }
                     Spacer(Modifier.height(32.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        if (trainee.age.toString() != "null") {
-                            TextWithLabel(
-                                label = stringResource(uiResource.string.age_label),
-                                text = trainee.age.toString() + stringResource(uiResource.string.age_unit),
-                            )
-                            Spacer(Modifier.weight(1f))
+                    val traineeInfo = listOfNotNull(
+                        trainee.age?.let {
+                            stringResource(uiResource.string.age_label) to
+                                it.toString() + stringResource(uiResource.string.age_unit)
+                        },
+                        trainee.height?.let {
+                            stringResource(uiResource.string.height_label) to
+                                it.toString() + stringResource(uiResource.string.height_unit)
+                        },
+                        trainee.weight?.let {
+                            stringResource(uiResource.string.weight_label) to
+                                it.toString().removeSuffix(".0") + stringResource(uiResource.string.weight_unit)
+                        },
+                    )
+
+                    if (traineeInfo.isNotEmpty()) {
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            traineeInfo.forEachIndexed { index, (label, text) ->
+                                TextWithLabel(label = label, text = text)
+                                Spacer(Modifier.weight(1f))
+                            }
                         }
-                        TextWithLabel(
-                            label = stringResource(uiResource.string.height_label),
-                            text = trainee.height.toString() + stringResource(uiResource.string.height_unit),
-                        )
-                        Spacer(Modifier.weight(1f))
-                        val formattedWeight = trainee.weight.toString().removeSuffix(".0")
-                        TextWithLabel(
-                            label = stringResource(uiResource.string.weight_label),
-                            text = formattedWeight + stringResource(uiResource.string.weight_unit),
-                        )
-                        if (trainee.age.toString() == "null") {
-                            Spacer(Modifier.weight(1f))
-                        }
+                        Spacer(Modifier.height(32.dp))
                     }
-                    Spacer(Modifier.height(32.dp))
                     TextWithBackground(
                         label = stringResource(R.string.purpose_of_pt),
                         text = trainee.ptPurpose.joinToString(", "),
@@ -213,7 +214,7 @@ private fun TraineeProfilePagePreview() {
                     name = "김회원",
                     image = null,
                     birthday = LocalDate.now().minusYears(19),
-                    weight = 55.0,
+                    weight = null,
                     height = 150,
                     ptPurpose = listOf("체중 감량", "자세 교정"),
                     caution = "손목이 안 좋습니다.",
