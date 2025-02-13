@@ -85,7 +85,7 @@ internal class TraineeHomeViewModel @Inject constructor(
 
     private fun selectDate(date: LocalDate) {
         viewModelScope.launch {
-            kotlin.runCatching {
+            runCatching {
                 traineeRepository.getDailyRecord(date)
             }.onSuccess { result ->
                 updateState {
