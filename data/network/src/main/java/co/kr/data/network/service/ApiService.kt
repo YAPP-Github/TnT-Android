@@ -99,6 +99,11 @@ interface ApiService {
         @Body request: PtSessionRequest,
     )
 
+    @PUT("/trainers/lessons/{ptSessionId}/complete")
+    suspend fun putCompletePtSession(
+        @Path("ptSessionId") ptSessionId: String,
+    )
+
     // Trainee
     @Multipart
     @POST("/trainees/diets")

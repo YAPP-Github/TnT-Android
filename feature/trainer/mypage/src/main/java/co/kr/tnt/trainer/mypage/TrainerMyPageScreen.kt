@@ -164,12 +164,12 @@ private fun TrainerMyPageScreen(
         ) {
             ManagementMemberCount(
                 title = "관리 중인 회원",
-                count = state.managementMemberCount.activeCount,
+                count = state.user.memberCounts.activeCount,
             )
             Spacer(modifier = Modifier.width(8.dp))
             ManagementMemberCount(
                 title = "함께 했던 회원",
-                count = state.managementMemberCount.cumulativeCount,
+                count = state.user.memberCounts.totalCount,
             )
         }
         Spacer(Modifier.height(16.dp))
@@ -362,12 +362,12 @@ private fun TrainerMyPageScreenPreview() {
                     id = "1",
                     name = "김헬짱",
                     image = null,
+                    memberCounts = TrainerManagementMemberCount(
+                        activeCount = 23,
+                        totalCount = 26,
+                    ),
                 ),
                 isEnablePushNotification = false,
-                managementMemberCount = TrainerManagementMemberCount(
-                    activeCount = 23,
-                    cumulativeCount = 26,
-                ),
             ),
             appVersion = "1.0.0",
             onTogglePushNotification = { },

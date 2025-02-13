@@ -62,4 +62,7 @@ internal class TrainerRepositoryImpl @Inject constructor(
             ),
         )
     }
+
+    override suspend fun postCompleteSession(ptSessionId: String) =
+        trainerRemoteDataSource.putCompletePtSession(ptSessionId)
 }

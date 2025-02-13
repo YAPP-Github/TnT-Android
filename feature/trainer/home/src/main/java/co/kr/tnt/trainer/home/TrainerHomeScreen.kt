@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.home
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -74,6 +75,7 @@ internal fun TrainerHomeRoute(
         onChangeVisibleMonth = { viewModel.setEvent(TrainerHomeUiEvent.OnChangeVisibleMonth(it)) },
         onClickDay = { viewModel.setEvent(TrainerHomeUiEvent.OnClickDay(it)) },
         onClickAddPtSession = { viewModel.setEvent(TrainerHomeUiEvent.OnClickAddPtSession) },
+        onClickPtSessionComplete = { viewModel.setEvent(TrainerHomeUiEvent.OnClickPtSessionComplete(it)) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -97,6 +99,7 @@ private fun TrainerHomeScreen(
     onChangeVisibleMonth: (yearMonth: YearMonth) -> Unit,
     onClickDay: (date: LocalDate) -> Unit,
     onClickAddPtSession: () -> Unit,
+    onClickPtSessionComplete: (PtSession) -> Unit,
 ) {
     val now = remember { YearMonth.now() }
     val calendarState = rememberCalendarState(
@@ -165,6 +168,7 @@ private fun TrainerHomeScreen(
                     PtSessionCard(
                         ptSession = selectDayPtSessions[index],
                         dateFormatter = dateFormatter,
+                        onClickComplete = onClickPtSessionComplete,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -289,6 +293,7 @@ private fun PtSessionCard(
     ptSession: PtSession,
     dateFormatter: DateFormatter,
     modifier: Modifier = Modifier,
+    onClickComplete: (PtSession) -> Unit,
 ) {
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -299,13 +304,21 @@ private fun PtSessionCard(
     )
 
     Row(
-        modifier = modifier.padding(horizontal = 20.dp),
+        modifier = modifier
+            .padding(horizontal = 20.dp)
+            .animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
-                .clickable(onClick = { })
+                .then(
+                    if (ptSession.isCompleted.not()) {
+                        Modifier.clickable { onClickComplete(ptSession) }
+                    } else {
+                        Modifier
+                    },
+                )
                 .padding(4.dp),
             painter = painterResource(
                 if (ptSession.isCompleted) {
@@ -346,6 +359,7 @@ private fun TrainerHomeScreenPreview() {
             onChangeVisibleMonth = { },
             onClickDay = { },
             onClickAddPtSession = { },
+            onClickPtSessionComplete = { },
         )
     }
 }

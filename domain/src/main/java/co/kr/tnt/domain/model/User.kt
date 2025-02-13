@@ -1,5 +1,6 @@
 package co.kr.tnt.domain.model
 
+import co.kr.tnt.domain.model.trainer.TrainerManagementMemberCount
 import java.time.LocalDate
 
 sealed class User {
@@ -7,16 +8,19 @@ sealed class User {
     abstract val name: String
     abstract val image: String?
 
+    // TODO [membersCount] 가 이 도메인 모델에 위치해 있는게 어색함.
     data class Trainer(
         override val id: String,
         override val name: String,
         override val image: String?,
+        val memberCounts: TrainerManagementMemberCount,
     ) : User() {
         companion object {
             val EMPTY = Trainer(
                 id = "",
                 name = "",
                 image = null,
+                memberCounts = TrainerManagementMemberCount.ZERO,
             )
         }
     }
