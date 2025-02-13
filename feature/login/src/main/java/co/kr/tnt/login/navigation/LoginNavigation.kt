@@ -24,11 +24,13 @@ fun NavController.navigateToLogin(
 )
 
 fun NavGraphBuilder.loginScreen(
+    navigateToWebView: (url: String) -> Unit,
     navigateToHome: (UserType) -> Unit,
     navigateToSignup: (LoginResult) -> Unit,
 ) {
     composable<Route.Login> {
         LoginRoute(
+            navigateToWebView = navigateToWebView,
             navigateToHome = navigateToHome,
             navigateToSignup = navigateToSignup,
         )
