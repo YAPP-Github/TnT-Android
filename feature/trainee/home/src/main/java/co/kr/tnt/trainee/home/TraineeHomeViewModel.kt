@@ -1,6 +1,5 @@
 package co.kr.tnt.trainee.home
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
 import co.kr.tnt.domain.repository.TraineeRepository
@@ -43,12 +42,8 @@ internal class TraineeHomeViewModel @Inject constructor(
             }
             return
         }
-        Log.d("debugging", "달력 데이터 요청: $visibleYearMonth")
-
         val startDate = visibleYearMonth.minusMonths(1).atDay(20).toString()
         val endDate = visibleYearMonth.plusMonths(1).atDay(7).toString()
-
-        Log.d("debugging", "달력 시작, 끝 날짜 $startDate to $endDate")
 
         viewModelScope.launch {
             runCatching {
