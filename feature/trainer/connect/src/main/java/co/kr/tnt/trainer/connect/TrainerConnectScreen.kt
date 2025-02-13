@@ -1,12 +1,11 @@
 package co.kr.tnt.trainer.connect
 
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectPage
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectSideEffect
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiEvent
@@ -20,7 +19,7 @@ internal fun TrainerConnectRoute(
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerConnectViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(trainerId) {
@@ -38,9 +37,7 @@ internal fun TrainerConnectRoute(
             when (effect) {
                 TrainerConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerConnectSideEffect.NavigateToHome -> navigateToHome(true)
-                is TrainerConnectSideEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
+                is TrainerConnectSideEffect.ShowToast -> snackbar.show(effect.message)
             }
         }
     }

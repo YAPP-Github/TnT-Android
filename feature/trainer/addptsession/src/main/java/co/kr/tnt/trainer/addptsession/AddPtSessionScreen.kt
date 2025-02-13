@@ -1,6 +1,5 @@
 package co.kr.tnt.trainer.addptsession
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,6 +64,7 @@ import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
 import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.MemberInfo
 import co.kr.tnt.domain.utils.DateFormatter
@@ -88,14 +87,12 @@ internal fun AddPtSessionRoute(
     viewModel: AddPtSessionViewModel = hiltViewModel(),
     navigateToPrevious: () -> Unit,
 ) {
-    val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
 
-    BackHandler {
-        viewModel.setEvent(AddPtSessionUiEvent.OnClickBack)
-    }
+    BackHandler { viewModel.setEvent(AddPtSessionUiEvent.OnClickBack) }
 
     AddPtSessionScreen(
         state = state,
@@ -171,10 +168,7 @@ internal fun AddPtSessionRoute(
                     showBottomSheet = false
                 }
 
-                is AddPtSessionSideEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
-
+                is AddPtSessionSideEffect.ShowToast -> snackbar.show(effect.message)
                 AddPtSessionSideEffect.NavigateToPrevious -> navigateToPrevious()
             }
         }

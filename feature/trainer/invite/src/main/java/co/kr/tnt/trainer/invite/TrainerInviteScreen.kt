@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Build
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,9 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,12 +29,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.tnt.designsystem.component.TnTToast
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainer.invite.R
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteSideEffect
@@ -54,12 +50,15 @@ internal fun TrainerInviteRoute(
     viewModel: TrainerInviteViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
+
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerInviteScreen(
         state = state,
         isSkippable = isSkippable,
         onRegenerateClick = { viewModel.setEvent(TrainerInviteUiEvent.OnRegenerateClick) },
+        onCodeClick = { code -> viewModel.setEvent(TrainerInviteUiEvent.OnCodeClick(code)) },
         onBackClick = { viewModel.setEvent(TrainerInviteUiEvent.OnBackClick) },
         onSkipClick = { viewModel.setEvent(TrainerInviteUiEvent.OnSkipClick) },
     )
@@ -69,9 +68,8 @@ internal fun TrainerInviteRoute(
             when (effect) {
                 TrainerInviteSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerInviteSideEffect.NavigateToHome -> navigateToHome(true)
-                is TrainerInviteSideEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
+                is TrainerInviteSideEffect.ShowToast -> snackbar.show(effect.message)
+                is TrainerInviteSideEffect.CopyToClipBoard -> copyToClipboard(context, effect.value)
             }
         }
     }
@@ -81,6 +79,7 @@ internal fun TrainerInviteRoute(
 internal fun TrainerInviteScreen(
     state: TrainerInviteUiState,
     isSkippable: Boolean,
+    onCodeClick: (code: String) -> Unit,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
     onSkipClick: () -> Unit,
@@ -92,9 +91,6 @@ internal fun TrainerInviteScreen(
             onBackClick()
         }
     }
-
-    val context = LocalContext.current
-    var showToast by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -155,10 +151,7 @@ internal fun TrainerInviteScreen(
                                 color = TnTTheme.colors.neutralColors.Neutral600,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .clickable {
-                                        showToast = true
-                                        copyToClipboard(context, state.inviteCode)
-                                    },
+                                    .clickable { onCodeClick(state.inviteCode) },
                             )
                             HorizontalDivider(
                                 thickness = 1.dp,
@@ -183,19 +176,6 @@ internal fun TrainerInviteScreen(
                     }
                 }
             }
-            if (showToast) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.BottomCenter,
-                ) {
-                    TnTToast(
-                        message = stringResource(R.string.code_is_copied),
-                        onDismiss = { showToast = false },
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 50.dp),
-                    )
-                }
-            }
         }
     }
 }
@@ -214,6 +194,7 @@ private fun CodeGenerationPagePreview() {
     TnTTheme {
         TrainerInviteScreen(
             state = TrainerInviteUiState(),
+            onCodeClick = {},
             onBackClick = {},
             onSkipClick = {},
             onRegenerateClick = {},

@@ -1,7 +1,5 @@
 package co.kr.tnt.trainee.home
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +46,7 @@ import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleYearMonth
 import co.kr.tnt.designsystem.component.card.TnTRecordCard
 import co.kr.tnt.designsystem.component.card.TnTSessionRecordCard
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.DailyRecord
@@ -84,6 +83,7 @@ internal fun TraineeHomeRoute(
     navigateToMealDetail: (id: Long) -> Unit,
 ) {
     val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -124,10 +124,6 @@ internal fun TraineeHomeRoute(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is TraineeHomeEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
-
                 TraineeHomeEffect.NavigateToExerciseRecord -> {
                     showBottomSheet = false
                     navigateToExerciseRecord()
@@ -137,6 +133,8 @@ internal fun TraineeHomeRoute(
                     showBottomSheet = false
                     navigateToMealRecord()
                 }
+
+                is TraineeHomeEffect.ShowToast -> snackbar.show(effect.message)
             }
         }
     }

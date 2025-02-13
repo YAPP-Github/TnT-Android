@@ -1,6 +1,5 @@
 package co.kr.tnt.login
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.LoginResult
@@ -65,6 +65,7 @@ internal fun LoginRoute(
     navigateToSignup: (LoginResult) -> Unit,
 ) {
     val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
     val coroutineScope = rememberCoroutineScope()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -120,9 +121,7 @@ internal fun LoginRoute(
                     showBottomSheet = true
                 }
 
-                is LoginSideEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
+                is LoginSideEffect.ShowToast -> snackbar.show(effect.message)
 
                 is LoginSideEffect.NavigateToWebView -> {
                     navigateToWebView(effect.url)
