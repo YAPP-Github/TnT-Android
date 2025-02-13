@@ -2,7 +2,6 @@ package co.kr.tnt.trainee.mealrecord.record
 
 import android.content.Context
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -65,6 +64,7 @@ import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
 import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.RecordType.MealType
@@ -92,6 +92,7 @@ internal fun TraineeMealRecordRoute(
     BackHandler { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickBack) }
 
     val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -172,9 +173,7 @@ internal fun TraineeMealRecordRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TraineeMealRecordContract.TraineeMealRecordSideEffect.NavigateToHome -> navigateToPrevious()
-                is TraineeMealRecordContract.TraineeMealRecordSideEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
+                is TraineeMealRecordContract.TraineeMealRecordSideEffect.ShowToast -> snackbar.show(effect.message)
             }
         }
     }
