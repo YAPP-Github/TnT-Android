@@ -161,11 +161,12 @@ private fun BirthdayPicker(
                 )
                     .apply {
                         // 오늘 이후는 선택 불가능
-                        datePicker.maxDate =
-                            today
-                                .atStartOfDay(ZoneId.systemDefault())
-                                .toInstant()
-                                .toEpochMilli()
+                        val todayMillis = today
+                            .atStartOfDay(ZoneId.systemDefault())
+                            .toInstant()
+                            .toEpochMilli()
+
+                        datePicker.maxDate = todayMillis - 1
                     }
                     .show()
             },
