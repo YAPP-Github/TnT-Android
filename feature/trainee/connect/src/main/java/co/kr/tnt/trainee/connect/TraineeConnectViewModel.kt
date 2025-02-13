@@ -118,7 +118,12 @@ internal class TraineeConnectViewModel @Inject constructor(
         }
 
         private fun handleChangeDialogState() {
-            updateState { copy(showDialog = !showDialog) }
+            if (currentState.inviteCodeInputState == VALID) {
+                updateState { copy(showDialog = !showDialog) }
+            } else {
+                sendEffect(TraineeConnectSideEffect.NavigateToBack)
+                return
+            }
         }
 
         private fun navigateToNext() {
