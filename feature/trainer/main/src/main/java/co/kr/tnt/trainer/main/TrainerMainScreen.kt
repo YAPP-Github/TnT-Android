@@ -49,25 +49,24 @@ private fun TrainerMainScreen(
     val navController = state.navController
 
     Scaffold(
-        containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.fillMaxSize(),
+        containerColor = state.currentMainTab?.containerColor?.invoke() ?: TnTTheme.colors.commonColors.Common0,
         bottomBar = {
-            if (state.shouldShowBottomBar) {
-                TnTBottomBar(
-                    modifier = Modifier.navigationBarsPadding(),
-                    bottomTabs = state.mainTabs,
-                    currentTab = state.currentMainTab,
-                    onClickTab = state::navigateMainTab,
-                )
-            }
+            TnTBottomBar(
+                modifier = Modifier.navigationBarsPadding(),
+                bottomTabs = state.mainTabs,
+                isVisible = state.shouldShowBottomBar,
+                currentTab = state.currentMainTab,
+                onClickTab = state::navigateMainTab,
+            )
         },
     ) { innerPadding ->
         NavHost(
-            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = state.startDestination,
         ) {
             trainerHomeNavGraph(
+                padding = innerPadding,
                 navigateToNotification = navController::navigateToTrainerNotification,
                 navigateToAddPtSession = navController::navigateToAddPtSession,
             ) {
@@ -79,11 +78,13 @@ private fun TrainerMainScreen(
                     navigateToPrevious = navController::popBackStack,
                 )
             }
-            trainerFeedbackNavGraph()
+            trainerFeedbackNavGraph(padding = innerPadding)
             trainerMembersNavGraph(
+                padding = innerPadding,
                 navigateToInvite = navigateToInvite,
             )
             trainerMyPageNavGraph(
+                padding = innerPadding,
                 navigateToLogin = navigateToLogin,
                 navigateToWebView = navigateToWebView,
             )

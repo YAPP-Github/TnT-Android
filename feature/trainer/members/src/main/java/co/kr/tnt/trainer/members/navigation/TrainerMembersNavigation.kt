@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.members.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
@@ -16,12 +17,14 @@ fun NavController.navigateToTrainerMembers(
 )
 
 fun NavGraphBuilder.trainerMembersNavGraph(
+    padding: PaddingValues,
     navigateToInvite: (Boolean) -> Unit,
     membersDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TrainerMainTab.Members>(startDestination = Route.TrainerMembers) {
         composable<Route.TrainerMembers> {
             TrainerMembersRoute(
+                padding = padding,
                 navigateToInvite = navigateToInvite,
             )
         }

@@ -22,6 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -189,84 +190,89 @@ private fun AddPtSessionScreen(
 ) {
     val dateFormatter = remember { DateFormatter() }
 
-    Box(
-        modifier = Modifier
-            .clearFocusOnTap()
-            .fillMaxSize(),
-    ) {
-        Column(
+    Scaffold(
+        containerColor = TnTTheme.colors.commonColors.Common0,
+    ) { innerPadding ->
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .imePadding()
-                .verticalScroll(state = rememberScrollState()),
+                .clearFocusOnTap()
+                .padding(innerPadding)
+                .fillMaxSize(),
         ) {
-            TnTTopBarWithBackButton(
-                modifier = Modifier.fillMaxWidth(),
-                title = "수업 추가하기",
-                windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
-                onBackClick = onClickBack,
-            )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                    .fillMaxSize()
+                    .imePadding()
+                    .verticalScroll(state = rememberScrollState()),
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Description()
-                Spacer(modifier = Modifier.height(48.dp))
-                Selector(
-                    title = "회원 선택",
-                    value = state.selectedMember?.traineeName ?: "",
-                    placeholder = "회원을 입력해주세요",
-                    onClick = onClickMember,
+                TnTTopBarWithBackButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = "수업 추가하기",
+                    windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
+                    onBackClick = onClickBack,
                 )
-                Spacer(modifier = Modifier.height(48.dp))
-                Selector(
-                    title = "PT 날짜",
-                    value = state.selectedDate?.let { selectedDate ->
-                        dateFormatter.format(selectedDate, "yyyy/MM/dd")
-                    } ?: "",
-                    placeholder = "날짜를 입력해주세요",
-                    onClick = onClickDate,
-                )
-                Spacer(modifier = Modifier.height(48.dp))
-                TimeSelector(
-                    startTime = state.selectedStartTime,
-                    endTime = state.selectedEndTime,
-                    dateFormatter = dateFormatter,
-                    onClickStartTime = onClickStartTime,
-                    onClickEndTime = onClickEndTime,
-                    isWarning = state.isErrorTime,
-                )
-                if (state.selectedStartTime != null && state.selectedEndTime == null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Description()
                     Spacer(modifier = Modifier.height(48.dp))
-                    MinuteChips(
-                        selectedMinute = state.totalSessionMinute ?: 0,
-                        onClickChip = onClickMinuteChip,
+                    Selector(
+                        title = "회원 선택",
+                        value = state.selectedMember?.traineeName ?: "",
+                        placeholder = "회원을 입력해주세요",
+                        onClick = onClickMember,
                     )
-                }
-                state.totalSessionMinute?.let { totalSessionMinute ->
-                    Spacer(modifier = Modifier.height(20.dp))
-                    TotalSessionMinute(
-                        minute = totalSessionMinute,
+                    Spacer(modifier = Modifier.height(48.dp))
+                    Selector(
+                        title = "PT 날짜",
+                        value = state.selectedDate?.let { selectedDate ->
+                            dateFormatter.format(selectedDate, "yyyy/MM/dd")
+                        } ?: "",
+                        placeholder = "날짜를 입력해주세요",
+                        onClick = onClickDate,
                     )
+                    Spacer(modifier = Modifier.height(48.dp))
+                    TimeSelector(
+                        startTime = state.selectedStartTime,
+                        endTime = state.selectedEndTime,
+                        dateFormatter = dateFormatter,
+                        onClickStartTime = onClickStartTime,
+                        onClickEndTime = onClickEndTime,
+                        isWarning = state.isErrorTime,
+                    )
+                    if (state.selectedStartTime != null && state.selectedEndTime == null) {
+                        Spacer(modifier = Modifier.height(48.dp))
+                        MinuteChips(
+                            selectedMinute = state.totalSessionMinute ?: 0,
+                            onClickChip = onClickMinuteChip,
+                        )
+                    }
+                    state.totalSessionMinute?.let { totalSessionMinute ->
+                        Spacer(modifier = Modifier.height(20.dp))
+                        TotalSessionMinute(
+                            minute = totalSessionMinute,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(48.dp))
+                    Memo(
+                        value = state.memo,
+                        isWarning = state.isErrorMemo,
+                        onValueChanged = onChangeMemo,
+                    )
+                    Spacer(modifier = Modifier.height(70.dp))
                 }
-                Spacer(modifier = Modifier.height(48.dp))
-                Memo(
-                    value = state.memo,
-                    isWarning = state.isErrorMemo,
-                    onValueChanged = onChangeMemo,
-                )
-                Spacer(modifier = Modifier.height(70.dp))
             }
-        }
 
-        TnTBottomButton(
-            text = "완료",
-            enabled = state.isEnableComplete,
-            modifier = Modifier.align(Alignment.BottomCenter),
-            onClick = onClickComplete,
-        )
+            TnTBottomButton(
+                text = "완료",
+                enabled = state.isEnableComplete,
+                modifier = Modifier.align(Alignment.BottomCenter),
+                onClick = onClickComplete,
+            )
+        }
     }
 }
 

@@ -50,25 +50,24 @@ private fun TraineeMainScreen(
     val navController = state.navController
 
     Scaffold(
-        containerColor = TnTTheme.colors.commonColors.Common0,
+        containerColor = state.currentMainTab?.containerColor?.invoke() ?: TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            if (state.shouldShowBottomBar) {
-                TnTBottomBar(
-                    modifier = Modifier.navigationBarsPadding(),
-                    bottomTabs = state.mainTabs,
-                    currentTab = state.currentMainTab,
-                    onClickTab = state::navigateMainTab,
-                )
-            }
+            TnTBottomBar(
+                modifier = Modifier.navigationBarsPadding(),
+                bottomTabs = state.mainTabs,
+                isVisible = state.shouldShowBottomBar,
+                currentTab = state.currentMainTab,
+                onClickTab = state::navigateMainTab,
+            )
         },
     ) { innerPadding ->
         NavHost(
-            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = state.startDestination,
         ) {
             traineeHomeNavGraph(
+                padding = innerPadding,
                 navigateToNotification = navController::navigateToTraineeNotification,
                 navigateToMealRecord = navigateToMealRecord,
                 navigateToMealDetail = navigateToMealDetail,
@@ -78,6 +77,7 @@ private fun TraineeMainScreen(
                 )
             }
             traineeMyPageNavGraph(
+                padding = innerPadding,
                 navigateToLogin = navigateToLogin,
                 navigateToWebView = navigateToWebView,
                 navigateToTraineeConnect = navigateToConnect,

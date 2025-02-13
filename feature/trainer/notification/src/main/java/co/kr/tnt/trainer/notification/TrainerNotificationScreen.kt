@@ -1,6 +1,7 @@
 package co.kr.tnt.trainer.notification
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -64,15 +65,13 @@ private fun TrainerNotificationScreen(
     onLinkNotificationClick: () -> Unit,
 ) {
     Scaffold(
-        topBar = {
+        containerColor = TnTTheme.colors.commonColors.Common0,
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
             TnTTopBarWithBackButton(
                 title = stringResource(uiResource.string.notification),
                 onBackClick = onBackClick,
             )
-        },
-        containerColor = TnTTheme.colors.commonColors.Common0,
-    ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize()) {
             if (state.notifications.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -86,9 +85,7 @@ private fun TrainerNotificationScreen(
                 }
             } else {
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     items(state.notifications) { notification ->
                         TnTNotification(

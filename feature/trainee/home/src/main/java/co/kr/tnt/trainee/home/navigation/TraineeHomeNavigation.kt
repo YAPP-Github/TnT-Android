@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.home.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
@@ -16,6 +17,7 @@ fun NavController.navigateToTraineeHome(
 )
 
 fun NavGraphBuilder.traineeHomeNavGraph(
+    padding: PaddingValues,
     navigateToNotification: () -> Unit,
     navigateToMealRecord: () -> Unit,
     navigateToMealDetail: (id: Long) -> Unit,
@@ -24,6 +26,7 @@ fun NavGraphBuilder.traineeHomeNavGraph(
     navigation<Route.TraineeMainTab.Home>(startDestination = Route.TraineeHome) {
         composable<Route.TraineeHome> {
             TraineeHomeRoute(
+                padding = padding,
                 navigateToNotification = navigateToNotification,
                 navigateToExerciseRecord = { /* TODO */ },
                 navigateToMealRecord = navigateToMealRecord,

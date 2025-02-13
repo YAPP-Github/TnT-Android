@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -63,6 +64,7 @@ import java.time.YearMonth
 @Composable
 internal fun TrainerHomeRoute(
     viewModel: TrainerHomeViewModel = hiltViewModel(),
+    padding: PaddingValues,
     navigateToNotification: () -> Unit,
     navigateToAddPtSession: () -> Unit,
 ) {
@@ -71,6 +73,7 @@ internal fun TrainerHomeRoute(
 
     TrainerHomeScreen(
         state = state,
+        padding = padding,
         onClickNotification = { viewModel.setEvent(TrainerHomeUiEvent.OnClickNotification) },
         onChangeVisibleMonth = { viewModel.setEvent(TrainerHomeUiEvent.OnChangeVisibleMonth(it)) },
         onClickDay = { viewModel.setEvent(TrainerHomeUiEvent.OnClickDay(it)) },
@@ -95,6 +98,7 @@ internal fun TrainerHomeRoute(
 @Composable
 private fun TrainerHomeScreen(
     state: TrainerHomeUiState,
+    padding: PaddingValues,
     onClickNotification: () -> Unit,
     onChangeVisibleMonth: (yearMonth: YearMonth) -> Unit,
     onClickDay: (date: LocalDate) -> Unit,
@@ -112,7 +116,7 @@ private fun TrainerHomeScreen(
     val visibleMonth = rememberMostVisibleMonth(calendarState)
     val dateFormatter = remember { DateFormatter() }
 
-    Box {
+    Box(modifier = Modifier.padding(padding)) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -355,6 +359,7 @@ private fun TrainerHomeScreenPreview() {
     TnTTheme {
         TrainerHomeScreen(
             state = TrainerHomeUiState(),
+            padding = PaddingValues(),
             onClickNotification = { },
             onChangeVisibleMonth = { },
             onClickDay = { },

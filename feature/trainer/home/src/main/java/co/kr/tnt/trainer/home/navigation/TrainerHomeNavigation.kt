@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.home.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
@@ -23,6 +24,7 @@ fun NavController.navigateToTrainerHome(
 )
 
 fun NavGraphBuilder.trainerHomeNavGraph(
+    padding: PaddingValues,
     navigateToNotification: () -> Unit,
     navigateToAddPtSession: () -> Unit,
     homeDestination: NavGraphBuilder.() -> Unit = { },
@@ -30,6 +32,7 @@ fun NavGraphBuilder.trainerHomeNavGraph(
     navigation<Route.TrainerMainTab.Home>(startDestination = Route.TrainerHome) {
         composable<Route.TrainerHome> {
             TrainerHomeRoute(
+                padding = padding,
                 navigateToNotification = navigateToNotification,
                 navigateToAddPtSession = navigateToAddPtSession,
             )

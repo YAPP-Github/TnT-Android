@@ -1,6 +1,5 @@
 package co.kr.tnt.trainer.members
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,13 +37,15 @@ import coil.request.ImageRequest
 
 @Composable
 internal fun TrainerMembersRoute(
-    viewModel: TrainerMembersViewModel = hiltViewModel(),
+    padding: PaddingValues,
     navigateToInvite: (Boolean) -> Unit,
+    viewModel: TrainerMembersViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerMembersScreen(
         state = uiState,
+        padding = padding,
         onClickInviteButton = { navigateToInvite(false) },
     )
 }
@@ -52,12 +53,13 @@ internal fun TrainerMembersRoute(
 @Composable
 private fun TrainerMembersScreen(
     state: TrainerMemberUiState,
+    padding: PaddingValues,
     onClickInviteButton: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(TnTTheme.colors.neutralColors.Neutral100),
+            .padding(padding),
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -213,6 +215,7 @@ private fun TrainerMembersScreenPreview() {
                     ),
                 ),
             ),
+            padding = PaddingValues(),
             onClickInviteButton = { },
         )
     }
