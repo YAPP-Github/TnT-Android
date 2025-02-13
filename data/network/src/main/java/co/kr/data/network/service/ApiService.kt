@@ -50,6 +50,10 @@ interface ApiService {
         @Part("request") request: RequestBody,
     ): SignUpResponse
 
+    // User Info
+    @GET("/members")
+    suspend fun getMyInfo(): UserResponse
+
     // Connect
     @GET("/trainers/invitation-code")
     suspend fun getInviteCode(): InviteCodeResponse
@@ -73,6 +77,7 @@ interface ApiService {
         @Query("traineeId") traineeId: String,
     ): ConnectedTraineeResponse
 
+    // Trainer
     @GET("/trainers/lessons/calendar")
     suspend fun getMonthlyPtSessionCounts(
         @Query("year") year: Int,
@@ -84,14 +89,19 @@ interface ApiService {
         @Path("date") date: String,
     ): DailyPtSessionsResponse
 
-    @GET("/members")
-    suspend fun getMyInfo(): UserResponse
-
     @GET("/trainers/active-trainees")
     suspend fun getActiveTrainees(): ActiveTraineesResponse
 
     @POST("/trainers/lessons")
     suspend fun postPtSession(
         @Body request: PtSessionRequest,
+    )
+
+    // Trainee
+    @Multipart
+    @POST("/trainees/diets")
+    suspend fun postMealRecord(
+        @Part dietImage: MultipartBody.Part?,
+        @Part("request") request: RequestBody,
     )
 }

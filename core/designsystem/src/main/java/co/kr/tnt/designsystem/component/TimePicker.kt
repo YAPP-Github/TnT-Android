@@ -36,14 +36,16 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.designsystem.utils.nonScaledSp
 import java.time.LocalTime
 import java.util.Locale
+import kotlin.math.abs
 
 @Composable
 fun TnTWheelTimePicker(
     modifier: Modifier = Modifier,
     initialTime: LocalTime = LocalTime.now(),
+    minuteInterval: Int = 10,
     onTimeSelected: (LocalTime) -> Unit,
 ) {
-    val roundedInitialTime by remember { mutableStateOf(getRoundedTime(initialTime)) }
+    val roundedInitialTime by remember { mutableStateOf(getRoundedTime(initialTime, minuteInterval)) }
     val am = stringResource(R.string.morning)
     val pm = stringResource(R.string.afternoon)
 
@@ -54,8 +56,12 @@ fun TnTWheelTimePicker(
     var selectedDayPart by remember { mutableStateOf(if (roundedInitialTime.hour < 12) am else pm) }
 
     val hourList = (1..12).toList()
-    val minuteList = (0..50 step 10).toList()
+    val minuteList = (0..59 step minuteInterval).toList()
     val dayPartList = listOf(am, pm)
+
+    LaunchedEffect(roundedInitialTime) {
+        onTimeSelected(roundedInitialTime)
+    }
 
     fun updateTime(
         newHour: Int = selectedHour,
@@ -131,8 +137,8 @@ fun TnTWheelTimePicker(
     }
 }
 
-private fun getRoundedTime(inputTime: LocalTime): LocalTime {
-    if (inputTime.minute % 10 == 0) {
+private fun getRoundedTime(inputTime: LocalTime, minuteInterval: Int): LocalTime {
+    if (minuteInterval == 1 || inputTime.minute % minuteInterval == 0) {
         return inputTime
     }
     val roundedMinute = ((inputTime.minute / 10.0).toInt() + 1) * 10
@@ -166,17 +172,15 @@ private fun TimeWheel(
             val viewportCenter = layoutInfo.viewportSize.height / 2
 
             layoutInfo.visibleItemsInfo.minByOrNull { item ->
-                kotlin.math.abs((item.offset + item.size / 2) - viewportCenter)
+                abs((item.offset + item.size / 2) - viewportCenter)
             }?.index?.rem(items.size) ?: selectedItem
         }
     }
 
-    LaunchedEffect(listState.isScrollInProgress) {
-        if (listState.isScrollInProgress.not()) {
-            val newSelectedItem = items[centeredItemIndex]
-            if (newSelectedItem != selectedItem) {
-                onItemSelected(newSelectedItem)
-            }
+    LaunchedEffect(centeredItemIndex) {
+        val newSelectedItem = items[centeredItemIndex]
+        if (newSelectedItem != selectedItem) {
+            onItemSelected(newSelectedItem)
         }
     }
 
@@ -241,12 +245,10 @@ fun DayPartWheel(
         derivedStateOf { listState.firstVisibleItemIndex }
     }
 
-    LaunchedEffect(listState.isScrollInProgress) {
-        if (listState.isScrollInProgress.not()) {
-            val newSelectedItem = items[centeredItemIndex]
-            if (newSelectedItem != selectedItem) {
-                onItemSelected(newSelectedItem)
-            }
+    LaunchedEffect(centeredItemIndex) {
+        val newSelectedItem = items[centeredItemIndex]
+        if (newSelectedItem != selectedItem) {
+            onItemSelected(newSelectedItem)
         }
     }
 

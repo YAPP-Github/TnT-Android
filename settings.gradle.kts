@@ -67,4 +67,5 @@ include(
     ":feature:trainee:home",
     ":feature:trainee:mypage",
     ":feature:trainee:notification",
+    ":feature:trainee:mealrecord",
 )
