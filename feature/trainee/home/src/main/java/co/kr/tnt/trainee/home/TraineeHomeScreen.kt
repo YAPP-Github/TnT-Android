@@ -133,6 +133,9 @@ internal fun TraineeHomeRoute(
             }
         }
     }
+
+    // TODO 홈 화면 진입 시마다 데이터 조회 재고 필요
+    LaunchedEffect(true) { viewModel.setEvent(TraineeHomeUiEvent.OnScreen) }
 }
 
 @Composable
@@ -194,7 +197,7 @@ private fun TraineeHomeScreen(
                     Calendar(
                         weekCalendarState = weekCalendarState,
                         selectedDay = state.selectedDay,
-                        dailyDataState = state.dailyRecordStatus,
+                        dailyDataState = state.recordedDates,
                         onClickDay = onClickDay,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
@@ -269,7 +272,7 @@ private fun TraineeHomeScreen(
 private fun Calendar(
     weekCalendarState: WeekCalendarState,
     selectedDay: LocalDate,
-    dailyDataState: List<TraineeDailyRecordStatus>,
+    dailyDataState: TraineeDailyRecordStatus?,
     onClickDay: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -277,7 +280,7 @@ private fun Calendar(
         state = weekCalendarState,
         dayState = { day -> DayState(isSelected = day == selectedDay) },
         indicatorState = { day ->
-            DayIndicatorState(showIcon = dailyDataState.any { it.date == day })
+            DayIndicatorState(showIcon = dailyDataState?.dates?.contains(day) ?: false)
         },
         onClickDay = onClickDay,
         modifier = modifier.background(TnTTheme.colors.commonColors.Common0),
