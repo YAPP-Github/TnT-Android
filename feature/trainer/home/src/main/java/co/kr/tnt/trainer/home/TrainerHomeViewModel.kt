@@ -39,6 +39,7 @@ internal class TrainerHomeViewModel @Inject constructor(
                 is TrainerHomeUiEvent.OnChangeVisibleMonth -> handleChangeVisibleMonth(event.yearMonth)
                 is TrainerHomeUiEvent.OnClickDay -> selectDay(event.day)
                 TrainerHomeUiEvent.OnClickAddPtSession -> sendEffect(TrainerHomeSideEffect.NavigateToAddPtSession)
+                is TrainerHomeUiEvent.OnClickPtSessionComplete -> completePtSession(event.ptSession)
             }
         }
 
@@ -96,6 +97,33 @@ internal class TrainerHomeViewModel @Inject constructor(
             }
 
             updateState { copy(dailyPtSessionCount = updatedDailyPtSessionCount) }
+        }
+
+        private fun completePtSession(ptSession: PtSession) {
+            viewModelScope.launch {
+                runCatching {
+                    trainerRepository.postCompleteSession(ptSession.id)
+                }.onSuccess {
+                    getDailyPtSessions(currentState.selectedDay)
+                }.onFailure {
+                    sendEffect(TrainerHomeSideEffect.ShowToast("서버 요청에 실패했어요"))
+                }
+            }
+        }
+
+        private fun getDailyPtSessions(day: LocalDate) {
+            viewModelScope.launch {
+                runCatching {
+                    trainerRepository.getDailyPtSessions(day)
+                }.onSuccess {
+                    cachedDailyPtSession[day] = it.sessions
+                    if (day == currentState.selectedDay) {
+                        updateState { copy(selectedDayPtSessions = cachedDailyPtSession[day]) }
+                    }
+                }.onFailure {
+                    sendEffect(TrainerHomeSideEffect.ShowToast("서버 요청에 실패했어요"))
+                }
+            }
         }
 
         private fun refresh() {

@@ -36,4 +36,8 @@ class TrainerRemoteDataSource @Inject constructor(
     suspend fun postPtSession(request: PtSessionRequest) = networkHandler {
         apiService.postPtSession(request)
     }
+
+    suspend fun putCompletePtSession(ptSessionId: String) = networkHandler {
+        apiService.putCompletePtSession(ptSessionId)
+    }
 }

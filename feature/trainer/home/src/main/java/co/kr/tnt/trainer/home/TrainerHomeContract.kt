@@ -20,6 +20,7 @@ internal class TrainerHomeContract {
         data class OnChangeVisibleMonth(val yearMonth: YearMonth) : TrainerHomeUiEvent
         data class OnClickDay(val day: LocalDate) : TrainerHomeUiEvent
         data object OnClickAddPtSession : TrainerHomeUiEvent
+        data class OnClickPtSessionComplete(val ptSession: PtSession) : TrainerHomeUiEvent
     }
 
     sealed interface TrainerHomeSideEffect : UiSideEffect {

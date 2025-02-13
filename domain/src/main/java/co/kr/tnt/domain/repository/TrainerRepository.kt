@@ -19,4 +19,5 @@ interface TrainerRepository {
         memo: String,
         traineeId: Long,
     )
+    suspend fun postCompleteSession(ptSessionId: String)
 }
