@@ -1,6 +1,5 @@
 package co.kr.tnt.trainee.mypage
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.LoginRepository
 import co.kr.tnt.domain.repository.SettingRepository
@@ -71,7 +70,6 @@ internal class TraineeMyPageViewModel @Inject constructor(
                 }.onSuccess { user ->
                     updateState { copy(user = user) }
                 }.onFailure {
-                    Log.d("test", it.toString())
                     sendEffect(TraineeMyPageEffect.ShowToast("서버 요청에 실패했어요"))
                 }
 
