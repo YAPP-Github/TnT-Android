@@ -30,4 +30,8 @@ class TraineeRemoteDataSource @Inject constructor(
     ) = networkHandler {
         apiService.getDailyRecord(date)
     }
+
+    suspend fun getMealRecord(dietId: Long) = networkHandler {
+        apiService.getMealRecord(dietId)
+    }
 }

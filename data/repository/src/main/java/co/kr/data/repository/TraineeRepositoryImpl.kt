@@ -8,6 +8,7 @@ import co.kr.data.network.source.UserRemoteDataSource
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecord
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
+import co.kr.tnt.domain.model.trainee.TraineeMealRecordDetail
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.DateFormatter
 import kotlinx.serialization.encodeToString
@@ -79,4 +80,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
         val jsonString = json.encodeToString(this)
         return jsonString.toRequestBody("application/json".toMediaTypeOrNull())
     }
+
+    override suspend fun getMealRecord(dietId: Long): TraineeMealRecordDetail =
+        traineeRemoteDataSource.getMealRecord(dietId).toDomain(dateFormatter)
 }

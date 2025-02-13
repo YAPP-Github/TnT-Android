@@ -2,6 +2,7 @@ package co.kr.tnt.login.model
 
 import androidx.annotation.StringRes
 import co.kr.tnt.domain.model.Term
+import co.kr.tnt.domain.utils.AppUrls
 import co.kr.tnt.feature.login.R
 
 sealed class TermState(
@@ -14,14 +15,14 @@ sealed class TermState(
         override val isRequired: Boolean,
     ) : TermState(
             titleRes = R.string.terms_of_service,
-            link = "www.github.com",
+            link = AppUrls.TERMS_OF_SERVICE_URL,
         )
 
     data class PrivacyPolicyState(
         override val isRequired: Boolean,
     ) : TermState(
             titleRes = R.string.privacy_policy,
-            link = "www.github.com",
+            link = AppUrls.PRIVACY_POLICY_URL,
         )
 
     companion object {

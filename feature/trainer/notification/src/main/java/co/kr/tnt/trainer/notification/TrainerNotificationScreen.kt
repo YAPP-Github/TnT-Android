@@ -1,6 +1,5 @@
 package co.kr.tnt.trainer.notification
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.notification.TnTNotification
 import co.kr.tnt.designsystem.component.notification.model.NotificationIcon
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotificationEffect
 import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotificationUiEvent
@@ -34,7 +33,7 @@ internal fun TrainerNotificationRoute(
     navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
     viewModel: TrainerNotificationViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerNotificationScreen(
@@ -52,9 +51,7 @@ internal fun TrainerNotificationRoute(
                     uiState.traineeId,
                 )
 
-                is TrainerNotificationEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
+                is TrainerNotificationEffect.ShowToast -> snackbar.show(effect.message)
             }
         }
     }

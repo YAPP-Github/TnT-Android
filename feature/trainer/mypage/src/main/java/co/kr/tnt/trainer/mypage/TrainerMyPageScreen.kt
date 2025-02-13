@@ -1,7 +1,6 @@
 package co.kr.tnt.trainer.mypage
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,6 +35,7 @@ import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTSwitch
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainer.TrainerManagementMemberCount
@@ -66,6 +66,7 @@ internal fun TrainerMyPageRoute(
     viewModel: TrainerMyPageViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val toast = LocalSnackbar.current
     val context = LocalContext.current
     val permissionState = rememberMultiplePermissionsState(TnTPermission.NOTIFICATION.values)
 
@@ -98,8 +99,7 @@ internal fun TrainerMyPageRoute(
             when (effect) {
                 TrainerMyPageSideEffect.NavigateToLogin -> navigateToLogin()
                 is TrainerMyPageSideEffect.NavigateToWebView -> navigateToWebView(effect.url)
-                is TrainerMyPageSideEffect.ShowToast ->
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                is TrainerMyPageSideEffect.ShowToast -> toast.show(effect.message)
 
                 is TrainerMyPageSideEffect.RequestPermission -> {
                     if (effect.isExplicitlyDenied) {

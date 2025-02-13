@@ -11,6 +11,7 @@ import co.kr.data.network.model.SignUpResponse
 import co.kr.data.network.model.UserResponse
 import co.kr.data.network.model.VerifyCodeResponse
 import co.kr.data.network.model.trainee.DailyRecordsResponse
+import co.kr.data.network.model.trainee.MealRecordDetailResponse
 import co.kr.data.network.model.trainee.WeeklyRecordedDatesResponse
 import co.kr.data.network.model.trainer.ActiveTraineesResponse
 import co.kr.data.network.model.trainer.DailyPtSessionsResponse
@@ -117,4 +118,9 @@ interface ApiService {
     suspend fun getDailyRecord(
         @Path("date") date: String,
     ): DailyRecordsResponse
+
+    @GET("/trainees/diets/{dietId}")
+    suspend fun getMealRecord(
+        @Path("dietId") dietId: Long,
+    ): MealRecordDetailResponse
 }

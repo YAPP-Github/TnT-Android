@@ -18,10 +18,14 @@ internal class TrainerInviteViewModel @Inject constructor(
     ) {
     override suspend fun handleEvent(event: TrainerInviteUiEvent) {
         when (event) {
-            is TrainerInviteUiEvent.OnRegenerateClick -> regenerateCode()
+            TrainerInviteUiEvent.OnRegenerateClick -> regenerateCode()
             TrainerInviteUiEvent.OnRegenerateClick -> generateCode()
             TrainerInviteUiEvent.OnBackClick -> navigateToBack()
             TrainerInviteUiEvent.OnSkipClick -> navigateToHome()
+            is TrainerInviteUiEvent.OnCodeClick -> {
+                sendEffect(TrainerInviteSideEffect.ShowToast("코드가 복사되었어요!"))
+                sendEffect(TrainerInviteSideEffect.CopyToClipBoard(event.code))
+            }
         }
     }
 

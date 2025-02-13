@@ -33,7 +33,11 @@ internal class LoginViewModel @Inject constructor(
 
             LoginUiEvent.OnCheckAllTermAgree -> checkAllTerms()
             is LoginUiEvent.OnCheckTerm -> checkTerm(event.termState)
-            is LoginUiEvent.OnClickTermLink -> TODO()
+
+            is LoginUiEvent.OnClickTermLink -> {
+                sendEffect(LoginSideEffect.NavigateToWebView(event.link))
+            }
+
             LoginUiEvent.OnClickNext -> navigateToSignup()
         }
     }

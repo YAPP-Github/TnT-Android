@@ -1,4 +1,4 @@
-package co.kr.tnt.trainee.mealrecord
+package co.kr.tnt.trainee.mealrecord.record
 
 import android.content.Context
 import android.net.Uri
@@ -69,9 +69,9 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.utils.DateFormatter
-import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiEvent
-import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState
-import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
+import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiEvent
+import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState
+import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
 import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.RecordChip
 import coil.compose.rememberAsyncImagePainter

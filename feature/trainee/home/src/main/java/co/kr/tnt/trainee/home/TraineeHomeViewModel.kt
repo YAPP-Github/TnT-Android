@@ -42,8 +42,8 @@ internal class TraineeHomeViewModel @Inject constructor(
             }
             return
         }
-        val startDate = visibleYearMonth.minusMonths(1).atDay(20).toString()
-        val endDate = visibleYearMonth.plusMonths(1).atDay(7).toString()
+        val startDate = visibleYearMonth.atDay(1).minusDays(7).toString()
+        val endDate = visibleYearMonth.atEndOfMonth().plusDays(7).toString()
 
         viewModelScope.launch {
             runCatching {

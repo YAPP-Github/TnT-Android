@@ -1,6 +1,5 @@
 package co.kr.tnt.login
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.LoginResult
@@ -60,10 +60,12 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
+    navigateToWebView: (url: String) -> Unit,
     navigateToHome: (UserType) -> Unit,
     navigateToSignup: (LoginResult) -> Unit,
 ) {
     val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
     val coroutineScope = rememberCoroutineScope()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -103,6 +105,9 @@ internal fun LoginRoute(
                     state = uiState,
                     onCheckAllTermAgree = { viewModel.setEvent(LoginUiEvent.OnCheckAllTermAgree) },
                     onCheckTerm = { term -> viewModel.setEvent(LoginUiEvent.OnCheckTerm(term)) },
+                    onClickTermLink = { link ->
+                        viewModel.setEvent(LoginUiEvent.OnClickTermLink(link))
+                    },
                     onClickNext = { viewModel.setEvent(LoginUiEvent.OnClickNext) },
                 )
             },
@@ -116,8 +121,10 @@ internal fun LoginRoute(
                     showBottomSheet = true
                 }
 
-                is LoginSideEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                is LoginSideEffect.ShowToast -> snackbar.show(effect.message)
+
+                is LoginSideEffect.NavigateToWebView -> {
+                    navigateToWebView(effect.url)
                 }
 
                 is LoginSideEffect.NavigateToHome -> {
@@ -223,6 +230,7 @@ private fun TermBottomSheetContent(
     state: LoginUiState,
     onCheckAllTermAgree: () -> Unit,
     onCheckTerm: (TermState) -> Unit,
+    onClickTermLink: (String) -> Unit,
     onClickNext: () -> Unit,
 ) {
     val isAllTermChecked = state.isAllTermChecked()
@@ -260,6 +268,7 @@ private fun TermBottomSheetContent(
                     termState = termState,
                     isChecked = isChecked,
                     onCheck = onCheckTerm,
+                    onClickTermLink = { onClickTermLink(termState.link) },
                 )
 
                 if (!isLastIndex) {
@@ -309,6 +318,7 @@ private fun TermItem(
     termState: TermState,
     isChecked: Boolean,
     onCheck: (termState: TermState) -> Unit,
+    onClickTermLink: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -341,8 +351,7 @@ private fun TermItem(
             text = stringResource(R.string.see),
             color = TnTTheme.colors.neutralColors.Neutral300,
             style = TnTTheme.typography.body2Medium,
-            modifier = Modifier.clickable {
-            },
+            modifier = Modifier.clickable(onClick = onClickTermLink),
         )
     }
 }
@@ -384,6 +393,7 @@ private fun TermBottomSheetContentPreview() {
             state = LoginUiState(),
             onCheckAllTermAgree = { },
             onCheckTerm = { },
+            onClickTermLink = { },
             onClickNext = { },
         )
     }
