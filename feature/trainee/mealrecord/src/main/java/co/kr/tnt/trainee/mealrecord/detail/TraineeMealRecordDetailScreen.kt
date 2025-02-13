@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -35,10 +36,10 @@ import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.chip.TnTChip
-import co.kr.tnt.designsystem.component.chip.model.ChipStyle
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
-import co.kr.tnt.domain.model.RecordType
+import co.kr.tnt.domain.model.RecordType.MealType
+import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailSideEffect
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiEvent
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiState
@@ -56,9 +57,12 @@ internal fun TraineeMealRecordDetailRoute(
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val dateFormatter = remember { DateFormatter() }
+
     TraineeMealRecordDetailScreen(
         state = state,
         context = context,
+        dateFormatter = dateFormatter,
         onClickMore = { viewModel.setEvent(TraineeMealRecordDetailUiEvent.OnClickMore) },
         onClickBack = navigateToPrevious,
     )
@@ -83,10 +87,11 @@ internal fun TraineeMealRecordDetailRoute(
 private fun TraineeMealRecordDetailScreen(
     state: TraineeMealRecordDetailUiState,
     context: Context,
+    dateFormatter: DateFormatter,
     onClickMore: () -> Unit,
     onClickBack: () -> Unit,
 ) {
-    val chip = getMealChipStyle(state.mealType)
+    val chip = RecordChip.create(state.mealType)
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context)
             .data(state.image)
@@ -98,7 +103,7 @@ private fun TraineeMealRecordDetailScreen(
     Scaffold(
         topBar = {
             TnTTopBarWithBackButton(
-                title = state.titleDate,
+                title = dateFormatter.format(state.date.toLocalDate(), "M월 d일"),
                 onBackClick = onClickBack,
                 showStoke = true,
                 trailingComponent = {
@@ -139,9 +144,9 @@ private fun TraineeMealRecordDetailScreen(
                     Spacer(Modifier.height(32.dp))
                 }
                 TnTChip(
-                    text = chip?.title ?: "",
-                    chipStyle = chip?.chipStyle ?: ChipStyle.PINK,
-                    leadingEmoji = chip?.emoji,
+                    text = chip.title,
+                    chipStyle = chip.chipStyle,
+                    leadingEmoji = chip.emoji,
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -150,12 +155,12 @@ private fun TraineeMealRecordDetailScreen(
                         .padding(vertical = 8.dp),
                 ) {
                     Text(
-                        text = state.contentDate,
+                        text = dateFormatter.format(state.date, "yyyy/MM/dd"),
                         color = TnTTheme.colors.neutralColors.Neutral600,
                         style = TnTTheme.typography.body2Medium,
                     )
                     Text(
-                        text = state.contentTime,
+                        text = dateFormatter.format(state.date, "a hh:mm"),
                         color = TnTTheme.colors.neutralColors.Neutral600,
                         style = TnTTheme.typography.body2Medium,
                     )
@@ -175,20 +180,6 @@ private fun TraineeMealRecordDetailScreen(
     }
 }
 
-@Composable
-fun getMealChipStyle(mealType: String): RecordChip? {
-    val normalizedType = mealType.uppercase()
-
-    val recordType = when (normalizedType) {
-        "BREAKFAST" -> RecordType.MealType.BREAKFAST
-        "LUNCH" -> RecordType.MealType.LUNCH
-        "DINNER" -> RecordType.MealType.DINNER
-        "SNACK" -> RecordType.MealType.SNACK
-        else -> null
-    }
-    return recordType?.let { RecordChip.create(it) }
-}
-
 @Preview
 @Composable
 private fun TraineeMealRecordDetailPreview() {
@@ -196,10 +187,11 @@ private fun TraineeMealRecordDetailPreview() {
         TraineeMealRecordDetailScreen(
             state = TraineeMealRecordDetailUiState(
                 image = "image",
-                mealType = "breakfast",
+                mealType = MealType.BREAKFAST,
                 memo = "오늘은 계란을 먹었습니다.",
             ),
             context = LocalContext.current,
+            dateFormatter = DateFormatter(),
             onClickMore = { },
             onClickBack = { },
         )

@@ -1,6 +1,6 @@
 package co.kr.tnt.trainee.mealrecord.detail
 
-import co.kr.tnt.domain.utils.DateFormatter
+import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -11,20 +11,9 @@ internal class TraineeMealRecordDetailContract {
         val id: Long = 0,
         val image: String? = null,
         val date: LocalDateTime = LocalDateTime.now(),
-        val mealType: String = "",
+        val mealType: MealType = MealType.BREAKFAST,
         val memo: String = "",
-    ) : UiState {
-        private val dateFormatter = DateFormatter()
-
-        val titleDate: String
-            get() = dateFormatter.format(date.toLocalDate(), "M월 d일")
-
-        val contentDate: String
-            get() = dateFormatter.format(date, "yyyy/MM/dd")
-
-        val contentTime: String
-            get() = dateFormatter.format(date, "a hh:mm")
-    }
+    ) : UiState
 
     sealed interface TraineeMealRecordDetailUiEvent : UiEvent {
         data class LoadRecordDetail(val id: Long) : TraineeMealRecordDetailUiEvent

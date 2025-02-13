@@ -1,6 +1,7 @@
 package co.kr.tnt.trainee.mealrecord.detail
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailSideEffect
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiEvent
@@ -20,7 +21,7 @@ internal class TraineeMealRecordDetailViewModel @Inject constructor(
         override suspend fun handleEvent(event: TraineeMealRecordDetailUiEvent) {
             when (event) {
                 is TraineeMealRecordDetailUiEvent.LoadRecordDetail -> fetchRecordDetail(event.id)
-                TraineeMealRecordDetailUiEvent.OnClickMore -> { }
+                TraineeMealRecordDetailUiEvent.OnClickMore -> {}
             }
         }
 
@@ -33,13 +34,23 @@ internal class TraineeMealRecordDetailViewModel @Inject constructor(
                         copy(
                             image = result.imageUrl,
                             date = result.date,
-                            mealType = result.dietType,
+                            mealType = convertToMealType(result.dietType),
                             memo = result.memo,
                         )
                     }
                 }.onFailure {
                     sendEffect(TraineeMealRecordDetailSideEffect.ShowToast("데이터 불러오기에 실패했어요"))
                 }
+            }
+        }
+
+        private fun convertToMealType(mealType: String): MealType {
+            return when (mealType.uppercase()) {
+                "BREAKFAST" -> MealType.BREAKFAST
+                "LUNCH" -> MealType.LUNCH
+                "DINNER" -> MealType.DINNER
+                "SNACK" -> MealType.SNACK
+                else -> MealType.BREAKFAST
             }
         }
     }
