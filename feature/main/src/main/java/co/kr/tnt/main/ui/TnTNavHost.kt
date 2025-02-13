@@ -15,6 +15,7 @@ import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
 import co.kr.tnt.trainee.main.navigation.navigateToTraineeMain
 import co.kr.tnt.trainee.main.navigation.traineeMainScreen
 import co.kr.tnt.trainee.mealrecord.navigation.navigateToTraineeMealRecord
+import co.kr.tnt.trainee.mealrecord.navigation.navigateToTraineeMealRecordDetail
 import co.kr.tnt.trainee.mealrecord.navigation.traineeMealRecordScreen
 import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
@@ -99,6 +100,7 @@ fun TnTNavHost(
                 navigateToWebView = navController::navigateToWebView,
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
                 navigateToMealRecord = navController::navigateToTraineeMealRecord,
+                navigateToMealDetail = navController::navigateToTraineeMealRecordDetail,
             )
             webViewScreen(
                 navigateToPrevious = navController::popBackStack,

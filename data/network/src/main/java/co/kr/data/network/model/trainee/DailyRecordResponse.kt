@@ -29,7 +29,7 @@ data class PtSessionResponse(
 
 @Serializable
 data class RecordResponse(
-    val recordId: String,
+    val recordId: Long,
     val recordType: String,
     val recordTime: String,
     val recordImage: String?,

@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.home
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +49,7 @@ import co.kr.tnt.designsystem.component.card.TnTRecordCard
 import co.kr.tnt.designsystem.component.card.TnTSessionRecordCard
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.DailyRecord
 import co.kr.tnt.domain.model.RecordType
 import co.kr.tnt.domain.model.RecordType.PTSessionType
@@ -57,10 +60,12 @@ import co.kr.tnt.feature.trainee.home.R
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeEffect
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
+import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.component.TnTHomeTopBar
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.model.RecordChip
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import kotlinx.coroutines.launch
@@ -76,7 +81,9 @@ internal fun TraineeHomeRoute(
     navigateToNotification: () -> Unit,
     navigateToExerciseRecord: () -> Unit,
     navigateToMealRecord: () -> Unit,
+    navigateToMealDetail: (id: Long) -> Unit,
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -85,6 +92,7 @@ internal fun TraineeHomeRoute(
 
     TraineeHomeScreen(
         state = uiState,
+        context = context,
         onClickNotification = navigateToNotification,
         onChangeVisibleMonth = { yearMonth ->
             viewModel.setEvent(TraineeHomeUiEvent.OnChangeVisibleMonth(yearMonth))
@@ -95,6 +103,7 @@ internal fun TraineeHomeRoute(
         onClickPtSessionCard = { id ->
             viewModel.setEvent(TraineeHomeUiEvent.OnClickPtSessionCard(id))
         },
+        onClickMealCard = navigateToMealDetail,
         onClickFloatingButton = { showBottomSheet = true },
     )
 
@@ -138,10 +147,12 @@ internal fun TraineeHomeRoute(
 @Composable
 private fun TraineeHomeScreen(
     state: TraineeHomeUiState,
+    context: Context,
     onClickNotification: () -> Unit,
     onChangeVisibleMonth: (YearMonth) -> Unit,
     onClickDay: (LocalDate) -> Unit,
-    onClickPtSessionCard: (String) -> Unit,
+    onClickPtSessionCard: (id: String) -> Unit,
+    onClickMealCard: (id: Long) -> Unit,
     onClickFloatingButton: () -> Unit,
 ) {
     val dateFormatter = remember { DateFormatter() }
@@ -201,6 +212,7 @@ private fun TraineeHomeScreen(
                     if (state.ptSessions != null) {
                         DailyPtSession(
                             session = state.ptSessions,
+                            context = context,
                             dateFormatter = dateFormatter,
                             onClickPtSessionCard = onClickPtSessionCard,
                         )
@@ -231,6 +243,8 @@ private fun TraineeHomeScreen(
                     DailyRecords(
                         record = record,
                         dateFormatter = dateFormatter,
+                        context = context,
+                        modifier = Modifier.clickable { onClickMealCard(record.recordId) },
                     )
                 }
             }
@@ -287,10 +301,19 @@ private fun Calendar(
 @Composable
 private fun DailyPtSession(
     session: TraineePtSession,
+    context: Context,
     dateFormatter: DateFormatter,
     onClickPtSessionCard: (sessionId: String) -> Unit,
 ) {
     val chip = RecordChip.create(PTSessionType(session.session))
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(session.trainerImage)
+            .placeholder(DefaultUserProfile.Trainer.image)
+            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .build(),
+    )
+
     TnTSessionRecordCard(
         name = session.trainerName,
         tagText = chip.title,
@@ -299,7 +322,7 @@ private fun DailyPtSession(
         isTrainer = false,
         defaultImage = painterResource(DefaultUserProfile.Trainer.image),
         leadingEmoji = chip.emoji ?: "",
-        profileImage = session.trainerImage?.let { rememberAsyncImagePainter(it) },
+        profileImage = session.trainerImage?.let { painter },
         showSessionRecordCreation = false,
         showSessionRecordDetails = session.hasRecord,
         onClick = { onClickPtSessionCard(session.ptSessionId) },
@@ -332,19 +355,29 @@ private fun EmptyPtSession() {
 
 @Composable
 private fun DailyRecords(
+    modifier: Modifier = Modifier,
+    context: Context,
     record: DailyRecord,
     dateFormatter: DateFormatter,
 ) {
     val chip = RecordChip.create(record.recordType)
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(record.recordImage)
+            .placeholder(co.kr.tnt.core.designsystem.R.drawable.img_default)
+            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .build(),
+    )
+
     TnTRecordCard(
         style = chip.chipStyle,
         record = record.recordContents,
         tagText = chip.title,
         time = dateFormatter.format(record.recordTime, "a hh:mm"),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
-        image = record.recordImage?.let { rememberAsyncImagePainter(it) },
+        image = record.recordImage?.let { painter },
         leadingEmoji = chip.emoji,
         feedbackCount = if (record.feedbackCount == 0) null else record.feedbackCount,
     )
@@ -440,7 +473,7 @@ private fun TraineeHomeScreenPreview() {
         selectedDay = date,
         recordList = listOf(
             DailyRecord(
-                recordId = "VDF1D907",
+                recordId = 0L,
                 recordType = RecordType.MealType.BREAKFAST,
                 recordTime = LocalDateTime.of(2025, 2, 8, 8, 0, 0),
                 recordImage = "https://buly.kr/BpESNP5",
@@ -448,7 +481,7 @@ private fun TraineeHomeScreenPreview() {
                 feedbackCount = 1,
             ),
             DailyRecord(
-                recordId = "VDF1D907",
+                recordId = 0L,
                 recordType = RecordType.MealType.LUNCH,
                 recordTime = LocalDateTime.of(2025, 2, 8, 13, 0, 0),
                 recordImage = "https://buly.kr/BpESNP5",
@@ -470,11 +503,13 @@ private fun TraineeHomeScreenPreview() {
     TnTTheme {
         TraineeHomeScreen(
             state = dummyUiState,
+            context = LocalContext.current,
             onClickNotification = { },
             onClickDay = { },
             onClickPtSessionCard = { },
             onChangeVisibleMonth = { },
             onClickFloatingButton = { },
+            onClickMealCard = { },
         )
     }
 }
