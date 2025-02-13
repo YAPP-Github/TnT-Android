@@ -73,7 +73,7 @@ internal class TraineeMealRecordViewModel @Inject constructor(
         }
 
         private fun updateMemo(value: String) {
-            if (value.length == 100) {
+            if (value.length >= 100) {
                 updateState { copy(showWarning = true, memo = value).validateMealRecord() }
             } else {
                 updateState { copy(showWarning = false, memo = value).validateMealRecord() }
