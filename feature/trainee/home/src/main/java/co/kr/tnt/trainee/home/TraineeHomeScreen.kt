@@ -150,8 +150,8 @@ private fun TraineeHomeScreen(
     context: Context,
     onClickNotification: () -> Unit,
     onChangeVisibleMonth: (YearMonth) -> Unit,
-    onClickDay: (LocalDate) -> Unit,
-    onClickPtSessionCard: (id: String) -> Unit,
+    onClickDay: (day: LocalDate) -> Unit,
+    onClickPtSessionCard: (id: Long) -> Unit,
     onClickMealCard: (id: Long) -> Unit,
     onClickFloatingButton: () -> Unit,
 ) {
@@ -244,7 +244,15 @@ private fun TraineeHomeScreen(
                         record = record,
                         dateFormatter = dateFormatter,
                         context = context,
-                        modifier = Modifier.clickable { onClickMealCard(record.recordId) },
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                            .then(
+                                if (record.recordType is RecordType.MealType) {
+                                    Modifier.clickable { onClickMealCard(record.recordId) }
+                                } else {
+                                    Modifier
+                                },
+                            ),
                     )
                 }
             }
@@ -303,7 +311,7 @@ private fun DailyPtSession(
     session: TraineePtSession,
     context: Context,
     dateFormatter: DateFormatter,
-    onClickPtSessionCard: (sessionId: String) -> Unit,
+    onClickPtSessionCard: (sessionId: Long) -> Unit,
 ) {
     val chip = RecordChip.create(PTSessionType(session.session))
     val painter = rememberAsyncImagePainter(
@@ -374,12 +382,10 @@ private fun DailyRecords(
         record = record.recordContents,
         tagText = chip.title,
         time = dateFormatter.format(record.recordTime, "a hh:mm"),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+        modifier = modifier.fillMaxWidth(),
         image = record.recordImage?.let { painter },
         leadingEmoji = chip.emoji,
-        feedbackCount = if (record.feedbackCount == 0) null else record.feedbackCount,
+        showFeedback = record.hasFeedback,
     )
 }
 
@@ -478,7 +484,7 @@ private fun TraineeHomeScreenPreview() {
                 recordTime = LocalDateTime.of(2025, 2, 8, 8, 0, 0),
                 recordImage = "https://buly.kr/BpESNP5",
                 recordContents = "아침으로 계란 2개 먹었습니다.",
-                feedbackCount = 1,
+                hasFeedback = false,
             ),
             DailyRecord(
                 recordId = 0L,
@@ -486,11 +492,11 @@ private fun TraineeHomeScreenPreview() {
                 recordTime = LocalDateTime.of(2025, 2, 8, 13, 0, 0),
                 recordImage = "https://buly.kr/BpESNP5",
                 recordContents = "점심으로 계란 5개 먹었습니다.",
-                feedbackCount = 0,
+                hasFeedback = true,
             ),
         ),
         ptSessions = TraineePtSession(
-            ptSessionId = "OSI93DG1",
+            ptSessionId = 0L,
             trainerName = "이강사",
             trainerImage = "https://buly.kr/DaO1v4V",
             session = 15,

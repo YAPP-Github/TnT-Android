@@ -8,5 +8,5 @@ data class DailyRecord(
     val recordTime: LocalDateTime,
     val recordImage: String?,
     val recordContents: String,
-    val feedbackCount: Int,
+    val hasFeedback: Boolean,
 )
