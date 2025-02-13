@@ -4,14 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,6 +32,7 @@ import co.kr.tnt.designsystem.component.card.TnTMemberProfileCard
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.MemberInfo
 import co.kr.tnt.trainer.members.TrainerMemberContract.TrainerMemberUiState
+import co.kr.tnt.ui.component.TnTCountTopBar
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 
@@ -65,26 +63,13 @@ private fun TrainerMembersScreen(
             modifier = Modifier.fillMaxSize(),
         ) {
             item {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                ) {
-                    Text(
-                        text = "내 회원",
-                        color = TnTTheme.colors.neutralColors.Neutral900,
-                        style = TnTTheme.typography.h2,
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        text = state.memberList.size.toString(),
-                        color = TnTTheme.colors.redColors.Red500,
-                        style = TnTTheme.typography.h2,
-                    )
-                    Spacer(Modifier.weight(1f))
-                    MemberInviteButton(onClickInviteButton)
-                }
+                TnTCountTopBar(
+                    title = "내 회원",
+                    count = state.memberList.size,
+                    trailingComponent = {
+                        MemberInviteButton(onClickInviteButton)
+                    },
+                )
             }
             if (state.memberList.isNotEmpty()) {
                 items(state.memberList) { member ->
