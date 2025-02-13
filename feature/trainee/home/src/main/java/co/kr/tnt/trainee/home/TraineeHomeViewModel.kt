@@ -79,7 +79,7 @@ internal class TraineeHomeViewModel @Inject constructor(
     }
 
     @Suppress("UnusedParameter")
-    private fun checkSessionRecord(ptSessionId: String) {
+    private fun checkSessionRecord(ptSessionId: Long) {
         // TODO: pt 수업 기록 확인 화면 이동
     }
 

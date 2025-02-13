@@ -11,7 +11,7 @@ data class TraineeDailyRecord(
 )
 
 data class TraineePtSession(
-    val ptSessionId: String,
+    val ptSessionId: Long,
     val trainerName: String,
     val trainerImage: String?,
     val session: Int,

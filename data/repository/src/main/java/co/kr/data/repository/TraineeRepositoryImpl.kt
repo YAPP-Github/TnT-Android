@@ -2,9 +2,9 @@ package co.kr.data.repository
 
 import co.kr.data.network.model.toDomain
 import co.kr.data.network.model.trainee.DailyRecordsResponse
+import co.kr.data.network.model.trainee.DietRecordResponse
 import co.kr.data.network.model.trainee.MealRecordRequest
 import co.kr.data.network.model.trainee.PtSessionResponse
-import co.kr.data.network.model.trainee.RecordResponse
 import co.kr.data.network.model.trainee.toDomain
 import co.kr.data.network.source.TraineeRemoteDataSource
 import co.kr.data.network.source.UserRemoteDataSource
@@ -44,128 +44,89 @@ internal class TraineeRepositoryImpl @Inject constructor(
         endDate: String,
     ): TraineeDailyRecordStatus {
         val response = traineeRemoteDataSource.getWeeklyRecordedDates(startDate, endDate)
-
         return response.toDomain(dateFormatter)
     }
 
-    // TODO : API에 맞춰 수정
     override suspend fun getTraineeDailyRecord(day: LocalDate): TraineeDailyRecord {
         val result = listOf(
             DailyRecordsResponse(
                 date = "2025-02-03",
-                lessons = PtSessionResponse(
-                    ptSessionId = "CDE35K32",
+                ptInfo = PtSessionResponse(
                     trainerName = "김헬스",
-                    trainerImage = "https://buly.kr/44x6xFN",
+                    trainerProfileImage = "https://buly.kr/44x6xFN",
                     session = 12,
-                    startTime = "2025-02-03T08:00:00",
-                    endTime = "2025-02-03T09:00:00",
-                    hasRecord = true,
+                    lessonStart = "2025-02-03T08:00:00",
+                    lessonEnd = "2025-02-03T09:00:00",
                 ),
-                records = listOf(
-                    RecordResponse(
-                        recordId = "VDF1D907",
-                        recordType = "BREAKFAST",
-                        recordTime = "2025-02-03T08:00:00",
-                        recordImage = "https://buly.kr/BpESNP5",
-                        recordContents = "아침으로 계란 2개 먹었습니다.",
-                        feedbackCount = 1,
+                diets = listOf(
+                    DietRecordResponse(
+                        dietId = 1001L,
+                        date = "2025-02-03T08:00:00",
+                        dietImageUrl = "https://buly.kr/BpESNP5",
+                        dietType = "BREAKFAST",
+                        memo = "아침으로 계란 2개 먹었습니다.",
                     ),
-                    RecordResponse(
-                        recordId = "VDF1D907",
-                        recordType = "LUNCH",
-                        recordTime = "2025-02-03T13:00:00",
-                        recordImage = "https://buly.kr/BpESNP5",
-                        recordContents = "점심으로 계란 5개 먹었습니다.",
-                        feedbackCount = 0,
+                    DietRecordResponse(
+                        dietId = 1002L,
+                        date = "2025-02-03T13:00:00",
+                        dietImageUrl = "https://buly.kr/BpESNP5",
+                        dietType = "LUNCH",
+                        memo = "점심으로 계란 5개 먹었습니다.",
                     ),
                 ),
             ),
             DailyRecordsResponse(
                 date = "2025-02-08",
-                lessons = null,
-                records = listOf(
-                    RecordResponse(
-                        recordId = "VDF1D907",
-                        recordType = "BREAKFAST",
-                        recordTime = "2025-02-08T13:00:00",
-                        recordImage = "https://buly.kr/BpESNP5",
-                        recordContents = "계란 2개 먹었습니다.",
-                        feedbackCount = 1,
+                ptInfo = null,
+                diets = listOf(
+                    DietRecordResponse(
+                        dietId = 2001L,
+                        date = "2025-02-08T13:00:00",
+                        dietImageUrl = "https://buly.kr/BpESNP5",
+                        dietType = "BREAKFAST",
+                        memo = "계란 2개 먹었습니다.",
                     ),
-                    RecordResponse(
-                        recordId = "VDF1D907",
-                        recordType = "SNACK",
-                        recordTime = "2025-02-08T15:00:00",
-                        recordImage = "https://buly.kr/BpESNP5",
-                        recordContents = "계란 반개 먹었습니다.",
-                        feedbackCount = 0,
+                    DietRecordResponse(
+                        dietId = 2002L,
+                        date = "2025-02-08T15:00:00",
+                        dietImageUrl = "https://buly.kr/BpESNP5",
+                        dietType = "SNACK",
+                        memo = "계란 반개 먹었습니다.",
                     ),
-                    RecordResponse(
-                        recordId = "VDF1D907",
-                        recordType = "DINNER",
-                        recordTime = "2025-02-08T18:40:00",
-                        recordImage = null,
-                        recordContents = "저녁으로 소고기 먹었습니다.",
-                        feedbackCount = 2,
+                    DietRecordResponse(
+                        dietId = 2003L,
+                        date = "2025-02-08T18:40:00",
+                        dietImageUrl = null,
+                        dietType = "DINNER",
+                        memo = "저녁으로 소고기 먹었습니다.",
                     ),
                 ),
             ),
             DailyRecordsResponse(
                 date = "2025-02-15",
-                lessons = PtSessionResponse(
-                    ptSessionId = "OSI93DG1",
+                ptInfo = PtSessionResponse(
                     trainerName = "이강사",
-                    trainerImage = null,
+                    trainerProfileImage = null,
                     session = 15,
-                    startTime = "2025-02-15T18:00:00",
-                    endTime = "2025-02-15T19:00:00",
-                    hasRecord = true,
+                    lessonStart = "2025-02-15T18:00:00",
+                    lessonEnd = "2025-02-15T19:00:00",
                 ),
-                records = listOf(
-                    RecordResponse(
-                        recordId = "VDF1D907",
-                        recordType = "LUNCH",
-                        recordTime = "2025-02-15T13:00:00",
-                        recordImage = null,
-                        recordContents = "비빔밥, 바나나 1개",
-                        feedbackCount = 1,
+                diets = listOf(
+                    DietRecordResponse(
+                        dietId = 3001L,
+                        date = "2025-02-15T13:00:00",
+                        dietImageUrl = null,
+                        dietType = "LUNCH",
+                        memo = "비빔밥, 바나나 1개",
                     ),
-                    RecordResponse(
-                        recordId = "VDF1D907",
-                        recordType = "DINNER",
-                        recordTime = "2025-02-03T20:00:00",
-                        recordImage = "https://buly.kr/BpESNP5",
-                        recordContents = "계란 5개 먹었습니다.",
-                        feedbackCount = 0,
+                    DietRecordResponse(
+                        dietId = 3002L,
+                        date = "2025-02-15T20:00:00",
+                        dietImageUrl = "https://buly.kr/BpESNP5",
+                        dietType = "DINNER",
+                        memo = "계란 5개 먹었습니다.",
                     ),
                 ),
-            ),
-            DailyRecordsResponse(
-                date = "2025-02-10",
-                lessons = PtSessionResponse(
-                    ptSessionId = "CDK392DF",
-                    trainerName = "박트레이너",
-                    trainerImage = null,
-                    session = 10,
-                    startTime = "2025-02-10T14:30:00",
-                    endTime = "2025-02-10T15:30:00",
-                    hasRecord = false,
-                ),
-                records = emptyList(),
-            ),
-            DailyRecordsResponse(
-                date = "2025-02-23",
-                lessons = PtSessionResponse(
-                    ptSessionId = "CDE35K32",
-                    trainerName = "정트레이너",
-                    trainerImage = "https://buly.kr/44x6xFN",
-                    session = 25,
-                    startTime = "2025-02-23T06:00:00",
-                    endTime = "2025-02-23T06:50:00",
-                    hasRecord = true,
-                ),
-                records = emptyList(),
             ),
         ).map { response ->
             response.toDomain(dateFormatter)

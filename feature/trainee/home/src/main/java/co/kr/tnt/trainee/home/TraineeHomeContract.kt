@@ -20,7 +20,7 @@ internal class TraineeHomeContract {
     sealed interface TraineeHomeUiEvent : UiEvent {
         data object OnScreen : TraineeHomeUiEvent
         data class OnChangeVisibleMonth(val yearMonth: YearMonth) : TraineeHomeUiEvent
-        data class OnClickPtSessionCard(val ptSessionId: String) : TraineeHomeUiEvent
+        data class OnClickPtSessionCard(val ptSessionId: Long) : TraineeHomeUiEvent
         data object OnClickExerciseRecord : TraineeHomeUiEvent
         data object OnClickMealRecord : TraineeHomeUiEvent
         data class OnClickDay(val date: LocalDate) : TraineeHomeUiEvent

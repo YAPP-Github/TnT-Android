@@ -23,13 +23,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.designsystem.R
@@ -47,7 +44,7 @@ fun TnTRecordCard(
     modifier: Modifier = Modifier,
     image: Painter? = null,
     leadingEmoji: String? = null,
-    feedbackCount: Int? = null,
+    showFeedback: Boolean = false,
 ) {
     val maxLines = if (image == null) 3 else 2
 
@@ -69,7 +66,7 @@ fun TnTRecordCard(
                             .size(140.dp)
                             .clip(RoundedCornerShape(16.dp)),
                     )
-                    if (feedbackCount != null) {
+                    if (showFeedback) {
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
@@ -122,7 +119,7 @@ fun TnTRecordCard(
                 }
             }
         }
-        feedbackCount?.let {
+        if (showFeedback) {
             // 사진이 없고 피드백이 있으면 기록과 피드백 사이에 20.dp 간격
             // 20 - 8(위의 기록 아래 간격) = 12.dp
             if (image == null) {
@@ -137,21 +134,10 @@ fun TnTRecordCard(
                 )
                 Spacer(Modifier.width(2.dp))
                 Text(
-                    text = buildAnnotatedString {
-                        withStyle(
-                            style = TnTTheme.typography.label2Medium.toSpanStyle(),
-                        ) {
-                            append(stringResource(R.string.received_feedback))
-                        }
-                        append(" ")
-                        withStyle(
-                            style = TnTTheme.typography.label2Bold.toSpanStyle(),
-                        ) {
-                            append(it.toString())
-                        }
-                    },
+                    text = stringResource(R.string.see_received_feedback),
+                    style = TnTTheme.typography.label2Medium,
                     color = TnTTheme.colors.neutralColors.Neutral500,
-                    modifier = Modifier.alignBy(LastBaseline),
+                    textAlign = TextAlign.Center,
                 )
             }
         }
@@ -402,7 +388,7 @@ private fun TnTRecordCardWithFeedbackPreview() {
             tagText = "상체 운동",
             time = "오전 7:30",
             modifier = Modifier.padding(10.dp),
-            feedbackCount = 1,
+            showFeedback = true,
         )
     }
 }
@@ -435,7 +421,7 @@ private fun TnTRecordCardWithImageAndFeedbackPreview() {
             modifier = Modifier.padding(10.dp),
             image = ColorPainter(Color.Gray),
             leadingEmoji = "\uD83C\uDF1E",
-            feedbackCount = 2,
+            showFeedback = true,
         )
     }
 }

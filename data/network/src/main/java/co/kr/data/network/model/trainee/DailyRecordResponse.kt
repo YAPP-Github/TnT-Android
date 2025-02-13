@@ -12,58 +12,57 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DailyRecordsResponse(
     val date: String,
-    val lessons: PtSessionResponse?,
-    val records: List<RecordResponse>,
+    val ptInfo: PtSessionResponse?,
+    val diets: List<DietRecordResponse>,
 )
 
 @Serializable
 data class PtSessionResponse(
-    val ptSessionId: String,
     val trainerName: String,
-    val trainerImage: String?,
+    val trainerProfileImage: String?,
     val session: Int,
-    val startTime: String,
-    val endTime: String,
-    val hasRecord: Boolean,
+    val lessonStart: String,
+    val lessonEnd: String,
 )
 
 @Serializable
-data class RecordResponse(
-    val recordId: String,
-    val recordType: String,
-    val recordTime: String,
-    val recordImage: String?,
-    val recordContents: String,
-    val feedbackCount: Int,
+data class DietRecordResponse(
+    val dietId: Long,
+    val date: String,
+    val dietImageUrl: String?,
+    val dietType: String,
+    val memo: String,
 )
 
 fun DailyRecordsResponse.toDomain(dateFormatter: DateFormatter) =
     TraineeDailyRecord(
         date = dateFormatter.parse(date),
-        ptSession = lessons?.toDomain(dateFormatter),
-        record = records.map { it.toDomain(dateFormatter) },
+        ptSession = ptInfo?.toDomain(dateFormatter),
+        record = diets.map { it.toDomain(dateFormatter) },
     )
 
 fun PtSessionResponse.toDomain(dateFormatter: DateFormatter) = TraineePtSession(
-    ptSessionId = ptSessionId,
+    // TODO : pt 수업 id
+    ptSessionId = 0L,
     trainerName = trainerName,
-    trainerImage = trainerImage,
+    trainerImage = trainerProfileImage,
     session = session,
-    startTime = dateFormatter.parseDateTime(startTime),
-    endTime = dateFormatter.parseDateTime(endTime),
-    hasRecord = hasRecord,
+    startTime = dateFormatter.parseDateTime(lessonStart),
+    endTime = dateFormatter.parseDateTime(lessonEnd),
+    // TODO : 수업 기록 존재 여부 반영
+    hasRecord = false,
 )
 
-fun RecordResponse.toDomain(dateFormatter: DateFormatter) = DailyRecord(
-    recordId = recordId,
-    recordType = recordType.toRecordType() ?: MealType.BREAKFAST,
-    recordTime = dateFormatter.parseDateTime(recordTime),
-    recordImage = recordImage,
-    recordContents = recordContents,
-    feedbackCount = feedbackCount,
+fun DietRecordResponse.toDomain(dateFormatter: DateFormatter) = DailyRecord(
+    recordId = dietId,
+    recordType = dietType.toRecordType() ?: MealType.BREAKFAST,
+    recordTime = dateFormatter.parseDateTime(date),
+    recordImage = dietImageUrl,
+    recordContents = memo,
+    // TODO 피드백 존재 여부 반영
+    hasFeedback = false,
 )
 
-// TODO : 수정
 fun String.toRecordType(): RecordType? {
     return when (this.uppercase()) {
         "BREAKFAST" -> MealType.BREAKFAST

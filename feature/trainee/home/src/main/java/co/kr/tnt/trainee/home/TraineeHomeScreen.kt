@@ -143,8 +143,8 @@ private fun TraineeHomeScreen(
     state: TraineeHomeUiState,
     onClickNotification: () -> Unit,
     onChangeVisibleMonth: (YearMonth) -> Unit,
-    onClickDay: (LocalDate) -> Unit,
-    onClickPtSessionCard: (String) -> Unit,
+    onClickDay: (day: LocalDate) -> Unit,
+    onClickPtSessionCard: (id: Long) -> Unit,
     onClickFloatingButton: () -> Unit,
 ) {
     val dateFormatter = remember { DateFormatter() }
@@ -291,7 +291,7 @@ private fun Calendar(
 private fun DailyPtSession(
     session: TraineePtSession,
     dateFormatter: DateFormatter,
-    onClickPtSessionCard: (sessionId: String) -> Unit,
+    onClickPtSessionCard: (sessionId: Long) -> Unit,
 ) {
     val chip = RecordChip.create(PTSessionType(session.session))
     TnTSessionRecordCard(
@@ -349,7 +349,7 @@ private fun DailyRecords(
             .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
         image = record.recordImage?.let { rememberAsyncImagePainter(it) },
         leadingEmoji = chip.emoji,
-        feedbackCount = if (record.feedbackCount == 0) null else record.feedbackCount,
+        showFeedback = record.hasFeedback,
     )
 }
 
@@ -443,24 +443,24 @@ private fun TraineeHomeScreenPreview() {
         selectedDay = date,
         recordList = listOf(
             DailyRecord(
-                recordId = "VDF1D907",
+                recordId = 0L,
                 recordType = RecordType.MealType.BREAKFAST,
                 recordTime = LocalDateTime.of(2025, 2, 8, 8, 0, 0),
                 recordImage = "https://buly.kr/BpESNP5",
                 recordContents = "아침으로 계란 2개 먹었습니다.",
-                feedbackCount = 1,
+                hasFeedback = false,
             ),
             DailyRecord(
-                recordId = "VDF1D907",
+                recordId = 0L,
                 recordType = RecordType.MealType.LUNCH,
                 recordTime = LocalDateTime.of(2025, 2, 8, 13, 0, 0),
                 recordImage = "https://buly.kr/BpESNP5",
                 recordContents = "점심으로 계란 5개 먹었습니다.",
-                feedbackCount = 0,
+                hasFeedback = true,
             ),
         ),
         ptSessions = TraineePtSession(
-            ptSessionId = "OSI93DG1",
+            ptSessionId = 0L,
             trainerName = "이강사",
             trainerImage = "https://buly.kr/DaO1v4V",
             session = 15,
