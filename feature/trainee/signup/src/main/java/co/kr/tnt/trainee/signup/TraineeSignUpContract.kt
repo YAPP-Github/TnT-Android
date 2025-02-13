@@ -17,8 +17,8 @@ internal class TraineeSignUpContract {
         val name: String = "",
         val image: Uri? = null,
         val birthday: LocalDate? = null,
-        val height: String = "",
-        val weight: String = "",
+        val height: String? = null,
+        val weight: String? = null,
         val ptPurpose: List<String> = emptyList(),
         val caution: String? = "",
     ) : UiState {
@@ -29,8 +29,11 @@ internal class TraineeSignUpContract {
          * 형식: 정수 3자
          */
         val isHeightValid
-            get() = height.isNotEmpty() && height.toIntOrNull() != null &&
-                !height.startsWith("0") && height.length <= MAX_HEIGHT_LENGTH
+            get() = height.isNullOrBlank() || (
+                height.toIntOrNull() != null &&
+                    !height.startsWith("0") &&
+                    height.length <= MAX_HEIGHT_LENGTH
+            )
 
         /**
          * 몸무게가 유효한 입력값인지 검사
@@ -38,8 +41,11 @@ internal class TraineeSignUpContract {
          */
         private val weightRegex = Regex("^(\\d{1,3}(\\.\\d)?)?\$")
         val isWeightValid
-            get() = weight.isNotEmpty() && weight.matches(weightRegex) &&
-                !weight.startsWith("0") && weight.length <= MAX_WEIGHT_LENGTH
+            get() = weight.isNullOrBlank() || (
+                weight.matches(weightRegex) &&
+                    !weight.startsWith("0") &&
+                    weight.length <= MAX_WEIGHT_LENGTH
+            )
 
         val isBasicInfoValid
             get() = isWeightValid && isHeightValid

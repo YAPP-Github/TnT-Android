@@ -481,9 +481,7 @@ private fun MealMemo(
         TnTOutlinedTextField(
             value = state.memo,
             onValueChange = { newValue ->
-                if (newValue.length <= 100) {
-                    onValueChange(newValue)
-                }
+                onValueChange(newValue)
             },
             placeholder = "식단에 대한 정보를 입력해주세요!",
             maxLength = 100,

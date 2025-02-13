@@ -164,14 +164,17 @@ private fun TraineeMealRecordDetailScreen(
                         style = TnTTheme.typography.body2Medium,
                     )
                 }
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    TnTDivider()
+                Column {
+                    Spacer(Modifier.height(8.dp))
+                    TnTDivider(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+                    Spacer(Modifier.height(8.dp))
                     Text(
                         text = state.memo,
                         color = TnTTheme.colors.neutralColors.Neutral800,
                         style = TnTTheme.typography.body1Medium,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }

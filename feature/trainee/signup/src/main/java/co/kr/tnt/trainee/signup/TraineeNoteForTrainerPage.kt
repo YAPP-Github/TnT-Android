@@ -56,12 +56,10 @@ internal fun TraineeNoteForTrainerPage(
                 TnTOutlinedTextField(
                     value = caution ?: "",
                     onValueChange = { newValue ->
-                        if (newValue.length <= MAX_LENGTH) {
-                            onCautionChange(newValue)
-                        }
+                        onCautionChange(newValue)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    isError = (caution?.length ?: 0) == MAX_LENGTH,
+                    isError = (caution?.length ?: 0) >= MAX_LENGTH,
                     warningMessage = stringResource(R.string.text_length_overflow),
                     maxLength = 100,
                 )
@@ -69,6 +67,7 @@ internal fun TraineeNoteForTrainerPage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
+                enabled = (caution?.length ?: 0) < MAX_LENGTH,
                 onClick = onNextClick,
             )
         }
