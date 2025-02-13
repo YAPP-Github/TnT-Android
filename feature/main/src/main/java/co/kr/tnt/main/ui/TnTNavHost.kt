@@ -44,6 +44,7 @@ fun TnTNavHost(
             startDestination = appState.startDestination,
         ) {
             loginScreen(
+                navigateToWebView = navController::navigateToWebView,
                 navigateToHome = { userType ->
                     when (userType) {
                         UserType.TRAINER -> navController.navigateToTrainerMain(clearBackStack = true)
