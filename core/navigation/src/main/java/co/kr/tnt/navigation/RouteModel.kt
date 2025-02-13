@@ -2,6 +2,7 @@ package co.kr.tnt.navigation
 
 import kotlinx.serialization.Serializable
 
+// TODO Route 정리
 sealed interface Route {
     @Serializable
     data object HomeBase : Route
@@ -96,6 +97,9 @@ sealed interface Route {
 
     @Serializable
     data object TrainerNotification : Route
+
+    @Serializable
+    data object AddPtSession : Route
 
     @Serializable
     data class WebView(val url: String) : Route

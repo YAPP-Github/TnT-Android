@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.designsystem.component.button.TnTFabButton
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
 import co.kr.tnt.designsystem.component.calendar.model.DayState
@@ -61,6 +63,7 @@ import java.time.YearMonth
 internal fun TrainerHomeRoute(
     viewModel: TrainerHomeViewModel = hiltViewModel(),
     navigateToNotification: () -> Unit,
+    navigateToAddPtSession: () -> Unit,
 ) {
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,16 +73,21 @@ internal fun TrainerHomeRoute(
         onClickNotification = { viewModel.setEvent(TrainerHomeUiEvent.OnClickNotification) },
         onChangeVisibleMonth = { viewModel.setEvent(TrainerHomeUiEvent.OnChangeVisibleMonth(it)) },
         onClickDay = { viewModel.setEvent(TrainerHomeUiEvent.OnClickDay(it)) },
+        onClickAddPtSession = { viewModel.setEvent(TrainerHomeUiEvent.OnClickAddPtSession) },
     )
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
+                TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession()
                 is TrainerHomeSideEffect.ShowToast -> Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+    // TODO 홈 화면 진입 시마다 데이터 조회 재고 필요
+    LaunchedEffect(true) { viewModel.setEvent(TrainerHomeUiEvent.OnScreen) }
 }
 
 @Composable
@@ -88,6 +96,7 @@ private fun TrainerHomeScreen(
     onClickNotification: () -> Unit,
     onChangeVisibleMonth: (yearMonth: YearMonth) -> Unit,
     onClickDay: (date: LocalDate) -> Unit,
+    onClickAddPtSession: () -> Unit,
 ) {
     val now = remember { YearMonth.now() }
     val calendarState = rememberCalendarState(
@@ -100,64 +109,85 @@ private fun TrainerHomeScreen(
     val visibleMonth = rememberMostVisibleMonth(calendarState)
     val dateFormatter = remember { DateFormatter() }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(TnTTheme.colors.neutralColors.Neutral100),
-    ) {
-        item {
-            Column(
-                modifier = Modifier.background(color = TnTTheme.colors.commonColors.Common0),
-            ) {
-                Spacer(modifier = Modifier.height(12.dp))
-                TnTHomeTopBar(
-                    modifier = Modifier.fillMaxWidth(),
-                    yearMonth = visibleMonth,
-                    onClickNotification = onClickNotification,
-                    onClickSelectorPrevious = {
-                        coroutineScope.launch {
-                            calendarState.animateScrollToMonth(visibleMonth.minusMonths(1))
-                        }
-                    },
-                    onClickSelectorNext = {
-                        coroutineScope.launch {
-                            calendarState.animateScrollToMonth(visibleMonth.plusMonths(1))
-                        }
-                    },
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Calendar(
+    Box {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(TnTTheme.colors.neutralColors.Neutral100),
+        ) {
+            item {
+                Column(
                     modifier = Modifier.background(color = TnTTheme.colors.commonColors.Common0),
-                    calendarState = calendarState,
-                    selectedDay = state.selectedDay,
-                    dailyPtSessionCount = state.dailyPtSessionCount,
-                    onClickDay = onClickDay,
-                )
+                ) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    TnTHomeTopBar(
+                        modifier = Modifier.fillMaxWidth(),
+                        yearMonth = visibleMonth,
+                        onClickNotification = onClickNotification,
+                        onClickSelectorPrevious = {
+                            coroutineScope.launch {
+                                calendarState.animateScrollToMonth(visibleMonth.minusMonths(1))
+                            }
+                        },
+                        onClickSelectorNext = {
+                            coroutineScope.launch {
+                                calendarState.animateScrollToMonth(visibleMonth.plusMonths(1))
+                            }
+                        },
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Calendar(
+                        modifier = Modifier.background(color = TnTTheme.colors.commonColors.Common0),
+                        calendarState = calendarState,
+                        selectedDay = state.selectedDay,
+                        dailyPtSessionCount = state.dailyPtSessionCount,
+                        onClickDay = onClickDay,
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
+                Column {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    DailyPtSessionTitle(
+                        day = state.selectedDay,
+                        sessionCount = state.selectedDayPtSessions?.size ?: 0,
+                        dateFormatter = dateFormatter,
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
             }
-            Column {
-                Spacer(modifier = Modifier.height(24.dp))
-                DailyPtSessionTitle(
-                    day = state.selectedDay,
-                    sessionCount = state.selectedDayPtSessions?.size ?: 0,
-                    dateFormatter = dateFormatter,
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-        }
-        state.selectedDayPtSessions?.let { selectDayPtSessions ->
-            if (selectDayPtSessions.isEmpty()) {
-                item { EmptyPtSessions() }
-                return@let
-            }
+            state.selectedDayPtSessions?.let { selectDayPtSessions ->
+                if (selectDayPtSessions.isEmpty()) {
+                    item { EmptyPtSessions() }
+                    return@let
+                }
 
-            items(count = selectDayPtSessions.size) { index ->
-                PtSessionCard(
-                    ptSession = selectDayPtSessions[index],
-                    dateFormatter = dateFormatter,
-                )
-                Spacer(modifier = Modifier.height(12.dp))
+                items(count = selectDayPtSessions.size) { index ->
+                    PtSessionCard(
+                        ptSession = selectDayPtSessions[index],
+                        dateFormatter = dateFormatter,
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+                item { Spacer(modifier = Modifier.height(84.dp)) }
             }
         }
+        TnTFabButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(
+                    bottom = 22.dp,
+                    end = 28.dp,
+                ),
+            text = "수업 추가",
+            enabled = true,
+            leadingComposable = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_add),
+                    contentDescription = "add pt session",
+                )
+            },
+            onClick = onClickAddPtSession,
+        )
     }
 
     LaunchedEffect(visibleMonth) {
@@ -315,6 +345,7 @@ private fun TrainerHomeScreenPreview() {
             onClickNotification = { },
             onChangeVisibleMonth = { },
             onClickDay = { },
+            onClickAddPtSession = { },
         )
     }
 }

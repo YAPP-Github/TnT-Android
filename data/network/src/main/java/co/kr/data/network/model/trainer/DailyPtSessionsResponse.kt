@@ -35,7 +35,7 @@ fun PtSessionResponse.toDomain(dateFormatter: DateFormatter): PtSession = PtSess
     traineeId = traineeId,
     traineeName = traineeName,
     traineeProfileUrl = traineeProfileImageUrl,
-    startTime = dateFormatter.parseDateTime(startTime),
-    endTime = dateFormatter.parseDateTime(endTime),
+    startTime = dateFormatter.parseDateTime(startTime, "yyyy-MM-dd'T'HH:mm:ss"),
+    endTime = dateFormatter.parseDateTime(endTime, "yyyy-MM-dd'T'HH:mm:ss"),
     isCompleted = isCompleted,
 )

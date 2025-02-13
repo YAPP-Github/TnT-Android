@@ -57,6 +57,7 @@ include(
     ":feature:trainer:members",
     ":feature:trainer:mypage",
     ":feature:trainer:notification",
+    ":feature:trainer:addptsession",
 )
 
 include(

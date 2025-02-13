@@ -1,6 +1,5 @@
 package co.kr.tnt.designsystem.component
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,7 +10,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 @Composable
 fun TnTDivider(modifier: Modifier = Modifier) {
     HorizontalDivider(
-        modifier = modifier.padding(vertical = 8.dp),
+        modifier = modifier,
         thickness = 2.dp,
         color = TnTTheme.colors.neutralColors.Neutral100,
     )

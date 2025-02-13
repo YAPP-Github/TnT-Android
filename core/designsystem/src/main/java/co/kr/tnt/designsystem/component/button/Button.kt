@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
@@ -120,6 +121,45 @@ fun TnTIconButton(
                     iconPosition.icon()
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun TnTFabButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    leadingComposable: @Composable RowScope.() -> Unit = { },
+    onClick: () -> Unit,
+) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        colors = ButtonType.Primary.colors(),
+        shape = RoundedCornerShape(80.dp),
+        border = BorderStroke(
+            width = ButtonType.Primary.stroke(enabled),
+            color = ButtonType.Primary.borderColor(enabled),
+        ),
+        contentPadding = ButtonSize.Large.contentPadding,
+        modifier = modifier.defaultMinSize(
+            minWidth = Dp.Hairline,
+            minHeight = ButtonSize.Large.height,
+        ),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            leadingComposable()
+            Text(
+                text = text,
+                style = ButtonSize.Large.textStyle(),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                modifier = Modifier.weight(1f, false),
+            )
         }
     }
 }

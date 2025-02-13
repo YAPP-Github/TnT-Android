@@ -24,12 +24,14 @@ fun NavController.navigateToTrainerHome(
 
 fun NavGraphBuilder.trainerHomeNavGraph(
     navigateToNotification: () -> Unit,
+    navigateToAddPtSession: () -> Unit,
     homeDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TrainerMainTab.Home>(startDestination = Route.TrainerHome) {
         composable<Route.TrainerHome> {
             TrainerHomeRoute(
                 navigateToNotification = navigateToNotification,
+                navigateToAddPtSession = navigateToAddPtSession,
             )
         }
         homeDestination()

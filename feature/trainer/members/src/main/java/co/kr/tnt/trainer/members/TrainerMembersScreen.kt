@@ -182,6 +182,7 @@ private fun TrainerMembersScreenPreview() {
             state = TrainerMemberUiState(
                 memberList = listOf(
                     MemberInfo(
+                        id = 0L,
                         traineeName = "김선정",
                         profileUrl = "https://buly.kr/BpESNP5",
                         ptPurpose = "체중 감량, 근력 향상, 건강 관리, 자세 교정, 유연성 향상",
@@ -190,6 +191,7 @@ private fun TrainerMembersScreenPreview() {
                         totalPtCount = 2,
                     ),
                     MemberInfo(
+                        id = 0L,
                         traineeName = "김영명",
                         profileUrl = "https://buly.kr/BpESNP5",
                         ptPurpose = "근력 향상",
@@ -198,6 +200,7 @@ private fun TrainerMembersScreenPreview() {
                         totalPtCount = 2,
                     ),
                     MemberInfo(
+                        id = 0L,
                         traineeName = "김정호",
                         profileUrl = "https://buly.kr/BpESNP5",
                         ptPurpose = "근력 향상, 건강 관리",
@@ -206,6 +209,7 @@ private fun TrainerMembersScreenPreview() {
                         totalPtCount = 2,
                     ),
                     MemberInfo(
+                        id = 0L,
                         traineeName = "박민서",
                         profileUrl = "https://buly.kr/BpESNP5",
                         ptPurpose = "근력 향상, 건강 관리",
@@ -214,6 +218,7 @@ private fun TrainerMembersScreenPreview() {
                         totalPtCount = 2,
                     ),
                     MemberInfo(
+                        id = 0L,
                         traineeName = "김혜림",
                         profileUrl = "https://buly.kr/BpESNP5",
                         ptPurpose = "건강 관리",
