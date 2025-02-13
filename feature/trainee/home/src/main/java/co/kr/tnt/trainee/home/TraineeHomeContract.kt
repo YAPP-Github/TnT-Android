@@ -12,12 +12,13 @@ import java.time.YearMonth
 internal class TraineeHomeContract {
     data class TraineeHomeUiState(
         val selectedDay: LocalDate = LocalDate.now(),
-        val dailyRecordStatus: List<TraineeDailyRecordStatus> = emptyList(),
+        val recordedDates: TraineeDailyRecordStatus? = null,
         val ptSessions: TraineePtSession? = null,
         val recordList: List<DailyRecord> = emptyList(),
     ) : UiState
 
     sealed interface TraineeHomeUiEvent : UiEvent {
+        data object OnScreen : TraineeHomeUiEvent
         data class OnChangeVisibleMonth(val yearMonth: YearMonth) : TraineeHomeUiEvent
         data class OnClickPtSessionCard(val ptSessionId: String) : TraineeHomeUiEvent
         data object OnClickExerciseRecord : TraineeHomeUiEvent

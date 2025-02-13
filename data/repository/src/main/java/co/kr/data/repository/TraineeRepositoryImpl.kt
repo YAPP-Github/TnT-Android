@@ -3,10 +3,8 @@ package co.kr.data.repository
 import co.kr.data.network.model.toDomain
 import co.kr.data.network.model.trainee.DailyRecordsResponse
 import co.kr.data.network.model.trainee.MealRecordRequest
-import co.kr.data.network.model.trainee.MonthlyRecordedDatesResponse
 import co.kr.data.network.model.trainee.PtSessionResponse
 import co.kr.data.network.model.trainee.RecordResponse
-import co.kr.data.network.model.trainee.RecordedDateResponse
 import co.kr.data.network.model.trainee.toDomain
 import co.kr.data.network.source.TraineeRemoteDataSource
 import co.kr.data.network.source.UserRemoteDataSource
@@ -26,7 +24,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,21 +40,13 @@ internal class TraineeRepositoryImpl @Inject constructor(
         return user
     }
 
-    // TODO : API에 맞춰 수정
-    override suspend fun getDailyDataStatus(yearMonth: YearMonth): List<TraineeDailyRecordStatus> {
-        val result = MonthlyRecordedDatesResponse(
-            listOf(
-                RecordedDateResponse(date = "2025-02-03"),
-                RecordedDateResponse(date = "2025-02-08"),
-                RecordedDateResponse(date = "2025-02-10"),
-                RecordedDateResponse(date = "2025-02-15"),
-                RecordedDateResponse(date = "2025-02-23"),
-            ),
-        ).calendarRecordInfo.map { response ->
-            response.toDomain(dateFormatter)
-        }
+    override suspend fun getWeeklyRecordedDate(
+        startDate: String,
+        endDate: String,
+    ): TraineeDailyRecordStatus {
+        val response = traineeRemoteDataSource.getWeeklyRecordedDates(startDate, endDate)
 
-        return result
+        return response.toDomain(dateFormatter)
     }
 
     // TODO : API에 맞춰 수정

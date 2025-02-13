@@ -11,6 +11,7 @@ import co.kr.data.network.model.SignUpResponse
 import co.kr.data.network.model.UserResponse
 import co.kr.data.network.model.VerifyCodeResponse
 import co.kr.data.network.model.trainee.MealRecordDetailResponse
+import co.kr.data.network.model.trainee.WeeklyRecordedDatesResponse
 import co.kr.data.network.model.trainer.ActiveTraineesResponse
 import co.kr.data.network.model.trainer.DailyPtSessionsResponse
 import co.kr.data.network.model.trainer.MonthlyPtSessionCountsResponse
@@ -105,6 +106,12 @@ interface ApiService {
         @Part dietImage: MultipartBody.Part?,
         @Part("request") request: RequestBody,
     )
+
+    @GET("/trainees/lessons/calendar")
+    suspend fun getWeeklyRecordedDates(
+        @Query("startDate") startDate: String,
+        @Query("endDate") endDate: String,
+    ): WeeklyRecordedDatesResponse
 
     @GET("/trainees/diets/{dietId}")
     suspend fun getMealRecord(
