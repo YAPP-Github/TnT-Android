@@ -27,8 +27,8 @@ data class TrainerResponse(
 data class TraineeResponse(
     val birthday: String?,
     val age: Int?,
-    val height: Double,
-    val weight: Double,
+    val height: Double?,
+    val weight: Double?,
     val cautionNote: String?,
     val ptGoals: List<String>,
 )
@@ -50,8 +50,8 @@ fun UserResponse.toDomain(dateFormatter: DateFormatter): User {
             name = name,
             image = profileImageUrl,
             birthday = trainee?.birthday?.let(dateFormatter::parse),
-            weight = requireNotNull(trainee?.weight),
-            height = requireNotNull(trainee?.height?.toInt()),
+            weight = trainee?.weight,
+            height = trainee?.height?.toInt(),
             ptPurpose = trainee?.ptGoals ?: emptyList(),
             caution = trainee?.cautionNote,
             isConnected = false,
