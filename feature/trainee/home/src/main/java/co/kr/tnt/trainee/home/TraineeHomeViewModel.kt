@@ -38,7 +38,7 @@ internal class TraineeHomeViewModel @Inject constructor(
             is TraineeHomeUiEvent.OnClickPtSessionCard -> checkSessionRecord(event.ptSessionId)
             TraineeHomeUiEvent.OnClickExerciseRecord -> sendEffect(TraineeHomeEffect.NavigateToExerciseRecord)
             TraineeHomeUiEvent.OnClickMealRecord -> sendEffect(TraineeHomeEffect.NavigateToMealRecord)
-            TraineeHomeUiEvent.OnChangeHideDialogOption -> clickHideDialog()
+            TraineeHomeUiEvent.OnChangeHideDialogOption -> changeDialogHideState()
             TraineeHomeUiEvent.OnConfirmConnectDialog -> navigateToConnect()
             TraineeHomeUiEvent.OnDismissDialog -> dismissDialog()
         }
@@ -110,7 +110,7 @@ internal class TraineeHomeViewModel @Inject constructor(
         }
     }
 
-    private fun clickHideDialog() {
+    private fun changeDialogHideState() {
         updateState { copy(isDialogHiddenForThreeDays = !isDialogHiddenForThreeDays) }
     }
 
