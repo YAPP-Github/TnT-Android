@@ -3,17 +3,22 @@ package co.kr.tnt.trainer.home
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.PtSession
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
+import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
+import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
@@ -22,6 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class TrainerHomeViewModel @Inject constructor(
     private val trainerRepository: TrainerRepository,
+    private val connectRepository: ConnectRepository,
 ) :
     BaseViewModel<TrainerHomeUiState, TrainerHomeUiEvent, TrainerHomeSideEffect>(TrainerHomeUiState()) {
         private val cachedMonthlyPtSessionCounts: ConcurrentMap<YearMonth, List<TrainerDailyPtSessionCount>> =
@@ -38,8 +44,12 @@ internal class TrainerHomeViewModel @Inject constructor(
                 TrainerHomeUiEvent.OnClickNotification -> sendEffect(TrainerHomeSideEffect.NavigateToNotification)
                 is TrainerHomeUiEvent.OnChangeVisibleMonth -> handleChangeVisibleMonth(event.yearMonth)
                 is TrainerHomeUiEvent.OnClickDay -> selectDay(event.day)
-                TrainerHomeUiEvent.OnClickAddPtSession -> sendEffect(TrainerHomeSideEffect.NavigateToAddPtSession)
+                TrainerHomeUiEvent.OnClickAddPtSession -> showConnectDialog(false)
+
                 is TrainerHomeUiEvent.OnClickPtSessionComplete -> completePtSession(event.ptSession)
+                TrainerHomeUiEvent.OnChangeHideDialogOption -> toggleDialogHiddenState()
+                TrainerHomeUiEvent.OnConfirmConnectDialog -> handleDialogConfirm()
+                TrainerHomeUiEvent.OnDismissDialog -> dismissDialog()
             }
         }
 
@@ -130,5 +140,72 @@ internal class TrainerHomeViewModel @Inject constructor(
             cachedMonthlyPtSessionCounts.clear()
             cachedDailyPtSession.clear()
             selectDay(currentState.selectedDay)
+            showConnectDialog(true)
+        }
+
+        private fun showConnectDialog(triggeredByHome: Boolean) {
+            val currentDateTime = LocalDateTime.now()
+
+            viewModelScope.launch {
+                runCatching {
+                    trainerRepository.getActiveMembers()
+                }.onSuccess { result ->
+                    if (result.isNotEmpty()) {
+                        updateState { copy(dialogState = DialogState.NONE) }
+                        if (triggeredByHome.not()) {
+                            sendEffect(TrainerHomeSideEffect.NavigateToConnect)
+                        }
+                        return@launch
+                    }
+                }
+
+                val lastHiddenDate = connectRepository.getHomeDialogHiddenDate().firstOrNull()
+                val isHidden = lastHiddenDate != null &&
+                    Duration.between(lastHiddenDate, currentDateTime).toSeconds() < 5
+
+                if (isHidden.not() && triggeredByHome) {
+                    updateState { copy(dialogState = DialogState.HOME_CONNECT) }
+                } else if (triggeredByHome.not()) {
+                    updateState { copy(dialogState = DialogState.ADD_PT_CONNECT) }
+                }
+            }
+        }
+
+        private fun toggleDialogHiddenState() {
+            updateState { copy(isDialogHiddenForThreeDays = !isDialogHiddenForThreeDays) }
+        }
+
+        private fun handleDialogConfirm() {
+            if (currentState.isDialogHiddenForThreeDays) {
+                updateCurrentDateTime()
+            }
+            val effect = when (currentState.dialogState) {
+                DialogState.HOME_CONNECT -> TrainerHomeSideEffect.NavigateToConnect
+                DialogState.ADD_PT_CONNECT -> TrainerHomeSideEffect.NavigateToAddPtSession
+                else -> return
+            }
+            updateState {
+                copy(dialogState = DialogState.NONE, isDialogHiddenForThreeDays = false)
+            }
+            sendEffect(effect)
+        }
+
+        private fun updateCurrentDateTime() {
+            val currentDateTime = LocalDateTime.now()
+            viewModelScope.launch {
+                connectRepository.updateHomeDialogHiddenDate(currentDateTime)
+            }
+        }
+
+        private fun dismissDialog() {
+            if (currentState.isDialogHiddenForThreeDays) {
+                updateCurrentDateTime()
+            }
+            updateState {
+                copy(
+                    dialogState = DialogState.NONE,
+                    isDialogHiddenForThreeDays = false,
+                )
+            }
         }
     }
