@@ -4,7 +4,6 @@
 
     <string name="what_is_your_name">이름이 어떻게 되세요?</string>
     <string name="enter_your_name">이름을 입력해주세요</string>
-    <string name="text_length_warning">%s자 이하로 입력해주세요</string>
 
     <string name="enter_your_basic_info">회원님의 기본 정보를\n입력해주세요</string>
     <string name="basic_info_for_pt">PT에 참고할 기본 정보예요!</string>
