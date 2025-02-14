@@ -2,6 +2,7 @@ package co.kr.tnt.trainee.home
 
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
+import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeEffect
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
@@ -9,8 +10,12 @@ import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
 import co.kr.tnt.ui.base.BaseViewModel
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -18,13 +23,10 @@ import javax.inject.Inject
 @HiltViewModel
 internal class TraineeHomeViewModel @Inject constructor(
     private val traineeRepository: TraineeRepository,
+    private val connectRepository: ConnectRepository,
 ) : BaseViewModel<TraineeHomeUiState, TraineeHomeUiEvent, TraineeHomeEffect>(
         TraineeHomeUiState(),
     ) {
-    init {
-        showConnectDialog()
-    }
-
     private val cachedMonthlyRecordState: ConcurrentHashMap<YearMonth, TraineeDailyRecordStatus> =
         ConcurrentHashMap()
 
@@ -38,7 +40,7 @@ internal class TraineeHomeViewModel @Inject constructor(
             TraineeHomeUiEvent.OnClickMealRecord -> sendEffect(TraineeHomeEffect.NavigateToMealRecord)
             TraineeHomeUiEvent.OnChangeHideDialogOption -> clickHideDialog()
             TraineeHomeUiEvent.OnConfirmConnectDialog -> navigateToConnect()
-            TraineeHomeUiEvent.OnDismissPopup -> dismissPopup()
+            TraineeHomeUiEvent.OnDismissDialog -> dismissDialog()
         }
     }
 
@@ -108,32 +110,71 @@ internal class TraineeHomeViewModel @Inject constructor(
         }
     }
 
-    private fun showConnectDialog() {
-        // TODO 3일간 보지 않기 설정한 마지막 시간 가져와서 3일 지났으면 띄워주기
-        if (currentState.isConnected.not()) {
-            updateState { copy(showConnectDialog = !showConnectDialog) }
-        }
-    }
-
     private fun clickHideDialog() {
-        // TODO 3일간 보지 않기 설정 저장
         updateState { copy(isDialogHiddenForThreeDays = !isDialogHiddenForThreeDays) }
     }
 
     private fun navigateToConnect() {
-        // TODO 3일간 보지 않겠다 했으면 오늘 날짜 저장
-        updateState { copy(showConnectDialog = !showConnectDialog) }
+        if (currentState.isDialogHiddenForThreeDays) {
+            updateCurrentDateTime()
+        }
+        updateState {
+            copy(
+                showConnectDialog = false,
+                isDialogHiddenForThreeDays = false,
+            )
+        }
         sendEffect(TraineeHomeEffect.NavigateToConnect)
     }
 
-    private fun dismissPopup() {
-        // TODO 3일간 보지 않겠다 했으면 오늘 날짜 저장
-        updateState { copy(showConnectDialog = !showConnectDialog) }
+    private fun dismissDialog() {
+        if (currentState.isDialogHiddenForThreeDays) {
+            updateCurrentDateTime()
+        }
+        updateState {
+            copy(
+                showConnectDialog = false,
+                isDialogHiddenForThreeDays = false,
+            )
+        }
+    }
+
+    private fun updateCurrentDateTime() {
+        val currentDateTime = LocalDateTime.now()
+        viewModelScope.launch {
+            connectRepository.updateHomeDialogHiddenDate(currentDateTime)
+        }
     }
 
     private fun refresh() {
         cachedMonthlyRecordState.clear()
         handleChangeVisibleMonth(currentState.selectedDay.yearMonth)
         selectDate(currentState.selectedDay)
+        showConnectDialog()
+    }
+
+    private fun showConnectDialog() {
+        val currentDateTime = LocalDateTime.now()
+
+        viewModelScope.launch {
+            runCatching {
+                traineeRepository.getMyInfo()
+            }.onSuccess { result ->
+                updateState { copy(isConnected = result.isConnected) }
+                if (result.isConnected) {
+                    return@launch
+                }
+            }
+
+            connectRepository.getHomeDialogHiddenDate()
+                .onEach { lastHiddenDate ->
+                    val isHidden = lastHiddenDate != null &&
+                        Duration.between(lastHiddenDate, currentDateTime).toHours() < 72
+
+                    if (isHidden.not()) {
+                        updateState { copy(showConnectDialog = true) }
+                    }
+                }.launchIn(viewModelScope)
+        }
     }
 }

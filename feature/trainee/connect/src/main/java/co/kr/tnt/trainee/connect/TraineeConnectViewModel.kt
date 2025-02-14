@@ -33,11 +33,13 @@ internal class TraineeConnectViewModel @Inject constructor(
                         completedSessionCount = event.count,
                     )
                 }
+
                 is TraineeConnectUiEvent.OnChangeTotalSessionCount -> updateState {
                     copy(
                         totalSessionCount = event.count,
                     )
                 }
+
                 is TraineeConnectUiEvent.OnNextClick -> handleNextClick()
                 TraineeConnectUiEvent.OnBackClick -> navigateToBack()
                 TraineeConnectUiEvent.OnSkipClick -> navigateToHome()

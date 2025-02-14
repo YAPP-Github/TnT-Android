@@ -136,10 +136,10 @@ internal fun TraineeHomeRoute(
             checkToggleText = stringResource(coreR.string.do_not_see_for_three_days),
             leftButtonText = stringResource(coreR.string.next_time),
             rightButtonText = stringResource(coreR.string.connect),
-            onLeftButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissPopup) },
-            onRightButtonClick = navigateToConnect,
+            onLeftButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissDialog) },
+            onRightButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnConfirmConnectDialog) },
             onCheckClick = { viewModel.setEvent(TraineeHomeUiEvent.OnChangeHideDialogOption) },
-            onDismiss = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissPopup) },
+            onDismiss = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissDialog) },
         )
     }
 
@@ -156,8 +156,7 @@ internal fun TraineeHomeRoute(
                     navigateToMealRecord()
                 }
 
-                TraineeHomeContract.TraineeHomeEffect.NavigateToConnect -> TODO()
-
+                TraineeHomeEffect.NavigateToConnect -> navigateToConnect()
                 is TraineeHomeEffect.ShowToast -> snackbar.show(effect.message)
             }
         }

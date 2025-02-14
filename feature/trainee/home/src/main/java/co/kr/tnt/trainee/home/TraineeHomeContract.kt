@@ -29,7 +29,7 @@ internal class TraineeHomeContract {
         data class OnClickDay(val date: LocalDate) : TraineeHomeUiEvent
         data object OnChangeHideDialogOption : TraineeHomeUiEvent
         data object OnConfirmConnectDialog : TraineeHomeUiEvent
-        data object OnDismissPopup : TraineeHomeUiEvent
+        data object OnDismissDialog : TraineeHomeUiEvent
     }
 
     sealed interface TraineeHomeEffect : UiSideEffect {
