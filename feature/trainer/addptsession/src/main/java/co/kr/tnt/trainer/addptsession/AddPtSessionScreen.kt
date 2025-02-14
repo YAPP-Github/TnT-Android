@@ -73,6 +73,7 @@ import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState.DialogState
 import co.kr.tnt.ui.extensions.clearFocusOnTap
+import co.kr.tnt.ui.utils.throttled
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.coroutines.CoroutineScope
@@ -271,7 +272,7 @@ private fun AddPtSessionScreen(
                 text = "완료",
                 enabled = state.isEnableComplete,
                 modifier = Modifier.align(Alignment.BottomCenter),
-                onClick = onClickComplete,
+                onClick = throttled { onClickComplete() },
             )
         }
     }

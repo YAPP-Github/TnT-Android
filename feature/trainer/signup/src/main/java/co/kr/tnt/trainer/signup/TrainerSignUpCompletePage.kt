@@ -25,6 +25,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainer.signup.R
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 import co.kr.tnt.ui.model.DefaultUserProfile
+import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -77,7 +78,7 @@ internal fun TrainerSignUpCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
-                onClick = { onNextClick(state.image) },
+                onClick = throttled { onNextClick(state.image) },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }

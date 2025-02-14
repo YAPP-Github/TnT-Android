@@ -73,7 +73,7 @@ fun TnTSnackbar(
 
 @Preview(showBackground = true)
 @Composable
-private fun TnTToastPreview() {
+private fun TnTSnackbarPreview() {
     TnTTheme {
         TnTSnackbar(
             snackbarData = object : SnackbarData {
