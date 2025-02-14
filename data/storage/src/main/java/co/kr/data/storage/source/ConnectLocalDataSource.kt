@@ -15,23 +15,23 @@ import javax.inject.Singleton
 class ConnectLocalDataSource @Inject constructor(
     @Named(CONNECT_STORAGE_NAME) private val connectPreferences: DataStore<Preferences>,
 ) {
-    val homeDialogHiddenDate: Flow<String?> = connectPreferences.data.map { preferences ->
-        preferences[HOME_DIALOG_HIDDEN_DATE] ?: ""
+    val explicitDeniedConnectDate: Flow<String?> = connectPreferences.data.map { preferences ->
+        preferences[EXPLICIT_DENIED_CONNECT_DATE] ?: ""
     }
 
-    suspend fun updateHomeDialogHiddenDate(startDate: String) {
+    suspend fun updateExplicitDeniedConnectDate(startDate: String) {
         connectPreferences.edit { preferences ->
-            preferences[HOME_DIALOG_HIDDEN_DATE] = startDate
+            preferences[EXPLICIT_DENIED_CONNECT_DATE] = startDate
         }
     }
 
-    suspend fun clearHomeDialogHiddenDate() {
+    suspend fun clearExplicitDeniedConnectDate() {
         connectPreferences.edit { preferences ->
-            preferences.remove(HOME_DIALOG_HIDDEN_DATE)
+            preferences.remove(EXPLICIT_DENIED_CONNECT_DATE)
         }
     }
 
     companion object {
-        private val HOME_DIALOG_HIDDEN_DATE = stringPreferencesKey("HOME_DIALOG_HIDDEN_DATE")
+        private val EXPLICIT_DENIED_CONNECT_DATE = stringPreferencesKey("EXPLICIT_DENIED_CONNECT_DATE")
     }
 }

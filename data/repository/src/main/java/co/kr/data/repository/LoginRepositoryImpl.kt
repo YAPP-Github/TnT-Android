@@ -46,12 +46,12 @@ internal class LoginRepositoryImpl @Inject constructor(
     override suspend fun logout() {
         loginRemoteDataSource.postLogout()
         sessionLocalDataSource.removeSessionId()
-        connectLocalDataSource.clearHomeDialogHiddenDate()
+        connectLocalDataSource.clearExplicitDeniedConnectDate()
     }
 
     override suspend fun withdraw() {
         loginRemoteDataSource.postWithdraw()
         sessionLocalDataSource.removeSessionId()
-        connectLocalDataSource.clearHomeDialogHiddenDate()
+        connectLocalDataSource.clearExplicitDeniedConnectDate()
     }
 }
