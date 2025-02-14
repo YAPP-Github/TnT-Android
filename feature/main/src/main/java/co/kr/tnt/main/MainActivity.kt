@@ -1,6 +1,7 @@
 package co.kr.tnt.main
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,6 +19,7 @@ import co.kr.tnt.main.ui.rememberTnTAppState
 import co.kr.tnt.ui.permission.TnTPermission
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -33,6 +35,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        getMessagingToken()
         splashScreen.setKeepOnScreenCondition { viewModel.uiState.value.showSplash }
 
         setContent {
@@ -50,6 +53,16 @@ class MainActivity : ComponentActivity() {
             }
 
             CheckPermissionEffect()
+
+            LaunchedEffect(viewModel.effect) {
+                viewModel.effect.collect { effect ->
+                    when (effect) {
+                        is MainContract.MainSideEffect.ShowToast -> {
+                            Toast.makeText(this@MainActivity, effect.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -67,5 +80,20 @@ class MainActivity : ComponentActivity() {
                 viewModel.setEvent(MainUiEvent.OnNotificationPermissionRevoked)
             }
         }
+    }
+
+    // TODO API 변경 시 제거 예정 코드
+    private fun getMessagingToken() {
+        FirebaseMessaging
+            .getInstance()
+            .token
+            .addOnSuccessListener { token ->
+                token?.let {
+                    viewModel.setEvent(MainUiEvent.OnGetMessagingTokenSucceeded(token))
+                } ?: viewModel.setEvent(MainUiEvent.OnGetMessagingTokenFailed)
+            }
+            .addOnFailureListener {
+                viewModel.setEvent(MainUiEvent.OnGetMessagingTokenFailed)
+            }
     }
 }

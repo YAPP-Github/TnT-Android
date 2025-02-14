@@ -21,6 +21,10 @@ jobs:
           echo DEBUG_BASE_API_URL=\"${{ secrets.DEBUG_BASE_API_URL }}\" >> ./local.properties
           echo KAKAO_NATIVE_APP_KEY=${{ secrets.KAKAO_NATIVE_APP_KEY }} >> ./local.properties
 
+      - name: add google-services.json
+        run: |
+          echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/src/google-services.json
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 

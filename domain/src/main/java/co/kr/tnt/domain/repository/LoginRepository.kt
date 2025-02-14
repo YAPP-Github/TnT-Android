@@ -9,6 +9,7 @@ interface LoginRepository {
 
     suspend fun login(
         authType: AuthType,
+        messagingToken: String,
         accessToken: String,
     ): LoginResult
 

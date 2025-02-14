@@ -10,4 +10,7 @@ android {
 
 dependencies {
     implementation(projects.core.login)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 }

@@ -29,6 +29,7 @@ internal class LoginContract {
         data class OnCheckTerm(val termState: TermState) : LoginUiEvent
         data class OnClickTermLink(val link: String) : LoginUiEvent
         data object OnClickNext : LoginUiEvent
+        data class OnGetMessagingTokenSucceed(val token: String) : LoginUiEvent
     }
 
     sealed interface LoginSideEffect : UiSideEffect {

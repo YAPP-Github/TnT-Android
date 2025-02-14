@@ -7,6 +7,7 @@ plugins {
     id("tnt.android.application")
     id("tnt.android.compose")
     id("com.google.android.gms.oss-licenses-plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -61,4 +62,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.kakao.user)
     implementation(libs.play.services.oss.licenses)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.analytics)
 }
