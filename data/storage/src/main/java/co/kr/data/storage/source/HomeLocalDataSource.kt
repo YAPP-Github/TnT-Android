@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import co.kr.data.storage.di.StorageModule.HOME_STORAGE_NAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -12,7 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 class HomeLocalDataSource @Inject constructor(
-    @Named("home") private val homePreferences: DataStore<Preferences>,
+    @Named(HOME_STORAGE_NAME) private val homePreferences: DataStore<Preferences>,
 ) {
     val hideDialogStartDate: Flow<String> = homePreferences.data.map { preferences ->
         preferences[HIDE_DIALOG_START_DATE] ?: ""

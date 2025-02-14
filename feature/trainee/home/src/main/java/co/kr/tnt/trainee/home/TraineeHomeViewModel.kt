@@ -1,9 +1,5 @@
 package co.kr.tnt.trainee.home
 
-import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeEffect
-import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
-import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
-import co.kr.tnt.ui.base.BaseViewModel
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
 import co.kr.tnt.domain.repository.TraineeRepository
@@ -125,11 +121,13 @@ internal class TraineeHomeViewModel @Inject constructor(
     }
 
     private fun navigateToConnect() {
+        // TODO 3일간 보지 않겠다 했으면 오늘 날짜 저장
         updateState { copy(showConnectDialog = !showConnectDialog) }
         sendEffect(TraineeHomeEffect.NavigateToConnect)
     }
 
     private fun dismissPopup() {
+        // TODO 3일간 보지 않겠다 했으면 오늘 날짜 저장
         updateState { copy(showConnectDialog = !showConnectDialog) }
     }
 
