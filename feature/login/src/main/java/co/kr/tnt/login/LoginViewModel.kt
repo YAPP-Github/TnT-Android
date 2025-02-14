@@ -20,6 +20,7 @@ internal class LoginViewModel @Inject constructor(
         LoginUiState(),
     ) {
     private var loginResult: LoginResult? = null
+    private var messagingToken: String = ""
 
     override suspend fun handleEvent(event: LoginUiEvent) {
         when (event) {
@@ -39,6 +40,7 @@ internal class LoginViewModel @Inject constructor(
             }
 
             LoginUiEvent.OnClickNext -> navigateToSignup()
+            is LoginUiEvent.OnGetMessagingTokenSucceed -> messagingToken = event.token
         }
     }
 
@@ -51,6 +53,7 @@ internal class LoginViewModel @Inject constructor(
                 loginRepository.login(
                     authType = authType,
                     accessToken = accessToken,
+                    messagingToken = messagingToken,
                 )
             }.onSuccess { loginResult ->
                 loginResult.userType?.let { userType ->

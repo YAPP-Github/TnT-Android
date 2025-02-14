@@ -13,7 +13,11 @@ internal class MainContract {
 
     sealed class MainUiEvent : UiEvent {
         data object OnNotificationPermissionRevoked : MainUiEvent()
+        data class OnGetMessagingTokenSucceeded(val token: String) : MainUiEvent()
+        data object OnGetMessagingTokenFailed : MainUiEvent()
     }
 
-    data object MainSideEffect : UiSideEffect
+    sealed interface MainSideEffect : UiSideEffect {
+        data class ShowToast(val message: String) : MainSideEffect
+    }
 }

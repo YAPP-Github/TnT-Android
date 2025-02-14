@@ -12,7 +12,15 @@ internal class TrainerHomeContract {
         val selectedDay: LocalDate = LocalDate.now(),
         val dailyPtSessionCount: Map<LocalDate, Int> = mapOf(),
         val selectedDayPtSessions: List<PtSession>? = null,
-    ) : UiState
+        val dialogState: DialogState = DialogState.NONE,
+        val isDialogHiddenForThreeDays: Boolean = false,
+    ) : UiState {
+        enum class DialogState {
+            NONE,
+            HOME_CONNECT,
+            ADD_PT_CONNECT,
+        }
+    }
 
     sealed interface TrainerHomeUiEvent : UiEvent {
         data object OnScreen : TrainerHomeUiEvent
@@ -21,11 +29,15 @@ internal class TrainerHomeContract {
         data class OnClickDay(val day: LocalDate) : TrainerHomeUiEvent
         data object OnClickAddPtSession : TrainerHomeUiEvent
         data class OnClickPtSessionComplete(val ptSession: PtSession) : TrainerHomeUiEvent
+        data object OnConfirmConnectDialog : TrainerHomeUiEvent
+        data object OnChangeHideDialogOption : TrainerHomeUiEvent
+        data object OnDismissDialog : TrainerHomeUiEvent
     }
 
     sealed interface TrainerHomeSideEffect : UiSideEffect {
         data object NavigateToNotification : TrainerHomeSideEffect
         data object NavigateToAddPtSession : TrainerHomeSideEffect
+        data object NavigateToInvite : TrainerHomeSideEffect
         data class ShowToast(val message: String) : TrainerHomeSideEffect
     }
 }

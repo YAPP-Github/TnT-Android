@@ -27,11 +27,13 @@ internal class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun login(
         authType: AuthType,
+        messagingToken: String,
         accessToken: String,
     ): LoginResult {
         val response = loginRemoteDataSource.postLogin(
             loginRequest = LoginRequest(
                 socialType = authType,
+                fcmToken = messagingToken,
                 socialAccessToken = accessToken,
             ),
         )
