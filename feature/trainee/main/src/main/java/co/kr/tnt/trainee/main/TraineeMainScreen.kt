@@ -3,13 +3,13 @@ package co.kr.tnt.trainee.main
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import co.kr.tnt.designsystem.component.bottombar.TnTBottomBar
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.navigation.model.ConnectScreenMode
 import co.kr.tnt.trainee.home.navigation.traineeHomeNavGraph
 import co.kr.tnt.trainee.mypage.navigation.traineeMyPageNavGraph
 import co.kr.tnt.trainee.notification.navigation.navigateToTraineeNotification
@@ -18,7 +18,7 @@ import co.kr.tnt.ui.extensions.safePopBackStack
 
 @Composable
 internal fun TraineeMainRoute(
-    navigateToConnect: (Boolean) -> Unit,
+    navigateToConnect: (ConnectScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
     navigateToMealRecord: () -> Unit,
@@ -42,7 +42,7 @@ internal fun TraineeMainRoute(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 private fun TraineeMainScreen(
     state: TraineeMainState,
-    navigateToConnect: (Boolean) -> Unit,
+    navigateToConnect: (ConnectScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
     navigateToMealRecord: () -> Unit,
@@ -72,7 +72,7 @@ private fun TraineeMainScreen(
                 navigateToNotification = navController::navigateToTraineeNotification,
                 navigateToMealRecord = navigateToMealRecord,
                 navigateToMealDetail = navigateToMealDetail,
-                navigateToConnect = { navigateToConnect(false) },
+                navigateToConnect = { navigateToConnect(ConnectScreenMode.BACK) },
             ) {
                 traineeNotification(
                     navigateToPrevious = navController::safePopBackStack,

@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.login.navigation.loginScreen
 import co.kr.tnt.login.navigation.navigateToLogin
+import co.kr.tnt.navigation.model.ConnectScreenMode
 import co.kr.tnt.roleselect.navigateToRoleSelection
 import co.kr.tnt.roleselect.roleSelectionScreen
 import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
@@ -72,7 +73,7 @@ fun TnTNavHost(
             traineeSignUpScreen(
                 navigateToPrevious = navController::safePopBackStack,
                 navigateToConnect = {
-                    navController.navigateToTraineeConnect(isSkippable = true)
+                    navController.navigateToTraineeConnect(screenMode = ConnectScreenMode.SKIP)
                 },
             )
             trainerInviteScreen(
