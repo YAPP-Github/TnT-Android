@@ -40,11 +40,16 @@ fun TnTCheckToggleDialog(
     modifier: Modifier = Modifier,
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
+    cancelable: Boolean = false,
     onCheckClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     Dialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = {
+            if (cancelable) {
+                onDismiss()
+            }
+        },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Card(
