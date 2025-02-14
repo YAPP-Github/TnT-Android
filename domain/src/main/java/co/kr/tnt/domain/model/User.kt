@@ -25,31 +25,26 @@ sealed class User {
         }
     }
 
+    // TODO 도메인 모델 개선
     data class Trainee(
         override val id: String,
         override val name: String,
         override val image: String?,
         val birthday: LocalDate?,
+        val age: Int? = 0,
         val weight: Double?,
         val height: Int?,
         val ptPurpose: List<String>?,
         val caution: String?,
         val isConnected: Boolean,
     ) : User() {
-        /** 한국식 나이 */
-        val age: Int? =
-            if (birthday == null) {
-                null
-            } else {
-                LocalDate.now().year - birthday.year + 1
-            }
-
         companion object {
             val EMPTY = Trainee(
                 id = "",
                 name = "",
                 image = null,
                 birthday = null,
+                age = null,
                 weight = null,
                 height = null,
                 ptPurpose = emptyList(),

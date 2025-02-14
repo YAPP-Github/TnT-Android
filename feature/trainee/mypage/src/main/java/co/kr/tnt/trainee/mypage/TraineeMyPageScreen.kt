@@ -317,6 +317,7 @@ private fun TraineeMyPageScreenPreview() {
                 user = User.Trainee(
                     id = "",
                     name = "김헬스",
+                    age = 0,
                     image = null,
                     birthday = LocalDate.of(2001, 1, 1),
                     weight = 10.0,

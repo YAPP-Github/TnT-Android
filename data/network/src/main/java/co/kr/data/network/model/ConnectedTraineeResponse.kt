@@ -1,30 +1,43 @@
 package co.kr.data.network.model
 
 import co.kr.tnt.domain.model.ConnectedResult
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ConnectedTraineeResponse(
-    val trainerName: String,
+    val trainee: Trainee,
+    val trainer: Trainer,
+)
+
+@Serializable
+data class Trainee(
     val traineeName: String,
-    val trainerProfileImageUrl: String?,
-    val traineeProfileImageUrl: String?,
-    val traineeAge: Int,
-    val height: Double,
-    val weight: Double,
-    val ptGoal: String,
+    val traineeProfileImageUrl: String,
     val cautionNote: String?,
+    val height: Double?,
+    val ptGoal: String,
+    val traineeAge: Int?,
+    val weight: Double?,
+)
+
+@Serializable
+data class Trainer(
+    @SerialName("trainerName")
+    val trainerName: String,
+    @SerialName("trainerProfileImageUrl")
+    val trainerProfileImageUrl: String,
 )
 
 fun ConnectedTraineeResponse.toDomain(): ConnectedResult =
     ConnectedResult(
-        trainerName = trainerName,
-        traineeName = traineeName,
-        trainerImage = trainerProfileImageUrl,
-        traineeImage = traineeProfileImageUrl,
-        age = traineeAge,
-        height = height,
-        weight = weight,
-        ptGoal = ptGoal,
-        cautionNote = cautionNote,
+        trainerName = trainer.trainerName,
+        traineeName = trainee.traineeName,
+        trainerImage = trainer.trainerProfileImageUrl,
+        traineeImage = trainee.traineeProfileImageUrl,
+        age = trainee.traineeAge,
+        height = trainee.height,
+        weight = trainee.weight,
+        ptGoal = trainee.ptGoal,
+        cautionNote = trainee.cautionNote,
     )
