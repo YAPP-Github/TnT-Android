@@ -85,6 +85,7 @@ internal fun TraineeProfilePage(
                         model = ImageRequest.Builder(context)
                             .data(trainee.image)
                             .placeholder(DefaultUserProfile.Trainee.image)
+                            .error(DefaultUserProfile.Trainee.image)
                             .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
                             .build(),
                     )

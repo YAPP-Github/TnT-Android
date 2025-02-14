@@ -127,6 +127,7 @@ private fun ProfileSection(
         model = ImageRequest.Builder(context)
             .data(image)
             .placeholder(defaultImage)
+            .error(DefaultUserProfile.Trainer.image)
             .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
             .build(),
     )
