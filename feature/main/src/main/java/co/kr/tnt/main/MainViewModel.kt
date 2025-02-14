@@ -19,15 +19,25 @@ internal class MainViewModel @Inject constructor(
     private val settingRepository: SettingRepository,
 ) :
     BaseViewModel<MainUiState, MainUiEvent, MainSideEffect>(MainUiState()) {
-        init {
-            viewModelScope.launch {
-                val startDestination = getStartDestination()
+        override suspend fun handleEvent(event: MainUiEvent) {
+            when (event) {
+                MainUiEvent.OnNotificationPermissionRevoked -> settingRepository.setEnablePushNotification(false)
+                is MainUiEvent.OnGetMessagingTokenSucceeded -> {
+                    viewModelScope.launch {
+                        val startDestination = getStartDestination()
 
-                updateState {
-                    copy(
-                        showSplash = false,
-                        startDestination = startDestination,
-                    )
+                        updateState {
+                            copy(
+                                showSplash = false,
+                                startDestination = startDestination,
+                            )
+                        }
+                    }
+                }
+
+                // TODO API 변경 시 제거 예정 코드
+                MainUiEvent.OnGetMessagingTokenFailed -> {
+                    sendEffect(MainSideEffect.ShowToast("네트워크 환경을 확인하신 후 앱을 재실행해주세요."))
                 }
             }
         }
@@ -46,11 +56,5 @@ internal class MainViewModel @Inject constructor(
                     Route.Login
                 },
             )
-        }
-
-        override suspend fun handleEvent(event: MainUiEvent) {
-            when (event) {
-                MainUiEvent.OnNotificationPermissionRevoked -> settingRepository.setEnablePushNotification(false)
-            }
         }
     }
