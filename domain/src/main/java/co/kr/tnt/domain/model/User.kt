@@ -32,7 +32,7 @@ sealed class User {
         val birthday: LocalDate?,
         val weight: Double?,
         val height: Int?,
-        val ptPurpose: List<String>,
+        val ptPurpose: List<String>?,
         val caution: String?,
         val isConnected: Boolean,
     ) : User() {

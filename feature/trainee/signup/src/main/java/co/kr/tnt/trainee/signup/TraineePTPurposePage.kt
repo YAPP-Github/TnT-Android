@@ -67,7 +67,7 @@ internal fun TraineePTPurposePage(
                             val purposeText = stringResource(purpose.textResId)
                             PurposeButton(
                                 text = purposeText,
-                                isSelected = purposeText in state.ptPurpose,
+                                isSelected = state.ptPurpose?.contains(purposeText) == true,
                                 onClick = { onPurposeSelected(purposeText) },
                                 modifier = Modifier.weight(1f),
                             )
@@ -78,7 +78,6 @@ internal fun TraineePTPurposePage(
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
                 onClick = onNextClick,
-                enabled = state.ptPurpose.isNotEmpty(),
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
