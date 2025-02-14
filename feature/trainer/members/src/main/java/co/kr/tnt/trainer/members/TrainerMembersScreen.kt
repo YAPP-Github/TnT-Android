@@ -158,7 +158,7 @@ private fun MemberList(member: MemberInfo) {
     Spacer(modifier = Modifier.height(16.dp))
 }
 
-@Preview(widthDp = 300)
+@Preview(showBackground = true, widthDp = 300)
 @Composable
 private fun TrainerMembersScreenPreview() {
     TnTTheme {
