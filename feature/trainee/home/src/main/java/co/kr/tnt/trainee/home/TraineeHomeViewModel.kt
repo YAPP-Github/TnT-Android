@@ -143,7 +143,7 @@ internal class TraineeHomeViewModel @Inject constructor(
     private fun updateCurrentDateTime() {
         val currentDateTime = LocalDateTime.now()
         viewModelScope.launch {
-            connectRepository.updateHomeDialogHiddenDate(currentDateTime)
+            connectRepository.updateExplicitDeniedConnectDate(currentDateTime)
         }
     }
 
@@ -169,7 +169,7 @@ internal class TraineeHomeViewModel @Inject constructor(
                 sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
             }
 
-            val lastHiddenDate = connectRepository.getHomeDialogHiddenDate().firstOrNull()
+            val lastHiddenDate = connectRepository.getExplicitDeniedConnectDate().firstOrNull()
             val isHidden = lastHiddenDate != null &&
                 Duration.between(lastHiddenDate, currentDateTime).toHours() < DIALOG_HIDE_DURATION_HOURS
 

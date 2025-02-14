@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.designsystem.component.TnTPopupDialog
 import co.kr.tnt.designsystem.component.button.TnTFabButton
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
@@ -51,6 +53,7 @@ import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
+import co.kr.tnt.ui.component.TnTCheckToggleDialog
 import co.kr.tnt.ui.component.TnTHomeTopBar
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -60,6 +63,7 @@ import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TrainerHomeRoute(
@@ -67,6 +71,7 @@ internal fun TrainerHomeRoute(
     padding: PaddingValues,
     navigateToNotification: () -> Unit,
     navigateToAddPtSession: () -> Unit,
+    navigateToInvite: (Boolean) -> Unit,
 ) {
     val toast = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -86,8 +91,39 @@ internal fun TrainerHomeRoute(
             when (effect) {
                 TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
                 TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession()
+                TrainerHomeSideEffect.NavigateToInvite -> navigateToInvite(false)
                 is TrainerHomeSideEffect.ShowToast -> toast.show(effect.message)
             }
+        }
+    }
+
+    when (state.dialogState) {
+        TrainerHomeUiState.DialogState.NONE -> Unit
+        TrainerHomeUiState.DialogState.HOME_CONNECT -> {
+            TnTCheckToggleDialog(
+                title = "회원을 연결해 주세요",
+                content = "연결하지 않을 경우 수업을 추가할 수 없어요\n초대 코드를 복사해 연결해주시겠어요?",
+                isChecked = state.isDialogHiddenForThreeDays,
+                checkToggleText = stringResource(coreR.string.do_not_see_for_three_days),
+                leftButtonText = stringResource(coreR.string.next_time),
+                rightButtonText = stringResource(coreR.string.connect),
+                onLeftButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
+                onRightButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnConfirmConnectDialog) },
+                onCheckClick = { viewModel.setEvent(TrainerHomeUiEvent.OnChangeHideDialogOption) },
+                onDismiss = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
+            )
+        }
+
+        TrainerHomeUiState.DialogState.ADD_PT_CONNECT -> {
+            TnTPopupDialog(
+                title = "회원을 연결해 주세요",
+                content = "연결하지 않을 경우 수업을 추가할 수 없어요\n초대 코드를 복사해 연결해주시겠어요?",
+                leftButtonText = stringResource(coreR.string.next_time),
+                rightButtonText = stringResource(coreR.string.connect),
+                onLeftButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
+                onRightButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnConfirmConnectDialog) },
+                onDismiss = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
+            )
         }
     }
 

@@ -67,7 +67,7 @@ internal class ConnectRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 
-    override suspend fun getHomeDialogHiddenDate(): Flow<LocalDateTime?> =
+    override suspend fun getExplicitDeniedConnectDate(): Flow<LocalDateTime?> =
         connectLocalDataSource.explicitDeniedConnectDate.map { dateString ->
             dateString?.let {
                 runCatching { dateFormatter.parseDateTime(it) }
@@ -75,7 +75,7 @@ internal class ConnectRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun updateHomeDialogHiddenDate(date: LocalDateTime) {
+    override suspend fun updateExplicitDeniedConnectDate(date: LocalDateTime) {
         val formattedDate = dateFormatter.format(date)
         connectLocalDataSource.updateExplicitDeniedConnectDate(formattedDate)
     }

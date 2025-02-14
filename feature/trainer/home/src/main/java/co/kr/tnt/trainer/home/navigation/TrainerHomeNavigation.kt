@@ -27,6 +27,7 @@ fun NavGraphBuilder.trainerHomeNavGraph(
     padding: PaddingValues,
     navigateToNotification: () -> Unit,
     navigateToAddPtSession: () -> Unit,
+    navigateToInvite: (Boolean) -> Unit,
     homeDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TrainerMainTab.Home>(startDestination = Route.TrainerHome) {
@@ -35,6 +36,7 @@ fun NavGraphBuilder.trainerHomeNavGraph(
                 padding = padding,
                 navigateToNotification = navigateToNotification,
                 navigateToAddPtSession = navigateToAddPtSession,
+                navigateToInvite = navigateToInvite,
             )
         }
         homeDestination()
