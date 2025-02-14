@@ -61,7 +61,6 @@ internal class TrainerConnectViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                // TODO 컴포넌트 사용
                 sendEffect(TrainerConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
             }
         }

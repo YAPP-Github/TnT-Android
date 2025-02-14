@@ -72,6 +72,7 @@ private fun TraineeMainScreen(
                 navigateToNotification = navController::navigateToTraineeNotification,
                 navigateToMealRecord = navigateToMealRecord,
                 navigateToMealDetail = navigateToMealDetail,
+                navigateToConnect = { navigateToConnect(false) },
             ) {
                 traineeNotification(
                     navigateToPrevious = navController::safePopBackStack,

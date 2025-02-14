@@ -2,6 +2,7 @@ package co.kr.tnt.trainee.home
 
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
+import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeEffect
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
@@ -9,15 +10,21 @@ import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
 import co.kr.tnt.ui.base.BaseViewModel
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
+const val DIALOG_HIDE_DURATION_HOURS = 72
+
 @HiltViewModel
 internal class TraineeHomeViewModel @Inject constructor(
     private val traineeRepository: TraineeRepository,
+    private val connectRepository: ConnectRepository,
 ) : BaseViewModel<TraineeHomeUiState, TraineeHomeUiEvent, TraineeHomeEffect>(
         TraineeHomeUiState(),
     ) {
@@ -32,6 +39,9 @@ internal class TraineeHomeViewModel @Inject constructor(
             is TraineeHomeUiEvent.OnClickPtSessionCard -> checkSessionRecord(event.ptSessionId)
             TraineeHomeUiEvent.OnClickExerciseRecord -> sendEffect(TraineeHomeEffect.NavigateToExerciseRecord)
             TraineeHomeUiEvent.OnClickMealRecord -> sendEffect(TraineeHomeEffect.NavigateToMealRecord)
+            TraineeHomeUiEvent.OnChangeHideDialogOption -> toggleDialogHiddenState()
+            TraineeHomeUiEvent.OnConfirmConnectDialog -> handleConfirmDialog()
+            TraineeHomeUiEvent.OnDismissDialog -> dismissDialog()
         }
     }
 
@@ -54,7 +64,7 @@ internal class TraineeHomeViewModel @Inject constructor(
                     updateMonthlyRecordStatus(mergedData)
                 }
             }.onFailure {
-                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
             }
         }
     }
@@ -96,8 +106,44 @@ internal class TraineeHomeViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
             }
+        }
+    }
+
+    private fun toggleDialogHiddenState() {
+        updateState { copy(isDialogHiddenForThreeDays = !isDialogHiddenForThreeDays) }
+    }
+
+    private fun handleConfirmDialog() {
+        if (currentState.isDialogHiddenForThreeDays) {
+            updateCurrentDateTime()
+        }
+        updateState {
+            copy(
+                showConnectDialog = false,
+                isDialogHiddenForThreeDays = false,
+            )
+        }
+        sendEffect(TraineeHomeEffect.NavigateToConnect)
+    }
+
+    private fun dismissDialog() {
+        if (currentState.isDialogHiddenForThreeDays) {
+            updateCurrentDateTime()
+        }
+        updateState {
+            copy(
+                showConnectDialog = false,
+                isDialogHiddenForThreeDays = false,
+            )
+        }
+    }
+
+    private fun updateCurrentDateTime() {
+        val currentDateTime = LocalDateTime.now()
+        viewModelScope.launch {
+            connectRepository.updateHomeDialogHiddenDate(currentDateTime)
         }
     }
 
@@ -105,5 +151,31 @@ internal class TraineeHomeViewModel @Inject constructor(
         cachedMonthlyRecordState.clear()
         handleChangeVisibleMonth(currentState.selectedDay.yearMonth)
         selectDate(currentState.selectedDay)
+        showConnectDialog()
+    }
+
+    private fun showConnectDialog() {
+        val currentDateTime = LocalDateTime.now()
+
+        viewModelScope.launch {
+            runCatching {
+                traineeRepository.getMyInfo()
+            }.onSuccess { result ->
+                updateState { copy(isConnected = result.isConnected) }
+                if (result.isConnected) {
+                    return@launch
+                }
+            }.onFailure {
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
+            }
+
+            val lastHiddenDate = connectRepository.getHomeDialogHiddenDate().firstOrNull()
+            val isHidden = lastHiddenDate != null &&
+                Duration.between(lastHiddenDate, currentDateTime).toHours() < DIALOG_HIDE_DURATION_HOURS
+
+            if (isHidden.not()) {
+                updateState { copy(showConnectDialog = true) }
+            }
+        }
     }
 }

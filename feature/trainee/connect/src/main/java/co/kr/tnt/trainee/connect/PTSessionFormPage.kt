@@ -63,12 +63,14 @@ internal fun PTSessionFormPage(
      * 1. 모든 항목(완료된 회차, 총 등록 회차, 시작일)이 입력되어야 한다
      * 2. 완료된 회차가 총 등록 회차보다 크지 않아야 한다
      */
-    val isFormValid = completedSessionCount.isNotEmpty() &&
-        totalSessionCount.isNotEmpty() && sessionStartDate != null &&
-        (completedSessionCount.toIntOrNull() ?: 0) < (totalSessionCount.toIntOrNull() ?: 0)
+    val isFormValid = sessionStartDate != null &&
+        isInvalidInput(completedSessionCount, allowZero = true).not() &&
+        isInvalidInput(totalSessionCount, allowZero = false).not() &&
+        isCompletedSessionInvalid(completedSessionCount, totalSessionCount).not()
 
-    val showWarning = completedSessionCount.isNotEmpty() && totalSessionCount.isNotEmpty() &&
-        (completedSessionCount.toIntOrNull() ?: 0) >= (totalSessionCount.toIntOrNull() ?: 0)
+    val showTotalSessionWarning = isInvalidInput(totalSessionCount, allowZero = false)
+    val showCompletedSessionWarning = isInvalidInput(completedSessionCount, allowZero = true) ||
+        isCompletedSessionInvalid(completedSessionCount, totalSessionCount)
 
     Scaffold(
         topBar = {
@@ -137,19 +139,21 @@ internal fun PTSessionFormPage(
                             isSingleLine = true,
                             isRequired = true,
                             keyboardType = KeyboardType.Number,
-                            showWarning = showWarning,
+                            showWarning = showCompletedSessionWarning || showTotalSessionWarning,
                             trailingComponent = {
                                 UnitLabel(R.string.count_unit)
                             },
                             onValueChange = { newValue ->
-                                if (validateInput(newValue)) {
-                                    onChangeCompletedSessionCount(newValue)
-                                }
+                                onChangeCompletedSessionCount(newValue)
                             },
                             modifier = Modifier.fillMaxWidth(),
                         )
                         Text(
-                            text = if (showWarning) stringResource(uiResource.string.entered_wrong_text) else "",
+                            text = if (showCompletedSessionWarning || showTotalSessionWarning) {
+                                stringResource(uiResource.string.entered_wrong_text)
+                            } else {
+                                ""
+                            },
                             style = TnTTheme.typography.body2Medium,
                             color = TnTTheme.colors.redColors.Red500,
                             modifier = Modifier.padding(top = 4.dp),
@@ -171,19 +175,21 @@ internal fun PTSessionFormPage(
                             isSingleLine = true,
                             isRequired = true,
                             keyboardType = KeyboardType.Number,
-                            showWarning = showWarning,
+                            showWarning = showTotalSessionWarning || showCompletedSessionWarning,
                             trailingComponent = {
                                 UnitLabel(R.string.count_unit)
                             },
                             onValueChange = { newValue ->
-                                if (validateInput(newValue)) {
-                                    onChangeTotalSessionCount(newValue)
-                                }
+                                onChangeTotalSessionCount(newValue)
                             },
                             modifier = Modifier.fillMaxWidth(),
                         )
                         Text(
-                            text = if (showWarning) stringResource(uiResource.string.entered_wrong_text) else "",
+                            text = if (showTotalSessionWarning || showCompletedSessionWarning) {
+                                stringResource(uiResource.string.entered_wrong_text)
+                            } else {
+                                ""
+                            },
                             style = TnTTheme.typography.body2Medium,
                             color = TnTTheme.colors.redColors.Red500,
                             modifier = Modifier.padding(top = 4.dp),
@@ -203,6 +209,27 @@ internal fun PTSessionFormPage(
     if (isLoading) {
         TnTLoadingScreen()
     }
+}
+
+/**
+ * 입력이 유효하지 않은 경우 true 리턴
+ * @param input 입력 값
+ * @param allowZero `true`일 경우 0 입력 가능 (현재 완료된 회차)
+ * @return `true`면 경고 필요, `false`면 정상 입력
+ */
+private fun isInvalidInput(input: String, allowZero: Boolean = false): Boolean {
+    val num = input.toIntOrNull() ?: return false
+
+    return if (allowZero) {
+        (num !in 0..MAX_COUNT) || (input.length > 1 && input.startsWith("0"))
+    } else {
+        (num !in 1..MAX_COUNT) || (input.length > 1 && input.startsWith("0"))
+    }
+}
+
+private fun isCompletedSessionInvalid(completedSession: String, totalSession: String): Boolean {
+    if (completedSession.isEmpty() || totalSession.isEmpty()) return false
+    return (completedSession.toIntOrNull() ?: 0) >= (totalSession.toIntOrNull() ?: 0)
 }
 
 @Composable
@@ -263,14 +290,6 @@ private fun UnitLabel(stringResId: Int) {
         style = TnTTheme.typography.body1Medium,
         color = TnTTheme.colors.neutralColors.Neutral400,
     )
-}
-
-/**
- * 유효한 입력 값인지 검사
- * 형식: 99 이하의 정수
- */
-private fun validateInput(input: String): Boolean {
-    return input.isEmpty() || (input.toIntOrNull() != null && !input.startsWith("0") && input.toInt() <= MAX_COUNT)
 }
 
 @Preview

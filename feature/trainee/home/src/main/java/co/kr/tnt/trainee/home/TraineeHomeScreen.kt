@@ -62,6 +62,7 @@ import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeEffect
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
 import co.kr.tnt.ui.coil.ResizeTransformation
+import co.kr.tnt.ui.component.TnTCheckToggleDialog
 import co.kr.tnt.ui.component.TnTHomeTopBar
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.model.RecordChip
@@ -74,12 +75,14 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
+import co.kr.tnt.core.ui.R as coreR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TraineeHomeRoute(
     viewModel: TraineeHomeViewModel = hiltViewModel(),
     padding: PaddingValues,
+    navigateToConnect: () -> Unit,
     navigateToNotification: () -> Unit,
     navigateToExerciseRecord: () -> Unit,
     navigateToMealRecord: () -> Unit,
@@ -125,6 +128,21 @@ internal fun TraineeHomeRoute(
         )
     }
 
+    if (uiState.showConnectDialog) {
+        TnTCheckToggleDialog(
+            title = stringResource(R.string.please_connect_trainer),
+            content = stringResource(R.string.connect_dialog_warning),
+            isChecked = uiState.isDialogHiddenForThreeDays,
+            checkToggleText = stringResource(coreR.string.do_not_see_for_three_days),
+            leftButtonText = stringResource(coreR.string.next_time),
+            rightButtonText = stringResource(coreR.string.connect),
+            onLeftButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissDialog) },
+            onRightButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnConfirmConnectDialog) },
+            onCheckClick = { viewModel.setEvent(TraineeHomeUiEvent.OnChangeHideDialogOption) },
+            onDismiss = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissDialog) },
+        )
+    }
+
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
@@ -138,6 +156,7 @@ internal fun TraineeHomeRoute(
                     navigateToMealRecord()
                 }
 
+                TraineeHomeEffect.NavigateToConnect -> navigateToConnect()
                 is TraineeHomeEffect.ShowToast -> snackbar.show(effect.message)
             }
         }

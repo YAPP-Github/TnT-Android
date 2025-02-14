@@ -1,6 +1,7 @@
 package co.kr.tnt.trainee.signup
 
 import android.app.DatePickerDialog
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +50,7 @@ internal fun TraineeBasicInfoPage(
 ) {
     BackHandler { onBackClick() }
 
+    val context = LocalContext.current
     val today = LocalDate.now()
 
     Scaffold(
@@ -66,7 +68,7 @@ internal fun TraineeBasicInfoPage(
                     currentStep = 2,
                     totalSteps = 4,
                     title = stringResource(R.string.enter_your_basic_info),
-                    subTitle = stringResource(R.string.basic_info_for_pt),
+                    subTitle = stringResource(R.string.basic_info_for_trainer),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 Text(
@@ -77,6 +79,7 @@ internal fun TraineeBasicInfoPage(
                 )
                 BirthdayPicker(
                     modifier = Modifier.padding(horizontal = 20.dp),
+                    context = context,
                     today = today,
                     selectedDate = state.birthday,
                     onDateSelected = onBirthdayChange,
@@ -136,13 +139,13 @@ internal fun TraineeBasicInfoPage(
 @Composable
 private fun BirthdayPicker(
     modifier: Modifier = Modifier,
+    context: Context,
     today: LocalDate,
     selectedDate: LocalDate?,
     onDateSelected: (LocalDate) -> Unit,
 ) {
-    val context = LocalContext.current
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
-    val date = selectedDate ?: today
+    val date = selectedDate ?: LocalDate.of(2001, 1, 1)
 
     Box(
         modifier = modifier

@@ -2,7 +2,6 @@
 <resources>
     <string name="what_is_your_name">이름이 어떻게 되세요?</string>
     <string name="name_placeholder">이름을 입력해주세요</string>
-    <string name="text_length_warning">%s자 이하로 입력해주세요</string>
 
     <string name="nice_to_meet_you_trainer">만나서 반가워요\n%s 트레이너님!</string>
     <string name="chemistry_boom_with_trainee">트레이니와 함께\n케미를 터뜨려보세요! 🧨</string>

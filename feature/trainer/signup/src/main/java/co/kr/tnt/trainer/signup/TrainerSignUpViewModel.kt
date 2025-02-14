@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
-import co.kr.tnt.core.ui.R as uiResource
 
 @HiltViewModel
 internal class TrainerSignUpViewModel @Inject constructor(
@@ -78,9 +77,7 @@ internal class TrainerSignUpViewModel @Inject constructor(
             }.onSuccess {
                 sendEffect(TrainerSignUpEffect.NavigateToConnect)
             }.onFailure {
-                // TODO 디자인 시스템 Toast 적용
-                val message = context.getString(uiResource.string.error_server_request_failed)
-                sendEffect(TrainerSignUpEffect.ShowToast(message))
+                sendEffect(TrainerSignUpEffect.ShowToast("서버 요청에 실패했어요"))
             }.also {
                 updateState { copy(isLoading = false) }
             }

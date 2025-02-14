@@ -134,8 +134,8 @@ private fun TraineeMyPageScreen(
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(state.user.image)
-            .placeholder(co.kr.tnt.core.designsystem.R.drawable.img_default)
-            .error(DefaultUserProfile.Trainer.image)
+            .placeholder(DefaultUserProfile.Trainee.image)
+            .error(DefaultUserProfile.Trainee.image)
             .build(),
     )
 

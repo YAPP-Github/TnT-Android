@@ -3,6 +3,8 @@ package co.kr.tnt.domain.repository
 import co.kr.tnt.domain.model.ConnectRequestResult
 import co.kr.tnt.domain.model.ConnectedResult
 import co.kr.tnt.domain.model.InviteCodeResult
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
 
 interface ConnectRepository {
     suspend fun getInviteCode(): InviteCodeResult
@@ -22,4 +24,8 @@ interface ConnectRepository {
         trainerId: String,
         traineeId: String,
     ): ConnectedResult
+
+    suspend fun getHomeDialogHiddenDate(): Flow<LocalDateTime?>
+
+    suspend fun updateHomeDialogHiddenDate(date: LocalDateTime)
 }

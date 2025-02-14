@@ -16,8 +16,8 @@
     <string name="ok">확인</string>
     <string name="move_to_setting">설정으로 이동</string>
 
-    <string name="error_server_request_failed">서버 요청에 실패했어요</string>
     <string name="entered_wrong_text">잘못된 수치를 입력했어요</string>
+    <string name="text_length_and_format_warning">%s자 미만의 한글 또는 영문으로 입력해주세요</string>
 
     <string name="trainee">트레이니</string>
     <string name="trainer">트레이너</string>
@@ -27,6 +27,7 @@
     <string name="start">시작하기</string>
     <string name="skip">건너뛰기</string>
     <string name="cancel">취소</string>
+    <string name="next_time">다음에</string>
 
     <string name="name">이름</string>
     <string name="age_label">나이</string>
@@ -38,6 +39,9 @@
 
     <string name="notification">알림</string>
     <string name="no_recent_notifications">최근 받은 알림이 없어요</string>
+
+    <!--  Dialog  -->
+    <string name="do_not_see_for_three_days">3일 동안 보지 않기</string>
 
     <!-- Meal -->
     <string name="meal_breakfast">아침</string>

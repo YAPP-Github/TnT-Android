@@ -36,7 +36,7 @@ import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import co.kr.tnt.core.ui.R as uiResource
+import co.kr.tnt.core.ui.R as coreR
 
 private const val MAX_LENGTH = 15
 
@@ -96,7 +96,7 @@ internal fun TraineeProfileSetupPage(
                 )
                 Spacer(Modifier.padding(top = 60.dp))
                 TnTLabeledTextFieldWithCounter(
-                    title = stringResource(uiResource.string.name),
+                    title = stringResource(coreR.string.name),
                     value = state.name,
                     onValueChange = { newValue ->
                         val filteredText = validateInput(newValue)
@@ -108,11 +108,11 @@ internal fun TraineeProfileSetupPage(
                     isSingleLine = true,
                     showWarning = !state.isNameValid,
                     isRequired = true,
-                    warningMessage = stringResource(R.string.text_length_warning, MAX_LENGTH),
+                    warningMessage = stringResource(coreR.string.text_length_and_format_warning, MAX_LENGTH),
                 )
             }
             TnTBottomButton(
-                text = stringResource(uiResource.string.next),
+                text = stringResource(coreR.string.next),
                 enabled = state.name.isNotBlank() && state.isNameValid,
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),

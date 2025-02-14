@@ -1,5 +1,6 @@
 package co.kr.tnt.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,11 +40,16 @@ fun TnTCheckToggleDialog(
     modifier: Modifier = Modifier,
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
+    cancelable: Boolean = false,
     onCheckClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     Dialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = {
+            if (cancelable) {
+                onDismiss()
+            }
+        },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Card(
@@ -88,7 +94,9 @@ fun TnTCheckToggleDialog(
                         text = checkToggleText,
                         style = TnTTheme.typography.body2Medium,
                         color = TnTTheme.colors.neutralColors.Neutral500,
-                        modifier = Modifier.padding(start = 4.dp),
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .clickable(onClick = onCheckClick),
                     )
                 }
                 Row(

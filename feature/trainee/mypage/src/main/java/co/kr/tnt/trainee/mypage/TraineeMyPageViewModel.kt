@@ -70,7 +70,7 @@ internal class TraineeMyPageViewModel @Inject constructor(
                 }.onSuccess { user ->
                     updateState { copy(user = user) }
                 }.onFailure {
-                    sendEffect(TraineeMyPageEffect.ShowToast("서버 요청에 실패했어요"))
+                    sendEffect(TraineeMyPageEffect.ShowToast("서버 요청에 실패했어요."))
                 }
 
                 settingRepository.isEnablePushNotification()

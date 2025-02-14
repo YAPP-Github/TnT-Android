@@ -4,10 +4,9 @@
 
     <string name="what_is_your_name">이름이 어떻게 되세요?</string>
     <string name="enter_your_name">이름을 입력해주세요</string>
-    <string name="text_length_warning">%s자 이하로 입력해주세요</string>
 
     <string name="enter_your_basic_info">회원님의 기본 정보를\n입력해주세요</string>
-    <string name="basic_info_for_pt">PT에 참고할 기본 정보예요!</string>
+    <string name="basic_info_for_trainer">정보를 입력하면 PT 트레이너에게 전송돼요</string>
     <string name="birthday_placeholder">2001/01/01</string>
 
     <string name="tell_purpose_of_pt">PT를 받는 목적에 대해\n알려주세요!</string>

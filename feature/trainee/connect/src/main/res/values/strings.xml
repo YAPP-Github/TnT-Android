@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="next_time">다음에 할게요</string>
-
     <string name="enter_invite_code_from_trainer">트레이너에게 받은\n초대 코드를 입력해 주세요</string>
     <string name="not_connected_warning">트레이너와 연결하지 않을 경우\n일부 기능이 제한될 수 있어요.</string>
     <string name="enter_the_code">코드를 입력해주세요</string>

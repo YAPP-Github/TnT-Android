@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,11 +30,14 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.feature.trainer.connect.R
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
+import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import java.time.LocalDate
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -45,6 +49,7 @@ internal fun TraineeProfilePage(
 ) {
     BackHandler { onBackClick() }
 
+    val context = LocalContext.current
     val trainee = state.traineeState
 
     Scaffold { innerPadding ->
@@ -76,7 +81,14 @@ internal fun TraineeProfilePage(
                         .background(TnTTheme.colors.commonColors.Common0)
                         .padding(horizontal = 20.dp, vertical = 32.dp),
                 ) {
-                    val painter = trainee.image?.let { rememberAsyncImagePainter(it) }
+                    val painter = rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(context)
+                            .data(trainee.image)
+                            .placeholder(DefaultUserProfile.Trainee.image)
+                            .error(DefaultUserProfile.Trainee.image)
+                            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+                            .build(),
+                    )
                     val defaultImage = painterResource(DefaultUserProfile.Trainee.image)
                     TnTProfileImage(
                         defaultImage = defaultImage,

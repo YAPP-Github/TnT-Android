@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
-import co.kr.tnt.core.ui.R
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.SignUpRepository
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpEffect
@@ -48,7 +47,6 @@ internal class TraineeSignUpViewModel @Inject constructor(
         }
     }
 
-    // FIXME context 사용하지 않도록 개선
     private fun signUp(
         context: Context,
         imageUri: Uri?,
@@ -89,9 +87,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
             }.onSuccess {
                 sendEffect(TraineeSignUpEffect.NavigateToConnect)
             }.onFailure {
-                // TODO 디자인 시스템 Toast 적용
-                val message = context.getString(R.string.error_server_request_failed)
-                sendEffect(TraineeSignUpEffect.ShowToast(message))
+                sendEffect(TraineeSignUpEffect.ShowToast("서버 요청에 실패했어요."))
             }.also {
                 updateState { copy(isLoading = false) }
             }
