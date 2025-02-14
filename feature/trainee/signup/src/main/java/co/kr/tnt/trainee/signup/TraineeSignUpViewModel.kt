@@ -115,7 +115,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
     }
 
     private fun updateSelectedPurposes(purpose: String) {
-        val updatedPurposes = currentState.ptPurpose.toMutableList().apply {
+        val updatedPurposes = currentState.ptPurpose.orEmpty().toMutableList().apply {
             if (contains(purpose)) {
                 remove(purpose)
             } else {

@@ -99,8 +99,7 @@ internal fun TraineeProfileSetupPage(
                     title = stringResource(coreR.string.name),
                     value = state.name,
                     onValueChange = { newValue ->
-                        val filteredText = validateInput(newValue)
-                        onNameChange(filteredText)
+                        onNameChange(newValue)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
                     placeholder = stringResource(R.string.enter_your_name),
@@ -119,13 +118,6 @@ internal fun TraineeProfileSetupPage(
             )
         }
     }
-}
-
-/**
- * 입력 값을 검사해 한글/영어/공백만 허용하고 특수문자는 제거
- */
-private fun validateInput(input: String): String {
-    return input.filter { it.isLetter() || it.isWhitespace() }
 }
 
 @Preview(showBackground = true)

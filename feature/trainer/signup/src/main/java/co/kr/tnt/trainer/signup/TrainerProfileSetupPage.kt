@@ -17,9 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -54,10 +52,6 @@ internal fun TrainerProfileSetupPage(
     BackHandler { onBackClick() }
 
     val context = LocalContext.current
-
-    val isWarning by remember(state.name) {
-        derivedStateOf { state.name.length > MAX_LENGTH }
-    }
 
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -108,14 +102,13 @@ internal fun TrainerProfileSetupPage(
                     title = stringResource(coreR.string.name),
                     value = state.name,
                     onValueChange = { newValue ->
-                        val filteredText = validateInput(newValue)
-                        onNameChange(filteredText)
+                        onNameChange(newValue)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
                     placeholder = stringResource(R.string.name_placeholder),
                     maxLength = MAX_LENGTH,
                     isSingleLine = true,
-                    showWarning = isWarning,
+                    showWarning = state.isNameValid.not(),
                     isRequired = true,
                     warningMessage = stringResource(coreR.string.text_length_and_format_warning, MAX_LENGTH),
                 )
@@ -123,18 +116,11 @@ internal fun TrainerProfileSetupPage(
             TnTBottomButton(
                 text = stringResource(coreR.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
-                enabled = state.name.isNotBlank() && !isWarning,
+                enabled = state.name.isNotBlank() && state.isNameValid,
                 onClick = onNextClick,
             )
         }
     }
-}
-
-/**
- * 입력 값을 검사해 한글/영어/공백만 허용하고 특수문자는 제거
- */
-private fun validateInput(input: String): String {
-    return input.filter { it.isLetter() || it.isWhitespace() }
 }
 
 @Preview(showBackground = true)

@@ -19,11 +19,15 @@ internal class TraineeSignUpContract {
         val birthday: LocalDate? = null,
         val height: String? = null,
         val weight: String? = null,
-        val ptPurpose: List<String> = emptyList(),
+        val ptPurpose: List<String>? = emptyList(),
         val caution: String? = "",
         val isLoading: Boolean = false,
     ) : UiState {
-        val isNameValid get() = name.length <= MAX_NAME_LENGTH
+        /**
+         * 입력 값을 검사해 한글/영어/공백만 허용하고 특수문자는 제거
+         */
+        private val nameRegex = Regex("^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣 ]+\$")
+        val isNameValid get() = name.isBlank() || name.matches(nameRegex) && name.length <= MAX_NAME_LENGTH
 
         /**
          * 키가 유효한 입력값인지 검사
