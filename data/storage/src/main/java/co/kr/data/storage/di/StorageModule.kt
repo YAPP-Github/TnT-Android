@@ -21,8 +21,8 @@ internal object StorageModule {
     const val SETTING_STORAGE_NAME = "SETTING_STORAGE"
     private val Context.settingDataStore by preferencesDataStore(name = SETTING_STORAGE_NAME)
 
-    const val HOME_STORAGE_NAME = "HOME_STORAGE"
-    private val Context.homeDataStore by preferencesDataStore(name = HOME_STORAGE_NAME)
+    const val CONNECT_STORAGE_NAME = "HOME_STORAGE"
+    private val Context.connectDataStore by preferencesDataStore(name = CONNECT_STORAGE_NAME)
 
     @Provides
     @Singleton
@@ -40,8 +40,8 @@ internal object StorageModule {
 
     @Provides
     @Singleton
-    @Named(HOME_STORAGE_NAME)
-    fun provideHomeSessionDataStore(
+    @Named(CONNECT_STORAGE_NAME)
+    fun provideConnectDataStore(
         @ApplicationContext context: Context,
-    ): DataStore<Preferences> = context.homeDataStore
+    ): DataStore<Preferences> = context.connectDataStore
 }

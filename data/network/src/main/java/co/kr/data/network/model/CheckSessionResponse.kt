@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CheckSessionResponse(
     val memberType: MemberType,
+    val isConnected: Boolean,
 )
