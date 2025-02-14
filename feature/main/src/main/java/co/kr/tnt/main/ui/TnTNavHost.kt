@@ -27,6 +27,7 @@ import co.kr.tnt.trainer.main.navigation.navigateToTrainerMain
 import co.kr.tnt.trainer.main.navigation.trainerMainScreen
 import co.kr.tnt.trainer.signup.navigation.navigateToTrainerSignUp
 import co.kr.tnt.trainer.signup.navigation.trainerSignUpScreen
+import co.kr.tnt.ui.extensions.safePopBackStack
 import co.kr.tnt.webview.navigateToWebView
 import co.kr.tnt.webview.webViewScreen
 
@@ -65,29 +66,29 @@ fun TnTNavHost(
                 navigateToTrainerSignUp = navController::navigateToTrainerSignUp,
             )
             trainerSignUpScreen(
-                navigateToPrevious = navController::popBackStack,
+                navigateToPrevious = navController::safePopBackStack,
                 navigateToInvite = navController::navigateToTrainerInvite,
             )
             traineeSignUpScreen(
-                navigateToPrevious = navController::popBackStack,
+                navigateToPrevious = navController::safePopBackStack,
                 navigateToConnect = {
                     navController.navigateToTraineeConnect(isSkippable = true)
                 },
             )
             trainerInviteScreen(
-                navigateToPrevious = navController::popBackStack,
+                navigateToPrevious = navController::safePopBackStack,
                 navigateToHome = { navController.navigateToTrainerMain(clearBackStack = true) },
             )
             trainerConnectScreen(
-                navigateToPrevious = navController::popBackStack,
+                navigateToPrevious = navController::safePopBackStack,
                 navigateToHome = { navController.navigateToTrainerMain(clearBackStack = true) },
             )
             traineeConnectScreen(
-                navigateToPrevious = navController::popBackStack,
+                navigateToPrevious = navController::safePopBackStack,
                 navigateToHome = { navController.navigateToTraineeMain(clearBackStack = true) },
             )
             traineeMealRecordScreen(
-                navigateToPrevious = navController::popBackStack,
+                navigateToPrevious = navController::safePopBackStack,
             )
             trainerMainScreen(
                 navigateToConnect = navController::navigateToTrainerConnect,
@@ -103,7 +104,7 @@ fun TnTNavHost(
                 navigateToMealDetail = navController::navigateToTraineeMealRecordDetail,
             )
             webViewScreen(
-                navigateToPrevious = navController::popBackStack,
+                navigateToPrevious = navController::safePopBackStack,
             )
         }
     }

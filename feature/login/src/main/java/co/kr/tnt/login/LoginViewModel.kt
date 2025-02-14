@@ -61,6 +61,7 @@ internal class LoginViewModel @Inject constructor(
                 }
 
                 this@LoginViewModel.loginResult = loginResult
+                clearAllChecks()
                 sendEffect(LoginSideEffect.ShowTermBottomSheet)
             }.onFailure {
                 // TODO resource
@@ -85,6 +86,14 @@ internal class LoginViewModel @Inject constructor(
                 terms = terms.toMutableMap()
                     .also { terms -> terms[termState] = !(terms[termState] ?: false) }
                     .toMap(),
+            )
+        }
+    }
+
+    private fun clearAllChecks() {
+        updateState {
+            copy(
+                terms = terms.keys.associateWith { false },
             )
         }
     }

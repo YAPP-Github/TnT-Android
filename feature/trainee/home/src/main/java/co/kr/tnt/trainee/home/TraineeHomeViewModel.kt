@@ -10,8 +10,7 @@ import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
 import co.kr.tnt.ui.base.BaseViewModel
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
@@ -19,6 +18,8 @@ import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
+
+const val DIALOG_HIDE_DURATION_HOURS = 72
 
 @HiltViewModel
 internal class TraineeHomeViewModel @Inject constructor(
@@ -38,8 +39,8 @@ internal class TraineeHomeViewModel @Inject constructor(
             is TraineeHomeUiEvent.OnClickPtSessionCard -> checkSessionRecord(event.ptSessionId)
             TraineeHomeUiEvent.OnClickExerciseRecord -> sendEffect(TraineeHomeEffect.NavigateToExerciseRecord)
             TraineeHomeUiEvent.OnClickMealRecord -> sendEffect(TraineeHomeEffect.NavigateToMealRecord)
-            TraineeHomeUiEvent.OnChangeHideDialogOption -> clickHideDialog()
-            TraineeHomeUiEvent.OnConfirmConnectDialog -> navigateToConnect()
+            TraineeHomeUiEvent.OnChangeHideDialogOption -> toggleDialogHiddenState()
+            TraineeHomeUiEvent.OnConfirmConnectDialog -> handleConfirmDialog()
             TraineeHomeUiEvent.OnDismissDialog -> dismissDialog()
         }
     }
@@ -63,7 +64,7 @@ internal class TraineeHomeViewModel @Inject constructor(
                     updateMonthlyRecordStatus(mergedData)
                 }
             }.onFailure {
-                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
             }
         }
     }
@@ -105,16 +106,16 @@ internal class TraineeHomeViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
             }
         }
     }
 
-    private fun clickHideDialog() {
+    private fun toggleDialogHiddenState() {
         updateState { copy(isDialogHiddenForThreeDays = !isDialogHiddenForThreeDays) }
     }
 
-    private fun navigateToConnect() {
+    private fun handleConfirmDialog() {
         if (currentState.isDialogHiddenForThreeDays) {
             updateCurrentDateTime()
         }
@@ -164,17 +165,17 @@ internal class TraineeHomeViewModel @Inject constructor(
                 if (result.isConnected) {
                     return@launch
                 }
+            }.onFailure {
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
             }
 
-            connectRepository.getHomeDialogHiddenDate()
-                .onEach { lastHiddenDate ->
-                    val isHidden = lastHiddenDate != null &&
-                        Duration.between(lastHiddenDate, currentDateTime).toHours() < 72
+            val lastHiddenDate = connectRepository.getHomeDialogHiddenDate().firstOrNull()
+            val isHidden = lastHiddenDate != null &&
+                Duration.between(lastHiddenDate, currentDateTime).toHours() < DIALOG_HIDE_DURATION_HOURS
 
-                    if (isHidden.not()) {
-                        updateState { copy(showConnectDialog = true) }
-                    }
-                }.launchIn(viewModelScope)
+            if (isHidden.not()) {
+                updateState { copy(showConnectDialog = true) }
+            }
         }
     }
 }

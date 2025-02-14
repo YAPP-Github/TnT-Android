@@ -17,6 +17,7 @@ import co.kr.tnt.trainer.members.navigation.trainerMembersNavGraph
 import co.kr.tnt.trainer.mypage.navigation.trainerMyPageNavGraph
 import co.kr.tnt.trainer.notification.navigation.navigateToTrainerNotification
 import co.kr.tnt.trainer.notification.navigation.trainerNotification
+import co.kr.tnt.ui.extensions.safePopBackStack
 
 @Composable
 internal fun TrainerMainRoute(
@@ -72,11 +73,11 @@ private fun TrainerMainScreen(
                 navigateToInvite = navigateToInvite,
             ) {
                 trainerNotification(
-                    navigateToPrevious = navController::popBackStack,
+                    navigateToPrevious = navController::safePopBackStack,
                     navigateToConnect = navigateToConnect,
                 )
                 addPtSession(
-                    navigateToPrevious = navController::popBackStack,
+                    navigateToPrevious = navController::safePopBackStack,
                 )
             }
             trainerFeedbackNavGraph(padding = innerPadding)
