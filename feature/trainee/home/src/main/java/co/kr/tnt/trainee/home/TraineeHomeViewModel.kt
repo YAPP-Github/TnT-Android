@@ -63,7 +63,7 @@ internal class TraineeHomeViewModel @Inject constructor(
                     updateMonthlyRecordStatus(mergedData)
                 }
             }.onFailure {
-                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
             }
         }
     }
@@ -105,7 +105,7 @@ internal class TraineeHomeViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
             }
         }
     }
@@ -164,6 +164,8 @@ internal class TraineeHomeViewModel @Inject constructor(
                 if (result.isConnected) {
                     return@launch
                 }
+            }.onFailure {
+                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
             }
 
             connectRepository.getHomeDialogHiddenDate()
