@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.TraineeRepository
+import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordSideEffect
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiEvent
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class TraineeMealRecordViewModel @Inject constructor(
     private val traineeRepository: TraineeRepository,
+    private val dateFormatter: DateFormatter,
 ) :
     BaseViewModel<TraineeMealRecordUiState, TraineeMealRecordUiEvent, TraineeMealRecordSideEffect>(
             TraineeMealRecordUiState(),
@@ -94,6 +96,11 @@ internal class TraineeMealRecordViewModel @Inject constructor(
         private fun postMealRecord(context: Context) {
             updateState { copy(isLoading = true) }
 
+            val mealDateTime = dateFormatter.format(
+                LocalDateTime.of(currentState.date, currentState.time),
+                "yyyy-MM-dd'T'HH:mm:ss",
+            )
+
             viewModelScope.launch {
                 val state = currentState
                 val imageFile: File? = state.image?.toFile(context)?.let { file ->
@@ -106,7 +113,7 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                 runCatching {
                     traineeRepository.postMealRecord(
                         mealImage = imageFile,
-                        date = state.mealDateTime ?: LocalDateTime.now(),
+                        date = mealDateTime,
                         mealType = state.mealType,
                         memo = state.memo,
                     )

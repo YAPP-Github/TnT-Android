@@ -20,7 +20,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.time.LocalDate
-import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -54,7 +53,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
 
     override suspend fun postMealRecord(
         mealImage: File?,
-        date: LocalDateTime,
+        date: String,
         mealType: String,
         memo: String,
     ) {
@@ -64,7 +63,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
         }
 
         val mealRecordRequest = MealRecordRequest(
-            date = date.toString(),
+            date = date,
             dietType = mealType,
             memo = memo,
         )
