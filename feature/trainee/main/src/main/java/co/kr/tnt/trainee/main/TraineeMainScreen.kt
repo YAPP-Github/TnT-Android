@@ -14,6 +14,7 @@ import co.kr.tnt.trainee.home.navigation.traineeHomeNavGraph
 import co.kr.tnt.trainee.mypage.navigation.traineeMyPageNavGraph
 import co.kr.tnt.trainee.notification.navigation.navigateToTraineeNotification
 import co.kr.tnt.trainee.notification.navigation.traineeNotification
+import co.kr.tnt.ui.extensions.safePopBackStack
 
 @Composable
 internal fun TraineeMainRoute(
@@ -73,7 +74,7 @@ private fun TraineeMainScreen(
                 navigateToMealDetail = navigateToMealDetail,
             ) {
                 traineeNotification(
-                    navigateToPrevious = navController::popBackStack,
+                    navigateToPrevious = navController::safePopBackStack,
                 )
             }
             traineeMyPageNavGraph(
