@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,14 +40,15 @@ import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainer.invite.R
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteSideEffect
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiEvent
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiState
-import co.kr.tnt.core.ui.R as uiResource
+import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TrainerInviteRoute(
-    isSkippable: Boolean,
+    screenMode: ScreenMode,
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerInviteViewModel = hiltViewModel(),
@@ -56,7 +60,7 @@ internal fun TrainerInviteRoute(
 
     TrainerInviteScreen(
         state = state,
-        isSkippable = isSkippable,
+        screenMode = screenMode,
         onRegenerateClick = { viewModel.setEvent(TrainerInviteUiEvent.OnRegenerateClick) },
         onCodeClick = { code -> viewModel.setEvent(TrainerInviteUiEvent.OnCodeClick(code)) },
         onBackClick = { viewModel.setEvent(TrainerInviteUiEvent.OnBackClick) },
@@ -78,41 +82,61 @@ internal fun TrainerInviteRoute(
 @Composable
 internal fun TrainerInviteScreen(
     state: TrainerInviteUiState,
-    isSkippable: Boolean,
+    screenMode: ScreenMode,
     onCodeClick: (code: String) -> Unit,
     onRegenerateClick: () -> Unit,
     onBackClick: () -> Unit,
     onSkipClick: () -> Unit,
 ) {
     BackHandler {
-        if (isSkippable) {
-            onSkipClick()
-        } else {
-            onBackClick()
+        when (screenMode) {
+            ScreenMode.BACK -> onBackClick()
+            ScreenMode.SKIP -> onSkipClick()
+            ScreenMode.CLOSE -> onBackClick()
         }
     }
 
     Scaffold(
         topBar = {
-            if (isSkippable) {
-                TnTTopBar(
-                    title = stringResource(uiResource.string.connect),
-                    trailingComponent = {
-                        Text(
-                            text = stringResource(uiResource.string.skip),
-                            color = TnTTheme.colors.neutralColors.Neutral400,
-                            style = TnTTheme.typography.body2Medium,
-                            modifier = Modifier.clickable {
-                                onSkipClick()
-                            },
-                        )
-                    },
-                )
-            } else {
-                TnTTopBarWithBackButton(
-                    title = stringResource(R.string.add_member),
-                    onBackClick = onBackClick,
-                )
+            when (screenMode) {
+                ScreenMode.BACK -> {
+                    TnTTopBarWithBackButton(
+                        title = stringResource(R.string.add_member),
+                        onBackClick = onBackClick,
+                    )
+                }
+
+                ScreenMode.SKIP -> {
+                    TnTTopBar(
+                        title = stringResource(coreR.string.connect),
+                        trailingComponent = {
+                            Text(
+                                text = stringResource(coreR.string.skip),
+                                color = TnTTheme.colors.neutralColors.Neutral400,
+                                style = TnTTheme.typography.body2Medium,
+                                modifier = Modifier.clickable {
+                                    onSkipClick()
+                                },
+                            )
+                        },
+                    )
+                }
+
+                ScreenMode.CLOSE -> {
+                    TnTTopBar(
+                        title = stringResource(R.string.add_member),
+                        trailingComponent = {
+                            IconButton(
+                                onClick = onBackClick,
+                            ) {
+                                Icon(
+                                    painter = painterResource(co.kr.tnt.core.designsystem.R.drawable.ic_delete),
+                                    contentDescription = null,
+                                )
+                            }
+                        },
+                    )
+                }
             }
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -198,7 +222,7 @@ private fun CodeGenerationPagePreview() {
             onBackClick = {},
             onSkipClick = {},
             onRegenerateClick = {},
-            isSkippable = false,
+            screenMode = ScreenMode.SKIP,
         )
     }
 }

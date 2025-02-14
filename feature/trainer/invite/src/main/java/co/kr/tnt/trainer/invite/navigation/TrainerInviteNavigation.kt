@@ -6,13 +6,14 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import co.kr.tnt.navigation.Route
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.invite.TrainerInviteRoute
 
 fun NavController.navigateToTrainerInvite(
-    isSkippable: Boolean,
+    screenMode: ScreenMode,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.TrainerInvite(isSkippable),
+    route = Route.TrainerInvite(screenMode),
     builder = navOptions,
 )
 
@@ -23,7 +24,7 @@ fun NavGraphBuilder.trainerInviteScreen(
     composable<Route.TrainerInvite> { backstackEntry ->
         backstackEntry.toRoute<Route.TrainerInvite>().apply {
             TrainerInviteRoute(
-                isSkippable = isSkippable,
+                screenMode = screenMode,
                 navigateToPrevious = navigateToPrevious,
                 navigateToHome = { navigateToHome(true) },
             )

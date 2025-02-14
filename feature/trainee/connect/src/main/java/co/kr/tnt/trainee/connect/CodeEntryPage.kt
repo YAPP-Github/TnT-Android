@@ -26,7 +26,7 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
-import co.kr.tnt.navigation.model.ConnectScreenMode
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainee.connect.component.CodeTextField
 import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.core.designsystem.R as uiResource
@@ -37,7 +37,7 @@ internal fun CodeEntryPage(
     showDialog: Boolean,
     inviteCode: String,
     inputState: InputState,
-    screenMode: ConnectScreenMode,
+    screenMode: ScreenMode,
     onSkipClick: () -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -48,22 +48,22 @@ internal fun CodeEntryPage(
 ) {
     BackHandler {
         when (screenMode) {
-            ConnectScreenMode.BACK -> onBackClick()
-            ConnectScreenMode.SKIP -> onSkipClick()
-            ConnectScreenMode.CLOSE -> onBackClick()
+            ScreenMode.BACK -> onBackClick()
+            ScreenMode.SKIP -> onSkipClick()
+            ScreenMode.CLOSE -> onBackClick()
         }
     }
 
     Scaffold(
         topBar = {
             when (screenMode) {
-                ConnectScreenMode.BACK -> {
+                ScreenMode.BACK -> {
                     TnTTopBarWithBackButton(
                         title = stringResource(coreR.string.connect),
                         onBackClick = onBackClick,
                     )
                 }
-                ConnectScreenMode.SKIP -> {
+                ScreenMode.SKIP -> {
                     TnTTopBar(
                         title = stringResource(coreR.string.connect),
                         trailingComponent = {
@@ -78,7 +78,7 @@ internal fun CodeEntryPage(
                         },
                     )
                 }
-                ConnectScreenMode.CLOSE -> {
+                ScreenMode.CLOSE -> {
                     TnTTopBar(
                         title = stringResource(coreR.string.connect),
                         trailingComponent = {
@@ -152,7 +152,7 @@ private fun CodeEntryPagePreview() {
             showDialog = false,
             inputState = InputState.FOCUS,
             inviteCode = "23A4SDA31",
-            screenMode = ConnectScreenMode.CLOSE,
+            screenMode = ScreenMode.CLOSE,
             onSkipClick = {},
             onNextClick = {},
             onValidateClick = {},

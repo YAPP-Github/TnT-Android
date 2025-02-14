@@ -7,6 +7,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import co.kr.tnt.navigation.Route
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.members.TrainerMembersRoute
 
 fun NavController.navigateToTrainerMembers(
@@ -18,7 +19,7 @@ fun NavController.navigateToTrainerMembers(
 
 fun NavGraphBuilder.trainerMembersNavGraph(
     padding: PaddingValues,
-    navigateToInvite: (Boolean) -> Unit,
+    navigateToInvite: (ScreenMode) -> Unit,
     membersDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TrainerMainTab.Members>(startDestination = Route.TrainerMembers) {

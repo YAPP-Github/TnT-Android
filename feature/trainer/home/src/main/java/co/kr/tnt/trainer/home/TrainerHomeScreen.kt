@@ -50,6 +50,7 @@ import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.PtSession
 import co.kr.tnt.domain.utils.DateFormatter
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
@@ -71,7 +72,7 @@ internal fun TrainerHomeRoute(
     padding: PaddingValues,
     navigateToNotification: () -> Unit,
     navigateToAddPtSession: () -> Unit,
-    navigateToInvite: (Boolean) -> Unit,
+    navigateToInvite: (ScreenMode) -> Unit,
 ) {
     val toast = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -91,7 +92,7 @@ internal fun TrainerHomeRoute(
             when (effect) {
                 TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
                 TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession()
-                TrainerHomeSideEffect.NavigateToInvite -> navigateToInvite(false)
+                TrainerHomeSideEffect.NavigateToInvite -> navigateToInvite(ScreenMode.CLOSE)
                 is TrainerHomeSideEffect.ShowToast -> toast.show(effect.message)
             }
         }

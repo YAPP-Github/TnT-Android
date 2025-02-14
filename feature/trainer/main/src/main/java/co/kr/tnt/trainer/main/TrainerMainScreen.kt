@@ -2,13 +2,13 @@ package co.kr.tnt.trainer.main
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import co.kr.tnt.designsystem.component.bottombar.TnTBottomBar
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.addptsession.navigation.addPtSession
 import co.kr.tnt.trainer.addptsession.navigation.navigateToAddPtSession
 import co.kr.tnt.trainer.feedback.navigation.trainerFeedbackNavGraph
@@ -22,7 +22,7 @@ import co.kr.tnt.ui.extensions.safePopBackStack
 @Composable
 internal fun TrainerMainRoute(
     navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
-    navigateToInvite: (Boolean) -> Unit,
+    navigateToInvite: (ScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {
@@ -43,7 +43,7 @@ internal fun TrainerMainRoute(
 private fun TrainerMainScreen(
     state: TrainerMainState,
     navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
-    navigateToInvite: (Boolean) -> Unit,
+    navigateToInvite: (ScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {

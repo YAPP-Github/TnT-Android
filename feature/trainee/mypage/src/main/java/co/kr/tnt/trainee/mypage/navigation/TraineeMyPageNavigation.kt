@@ -7,7 +7,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import co.kr.tnt.navigation.Route
-import co.kr.tnt.navigation.model.ConnectScreenMode
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainee.mypage.TraineeMyPageRoute
 
 fun NavController.navigateToTraineeMyPage(
@@ -19,7 +19,7 @@ fun NavController.navigateToTraineeMyPage(
 
 fun NavGraphBuilder.traineeMyPageNavGraph(
     padding: PaddingValues,
-    navigateToTraineeConnect: (ConnectScreenMode) -> Unit,
+    navigateToTraineeConnect: (ScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {

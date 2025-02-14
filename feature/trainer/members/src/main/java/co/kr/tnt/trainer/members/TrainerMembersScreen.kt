@@ -31,6 +31,7 @@ import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.card.TnTMemberProfileCard
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.MemberInfo
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.members.TrainerMemberContract.TrainerMemberUiState
 import co.kr.tnt.ui.component.TnTCountTopBar
 import coil.compose.rememberAsyncImagePainter
@@ -39,7 +40,7 @@ import coil.request.ImageRequest
 @Composable
 internal fun TrainerMembersRoute(
     padding: PaddingValues,
-    navigateToInvite: (Boolean) -> Unit,
+    navigateToInvite: (ScreenMode) -> Unit,
     viewModel: TrainerMembersViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,7 +48,7 @@ internal fun TrainerMembersRoute(
     TrainerMembersScreen(
         state = uiState,
         padding = padding,
-        onClickInviteButton = { navigateToInvite(false) },
+        onClickInviteButton = { navigateToInvite(ScreenMode.BACK) },
     )
 }
 

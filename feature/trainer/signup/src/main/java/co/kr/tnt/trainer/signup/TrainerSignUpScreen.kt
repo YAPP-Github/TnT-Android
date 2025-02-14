@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiEvent
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 
@@ -17,7 +18,7 @@ internal fun TrainerSignUpRoute(
     authType: String,
     email: String,
     navigateToPrevious: () -> Unit,
-    navigateToInvite: (Boolean) -> Unit,
+    navigateToInvite: (ScreenMode) -> Unit,
     viewModel: TrainerSignUpViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -47,7 +48,7 @@ internal fun TrainerSignUpRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TrainerSignUpContract.TrainerSignUpEffect.NavigateToBack -> navigateToPrevious()
-                TrainerSignUpContract.TrainerSignUpEffect.NavigateToConnect -> navigateToInvite(true)
+                TrainerSignUpContract.TrainerSignUpEffect.NavigateToConnect -> navigateToInvite(ScreenMode.SKIP)
                 is TrainerSignUpContract.TrainerSignUpEffect.ShowToast -> snackbar.show(effect.message)
             }
         }

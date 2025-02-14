@@ -35,7 +35,7 @@ import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.feature.trainee.mypage.R
-import co.kr.tnt.navigation.model.ConnectScreenMode
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
@@ -59,7 +59,7 @@ import co.kr.tnt.core.ui.R as coreR
 @Composable
 internal fun TraineeMyPageRoute(
     padding: PaddingValues,
-    navigateToConnect: (ConnectScreenMode) -> Unit,
+    navigateToConnect: (ScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
     viewModel: TraineeMyPageViewModel = hiltViewModel(),
@@ -99,7 +99,7 @@ internal fun TraineeMyPageRoute(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(ConnectScreenMode.BACK)
+                TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(ScreenMode.BACK)
                 TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
                 is TraineeMyPageEffect.ShowToast -> snackbar.show(effect.message)
                 is TraineeMyPageEffect.NavigateToWebView -> navigateToWebView(effect.url)

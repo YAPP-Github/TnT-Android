@@ -6,6 +6,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import co.kr.tnt.navigation.Route
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.signup.TrainerSignUpRoute
 
 fun NavController.navigateToTrainerSignUp(
@@ -24,7 +25,7 @@ fun NavController.navigateToTrainerSignUp(
 
 fun NavGraphBuilder.trainerSignUpScreen(
     navigateToPrevious: () -> Unit,
-    navigateToInvite: (Boolean) -> Unit,
+    navigateToInvite: (ScreenMode) -> Unit,
 ) {
     composable<Route.TrainerSignUp> { backstackEntry ->
         backstackEntry.toRoute<Route.TrainerSignUp>().apply {

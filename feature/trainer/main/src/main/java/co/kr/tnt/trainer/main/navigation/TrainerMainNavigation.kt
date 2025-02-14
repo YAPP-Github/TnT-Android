@@ -6,6 +6,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import co.kr.tnt.navigation.Route
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.main.TrainerMainRoute
 
 fun NavController.navigateToTrainerMain(
@@ -23,7 +24,7 @@ fun NavController.navigateToTrainerMain(
 
 fun NavGraphBuilder.trainerMainScreen(
     navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
-    navigateToInvite: (Boolean) -> Unit,
+    navigateToInvite: (ScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
 ) {

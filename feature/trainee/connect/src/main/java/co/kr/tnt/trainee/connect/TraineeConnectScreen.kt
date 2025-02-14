@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
-import co.kr.tnt.navigation.model.ConnectScreenMode
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
@@ -15,7 +15,7 @@ import java.time.LocalDate
 
 @Composable
 internal fun TraineeConnectRoute(
-    screenMode: ConnectScreenMode,
+    screenMode: ScreenMode,
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
     viewModel: TraineeConnectViewModel = hiltViewModel(),
@@ -62,7 +62,7 @@ internal fun TraineeConnectRoute(
 @Composable
 private fun TraineeConnectScreen(
     state: TraineeConnectUiState,
-    screenMode: ConnectScreenMode,
+    screenMode: ScreenMode,
     onChangeInviteCode: (code: String) -> Unit,
     onCodeValidationClick: (code: String) -> Unit,
     onCancelConnectClick: () -> Unit,

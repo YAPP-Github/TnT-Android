@@ -1,6 +1,6 @@
 package co.kr.tnt.navigation.model
 
-enum class ConnectScreenMode {
+enum class ScreenMode {
     BACK,
     SKIP,
     CLOSE,
