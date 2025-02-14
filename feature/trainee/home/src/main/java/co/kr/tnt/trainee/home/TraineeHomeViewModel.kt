@@ -19,6 +19,8 @@ import java.time.YearMonth
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
+const val DIALOG_HIDE_DURATION_HOURS = 72
+
 @HiltViewModel
 internal class TraineeHomeViewModel @Inject constructor(
     private val traineeRepository: TraineeRepository,
@@ -169,7 +171,7 @@ internal class TraineeHomeViewModel @Inject constructor(
 
             val lastHiddenDate = connectRepository.getHomeDialogHiddenDate().firstOrNull()
             val isHidden = lastHiddenDate != null &&
-                Duration.between(lastHiddenDate, currentDateTime).toHours() < 72
+                Duration.between(lastHiddenDate, currentDateTime).toHours() < DIALOG_HIDE_DURATION_HOURS
 
             if (isHidden.not()) {
                 updateState { copy(showConnectDialog = true) }
