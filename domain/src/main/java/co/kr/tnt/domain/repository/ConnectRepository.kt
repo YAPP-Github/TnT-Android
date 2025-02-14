@@ -25,7 +25,7 @@ interface ConnectRepository {
         traineeId: String,
     ): ConnectedResult
 
-    suspend fun getHomeDialogHiddenDate(): Flow<LocalDateTime?>
+    suspend fun getExplicitDeniedConnectDate(): Flow<LocalDateTime?>
 
-    suspend fun updateHomeDialogHiddenDate(date: LocalDateTime)
+    suspend fun updateExplicitDeniedConnectDate(date: LocalDateTime)
 }

@@ -161,7 +161,7 @@ internal class TrainerHomeViewModel @Inject constructor(
                     }
                 }
 
-                val lastHiddenDate = connectRepository.getHomeDialogHiddenDate().firstOrNull()
+                val lastHiddenDate = connectRepository.getExplicitDeniedConnectDate().firstOrNull()
                 val isHidden = lastHiddenDate != null &&
                     Duration.between(lastHiddenDate, currentDateTime).toHours() < DIALOG_HIDE_DURATION_HOURS
 
@@ -195,7 +195,7 @@ internal class TrainerHomeViewModel @Inject constructor(
         private fun updateCurrentDateTime() {
             val currentDateTime = LocalDateTime.now()
             viewModelScope.launch {
-                connectRepository.updateHomeDialogHiddenDate(currentDateTime)
+                connectRepository.updateExplicitDeniedConnectDate(currentDateTime)
             }
         }
 
