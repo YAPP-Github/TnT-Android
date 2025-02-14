@@ -1,6 +1,6 @@
 package co.kr.tnt.trainer.members
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,13 +38,15 @@ import coil.request.ImageRequest
 
 @Composable
 internal fun TrainerMembersRoute(
-    viewModel: TrainerMembersViewModel = hiltViewModel(),
+    padding: PaddingValues,
     navigateToInvite: (Boolean) -> Unit,
+    viewModel: TrainerMembersViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerMembersScreen(
         state = uiState,
+        padding = padding,
         onClickInviteButton = { navigateToInvite(false) },
     )
 }
@@ -52,35 +54,31 @@ internal fun TrainerMembersRoute(
 @Composable
 private fun TrainerMembersScreen(
     state: TrainerMemberUiState,
+    padding: PaddingValues,
     onClickInviteButton: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(TnTTheme.colors.neutralColors.Neutral100),
+            .padding(padding),
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            item {
-                TnTCountTopBar(
-                    title = "내 회원",
-                    count = state.memberList.size,
-                    trailingComponent = {
-                        MemberInviteButton(onClickInviteButton)
-                    },
-                )
-            }
-            if (state.memberList.isNotEmpty()) {
-                items(state.memberList) { member ->
-                    MemberList(member)
+        Column(modifier = Modifier.fillMaxSize()) {
+            TnTCountTopBar(
+                title = "내 회원",
+                count = state.memberList.size,
+                trailingComponent = {
+                    MemberInviteButton(onClickInviteButton)
+                },
+            )
+            if (state.memberList.isEmpty()) {
+                EmptyMemberList()
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(state.memberList) { member ->
+                        MemberList(member)
+                    }
                 }
             }
-        }
-        if (state.memberList.isEmpty()) {
-            EmptyMemberList(
-                modifier = Modifier.align(Alignment.Center),
-            )
         }
     }
 }
@@ -117,7 +115,8 @@ private fun MemberInviteButton(
 @Composable
 private fun EmptyMemberList(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -213,6 +212,7 @@ private fun TrainerMembersScreenPreview() {
                     ),
                 ),
             ),
+            padding = PaddingValues(),
             onClickInviteButton = { },
         )
     }

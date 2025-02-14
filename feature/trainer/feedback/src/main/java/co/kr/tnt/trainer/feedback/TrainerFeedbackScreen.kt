@@ -1,11 +1,12 @@
 package co.kr.tnt.trainer.feedback
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,17 +19,20 @@ import co.kr.tnt.ui.component.TnTCountTopBar
 @Composable
 @Suppress("UnusedParameter")
 internal fun TrainerFeedbackRoute(
+    padding: PaddingValues,
     viewModel: TrainerFeedbackViewModel = hiltViewModel(),
 ) {
-    TrainerFeedbackScreen()
+    TrainerFeedbackScreen(padding)
 }
 
 @Composable
-private fun TrainerFeedbackScreen() {
+private fun TrainerFeedbackScreen(
+    padding: PaddingValues,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(TnTTheme.colors.neutralColors.Neutral100),
+            .padding(padding),
     ) {
         TnTCountTopBar(
             title = "피드백",

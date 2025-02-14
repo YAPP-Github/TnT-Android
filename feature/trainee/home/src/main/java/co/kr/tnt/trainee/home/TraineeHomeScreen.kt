@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -78,6 +79,7 @@ import java.time.YearMonth
 @Composable
 internal fun TraineeHomeRoute(
     viewModel: TraineeHomeViewModel = hiltViewModel(),
+    padding: PaddingValues,
     navigateToNotification: () -> Unit,
     navigateToExerciseRecord: () -> Unit,
     navigateToMealRecord: () -> Unit,
@@ -92,6 +94,7 @@ internal fun TraineeHomeRoute(
 
     TraineeHomeScreen(
         state = uiState,
+        padding = padding,
         context = context,
         onClickNotification = navigateToNotification,
         onChangeVisibleMonth = { yearMonth ->
@@ -147,6 +150,7 @@ internal fun TraineeHomeRoute(
 @Composable
 private fun TraineeHomeScreen(
     state: TraineeHomeUiState,
+    padding: PaddingValues,
     context: Context,
     onClickNotification: () -> Unit,
     onChangeVisibleMonth: (YearMonth) -> Unit,
@@ -168,6 +172,7 @@ private fun TraineeHomeScreen(
 
     Box(
         modifier = Modifier
+            .padding(padding)
             .fillMaxSize()
             .background(TnTTheme.colors.neutralColors.Neutral100),
     ) {
@@ -509,6 +514,7 @@ private fun TraineeHomeScreenPreview() {
     TnTTheme {
         TraineeHomeScreen(
             state = dummyUiState,
+            padding = PaddingValues(),
             context = LocalContext.current,
             onClickNotification = { },
             onClickDay = { },

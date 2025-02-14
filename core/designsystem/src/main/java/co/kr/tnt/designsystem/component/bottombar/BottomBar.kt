@@ -1,5 +1,12 @@
 package co.kr.tnt.designsystem.component.bottombar
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.kr.tnt.core.designsystem.R
@@ -22,25 +30,32 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 fun <Tab : BottomTab> TnTBottomBar(
     bottomTabs: List<Tab>,
     currentTab: Tab?,
+    isVisible: Boolean,
     onClickTab: (tab: Tab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier) {
-        bottomTabs.forEach { tab ->
-            Button(
-                onClick = { onClickTab(tab) },
-                modifier = Modifier.weight(1f),
-                colors = ButtonColors(
-                    containerColor = TnTTheme.colors.commonColors.Common0,
-                    contentColor = TnTTheme.colors.commonColors.Common0,
-                    disabledContainerColor = TnTTheme.colors.commonColors.Common0,
-                    disabledContentColor = TnTTheme.colors.commonColors.Common0,
-                ),
-            ) {
-                TnTBottomTab(
-                    bottomTab = tab,
-                    isSelected = currentTab == tab,
-                )
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(animationSpec = tween(700)) + slideIn { IntOffset(0, it.height) },
+        exit = fadeOut(animationSpec = tween(700)) + slideOut { IntOffset(0, it.height) },
+    ) {
+        Row(modifier = modifier.background(TnTTheme.colors.commonColors.Common0)) {
+            bottomTabs.forEach { tab ->
+                Button(
+                    onClick = { onClickTab(tab) },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonColors(
+                        containerColor = TnTTheme.colors.commonColors.Common0,
+                        contentColor = TnTTheme.colors.commonColors.Common0,
+                        disabledContainerColor = TnTTheme.colors.commonColors.Common0,
+                        disabledContentColor = TnTTheme.colors.commonColors.Common0,
+                    ),
+                ) {
+                    TnTBottomTab(
+                        bottomTab = tab,
+                        isSelected = currentTab == tab,
+                    )
+                }
             }
         }
     }
@@ -103,6 +118,7 @@ private fun TnTBottomBarPreview() {
         TnTBottomBar(
             bottomTabs = tabs,
             currentTab = home,
+            isVisible = true,
             onClickTab = { },
         )
     }

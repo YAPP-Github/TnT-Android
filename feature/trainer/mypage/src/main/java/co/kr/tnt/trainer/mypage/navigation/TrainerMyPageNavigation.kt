@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.mypage.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
@@ -17,6 +18,7 @@ fun NavController.navigateToTrainerMyPage(
 )
 
 fun NavGraphBuilder.trainerMyPageNavGraph(
+    padding: PaddingValues,
     navigateToLogin: () -> Unit,
     navigateToWebView: (String) -> Unit,
     myPageDestination: NavGraphBuilder.() -> Unit = { },
@@ -24,6 +26,7 @@ fun NavGraphBuilder.trainerMyPageNavGraph(
     navigation<Route.TrainerMainTab.MyPage>(startDestination = Route.TrainerMyPage) {
         composable<Route.TrainerMyPage> {
             TrainerMyPageRoute(
+                padding = padding,
                 navigateToLogin = navigateToLogin,
                 navigateToWebView = navigateToWebView,
             )

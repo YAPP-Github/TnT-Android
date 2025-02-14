@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,6 +62,7 @@ import co.kr.tnt.core.ui.R as coreR
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun TrainerMyPageRoute(
+    padding: PaddingValues,
     navigateToLogin: () -> Unit,
     navigateToWebView: (String) -> Unit,
     viewModel: TrainerMyPageViewModel = hiltViewModel(),
@@ -72,6 +74,7 @@ internal fun TrainerMyPageRoute(
 
     TrainerMyPageScreen(
         state = state,
+        padding = padding,
         appVersion = context.getAppVersion(),
         onTogglePushNotification = {
             viewModel.setEvent(
@@ -119,6 +122,7 @@ internal fun TrainerMyPageRoute(
 @Composable
 private fun TrainerMyPageScreen(
     state: TrainerMyPageUiState,
+    padding: PaddingValues,
     appVersion: String,
     onTogglePushNotification: () -> Unit,
     onClickTermsOfService: () -> Unit,
@@ -139,6 +143,7 @@ private fun TrainerMyPageScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
+            .padding(padding)
             .background(TnTTheme.colors.neutralColors.Neutral50)
             .verticalScroll(rememberScrollState()),
     ) {
@@ -369,6 +374,7 @@ private fun TrainerMyPageScreenPreview() {
                 ),
                 isEnablePushNotification = false,
             ),
+            padding = PaddingValues(),
             appVersion = "1.0.0",
             onTogglePushNotification = { },
             onClickTermsOfService = { },

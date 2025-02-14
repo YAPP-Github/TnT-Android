@@ -1,6 +1,7 @@
 package co.kr.tnt.trainee.notification
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -59,11 +60,12 @@ private fun TraineeNotificationScreen(
             TnTTopBarWithBackButton(
                 title = stringResource(uiResource.string.notification),
                 onBackClick = onBackClick,
+                showStoke = true,
             )
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.padding(innerPadding)) {
             if (state.notifications.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -77,9 +79,7 @@ private fun TraineeNotificationScreen(
                 }
             } else {
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     items(state.notifications) { notification ->
                         TnTNotification(

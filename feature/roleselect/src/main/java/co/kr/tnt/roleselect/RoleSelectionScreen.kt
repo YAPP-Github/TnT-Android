@@ -1,7 +1,6 @@
 package co.kr.tnt.roleselect
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,12 +60,14 @@ fun RoleSelectionScreen(
 ) {
     var selectedRole by remember { mutableStateOf(RoleState.fromDomain(UserType.TRAINER)) }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = TnTTheme.colors.commonColors.Common0,
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .background(TnTTheme.colors.commonColors.Common0),
+                .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(modifier = Modifier.padding(start = 24.dp, top = 60.dp)) {
