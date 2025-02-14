@@ -67,12 +67,6 @@ internal class ConnectRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 
-    override suspend fun isUserConnected(): Flow<Boolean> =
-        connectLocalDataSource.isConnected
-
-    override suspend fun setConnectedState(isConnected: Boolean) =
-        connectLocalDataSource.updateConnectionStatus(isConnected)
-
     override suspend fun getHomeDialogHiddenDate(): Flow<LocalDateTime?> =
         connectLocalDataSource.homeDialogHiddenDate.map { dateString ->
             dateString?.let {

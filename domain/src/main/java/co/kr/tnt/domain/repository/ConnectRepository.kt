@@ -25,10 +25,6 @@ interface ConnectRepository {
         traineeId: String,
     ): ConnectedResult
 
-    suspend fun isUserConnected(): Flow<Boolean>
-
-    suspend fun setConnectedState(isConnected: Boolean)
-
     suspend fun getHomeDialogHiddenDate(): Flow<LocalDateTime?>
 
     suspend fun updateHomeDialogHiddenDate(date: LocalDateTime)

@@ -22,8 +22,6 @@ internal class LoginRepositoryImpl @Inject constructor(
     override suspend fun getUserType(): UserType {
         val response = loginRemoteDataSource.getCheckSession()
 
-        connectLocalDataSource.updateConnectionStatus(response.isConnected)
-
         return response.memberType.toDomain()
     }
 
@@ -48,12 +46,12 @@ internal class LoginRepositoryImpl @Inject constructor(
     override suspend fun logout() {
         loginRemoteDataSource.postLogout()
         sessionLocalDataSource.removeSessionId()
-        connectLocalDataSource.clearHomeDialogPreferences()
+        connectLocalDataSource.clearHomeDialogHiddenDate()
     }
 
     override suspend fun withdraw() {
         loginRemoteDataSource.postWithdraw()
         sessionLocalDataSource.removeSessionId()
-        connectLocalDataSource.clearHomeDialogPreferences()
+        connectLocalDataSource.clearHomeDialogHiddenDate()
     }
 }
