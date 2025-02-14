@@ -26,7 +26,7 @@ class ConnectLocalDataSource @Inject constructor(
         }
     }
 
-    val homeDialogHiddenDate: Flow<String> = connectPreferences.data.map { preferences ->
+    val homeDialogHiddenDate: Flow<String?> = connectPreferences.data.map { preferences ->
         preferences[HOME_DIALOG_HIDDEN_DATE] ?: ""
     }
 
