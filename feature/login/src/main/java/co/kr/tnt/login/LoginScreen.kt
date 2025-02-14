@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +55,8 @@ import co.kr.tnt.login.LoginContract.LoginUiEvent
 import co.kr.tnt.login.LoginContract.LoginUiState
 import co.kr.tnt.login.kakao.KakaoLoginSdk
 import co.kr.tnt.login.model.TermState
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -137,6 +140,12 @@ internal fun LoginRoute(
                     navigateToSignup(effect.loginResult)
                 }
             }
+        }
+    }
+
+    SideEffect {
+        Firebase.messaging.token.addOnCompleteListener {
+            viewModel.setEvent(LoginUiEvent.OnGetMessagingTokenSucceed(token = it.result ?: ""))
         }
     }
 }
