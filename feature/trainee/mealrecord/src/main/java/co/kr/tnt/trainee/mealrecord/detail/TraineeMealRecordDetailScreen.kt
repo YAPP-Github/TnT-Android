@@ -3,7 +3,6 @@ package co.kr.tnt.trainee.mealrecord.detail
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -83,6 +82,7 @@ internal fun TraineeMealRecordDetailRoute(
 }
 
 @Composable
+@Suppress("UnusedParameter")
 private fun TraineeMealRecordDetailScreen(
     state: TraineeMealRecordDetailUiState,
     context: Context,
@@ -109,7 +109,6 @@ private fun TraineeMealRecordDetailScreen(
                     Icon(
                         painter = painterResource(R.drawable.ic_more),
                         contentDescription = null,
-                        modifier = Modifier.clickable(onClick = onClickMore),
                     )
                 },
             )
