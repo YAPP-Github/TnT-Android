@@ -75,7 +75,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
-import co.kr.tnt.core.ui.R as uiResource
+import co.kr.tnt.core.ui.R as coreR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -133,9 +133,9 @@ internal fun TraineeHomeRoute(
             title = stringResource(R.string.please_connect_trainer),
             content = stringResource(R.string.connect_dialog_warning),
             isChecked = uiState.isDialogHiddenForThreeDays,
-            checkToggleText = stringResource(uiResource.string.do_not_see_for_three_days),
-            leftButtonText = stringResource(uiResource.string.next_time),
-            rightButtonText = stringResource(uiResource.string.connect),
+            checkToggleText = stringResource(coreR.string.do_not_see_for_three_days),
+            leftButtonText = stringResource(coreR.string.next_time),
+            rightButtonText = stringResource(coreR.string.connect),
             onLeftButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissPopup) },
             onRightButtonClick = navigateToConnect,
             onCheckClick = { viewModel.setEvent(TraineeHomeUiEvent.OnChangeHideDialogOption) },
