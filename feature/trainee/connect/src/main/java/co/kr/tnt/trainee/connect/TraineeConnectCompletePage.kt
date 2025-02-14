@@ -1,5 +1,6 @@
 package co.kr.tnt.trainee.connect
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -25,10 +27,13 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.trainee.connect.R
+import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
@@ -41,6 +46,8 @@ internal fun TraineeConnectCompletePage(
     onBackClick: () -> Unit,
 ) {
     BackHandler { onBackClick() }
+
+    val context = LocalContext.current
 
     Scaffold { innerPadding ->
         Image(
@@ -79,12 +86,14 @@ internal fun TraineeConnectCompletePage(
                             type = UserType.TRAINER,
                             name = trainerName,
                             image = trainerImage,
+                            context = context,
                             modifier = Modifier.padding(end = 16.dp),
                         )
                         ProfileSection(
                             type = UserType.TRAINEE,
                             name = traineeName,
                             image = traineeImage,
+                            context = context,
                         )
                     }
                     Image(
@@ -110,18 +119,24 @@ private fun ProfileSection(
     type: UserType,
     name: String,
     image: String,
+    context: Context,
     modifier: Modifier = Modifier,
 ) {
-    val painter = rememberAsyncImagePainter(image)
-    val defaultImage = painterResource(DefaultUserProfile.fromDomain(type).image)
-
+    val defaultImage = DefaultUserProfile.fromDomain(type).image
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(image)
+            .placeholder(defaultImage)
+            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .build(),
+    )
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         TnTProfileImage(
-            defaultImage = defaultImage,
+            defaultImage = painterResource(defaultImage),
             image = painter,
             imageSize = 100.dp,
             showEditButton = false,
