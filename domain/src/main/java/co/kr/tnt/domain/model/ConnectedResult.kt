@@ -5,9 +5,9 @@ data class ConnectedResult(
     val traineeName: String,
     val trainerImage: String?,
     val traineeImage: String?,
-    val age: Int,
-    val height: Double,
-    val weight: Double,
+    val age: Int?,
+    val height: Double?,
+    val weight: Double?,
     val ptGoal: String,
     val cautionNote: String?,
 )

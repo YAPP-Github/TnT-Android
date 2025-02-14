@@ -148,13 +148,11 @@ internal fun TraineeProfilePage(
                         text = trainee.ptPurpose?.joinToString(", ") ?: "",
                     )
                     Spacer(Modifier.height(32.dp))
-                    if (!trainee.caution.isNullOrEmpty()) {
-                        TextWithBackground(
-                            label = stringResource(R.string.caution),
-                            text = trainee.caution ?: "",
-                            modifier = Modifier.height(128.dp),
-                        )
-                    }
+                    TextWithBackground(
+                        label = stringResource(R.string.caution),
+                        text = trainee.caution ?: "",
+                        modifier = Modifier.height(128.dp),
+                    )
                 }
             }
             TnTBottomButton(
@@ -207,9 +205,14 @@ private fun TextWithBackground(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
             Text(
-                text = text,
+                text = text.ifEmpty { "미입력" },
                 style = TnTTheme.typography.label1Medium,
-                color = TnTTheme.colors.neutralColors.Neutral800,
+                color =
+                    if (text.isEmpty()) {
+                        TnTTheme.colors.neutralColors.Neutral400
+                    } else {
+                        TnTTheme.colors.neutralColors.Neutral800
+                    },
             )
         }
     }

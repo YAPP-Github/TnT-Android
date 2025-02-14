@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import co.kr.tnt.navigation.Route
 import co.kr.tnt.trainer.connect.TrainerConnectRoute
@@ -21,7 +22,13 @@ fun NavGraphBuilder.trainerConnectScreen(
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
 ) {
-    composable<Route.TrainerConnect> { backstackEntry ->
+    composable<Route.TrainerConnect>(
+        deepLinks = listOf(
+            navDeepLink<Route.TrainerConnect>(
+                basePath = "tnt-deeplink://trainee-connect-complete",
+            ),
+        ),
+    ) { backstackEntry ->
         backstackEntry.toRoute<Route.TrainerConnect>().apply {
             TrainerConnectRoute(
                 trainerId = trainerId,
