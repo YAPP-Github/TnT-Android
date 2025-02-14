@@ -121,7 +121,6 @@ internal fun TraineeHomeRoute(
             },
             content = {
                 RecordBottomSheetContent(
-                    onClickExercise = { viewModel.setEvent(TraineeHomeUiEvent.OnClickExerciseRecord) },
                     onClickDiet = { viewModel.setEvent(TraineeHomeUiEvent.OnClickMealRecord) },
                 )
             },
@@ -331,6 +330,7 @@ private fun Calendar(
 }
 
 @Composable
+@Suppress("UnusedParameter")
 private fun DailyPtSession(
     session: TraineePtSession,
     context: Context,
@@ -357,7 +357,7 @@ private fun DailyPtSession(
         profileImage = session.trainerImage?.let { painter },
         showSessionRecordCreation = false,
         showSessionRecordDetails = session.hasRecord,
-        onClick = { onClickPtSessionCard(session.ptSessionId) },
+        onClick = { },
         modifier = Modifier.padding(
             start = 20.dp,
             end = 20.dp,
@@ -442,7 +442,6 @@ private fun EmptyDailyRecords() {
 
 @Composable
 private fun RecordBottomSheetContent(
-    onClickExercise: () -> Unit,
     onClickDiet: () -> Unit,
 ) {
     Column(
@@ -454,12 +453,6 @@ private fun RecordBottomSheetContent(
             style = TnTTheme.typography.h3,
             modifier = Modifier.padding(vertical = 20.dp),
         )
-        RecordItem(
-            icon = "\uD83C\uDFCB\uD83C\uDFFB\u200D♀\uFE0F",
-            text = "개인 운동",
-            modifier = Modifier.clickable(onClick = onClickExercise),
-        )
-        Spacer(Modifier.height(12.dp))
         RecordItem(
             icon = "\uD83E\uDD57",
             text = "식단",
@@ -550,7 +543,6 @@ private fun TraineeHomeScreenPreview() {
 private fun RecordBottomSheetContentPreview() {
     TnTTheme {
         RecordBottomSheetContent(
-            onClickExercise = { },
             onClickDiet = { },
         )
     }

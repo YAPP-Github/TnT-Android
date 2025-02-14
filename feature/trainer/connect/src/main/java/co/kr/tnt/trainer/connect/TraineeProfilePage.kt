@@ -145,7 +145,7 @@ internal fun TraineeProfilePage(
                     }
                     TextWithBackground(
                         label = stringResource(R.string.purpose_of_pt),
-                        text = trainee.ptPurpose.joinToString(", "),
+                        text = trainee.ptPurpose?.joinToString(", ") ?: "",
                     )
                     Spacer(Modifier.height(32.dp))
                     if (!trainee.caution.isNullOrEmpty()) {

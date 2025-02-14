@@ -1,5 +1,6 @@
 package co.kr.tnt.navigation
 
+import co.kr.tnt.navigation.model.ScreenMode
 import kotlinx.serialization.Serializable
 
 // TODO Route 정리
@@ -35,7 +36,7 @@ sealed interface Route {
     ) : Route
 
     @Serializable
-    data class TrainerInvite(val isSkippable: Boolean) : Route
+    data class TrainerInvite(val screenMode: ScreenMode) : Route
 
     @Serializable
     data class TrainerConnect(
@@ -44,7 +45,7 @@ sealed interface Route {
     ) : Route
 
     @Serializable
-    data class TraineeConnect(val isSkippable: Boolean) : Route
+    data class TraineeConnect(val screenMode: ScreenMode) : Route
 
     @Serializable
     data object TrainerMain : Route

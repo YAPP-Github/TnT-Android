@@ -6,13 +6,12 @@ import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
 import co.kr.tnt.domain.model.trainee.TraineeMealRecordDetail
 import java.io.File
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 interface TraineeRepository {
     suspend fun getMyInfo(): User.Trainee
     suspend fun postMealRecord(
         mealImage: File?,
-        date: LocalDateTime,
+        date: String,
         mealType: String,
         memo: String,
     )

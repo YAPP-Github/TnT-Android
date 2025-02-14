@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navOptions
 import co.kr.tnt.navigation.Route
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.home.TrainerHomeRoute
 
 fun NavController.navigateToTrainerHome(
@@ -27,7 +28,7 @@ fun NavGraphBuilder.trainerHomeNavGraph(
     padding: PaddingValues,
     navigateToNotification: () -> Unit,
     navigateToAddPtSession: () -> Unit,
-    navigateToInvite: (Boolean) -> Unit,
+    navigateToInvite: (ScreenMode) -> Unit,
     homeDestination: NavGraphBuilder.() -> Unit = { },
 ) {
     navigation<Route.TrainerMainTab.Home>(startDestination = Route.TrainerHome) {

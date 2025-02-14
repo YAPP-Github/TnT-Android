@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
@@ -14,7 +15,7 @@ import java.time.LocalDate
 
 @Composable
 internal fun TraineeConnectRoute(
-    isSkippable: Boolean,
+    screenMode: ScreenMode,
     navigateToPrevious: () -> Unit,
     navigateToHome: (Boolean) -> Unit,
     viewModel: TraineeConnectViewModel = hiltViewModel(),
@@ -24,7 +25,7 @@ internal fun TraineeConnectRoute(
 
     TraineeConnectScreen(
         state = state,
-        isSkippable = isSkippable,
+        screenMode = screenMode,
         onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
         onNextClick = { viewModel.setEvent(TraineeConnectUiEvent.OnNextClick) },
         onSkipClick = { viewModel.setEvent(TraineeConnectUiEvent.OnSkipClick) },
@@ -61,7 +62,7 @@ internal fun TraineeConnectRoute(
 @Composable
 private fun TraineeConnectScreen(
     state: TraineeConnectUiState,
-    isSkippable: Boolean,
+    screenMode: ScreenMode,
     onChangeInviteCode: (code: String) -> Unit,
     onCodeValidationClick: (code: String) -> Unit,
     onCancelConnectClick: () -> Unit,
@@ -78,7 +79,7 @@ private fun TraineeConnectScreen(
             showDialog = state.showDialog,
             inputState = state.inviteCodeInputState,
             inviteCode = state.inviteCode,
-            isSkippable = isSkippable,
+            screenMode = screenMode,
             onNextClick = onNextClick,
             onBackClick = onBackClick,
             onSkipClick = onSkipClick,

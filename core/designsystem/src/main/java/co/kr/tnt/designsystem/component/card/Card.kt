@@ -283,6 +283,7 @@ fun TnTSessionRecordCard(
 }
 
 @Composable
+@Suppress("UnusedParameter")
 fun TnTMemberProfileCard(
     name: String,
     profileImage: Painter,
@@ -293,12 +294,12 @@ fun TnTMemberProfileCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
+    // TODO: clickable 추가
     Column(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(TnTTheme.colors.commonColors.Common0)
-            .clickable(onClick = onClick)
             .padding(12.dp),
     ) {
         Row(

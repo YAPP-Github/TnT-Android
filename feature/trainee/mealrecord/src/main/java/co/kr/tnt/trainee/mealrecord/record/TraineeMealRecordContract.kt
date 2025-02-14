@@ -29,13 +29,12 @@ internal class TraineeMealRecordContract {
             EXIT,
         }
 
-        val mealDateTime: LocalDateTime?
-            get() = time?.let { LocalDateTime.of(date, it) }
-
         fun validateMealRecord(): TraineeMealRecordUiState {
+            val now = LocalDateTime.now()
+            val selectedDateTime = time?.let { LocalDateTime.of(date, it) }
+
             return copy(
-                isMealRecordValid = date <= LocalDate.now() &&
-                    time != null &&
+                isMealRecordValid = selectedDateTime != null && selectedDateTime <= now &&
                     mealType.isNotBlank() &&
                     memo.isNotBlank(),
             )

@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,16 +26,18 @@ import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
+import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainee.connect.component.CodeTextField
 import co.kr.tnt.trainee.connect.model.InputState
-import co.kr.tnt.core.ui.R as uiResource
+import co.kr.tnt.core.designsystem.R as uiResource
+import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun CodeEntryPage(
     showDialog: Boolean,
     inviteCode: String,
     inputState: InputState,
-    isSkippable: Boolean,
+    screenMode: ScreenMode,
     onSkipClick: () -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -42,34 +47,52 @@ internal fun CodeEntryPage(
     onDismissPopup: () -> Unit,
 ) {
     BackHandler {
-        if (isSkippable) {
-            onSkipClick()
-        } else {
-            onBackClick()
+        when (screenMode) {
+            ScreenMode.BACK -> onBackClick()
+            ScreenMode.SKIP -> onSkipClick()
+            ScreenMode.CLOSE -> onBackClick()
         }
     }
 
     Scaffold(
         topBar = {
-            if (isSkippable) {
-                TnTTopBar(
-                    title = stringResource(uiResource.string.connect),
-                    trailingComponent = {
-                        Text(
-                            text = stringResource(uiResource.string.skip),
-                            color = TnTTheme.colors.neutralColors.Neutral400,
-                            style = TnTTheme.typography.body2Medium,
-                            modifier = Modifier.clickable {
-                                onSkipClick()
-                            },
-                        )
-                    },
-                )
-            } else {
-                TnTTopBarWithBackButton(
-                    title = stringResource(uiResource.string.connect),
-                    onBackClick = onBackClick,
-                )
+            when (screenMode) {
+                ScreenMode.BACK -> {
+                    TnTTopBarWithBackButton(
+                        title = stringResource(coreR.string.connect),
+                        onBackClick = onBackClick,
+                    )
+                }
+                ScreenMode.SKIP -> {
+                    TnTTopBar(
+                        title = stringResource(coreR.string.connect),
+                        trailingComponent = {
+                            Text(
+                                text = stringResource(coreR.string.skip),
+                                color = TnTTheme.colors.neutralColors.Neutral400,
+                                style = TnTTheme.typography.body2Medium,
+                                modifier = Modifier.clickable {
+                                    onSkipClick()
+                                },
+                            )
+                        },
+                    )
+                }
+                ScreenMode.CLOSE -> {
+                    TnTTopBar(
+                        title = stringResource(coreR.string.connect),
+                        trailingComponent = {
+                            IconButton(
+                                onClick = onBackClick,
+                            ) {
+                                Icon(
+                                    painter = painterResource(uiResource.drawable.ic_delete),
+                                    contentDescription = null,
+                                )
+                            }
+                        },
+                    )
+                }
             }
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -100,7 +123,7 @@ internal fun CodeEntryPage(
                 )
             }
             TnTBottomButton(
-                text = stringResource(uiResource.string.next),
+                text = stringResource(coreR.string.next),
                 enabled = inputState.isValid,
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -126,10 +149,10 @@ internal fun CodeEntryPage(
 private fun CodeEntryPagePreview() {
     TnTTheme {
         CodeEntryPage(
-            showDialog = true,
+            showDialog = false,
             inputState = InputState.FOCUS,
             inviteCode = "23A4SDA31",
-            isSkippable = false,
+            screenMode = ScreenMode.CLOSE,
             onSkipClick = {},
             onNextClick = {},
             onValidateClick = {},
