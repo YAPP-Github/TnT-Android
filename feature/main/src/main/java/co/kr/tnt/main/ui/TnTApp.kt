@@ -2,7 +2,6 @@ package co.kr.tnt.main.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import co.kr.tnt.core.designsystem.R
@@ -18,7 +17,6 @@ import co.kr.tnt.core.ui.R as coreR
 fun TnTApp(
     appState: TnTAppState,
 ) {
-    val context = LocalContext.current
     val toastState = rememberSnackbarState()
 
     if (appState.showSessionExpiredDialog) {
