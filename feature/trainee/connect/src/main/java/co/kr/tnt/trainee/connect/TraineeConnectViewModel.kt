@@ -77,6 +77,7 @@ internal class TraineeConnectViewModel @Inject constructor(
 
         private fun requestConnect() {
             viewModelScope.launch {
+                updateState { copy(isLoading = true) }
                 runCatching {
                     currentState.run {
                         connectRepository.connectRequest(
@@ -98,6 +99,8 @@ internal class TraineeConnectViewModel @Inject constructor(
                     navigateToNext()
                 }.onFailure {
                     sendEffect(TraineeConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
+                }.also {
+                    updateState { copy(isLoading = false) }
                 }
             }
         }

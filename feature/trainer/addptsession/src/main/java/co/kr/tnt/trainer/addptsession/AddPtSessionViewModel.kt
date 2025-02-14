@@ -103,6 +103,7 @@ internal class AddPtSessionViewModel @Inject constructor(
         val endDateTime = currentState.selectedDate?.atTime(currentState.selectedEndTime) ?: return
 
         viewModelScope.launch {
+            updateState { copy(isLoading = true) }
             runCatching {
                 trainerRepository.postPtSession(
                     startDateTime = startDateTime,
@@ -114,6 +115,8 @@ internal class AddPtSessionViewModel @Inject constructor(
                 updateState { copy(dialogState = DialogState.SUCCESS_ADD) }
             }.onFailure { throwable ->
                 sendEffect(AddPtSessionSideEffect.ShowToast(throwable.message ?: "서버 요청에 실패했어요"))
+            }.also {
+                updateState { copy(isLoading = false) }
             }
         }
     }
