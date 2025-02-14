@@ -10,6 +10,7 @@ import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
+import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -21,7 +22,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 import javax.inject.Inject
 
 const val DIALOG_HIDE_DURATION_HOURS = 72
@@ -32,9 +32,9 @@ internal class TrainerHomeViewModel @Inject constructor(
     private val connectRepository: ConnectRepository,
 ) :
     BaseViewModel<TrainerHomeUiState, TrainerHomeUiEvent, TrainerHomeSideEffect>(TrainerHomeUiState()) {
-        private val cachedMonthlyPtSessionCounts: ConcurrentMap<YearMonth, List<TrainerDailyPtSessionCount>> =
+        private val cachedMonthlyPtSessionCounts: ConcurrentHashMap<YearMonth, List<TrainerDailyPtSessionCount>> =
             ConcurrentHashMap()
-        private val cachedDailyPtSession: ConcurrentMap<LocalDate, List<PtSession>> = ConcurrentHashMap()
+        private val cachedDailyPtSession: ConcurrentHashMap<LocalDate, List<PtSession>> = ConcurrentHashMap()
 
         init {
             selectDay(LocalDate.now())
@@ -44,7 +44,7 @@ internal class TrainerHomeViewModel @Inject constructor(
             when (event) {
                 TrainerHomeUiEvent.OnScreen -> refresh()
                 TrainerHomeUiEvent.OnClickNotification -> sendEffect(TrainerHomeSideEffect.NavigateToNotification)
-                is TrainerHomeUiEvent.OnChangeVisibleMonth -> handleChangeVisibleMonth(event.yearMonth)
+                is TrainerHomeUiEvent.OnChangeVisibleMonth -> getMonthlySessionCounts(event.yearMonth)
                 is TrainerHomeUiEvent.OnClickDay -> selectDay(event.day)
                 TrainerHomeUiEvent.OnClickAddPtSession -> showConnectDialog(false)
 
@@ -55,7 +55,7 @@ internal class TrainerHomeViewModel @Inject constructor(
             }
         }
 
-        private fun handleChangeVisibleMonth(yearMonth: YearMonth) {
+        private fun getMonthlySessionCounts(yearMonth: YearMonth) {
             // 현재 달을 기준으로 2개월 전부터 2개월 후까지의 데이터를 한 번에 요청합니다.
             val targetRange = -2L..2L
 
@@ -142,6 +142,7 @@ internal class TrainerHomeViewModel @Inject constructor(
             cachedMonthlyPtSessionCounts.clear()
             cachedDailyPtSession.clear()
             selectDay(currentState.selectedDay)
+            getMonthlySessionCounts(currentState.selectedDay.yearMonth)
             showConnectDialog(true)
         }
 
