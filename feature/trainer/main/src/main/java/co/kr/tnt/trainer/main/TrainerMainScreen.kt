@@ -69,6 +69,7 @@ private fun TrainerMainScreen(
                 padding = innerPadding,
                 navigateToNotification = navController::navigateToTrainerNotification,
                 navigateToAddPtSession = navController::navigateToAddPtSession,
+                navigateToInvite = navigateToInvite,
             ) {
                 trainerNotification(
                     navigateToPrevious = navController::popBackStack,

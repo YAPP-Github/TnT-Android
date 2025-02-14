@@ -37,7 +37,7 @@ internal class TrainerHomeContract {
     sealed interface TrainerHomeSideEffect : UiSideEffect {
         data object NavigateToNotification : TrainerHomeSideEffect
         data object NavigateToAddPtSession : TrainerHomeSideEffect
-        data object NavigateToConnect : TrainerHomeSideEffect
+        data object NavigateToInvite : TrainerHomeSideEffect
         data class ShowToast(val message: String) : TrainerHomeSideEffect
     }
 }

@@ -71,6 +71,7 @@ internal fun TrainerHomeRoute(
     padding: PaddingValues,
     navigateToNotification: () -> Unit,
     navigateToAddPtSession: () -> Unit,
+    navigateToInvite: (Boolean) -> Unit,
 ) {
     val toast = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -90,7 +91,7 @@ internal fun TrainerHomeRoute(
             when (effect) {
                 TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
                 TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession()
-                TrainerHomeSideEffect.NavigateToConnect -> TODO()
+                TrainerHomeSideEffect.NavigateToInvite -> navigateToInvite(false)
                 is TrainerHomeSideEffect.ShowToast -> toast.show(effect.message)
             }
         }
