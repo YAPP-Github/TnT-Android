@@ -93,6 +93,7 @@ private fun TraineeConnectScreen(
             sessionStartDate = state.sessionStartDate,
             completedSessionCount = state.completedSessionCount,
             totalSessionCount = state.totalSessionCount,
+            isLoading = state.isLoading,
             onChangeSessionStartDate = onChangeSessionStartDate,
             onChangeCompletedSessionCount = onChangeCompletedSessionCount,
             onChangeTotalSessionCount = onChangeTotalSessionCount,

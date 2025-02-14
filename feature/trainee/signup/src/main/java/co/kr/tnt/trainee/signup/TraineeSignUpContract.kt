@@ -21,6 +21,7 @@ internal class TraineeSignUpContract {
         val weight: String? = null,
         val ptPurpose: List<String> = emptyList(),
         val caution: String? = "",
+        val isLoading: Boolean = false,
     ) : UiState {
         val isNameValid get() = name.length <= MAX_NAME_LENGTH
 

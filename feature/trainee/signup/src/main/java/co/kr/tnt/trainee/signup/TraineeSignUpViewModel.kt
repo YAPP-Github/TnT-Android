@@ -55,6 +55,8 @@ internal class TraineeSignUpViewModel @Inject constructor(
         authType: String,
     ) {
         viewModelScope.launch {
+            updateState { copy(isLoading = true) }
+
             val state = currentState
             val profileImageFile: File? = imageUri?.toFile(context)?.let { file ->
                 if (!isAllowedImageFormat(file)) {
@@ -85,7 +87,9 @@ internal class TraineeSignUpViewModel @Inject constructor(
             }.onSuccess {
                 sendEffect(TraineeSignUpEffect.NavigateToConnect)
             }.onFailure {
-                sendEffect(TraineeSignUpEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(TraineeSignUpEffect.ShowToast("서버 요청에 실패했어요."))
+            }.also {
+                updateState { copy(isLoading = false) }
             }
         }
     }

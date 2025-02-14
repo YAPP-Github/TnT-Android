@@ -51,6 +51,7 @@ import co.kr.tnt.ui.extensions.moveToAppSetting
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.permission.PermissionRequestDialog
 import co.kr.tnt.ui.permission.TnTPermission
+import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -112,6 +113,7 @@ internal fun TrainerMyPageRoute(
 
                     permissionState.launchMultiplePermissionRequest()
                 }
+
                 TrainerMyPageSideEffect.NavigateToOpenSourceLicense ->
                     context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             }
@@ -188,11 +190,10 @@ private fun TrainerMyPageScreen(
                 text = stringResource(coreR.string.app_push_notification),
                 verticalPadding = 12.dp,
                 enabled = false,
-                onClick = { },
                 trailingComponent = {
                     TnTSwitch(
                         checked = state.isEnablePushNotification,
-                        onClick = onTogglePushNotification,
+                        onClick = throttled(throttleTime = 500L) { onTogglePushNotification() },
                     )
                 },
             )

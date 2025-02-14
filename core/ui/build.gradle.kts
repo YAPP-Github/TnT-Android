@@ -15,4 +15,5 @@ dependencies {
     implementation(projects.domain)
 
     implementation(libs.accompanist.permissions)
+    implementation(libs.androidx.compose.navigation)
 }

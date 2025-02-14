@@ -18,6 +18,7 @@ internal class AddPtSessionContract {
         val memo: String = "",
         val dialogState: DialogState = DialogState.NONE,
         val sheetType: BottomSheetType = BottomSheetType.NONE,
+        val isLoading: Boolean = false,
     ) : UiState {
         val totalSessionMinute: Int?
             get() {

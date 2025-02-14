@@ -92,6 +92,8 @@ internal class TraineeMealRecordViewModel @Inject constructor(
         }
 
         private fun postMealRecord(context: Context) {
+            updateState { copy(isLoading = true) }
+
             viewModelScope.launch {
                 val state = currentState
                 val imageFile: File? = state.image?.toFile(context)?.let { file ->
@@ -112,6 +114,8 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                     updateState { copy(dialogState = DialogState.COMPLETED) }
                 }.onFailure {
                     sendEffect(TraineeMealRecordSideEffect.ShowToast("식단 기록에 실패했어요"))
+                }.also {
+                    updateState { copy(isLoading = false) }
                 }
             }
         }
