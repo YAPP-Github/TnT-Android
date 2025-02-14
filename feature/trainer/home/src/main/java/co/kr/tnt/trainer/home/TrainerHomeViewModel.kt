@@ -153,16 +153,15 @@ internal class TrainerHomeViewModel @Inject constructor(
                     if (result.isNotEmpty()) {
                         updateState { copy(dialogState = DialogState.NONE) }
                         if (triggeredByHome.not()) {
-                            sendEffect(TrainerHomeSideEffect.NavigateToInvite)
+                            sendEffect(TrainerHomeSideEffect.NavigateToAddPtSession)
                         }
                         return@launch
                     }
                 }
 
                 val lastHiddenDate = connectRepository.getHomeDialogHiddenDate().firstOrNull()
-                // TODO : 72시간으로 바꾸기
                 val isHidden = lastHiddenDate != null &&
-                    Duration.between(lastHiddenDate, currentDateTime).toSeconds() < 5
+                    Duration.between(lastHiddenDate, currentDateTime).toHours() < 72
 
                 if (isHidden.not() && triggeredByHome) {
                     updateState { copy(dialogState = DialogState.HOME_CONNECT) }
