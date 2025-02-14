@@ -283,6 +283,7 @@ fun TnTSessionRecordCard(
 }
 
 @Composable
+@Suppress("UnusedParameter")
 fun TnTMemberProfileCard(
     name: String,
     profileImage: Painter,
