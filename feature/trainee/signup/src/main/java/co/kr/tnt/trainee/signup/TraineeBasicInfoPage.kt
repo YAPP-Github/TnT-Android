@@ -68,7 +68,7 @@ internal fun TraineeBasicInfoPage(
                     currentStep = 2,
                     totalSteps = 4,
                     title = stringResource(R.string.enter_your_basic_info),
-                    subTitle = stringResource(R.string.basic_info_for_pt),
+                    subTitle = stringResource(R.string.basic_info_for_trainer),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 Text(
