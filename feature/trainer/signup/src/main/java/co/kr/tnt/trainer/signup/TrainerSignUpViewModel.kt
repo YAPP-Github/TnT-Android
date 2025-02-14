@@ -52,6 +52,8 @@ internal class TrainerSignUpViewModel @Inject constructor(
         authType: String,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            updateState { copy(isLoading = true) }
+
             val profileImageFile: File? = imageUri?.toFile(context)?.let { file ->
                 if (!isAllowedImageFormat(file)) {
                     file.toUri().convertToAllowedImageFormat(context)
@@ -79,6 +81,8 @@ internal class TrainerSignUpViewModel @Inject constructor(
                 // TODO 디자인 시스템 Toast 적용
                 val message = context.getString(uiResource.string.error_server_request_failed)
                 sendEffect(TrainerSignUpEffect.ShowToast(message))
+            }.also {
+                updateState { copy(isLoading = false) }
             }
         }
     }

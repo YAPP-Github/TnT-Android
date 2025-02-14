@@ -21,6 +21,7 @@ internal class TraineeMealRecordContract {
         val isMealRecordValid: Boolean = false,
         val showWarning: Boolean = false,
         val dialogState: DialogState = DialogState.NONE,
+        val isLoading: Boolean = false,
     ) : UiState {
         enum class DialogState {
             NONE,

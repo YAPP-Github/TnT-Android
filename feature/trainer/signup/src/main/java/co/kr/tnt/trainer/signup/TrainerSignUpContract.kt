@@ -11,6 +11,7 @@ internal class TrainerSignUpContract {
         val page: TrainerSignUpPage = TrainerSignUpPage.ProfileSetUp,
         val name: String = "",
         val image: Uri? = null,
+        val isLoading: Boolean = false,
     ) : UiState
 
     sealed interface TrainerSignUpUiEvent : UiEvent {

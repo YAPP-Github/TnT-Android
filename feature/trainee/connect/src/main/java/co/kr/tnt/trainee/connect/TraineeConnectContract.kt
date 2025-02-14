@@ -19,6 +19,7 @@ internal class TraineeConnectContract {
         val trainerImage: String = "",
         val traineeName: String = "",
         val traineeImage: String = "",
+        val isLoading: Boolean = false,
     ) : UiState
 
     sealed interface TraineeConnectUiEvent : UiEvent {

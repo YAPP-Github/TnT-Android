@@ -24,6 +24,7 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
+import co.kr.tnt.ui.component.TnTLoadingScreen
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
@@ -82,6 +83,10 @@ internal fun TraineeSignUpCompletePage(
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
+    }
+
+    if (state.isLoading) {
+        TnTLoadingScreen()
     }
 }
 

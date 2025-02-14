@@ -72,6 +72,7 @@ import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffec
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState.DialogState
+import co.kr.tnt.ui.component.TnTLoadingScreen
 import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.utils.throttled
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -157,6 +158,10 @@ internal fun AddPtSessionRoute(
         onClickConfirm = { viewModel.setEvent(AddPtSessionUiEvent.OnClickDialogConfirm) },
         onDismissDialog = { viewModel.setEvent(AddPtSessionUiEvent.OnDismissDialog) },
     )
+
+    if (state.isLoading) {
+        TnTLoadingScreen()
+    }
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->

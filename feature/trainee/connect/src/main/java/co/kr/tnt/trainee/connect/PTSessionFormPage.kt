@@ -31,6 +31,8 @@ import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
+import co.kr.tnt.ui.component.TnTLoadingScreen
+import co.kr.tnt.ui.utils.throttled
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -44,6 +46,7 @@ internal fun PTSessionFormPage(
     sessionStartDate: LocalDate?,
     completedSessionCount: String,
     totalSessionCount: String,
+    isLoading: Boolean,
     onChangeSessionStartDate: (date: LocalDate) -> Unit,
     onChangeCompletedSessionCount: (count: String) -> Unit,
     onChangeTotalSessionCount: (count: String) -> Unit,
@@ -192,9 +195,13 @@ internal fun PTSessionFormPage(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
-                onClick = onNextClick,
+                onClick = throttled { onNextClick() },
             )
         }
+    }
+
+    if (isLoading) {
+        TnTLoadingScreen()
     }
 }
 
@@ -275,6 +282,7 @@ private fun PTSessionFormPagePreview() {
             sessionStartDate = LocalDate.now(),
             completedSessionCount = "15",
             totalSessionCount = "10",
+            isLoading = false,
             onNextClick = { },
             onBackClick = { },
             onChangeSessionStartDate = { },

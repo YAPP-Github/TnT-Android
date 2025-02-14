@@ -73,6 +73,7 @@ import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMeal
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
 import co.kr.tnt.ui.coil.ResizeTransformation
+import co.kr.tnt.ui.component.TnTLoadingScreen
 import co.kr.tnt.ui.model.RecordChip
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
@@ -275,6 +276,10 @@ private fun TraineeMealRecordScreen(
                 }
             }
         }
+    }
+
+    if (state.isLoading) {
+        TnTLoadingScreen()
     }
 }
 

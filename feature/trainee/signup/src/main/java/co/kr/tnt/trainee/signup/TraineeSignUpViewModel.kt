@@ -57,6 +57,8 @@ internal class TraineeSignUpViewModel @Inject constructor(
         authType: String,
     ) {
         viewModelScope.launch {
+            updateState { copy(isLoading = true) }
+
             val state = currentState
             val profileImageFile: File? = imageUri?.toFile(context)?.let { file ->
                 if (!isAllowedImageFormat(file)) {
@@ -90,6 +92,8 @@ internal class TraineeSignUpViewModel @Inject constructor(
                 // TODO 디자인 시스템 Toast 적용
                 val message = context.getString(R.string.error_server_request_failed)
                 sendEffect(TraineeSignUpEffect.ShowToast(message))
+            }.also {
+                updateState { copy(isLoading = false) }
             }
         }
     }
