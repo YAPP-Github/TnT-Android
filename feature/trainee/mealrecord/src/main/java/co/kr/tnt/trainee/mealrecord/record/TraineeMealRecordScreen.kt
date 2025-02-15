@@ -321,8 +321,8 @@ private fun Dialog(
             TnTIconPopupDialog(
                 title = "식단 기록을 종료할까요?",
                 content = "기록이 저장되지 않아요!",
-                leftButtonText = "종료",
-                rightButtonText = "계속 수정",
+                leftButtonText = "취소",
+                rightButtonText = "확인",
                 onLeftButtonClick = onClickExit,
                 onRightButtonClick = onDismissDialog,
                 onDismiss = onDismissDialog,

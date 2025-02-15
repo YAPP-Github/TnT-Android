@@ -135,8 +135,8 @@ internal fun CodeEntryPage(
         TnTIconPopupDialog(
             title = stringResource(R.string.stop_connecting_trainer),
             content = stringResource(R.string.warning_reconnect_needed),
-            leftButtonText = stringResource(R.string.action_cancel),
-            rightButtonText = stringResource(R.string.action_continue),
+            leftButtonText = stringResource(coreR.string.cancel),
+            rightButtonText = stringResource(coreR.string.ok),
             onLeftButtonClick = onCancelClick,
             onRightButtonClick = onDismissPopup,
             onDismiss = onDismissPopup,
