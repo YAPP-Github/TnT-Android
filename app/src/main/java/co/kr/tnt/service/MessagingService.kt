@@ -11,24 +11,42 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import co.kr.tnt.R
+import co.kr.tnt.domain.repository.SettingRepository
 import co.kr.tnt.main.MainActivity
 import com.google.firebase.messaging.Constants.MessageNotificationKeys
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class MessagingService : FirebaseMessagingService() {
+class MessagingService: FirebaseMessagingService() {
+    @Inject
+    lateinit var settingRepository: SettingRepository
+
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.IO + job)
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        // TODO message.data 형태로 오도록 요청
-        launchNotification(
-            title = message.data["title"] ?: "트레이너 연결 알림",
-            content = message.data["content"] ?: "트레이니님과 연결되었어요!",
-            pendingIntent = createPendingIntent(message.data)
-        )
+        scope.launch {
+            // TODO message.data 형태로 오도록 요청
+            val isEnabled = settingRepository.isEnablePushNotification().first()
+
+            if (isEnabled) {
+                launchNotification(
+                    title = message.data["title"] ?: "트레이너 연결 알림",
+                    content = message.data["content"] ?: "트레이니님과 연결되었어요!",
+                    pendingIntent = createPendingIntent(message.data)
+                )
+            }
+        }
     }
 
     private fun createPendingIntent(
