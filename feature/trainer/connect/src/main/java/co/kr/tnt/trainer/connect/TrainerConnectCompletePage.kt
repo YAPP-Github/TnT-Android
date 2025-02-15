@@ -120,7 +120,7 @@ private fun ProfileSection(
             .build(),
     )
     Column(
-        modifier = modifier,
+        modifier = modifier.width(100.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -134,7 +134,8 @@ private fun ProfileSection(
             text = profile.name,
             color = TnTTheme.colors.neutralColors.Neutral300,
             style = TnTTheme.typography.body2Medium,
-            modifier = Modifier.padding(horizontal = 24.dp),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
