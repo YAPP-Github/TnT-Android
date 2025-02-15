@@ -135,6 +135,7 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
         private fun logout() {
             viewModelScope.launch {
+                updateState { copy(isLoading = true) }
                 runCatching {
                     loginRepository.logout()
                     kakaoLoginSdk.logout()
@@ -142,12 +143,15 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     updateState { copy(dialogState = DialogState.LOGOUT) }
                 }.onFailure {
                     sendEffect(TraineeMyPageEffect.ShowToast("로그아웃에 실패하였습니다."))
+                }.also {
+                    updateState { copy(isLoading = false) }
                 }
             }
         }
 
         private fun withdraw() {
             viewModelScope.launch {
+                updateState { copy(isLoading = true) }
                 runCatching {
                     loginRepository.withdraw()
                     kakaoLoginSdk.unlink()
@@ -155,6 +159,8 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     updateState { copy(dialogState = DialogState.DELETE_ACCOUNT) }
                 }.onFailure {
                     sendEffect(TraineeMyPageEffect.ShowToast("탈퇴에 실패하였습니다."))
+                }.also {
+                    updateState { copy(isLoading = false) }
                 }
             }
         }

@@ -56,6 +56,7 @@ import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
 import co.kr.tnt.ui.component.TnTCheckToggleDialog
 import co.kr.tnt.ui.component.TnTHomeTopBar
+import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.kizitonwose.calendar.compose.CalendarState
@@ -355,7 +356,7 @@ private fun PtSessionCard(
                 .clip(RoundedCornerShape(8.dp))
                 .then(
                     if (ptSession.isCompleted.not()) {
-                        Modifier.clickable { onClickComplete(ptSession) }
+                        Modifier.clickable(onClick = throttled { onClickComplete(ptSession) })
                     } else {
                         Modifier
                     },
@@ -374,6 +375,7 @@ private fun PtSessionCard(
         Spacer(modifier = Modifier.width(20.dp))
         ptSession.run {
             // TODO 컴포넌트 개선
+            // TODO 정식 출시 후 PT 수업 기록 남기기 활성화
             TnTSessionRecordCard(
                 isTrainer = true,
                 name = traineeName,
@@ -383,7 +385,7 @@ private fun PtSessionCard(
                 defaultImage = painterResource(R.drawable.img_default),
                 profileImage = painter,
                 leadingEmoji = "\uD83D\uDCAA",
-                showSessionRecordCreation = ptSession.isCompleted,
+                showSessionRecordCreation = false,
                 onClick = {},
             )
         }

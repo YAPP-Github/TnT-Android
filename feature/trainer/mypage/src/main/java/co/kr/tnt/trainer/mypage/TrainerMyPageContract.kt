@@ -9,6 +9,7 @@ internal class TrainerMyPageContract {
     data class TrainerMyPageUiState(
         val user: User.Trainer = User.Trainer.EMPTY,
         val isEnablePushNotification: Boolean = true,
+        val isLoading: Boolean = false,
         val dialogState: DialogState = DialogState.NONE,
     ) : UiState {
         enum class DialogState {

@@ -10,6 +10,7 @@ internal class TraineeMyPageContract {
         val user: User.Trainee = User.Trainee.EMPTY,
         val trainerName: String = "",
         val isEnablePushNotification: Boolean = true,
+        val isLoading: Boolean = false,
         val dialogState: DialogState = DialogState.NONE,
     ) : UiState {
         enum class DialogState {

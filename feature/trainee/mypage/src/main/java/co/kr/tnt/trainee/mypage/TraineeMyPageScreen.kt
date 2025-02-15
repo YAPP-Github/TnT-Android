@@ -40,6 +40,7 @@ import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState.DialogState
+import co.kr.tnt.ui.component.TnTLoadingScreen
 import co.kr.tnt.ui.component.TnTMyPageButton
 import co.kr.tnt.ui.extensions.getAppVersion
 import co.kr.tnt.ui.extensions.moveToAppSetting
@@ -95,6 +96,10 @@ internal fun TraineeMyPageRoute(
         onClickConfirm = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickDialogConfirm) },
         onDismissDialog = { viewModel.setEvent(TraineeMyPageUiEvent.OnDismissDialog) },
     )
+
+    if (uiState.isLoading) {
+        TnTLoadingScreen()
+    }
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
