@@ -85,7 +85,7 @@ internal fun TraineeHomeRoute(
     navigateToConnect: () -> Unit,
     navigateToNotification: () -> Unit,
     navigateToExerciseRecord: () -> Unit,
-    navigateToMealRecord: () -> Unit,
+    navigateToMealRecord: (selectedDate: String) -> Unit,
     navigateToMealDetail: (id: Long) -> Unit,
 ) {
     val context = LocalContext.current
@@ -152,7 +152,7 @@ internal fun TraineeHomeRoute(
 
                 TraineeHomeEffect.NavigateToMealRecord -> {
                     showBottomSheet = false
-                    navigateToMealRecord()
+                    navigateToMealRecord(uiState.selectedDay.toString())
                 }
 
                 TraineeHomeEffect.NavigateToConnect -> navigateToConnect()

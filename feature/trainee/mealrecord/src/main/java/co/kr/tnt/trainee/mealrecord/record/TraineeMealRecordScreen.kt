@@ -88,6 +88,7 @@ import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TraineeMealRecordRoute(
+    selectedDate: String,
     navigateToPrevious: () -> Unit,
     viewModel: TraineeMealRecordViewModel = hiltViewModel(),
 ) {
@@ -96,8 +97,19 @@ internal fun TraineeMealRecordRoute(
     val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val dateFormatter = remember { DateFormatter() }
 
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(selectedDate) {
+        viewModel.setEvent(
+            TraineeMealRecordUiEvent.OnSelectMealDate(
+                dateFormatter.parse(
+                    selectedDate,
+                ),
+            ),
+        )
+    }
 
     TraineeMealRecordScreen(
         state = state,
@@ -175,7 +187,9 @@ internal fun TraineeMealRecordRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TraineeMealRecordContract.TraineeMealRecordSideEffect.NavigateToHome -> navigateToPrevious()
-                is TraineeMealRecordContract.TraineeMealRecordSideEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeMealRecordContract.TraineeMealRecordSideEffect.ShowToast -> snackbar.show(
+                    effect.message,
+                )
             }
         }
     }

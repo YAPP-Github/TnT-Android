@@ -10,9 +10,10 @@ import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailRoute
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordRoute
 
 fun NavController.navigateToTraineeMealRecord(
+    selectedDate: String,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
-    route = Route.TraineeMealRecord,
+    route = Route.TraineeMealRecord(selectedDate),
     builder = navOptions,
 )
 
@@ -30,6 +31,7 @@ fun NavGraphBuilder.traineeMealRecordScreen(
     composable<Route.TraineeMealRecord> { backstackEntry ->
         backstackEntry.toRoute<Route.TraineeMealRecord>().apply {
             TraineeMealRecordRoute(
+                selectedDate = selectedDate,
                 navigateToPrevious = navigateToPrevious,
             )
         }

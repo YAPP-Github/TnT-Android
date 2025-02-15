@@ -19,7 +19,7 @@ fun NavController.navigateToTraineeHome(
 fun NavGraphBuilder.traineeHomeNavGraph(
     padding: PaddingValues,
     navigateToNotification: () -> Unit,
-    navigateToMealRecord: () -> Unit,
+    navigateToMealRecord: (selectedDate: String) -> Unit,
     navigateToMealDetail: (id: Long) -> Unit,
     navigateToConnect: () -> Unit,
     homeDestination: NavGraphBuilder.() -> Unit = { },
