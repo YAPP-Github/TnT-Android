@@ -64,13 +64,20 @@ internal fun PTSessionFormPage(
      * 2. 완료된 회차가 총 등록 회차보다 크지 않아야 한다
      */
     val isFormValid = sessionStartDate != null &&
+        completedSessionCount.isNotBlank() &&
+        totalSessionCount.isNotBlank() &&
         isInvalidInput(completedSessionCount, allowZero = true).not() &&
         isInvalidInput(totalSessionCount, allowZero = false).not() &&
         isCompletedSessionInvalid(completedSessionCount, totalSessionCount).not()
 
-    val showTotalSessionWarning = isInvalidInput(totalSessionCount, allowZero = false)
-    val showCompletedSessionWarning = isInvalidInput(completedSessionCount, allowZero = true) ||
-        isCompletedSessionInvalid(completedSessionCount, totalSessionCount)
+    val showTotalSessionWarning = totalSessionCount.isNotBlank() &&
+        isInvalidInput(totalSessionCount, allowZero = false)
+
+    val showCompletedSessionWarning = completedSessionCount.isNotBlank() &&
+        (
+            isInvalidInput(completedSessionCount, allowZero = true) ||
+                isCompletedSessionInvalid(completedSessionCount, totalSessionCount)
+        )
 
     Scaffold(
         topBar = {
