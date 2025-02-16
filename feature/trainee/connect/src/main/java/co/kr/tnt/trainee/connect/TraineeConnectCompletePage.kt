@@ -87,8 +87,7 @@ internal fun TraineeConnectCompletePage(
                             name = trainerName,
                             image = trainerImage,
                             context = context,
-                            modifier = Modifier
-                                .padding(end = 16.dp),
+                            modifier = Modifier.padding(end = 16.dp),
                         )
                         ProfileSection(
                             type = UserType.TRAINEE,
