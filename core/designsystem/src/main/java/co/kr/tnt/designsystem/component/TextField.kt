@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,6 +32,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,6 +58,7 @@ fun TnTTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     trailingComponent: @Composable BoxScope.() -> Unit = {},
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     var isFocused by remember { mutableStateOf(false) }
 
     val lineColor = when {
@@ -98,6 +101,12 @@ fun TnTTextField(
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = keyboardType,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                        isFocused = false
+                    },
                 ),
             )
 
@@ -253,6 +262,7 @@ fun TnTOutlinedTextField(
     warningMessage: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     var isFocused by remember { mutableStateOf(false) }
 
     val borderWidth = if (isError || isFocused) 2.dp else 1.dp
@@ -306,6 +316,12 @@ fun TnTOutlinedTextField(
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide()
+                    isFocused = false
+                },
             ),
         )
         Row(
