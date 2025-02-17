@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +29,7 @@ import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.designsystem.utils.addFocusCleaner
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
@@ -50,6 +52,7 @@ internal fun TraineeProfileSetupPage(
 ) {
     BackHandler { onBackClick() }
 
+    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -66,6 +69,7 @@ internal fun TraineeProfileSetupPage(
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
+        modifier = Modifier.addFocusCleaner(focusManager),
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(

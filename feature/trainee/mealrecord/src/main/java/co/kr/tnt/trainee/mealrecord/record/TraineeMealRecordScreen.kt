@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,6 +67,7 @@ import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.designsystem.utils.addFocusCleaner
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.utils.DateFormatter
@@ -208,6 +210,7 @@ private fun TraineeMealRecordScreen(
     onClickSaveButton: () -> Unit,
     onClickBack: () -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
     val dateFormatter = remember { DateFormatter() }
 
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
@@ -238,6 +241,7 @@ private fun TraineeMealRecordScreen(
                 onClick = throttled { onClickSaveButton() },
             )
         },
+        modifier = Modifier.addFocusCleaner(focusManager),
     ) { innerPadding ->
         Column(
             modifier = Modifier
