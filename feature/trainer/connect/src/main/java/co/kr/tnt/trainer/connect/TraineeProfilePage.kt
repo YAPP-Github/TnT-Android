@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +45,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import co.kr.tnt.core.ui.R as uiResource
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun TraineeProfilePage(
     state: TrainerConnectUiState,
@@ -66,8 +71,10 @@ internal fun TraineeProfilePage(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(bottom = 66.dp)
-                    .padding(horizontal = 40.dp),
+                    .padding(horizontal = 40.dp)
+                    .verticalScroll(rememberScrollState()),
             ) {
+                Spacer(Modifier.height(24.dp))
                 Text(
                     text = stringResource(R.string.trainee_who_will_be_with),
                     style = TnTTheme.typography.h4,
@@ -123,7 +130,7 @@ internal fun TraineeProfilePage(
                     )
 
                     if (traineeInfo.isNotEmpty()) {
-                        Row(
+                        FlowRow(
                             horizontalArrangement = Arrangement.Start,
                             modifier = Modifier.fillMaxWidth(),
                         ) {
@@ -145,6 +152,7 @@ internal fun TraineeProfilePage(
                         modifier = Modifier.height(128.dp),
                     )
                 }
+                Spacer(Modifier.height(24.dp))
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
