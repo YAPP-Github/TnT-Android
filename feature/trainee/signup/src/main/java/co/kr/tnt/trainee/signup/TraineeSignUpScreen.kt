@@ -19,6 +19,7 @@ internal fun TraineeSignUpRoute(
     authId: String,
     authType: String,
     email: String,
+    messagingToken: String,
     navigateToPrevious: () -> Unit,
     navigateToConnect: () -> Unit,
     viewModel: TraineeSignUpViewModel = hiltViewModel(),
@@ -46,6 +47,7 @@ internal fun TraineeSignUpRoute(
                     id = authId,
                     email = email,
                     authType = authType,
+                    messagingToken = messagingToken,
                 ),
             )
         },

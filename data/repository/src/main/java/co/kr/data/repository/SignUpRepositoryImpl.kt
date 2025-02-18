@@ -31,18 +31,18 @@ internal class SignUpRepositoryImpl @Inject constructor(
         socialId: String,
         socialType: String,
         email: String,
+        messagingToken: String,
     ): SignUpResult {
         val profileImagePart = profileImage?.let {
             val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
             MultipartBody.Part.createFormData("profileImage", it.name, requestFile)
         }
 
-        // TODO FCM token
         val signUpRequest = user.toSignUpRequest(
             socialId = socialId,
             socialType = socialType,
             email = email,
-            fcmToken = "EMPTY",
+            fcmToken = messagingToken,
         )
         val requestBody = signUpRequest.toRequestBody()
 

@@ -19,6 +19,7 @@ sealed interface Route {
         val authId: String,
         val authType: String,
         val email: String,
+        val messagingToken: String,
     ) : Route
 
     @Serializable
@@ -26,6 +27,7 @@ sealed interface Route {
         val authId: String,
         val authType: String,
         val email: String,
+        val messagingToken: String,
     ) : Route
 
     @Serializable
@@ -33,6 +35,7 @@ sealed interface Route {
         val authId: String,
         val authType: String,
         val email: String,
+        val messagingToken: String,
     ) : Route
 
     @Serializable

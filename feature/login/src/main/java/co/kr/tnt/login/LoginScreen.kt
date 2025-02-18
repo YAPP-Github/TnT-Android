@@ -65,7 +65,7 @@ internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
     navigateToWebView: (url: String) -> Unit,
     navigateToHome: (UserType) -> Unit,
-    navigateToSignup: (LoginResult) -> Unit,
+    navigateToSignup: (loginResult: LoginResult, messagingToken: String) -> Unit,
 ) {
     val context = LocalContext.current
     val snackbar = LocalSnackbar.current
@@ -137,7 +137,7 @@ internal fun LoginRoute(
 
                 is LoginSideEffect.NavigateToSignup -> {
                     showBottomSheet = false
-                    navigateToSignup(effect.loginResult)
+                    navigateToSignup(effect.loginResult, effect.messagingToken)
                 }
             }
         }

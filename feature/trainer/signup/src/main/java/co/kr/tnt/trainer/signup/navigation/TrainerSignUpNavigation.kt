@@ -13,12 +13,14 @@ fun NavController.navigateToTrainerSignUp(
     authId: String,
     authType: String,
     email: String,
+    messagingToken: String,
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) = navigate(
     route = Route.TrainerSignUp(
         authId = authId,
         authType = authType,
         email = email,
+        messagingToken = messagingToken,
     ),
     builder = navOptions,
 )
@@ -33,6 +35,7 @@ fun NavGraphBuilder.trainerSignUpScreen(
                 authId = authId,
                 authType = authType,
                 email = email,
+                messagingToken = messagingToken,
                 navigateToPrevious = navigateToPrevious,
                 navigateToInvite = navigateToInvite,
             )

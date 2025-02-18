@@ -11,5 +11,6 @@ interface SignUpRepository {
         socialId: String,
         socialType: String,
         email: String,
+        messagingToken: String,
     ): SignUpResult
 }

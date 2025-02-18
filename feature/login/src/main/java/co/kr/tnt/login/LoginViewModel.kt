@@ -103,7 +103,7 @@ internal class LoginViewModel @Inject constructor(
 
     private fun navigateToSignup() {
         loginResult?.let { loginResult ->
-            sendEffect(LoginSideEffect.NavigateToSignup(loginResult))
+            sendEffect(LoginSideEffect.NavigateToSignup(loginResult, messagingToken))
             this@LoginViewModel.loginResult = null
         } ?: run {
             sendEffect(LoginSideEffect.ShowToast("로그인에 실패하였습니다. 다시 시도해주세요."))

@@ -54,11 +54,12 @@ fun TnTNavHost(
                         UserType.TRAINEE -> navController.navigateToTraineeMain(clearBackStack = true)
                     }
                 },
-                navigateToSignup = { loginResult ->
+                navigateToSignup = { loginResult, messagingToken ->
                     navController.navigateToRoleSelection(
                         authId = loginResult.authId,
                         authType = loginResult.authType.name,
                         email = loginResult.email,
+                        messagingToken = messagingToken,
                     )
                 },
             )
