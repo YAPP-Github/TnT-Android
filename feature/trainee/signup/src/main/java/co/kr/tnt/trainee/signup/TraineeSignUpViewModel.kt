@@ -43,6 +43,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
                 id = event.id,
                 email = event.email,
                 authType = event.authType,
+                messagingToken = event.messagingToken,
             )
         }
     }
@@ -53,6 +54,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
         id: String,
         email: String,
         authType: String,
+        messagingToken: String,
     ) {
         viewModelScope.launch {
             updateState { copy(isLoading = true) }
@@ -83,6 +85,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
                     socialId = id,
                     socialType = authType,
                     email = email,
+                    messagingToken = messagingToken,
                 )
             }.onSuccess {
                 sendEffect(TraineeSignUpEffect.NavigateToConnect)

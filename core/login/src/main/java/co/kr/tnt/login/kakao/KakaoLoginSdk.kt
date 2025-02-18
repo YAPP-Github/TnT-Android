@@ -6,6 +6,7 @@ import co.kr.tnt.login.LoginException.AuthException
 import co.kr.tnt.login.LoginException.CancelException
 import co.kr.tnt.login.LoginSdk
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
@@ -42,7 +43,18 @@ class KakaoLoginSdk @Inject constructor() : LoginSdk {
 
             if (userApiClient.isKakaoTalkLoginAvailable(context)) {
                 // 카카오톡 로그인
-                userApiClient.loginWithKakaoTalk(context, callback = callback)
+                userApiClient.loginWithKakaoTalk(
+                    context,
+                    callback = callback@{ oAuthToken, throwable ->
+                        // 카카오톡이 설치되어 있으나 로그인되어 있지 않은 경우 대응
+                        if (throwable is AuthError && throwable.statusCode == 302) {
+                            userApiClient.loginWithKakaoAccount(context, callback = callback)
+                            return@callback
+                        }
+
+                        callback(oAuthToken, throwable)
+                    },
+                )
             } else {
                 // 카카오톡 웹 로그인
                 userApiClient.loginWithKakaoAccount(context, callback = callback)

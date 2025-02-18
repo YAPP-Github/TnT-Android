@@ -17,6 +17,7 @@ internal fun TrainerSignUpRoute(
     authId: String,
     authType: String,
     email: String,
+    messagingToken: String,
     navigateToPrevious: () -> Unit,
     navigateToInvite: (ScreenMode) -> Unit,
     viewModel: TrainerSignUpViewModel = hiltViewModel(),
@@ -39,6 +40,7 @@ internal fun TrainerSignUpRoute(
                     id = authId,
                     email = email,
                     authType = authType,
+                    messagingToken = messagingToken,
                 ),
             )
         },

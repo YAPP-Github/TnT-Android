@@ -1,5 +1,6 @@
 package co.kr.tnt.login
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -65,7 +66,7 @@ internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
     navigateToWebView: (url: String) -> Unit,
     navigateToHome: (UserType) -> Unit,
-    navigateToSignup: (LoginResult) -> Unit,
+    navigateToSignup: (loginResult: LoginResult, messagingToken: String) -> Unit,
 ) {
     val context = LocalContext.current
     val snackbar = LocalSnackbar.current
@@ -91,6 +92,7 @@ internal fun LoginRoute(
                         )
                     }
                     .onFailure { throwable ->
+                        Log.e("TnT Login error", throwable.toString())
                         viewModel.setEvent(LoginUiEvent.OnAuthFail(throwable))
                     }
             }
@@ -137,7 +139,7 @@ internal fun LoginRoute(
 
                 is LoginSideEffect.NavigateToSignup -> {
                     showBottomSheet = false
-                    navigateToSignup(effect.loginResult)
+                    navigateToSignup(effect.loginResult, effect.messagingToken)
                 }
             }
         }

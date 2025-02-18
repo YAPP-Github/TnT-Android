@@ -37,6 +37,9 @@ internal class LoginContract {
         data class ShowToast(val message: String) : LoginSideEffect
         data class NavigateToWebView(val url: String) : LoginSideEffect
         data class NavigateToHome(val userType: UserType) : LoginSideEffect
-        data class NavigateToSignup(val loginResult: LoginResult) : LoginSideEffect
+        data class NavigateToSignup(
+            val loginResult: LoginResult,
+            val messagingToken: String,
+        ) : LoginSideEffect
     }
 }

@@ -72,6 +72,7 @@ internal class TraineeSignUpContract {
             val id: String,
             val email: String,
             val authType: String,
+            val messagingToken: String,
         ) : TraineeSignUpUiEvent
     }
 
