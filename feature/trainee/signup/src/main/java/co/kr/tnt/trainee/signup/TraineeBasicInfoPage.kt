@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -32,10 +31,10 @@ import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.designsystem.utils.addFocusCleaner
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.trainee.signup.component.ProgressSteps
+import co.kr.tnt.ui.extensions.clearFocusOnTap
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -52,14 +51,13 @@ internal fun TraineeBasicInfoPage(
 ) {
     BackHandler { onBackClick() }
 
-    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val today = LocalDate.now()
 
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
-        modifier = Modifier.addFocusCleaner(focusManager),
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(

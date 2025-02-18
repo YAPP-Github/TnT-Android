@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,11 +25,11 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.designsystem.utils.addFocusCleaner
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainee.connect.component.CodeTextField
 import co.kr.tnt.trainee.connect.model.InputState
+import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.core.designsystem.R as uiResource
 import co.kr.tnt.core.ui.R as coreR
 
@@ -55,8 +54,6 @@ internal fun CodeEntryPage(
             ScreenMode.CLOSE -> onBackClick()
         }
     }
-
-    val focusManager = LocalFocusManager.current
 
     Scaffold(
         topBar = {
@@ -100,7 +97,7 @@ internal fun CodeEntryPage(
             }
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
-        modifier = Modifier.addFocusCleaner(focusManager),
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(modifier = Modifier.fillMaxSize()) {

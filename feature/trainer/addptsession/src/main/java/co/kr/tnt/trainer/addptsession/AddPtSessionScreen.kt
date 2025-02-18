@@ -66,7 +66,6 @@ import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.designsystem.utils.addFocusCleaner
 import co.kr.tnt.domain.model.MemberInfo
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffect
@@ -194,7 +193,6 @@ private fun AddPtSessionScreen(
     onChangeMemo: (memo: String) -> Unit,
     onClickComplete: () -> Unit,
 ) {
-    val focusManager = LocalFocusManager.current
     val dateFormatter = remember { DateFormatter() }
 
     Scaffold(
@@ -207,7 +205,7 @@ private fun AddPtSessionScreen(
             )
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
-        modifier = Modifier.addFocusCleaner(focusManager),
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Box(
             modifier = Modifier

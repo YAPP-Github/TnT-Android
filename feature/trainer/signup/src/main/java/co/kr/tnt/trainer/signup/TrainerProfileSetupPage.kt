@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,11 +29,11 @@ import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.designsystem.utils.addFocusCleaner
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.feature.trainer.signup.R
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 import co.kr.tnt.ui.coil.ResizeTransformation
+import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -52,7 +51,6 @@ internal fun TrainerProfileSetupPage(
 ) {
     BackHandler { onBackClick() }
 
-    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
@@ -70,7 +68,7 @@ internal fun TrainerProfileSetupPage(
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
-        modifier = Modifier.addFocusCleaner(focusManager),
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(
