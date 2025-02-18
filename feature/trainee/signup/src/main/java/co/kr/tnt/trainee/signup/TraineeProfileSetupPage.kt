@@ -33,6 +33,7 @@ import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.ui.coil.ResizeTransformation
+import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -66,6 +67,7 @@ internal fun TraineeProfileSetupPage(
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(

@@ -29,6 +29,7 @@ import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainee.connect.component.CodeTextField
 import co.kr.tnt.trainee.connect.model.InputState
+import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.core.designsystem.R as uiResource
 import co.kr.tnt.core.ui.R as coreR
 
@@ -96,6 +97,7 @@ internal fun CodeEntryPage(
             }
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(modifier = Modifier.fillMaxSize()) {
@@ -135,8 +137,8 @@ internal fun CodeEntryPage(
         TnTIconPopupDialog(
             title = stringResource(R.string.stop_connecting_trainer),
             content = stringResource(R.string.warning_reconnect_needed),
-            leftButtonText = stringResource(R.string.action_cancel),
-            rightButtonText = stringResource(R.string.action_continue),
+            leftButtonText = stringResource(coreR.string.cancel),
+            rightButtonText = stringResource(coreR.string.ok),
             onLeftButtonClick = onCancelClick,
             onRightButtonClick = onDismissPopup,
             onDismiss = onDismissPopup,

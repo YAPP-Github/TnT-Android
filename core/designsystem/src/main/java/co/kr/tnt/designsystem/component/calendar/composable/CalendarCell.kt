@@ -2,6 +2,7 @@ package co.kr.tnt.designsystem.component.calendar.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -69,7 +70,11 @@ internal fun CalendarCellWithIndicator(
             .height(54.dp)
             .then(
                 if (onClick != null) {
-                    Modifier.clickable(onClick = onClick)
+                    Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onClick,
+                    )
                 } else {
                     Modifier
                 },
@@ -122,12 +127,11 @@ private fun CalendarDay(
         Text(
             date.dayOfMonth.toString(),
             style = TnTTheme.typography.body2Medium,
-            color =
-                if (isSelected) {
-                    TnTTheme.colors.commonColors.Common0
-                } else {
-                    TnTTheme.colors.neutralColors.Neutral600
-                },
+            color = if (isSelected) {
+                TnTTheme.colors.commonColors.Common0
+            } else {
+                TnTTheme.colors.neutralColors.Neutral600
+            },
             fontSize = 15.sp.nonScaledSp,
         )
     }

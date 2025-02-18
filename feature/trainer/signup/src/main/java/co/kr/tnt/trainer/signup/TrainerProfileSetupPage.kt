@@ -17,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,6 +33,7 @@ import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.feature.trainer.signup.R
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 import co.kr.tnt.ui.coil.ResizeTransformation
+import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -68,6 +68,7 @@ internal fun TrainerProfileSetupPage(
     Scaffold(
         topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
         containerColor = TnTTheme.colors.commonColors.Common0,
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(

@@ -74,6 +74,7 @@ import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMeal
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
 import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.component.TnTLoadingScreen
+import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.RecordChip
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
@@ -88,6 +89,7 @@ import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TraineeMealRecordRoute(
+    selectedDate: String,
     navigateToPrevious: () -> Unit,
     viewModel: TraineeMealRecordViewModel = hiltViewModel(),
 ) {
@@ -96,8 +98,19 @@ internal fun TraineeMealRecordRoute(
     val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val dateFormatter = remember { DateFormatter() }
 
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(selectedDate) {
+        viewModel.setEvent(
+            TraineeMealRecordUiEvent.OnSelectMealDate(
+                dateFormatter.parse(
+                    selectedDate,
+                ),
+            ),
+        )
+    }
 
     TraineeMealRecordScreen(
         state = state,
@@ -175,7 +188,9 @@ internal fun TraineeMealRecordRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TraineeMealRecordContract.TraineeMealRecordSideEffect.NavigateToHome -> navigateToPrevious()
-                is TraineeMealRecordContract.TraineeMealRecordSideEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeMealRecordContract.TraineeMealRecordSideEffect.ShowToast -> snackbar.show(
+                    effect.message,
+                )
             }
         }
     }
@@ -224,6 +239,7 @@ private fun TraineeMealRecordScreen(
                 onClick = throttled { onClickSaveButton() },
             )
         },
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -307,8 +323,8 @@ private fun Dialog(
             TnTIconPopupDialog(
                 title = "식단 기록을 종료할까요?",
                 content = "기록이 저장되지 않아요!",
-                leftButtonText = "종료",
-                rightButtonText = "계속 수정",
+                leftButtonText = "취소",
+                rightButtonText = "확인",
                 onLeftButtonClick = onClickExit,
                 onRightButtonClick = onDismissDialog,
                 onDismiss = onDismissDialog,

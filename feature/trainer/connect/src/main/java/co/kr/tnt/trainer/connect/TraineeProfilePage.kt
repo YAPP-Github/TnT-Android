@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.designsystem.component.TnTProfileImage
@@ -38,9 +43,9 @@ import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import java.time.LocalDate
 import co.kr.tnt.core.ui.R as uiResource
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun TraineeProfilePage(
     state: TrainerConnectUiState,
@@ -66,8 +71,10 @@ internal fun TraineeProfilePage(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(bottom = 66.dp)
-                    .padding(horizontal = 40.dp),
+                    .padding(horizontal = 40.dp)
+                    .verticalScroll(rememberScrollState()),
             ) {
+                Spacer(Modifier.height(24.dp))
                 Text(
                     text = stringResource(R.string.trainee_who_will_be_with),
                     style = TnTTheme.typography.h4,
@@ -98,23 +105,13 @@ internal fun TraineeProfilePage(
                         modifier = Modifier.fillMaxWidth(),
                     )
                     Spacer(Modifier.height(12.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
+                    Text(
+                        text = trainee.name,
+                        style = TnTTheme.typography.h2,
+                        color = TnTTheme.colors.neutralColors.Neutral950,
                         modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(
-                            text = trainee.name,
-                            style = TnTTheme.typography.h2,
-                            color = TnTTheme.colors.neutralColors.Neutral950,
-                        )
-                        Spacer(Modifier.width(4.dp))
-                        Text(
-                            text = stringResource(uiResource.string.trainee),
-                            style = TnTTheme.typography.h4,
-                            color = TnTTheme.colors.neutralColors.Neutral950,
-                        )
-                    }
+                        textAlign = TextAlign.Center,
+                    )
                     Spacer(Modifier.height(32.dp))
                     val traineeInfo = listOfNotNull(
                         trainee.age?.let {
@@ -127,12 +124,13 @@ internal fun TraineeProfilePage(
                         },
                         trainee.weight?.let {
                             stringResource(uiResource.string.weight_label) to
-                                it.toString().removeSuffix(".0") + stringResource(uiResource.string.weight_unit)
+                                it.toString()
+                                    .removeSuffix(".0") + stringResource(uiResource.string.weight_unit)
                         },
                     )
 
                     if (traineeInfo.isNotEmpty()) {
-                        Row(
+                        FlowRow(
                             horizontalArrangement = Arrangement.Start,
                             modifier = Modifier.fillMaxWidth(),
                         ) {
@@ -154,6 +152,7 @@ internal fun TraineeProfilePage(
                         modifier = Modifier.height(128.dp),
                     )
                 }
+                Spacer(Modifier.height(24.dp))
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
@@ -228,9 +227,10 @@ private fun TraineeProfilePagePreview() {
                     id = "",
                     name = "김회원",
                     image = null,
-                    birthday = LocalDate.now().minusYears(19),
-                    weight = null,
-                    height = 150,
+                    birthday = null,
+                    age = 25,
+                    weight = 70.0,
+                    height = 170,
                     ptPurpose = listOf("체중 감량", "자세 교정"),
                     caution = "손목이 안 좋습니다.",
                     isConnected = true,

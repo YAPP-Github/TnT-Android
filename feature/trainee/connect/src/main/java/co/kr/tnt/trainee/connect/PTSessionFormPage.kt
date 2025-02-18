@@ -32,6 +32,7 @@ import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.ui.component.TnTLoadingScreen
+import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.utils.throttled
 import java.time.LocalDate
 import java.time.ZoneId
@@ -64,13 +65,20 @@ internal fun PTSessionFormPage(
      * 2. 완료된 회차가 총 등록 회차보다 크지 않아야 한다
      */
     val isFormValid = sessionStartDate != null &&
+        completedSessionCount.isNotBlank() &&
+        totalSessionCount.isNotBlank() &&
         isInvalidInput(completedSessionCount, allowZero = true).not() &&
         isInvalidInput(totalSessionCount, allowZero = false).not() &&
         isCompletedSessionInvalid(completedSessionCount, totalSessionCount).not()
 
-    val showTotalSessionWarning = isInvalidInput(totalSessionCount, allowZero = false)
-    val showCompletedSessionWarning = isInvalidInput(completedSessionCount, allowZero = true) ||
-        isCompletedSessionInvalid(completedSessionCount, totalSessionCount)
+    val showTotalSessionWarning = totalSessionCount.isNotBlank() &&
+        isInvalidInput(totalSessionCount, allowZero = false)
+
+    val showCompletedSessionWarning = completedSessionCount.isNotBlank() &&
+        (
+            isInvalidInput(completedSessionCount, allowZero = true) ||
+                isCompletedSessionInvalid(completedSessionCount, totalSessionCount)
+        )
 
     Scaffold(
         topBar = {
@@ -80,6 +88,7 @@ internal fun PTSessionFormPage(
             )
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             Column(

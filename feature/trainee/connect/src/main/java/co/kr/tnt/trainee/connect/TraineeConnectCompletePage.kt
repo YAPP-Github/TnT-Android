@@ -94,6 +94,7 @@ internal fun TraineeConnectCompletePage(
                             name = traineeName,
                             image = traineeImage,
                             context = context,
+                            modifier = Modifier.width(100.dp),
                         )
                     }
                     Image(
@@ -132,7 +133,7 @@ private fun ProfileSection(
             .build(),
     )
     Column(
-        modifier = modifier,
+        modifier = modifier.width(100.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -146,7 +147,8 @@ private fun ProfileSection(
             text = name,
             color = TnTTheme.colors.neutralColors.Neutral300,
             style = TnTTheme.typography.body2Medium,
-            modifier = Modifier.padding(horizontal = 24.dp),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -156,9 +158,9 @@ private fun ProfileSection(
 private fun TraineeConnectCompletePagePreview() {
     TnTTheme {
         TraineeConnectCompletePage(
-            trainerName = "",
+            trainerName = "김헬스",
             trainerImage = "",
-            traineeName = "",
+            traineeName = "김회원",
             traineeImage = "",
             onNextClick = {},
             onBackClick = {},

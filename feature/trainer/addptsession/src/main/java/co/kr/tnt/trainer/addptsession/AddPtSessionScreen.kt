@@ -205,6 +205,7 @@ private fun AddPtSessionScreen(
             )
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
+        modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
         Box(
             modifier = Modifier
