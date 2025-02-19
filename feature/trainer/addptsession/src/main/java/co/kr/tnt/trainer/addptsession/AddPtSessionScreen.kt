@@ -86,6 +86,7 @@ import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun AddPtSessionRoute(
+    selectedDate: String,
     viewModel: AddPtSessionViewModel = hiltViewModel(),
     navigateToPrevious: () -> Unit,
 ) {
@@ -93,8 +94,13 @@ internal fun AddPtSessionRoute(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+    val dateFormatter = remember { DateFormatter() }
 
     BackHandler { viewModel.setEvent(AddPtSessionUiEvent.OnClickBack) }
+
+    LaunchedEffect(selectedDate) {
+        viewModel.setEvent(AddPtSessionUiEvent.OnSelectDate(dateFormatter.parse(selectedDate)))
+    }
 
     AddPtSessionScreen(
         state = state,

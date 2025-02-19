@@ -27,7 +27,7 @@ fun NavController.navigateToTrainerHome(
 fun NavGraphBuilder.trainerHomeNavGraph(
     padding: PaddingValues,
     navigateToNotification: () -> Unit,
-    navigateToAddPtSession: () -> Unit,
+    navigateToAddPtSession: (selectedDate: String) -> Unit,
     navigateToInvite: (ScreenMode) -> Unit,
     homeDestination: NavGraphBuilder.() -> Unit = { },
 ) {

@@ -72,7 +72,7 @@ internal fun TrainerHomeRoute(
     viewModel: TrainerHomeViewModel = hiltViewModel(),
     padding: PaddingValues,
     navigateToNotification: () -> Unit,
-    navigateToAddPtSession: () -> Unit,
+    navigateToAddPtSession: (selectedDate: String) -> Unit,
     navigateToInvite: (ScreenMode) -> Unit,
 ) {
     val toast = LocalSnackbar.current
@@ -92,7 +92,7 @@ internal fun TrainerHomeRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
-                TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession()
+                TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession(state.selectedDay.toString())
                 TrainerHomeSideEffect.NavigateToInvite -> navigateToInvite(ScreenMode.CLOSE)
                 is TrainerHomeSideEffect.ShowToast -> toast.show(effect.message)
             }
