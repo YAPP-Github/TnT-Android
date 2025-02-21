@@ -117,8 +117,8 @@ internal class TrainerHomeViewModel @Inject constructor(
                     trainerRepository.postCompleteSession(ptSession.id)
                 }.onSuccess {
                     getDailyPtSessions(currentState.selectedDay)
-                }.onFailure {
-                    sendEffect(TrainerHomeSideEffect.ShowToast("서버 요청에 실패했어요"))
+                }.onFailure { throwable ->
+                    sendEffect(TrainerHomeSideEffect.ShowToast(throwable.message ?: "서버 요청에 실패했어요"))
                 }
             }
         }
