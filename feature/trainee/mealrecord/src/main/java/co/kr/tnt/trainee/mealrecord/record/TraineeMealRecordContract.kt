@@ -36,7 +36,8 @@ internal class TraineeMealRecordContract {
             return copy(
                 isMealRecordValid = selectedDateTime != null && selectedDateTime <= now &&
                     mealType.isNotBlank() &&
-                    memo.isNotBlank(),
+                    memo.isNotBlank() &&
+                    memo.length < 100,
             )
         }
     }
