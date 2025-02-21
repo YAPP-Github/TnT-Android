@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -39,7 +40,11 @@ fun <Tab : BottomTab> TnTBottomBar(
         enter = fadeIn(animationSpec = tween(700)) + slideIn { IntOffset(0, it.height) },
         exit = fadeOut(animationSpec = tween(700)) + slideOut { IntOffset(0, it.height) },
     ) {
-        Row(modifier = modifier.background(TnTTheme.colors.commonColors.Common0)) {
+        Row(
+            modifier = modifier
+                .shadow(elevation = 10.dp)
+                .background(TnTTheme.colors.commonColors.Common0),
+        ) {
             bottomTabs.forEach { tab ->
                 Button(
                     onClick = { onClickTab(tab) },

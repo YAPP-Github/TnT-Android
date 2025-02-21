@@ -103,7 +103,7 @@ sealed interface Route {
     data object TrainerNotification : Route
 
     @Serializable
-    data object AddPtSession : Route
+    data class AddPtSession(val selectedDate: String) : Route
 
     @Serializable
     data class TraineeMealRecord(val selectedDate: String) : Route

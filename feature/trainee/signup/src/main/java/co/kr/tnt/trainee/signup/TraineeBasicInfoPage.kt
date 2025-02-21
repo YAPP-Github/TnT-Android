@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -63,6 +64,7 @@ internal fun TraineeBasicInfoPage(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .consumeWindowInsets(innerPadding)
                     .imePadding()
                     .verticalScroll(rememberScrollState()),
             ) {

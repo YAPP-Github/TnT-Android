@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -86,6 +87,7 @@ import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun AddPtSessionRoute(
+    selectedDate: String,
     viewModel: AddPtSessionViewModel = hiltViewModel(),
     navigateToPrevious: () -> Unit,
 ) {
@@ -93,8 +95,13 @@ internal fun AddPtSessionRoute(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+    val dateFormatter = remember { DateFormatter() }
 
     BackHandler { viewModel.setEvent(AddPtSessionUiEvent.OnClickBack) }
+
+    LaunchedEffect(selectedDate) {
+        viewModel.setEvent(AddPtSessionUiEvent.OnSelectDate(dateFormatter.parse(selectedDate)))
+    }
 
     AddPtSessionScreen(
         state = state,
@@ -216,6 +223,7 @@ private fun AddPtSessionScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .consumeWindowInsets(innerPadding)
                     .imePadding()
                     .verticalScroll(state = rememberScrollState()),
             ) {
