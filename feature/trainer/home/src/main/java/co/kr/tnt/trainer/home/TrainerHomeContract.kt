@@ -4,6 +4,7 @@ import co.kr.tnt.domain.model.PtSession
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.model.SnackbarType
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -38,6 +39,9 @@ internal class TrainerHomeContract {
         data object NavigateToNotification : TrainerHomeSideEffect
         data object NavigateToAddPtSession : TrainerHomeSideEffect
         data object NavigateToInvite : TrainerHomeSideEffect
-        data class ShowToast(val message: String) : TrainerHomeSideEffect
+        data class ShowToast(
+            val message: String,
+            val type: SnackbarType = SnackbarType.WARNING,
+        ) : TrainerHomeSideEffect
     }
 }
