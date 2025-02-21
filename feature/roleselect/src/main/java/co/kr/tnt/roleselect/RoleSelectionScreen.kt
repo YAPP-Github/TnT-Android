@@ -6,7 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,16 +65,26 @@ fun RoleSelectionScreen(
     var selectedRole by remember { mutableStateOf(RoleState.fromDomain(UserType.TRAINER)) }
 
     Scaffold(
+        bottomBar = {
+            TnTBottomButton(
+                text = stringResource(uiResource.string.next),
+                enabled = true,
+                onClick = { onNextClick(selectedRole) },
+                modifier = Modifier.navigationBarsPadding(),
+            )
+        },
         modifier = Modifier.fillMaxSize(),
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Column(
+            verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.SpaceBetween,
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState()),
         ) {
-            Column(modifier = Modifier.padding(start = 24.dp, top = 60.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+                Spacer(Modifier.height(60.dp))
                 Text(
                     text = stringResource(R.string.select_role),
                     color = TnTTheme.colors.neutralColors.Neutral950,
@@ -113,11 +127,7 @@ fun RoleSelectionScreen(
                     },
                 )
             }
-            TnTBottomButton(
-                text = stringResource(uiResource.string.next),
-                enabled = true,
-                onClick = { onNextClick(selectedRole) },
-            )
+            Spacer(Modifier.height(60.dp))
         }
     }
 }
