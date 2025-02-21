@@ -40,6 +40,7 @@ import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteSideEffect
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiEvent
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiState
+import kotlinx.coroutines.flow.collectLatest
 import co.kr.tnt.core.ui.R as coreR
 
 @Composable
@@ -63,7 +64,7 @@ internal fun TrainerInviteRoute(
     )
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collectLatest { effect ->
             when (effect) {
                 TrainerInviteSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerInviteSideEffect.NavigateToHome -> navigateToHome(true)
