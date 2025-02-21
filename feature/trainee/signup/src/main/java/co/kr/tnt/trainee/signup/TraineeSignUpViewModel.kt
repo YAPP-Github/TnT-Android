@@ -2,7 +2,6 @@ package co.kr.tnt.trainee.signup
 
 import android.content.Context
 import android.net.Uri
-import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.SignUpRepository
@@ -12,8 +11,6 @@ import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiEvent
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
-import co.kr.tnt.ui.utils.isAllowedImageFormat
-import co.kr.tnt.ui.utils.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
@@ -60,13 +57,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
             updateState { copy(isLoading = true) }
 
             val state = currentState
-            val profileImageFile: File? = imageUri?.toFile(context)?.let { file ->
-                if (!isAllowedImageFormat(file)) {
-                    file.toUri().convertToAllowedImageFormat(context)
-                } else {
-                    file
-                }
-            }
+            val profileImageFile: File? = imageUri?.convertToAllowedImageFormat(context)
 
             runCatching {
                 signUpRepository.signUp(

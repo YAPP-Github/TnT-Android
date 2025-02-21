@@ -1,7 +1,6 @@
 package co.kr.tnt.trainee.mealrecord.record
 
 import android.content.Context
-import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.DateFormatter
@@ -11,8 +10,6 @@ import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMeal
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
-import co.kr.tnt.ui.utils.isAllowedImageFormat
-import co.kr.tnt.ui.utils.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
@@ -93,6 +90,7 @@ internal class TraineeMealRecordViewModel @Inject constructor(
             }
         }
 
+        // TODO Context 제거
         private fun postMealRecord(context: Context) {
             updateState { copy(isLoading = true) }
 
@@ -103,13 +101,7 @@ internal class TraineeMealRecordViewModel @Inject constructor(
 
             viewModelScope.launch {
                 val state = currentState
-                val imageFile: File? = state.image?.toFile(context)?.let { file ->
-                    if (!isAllowedImageFormat(file)) {
-                        file.toUri().convertToAllowedImageFormat(context)
-                    } else {
-                        file
-                    }
-                }
+                val imageFile: File? = state.image?.convertToAllowedImageFormat(context)
                 runCatching {
                     traineeRepository.postMealRecord(
                         mealImage = imageFile,
