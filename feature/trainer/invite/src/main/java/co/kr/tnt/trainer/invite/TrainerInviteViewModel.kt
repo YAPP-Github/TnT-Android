@@ -23,8 +23,8 @@ internal class TrainerInviteViewModel @Inject constructor(
             TrainerInviteUiEvent.OnBackClick -> navigateToBack()
             TrainerInviteUiEvent.OnSkipClick -> navigateToHome()
             is TrainerInviteUiEvent.OnCodeClick -> {
-                sendEffect(TrainerInviteSideEffect.ShowToast("코드가 복사되었어요!"))
                 sendEffect(TrainerInviteSideEffect.CopyToClipBoard(event.code))
+                sendEffect(TrainerInviteSideEffect.ShowToast("코드가 복사되었어요!"))
             }
         }
     }

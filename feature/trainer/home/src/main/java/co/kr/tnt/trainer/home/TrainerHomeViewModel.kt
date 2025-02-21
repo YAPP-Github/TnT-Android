@@ -10,6 +10,7 @@ import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.model.SnackbarType
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -117,8 +118,14 @@ internal class TrainerHomeViewModel @Inject constructor(
                     trainerRepository.postCompleteSession(ptSession.id)
                 }.onSuccess {
                     getDailyPtSessions(currentState.selectedDay)
-                }.onFailure {
-                    sendEffect(TrainerHomeSideEffect.ShowToast("서버 요청에 실패했어요"))
+                    sendEffect(
+                        TrainerHomeSideEffect.ShowToast(
+                            message = "PT 수업을 완료했어요",
+                            type = SnackbarType.SUCCESS,
+                        ),
+                    )
+                }.onFailure { throwable ->
+                    sendEffect(TrainerHomeSideEffect.ShowToast(throwable.message ?: "서버 요청에 실패했어요"))
                 }
             }
         }

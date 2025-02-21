@@ -2,13 +2,13 @@ package co.kr.tnt.ui.utils
 
 import android.content.Context
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import co.kr.tnt.domain.IMAGE_MAX_SIZE
+import co.kr.tnt.ui.extensions.toResizedByteArray
 import java.io.File
-import java.io.FileOutputStream
 
 fun Uri.toFile(context: Context): File? {
     return getRealPathFromUri(this, context)?.let { filePath ->
@@ -31,14 +31,19 @@ fun getRealPathFromUri(uri: Uri, context: Context): String? {
     return null
 }
 
-fun Uri.convertToAllowedImageFormat(context: Context): File {
+fun Uri.convertToAllowedImageFormat(
+    context: Context,
+    maxSizeInBytes: Int = IMAGE_MAX_SIZE,
+): File {
     val inputStream = context.contentResolver.openInputStream(this)
     val bitmap = BitmapFactory.decodeStream(inputStream)
+    inputStream?.close()
 
-    val convertedFile = File(context.cacheDir, "image.png")
-    val outputStream = FileOutputStream(convertedFile)
+    val compressedBytes = bitmap.toResizedByteArray(maxSizeInBytes)
+    val convertedFile = File(context.cacheDir, "image.jpg")
+    val outputStream = convertedFile.outputStream()
 
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+    outputStream.use { it.write(compressedBytes) }
     outputStream.flush()
     outputStream.close()
 

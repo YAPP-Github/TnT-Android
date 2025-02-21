@@ -1,10 +1,5 @@
 package co.kr.tnt.trainer.invite
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Context.CLIPBOARD_SERVICE
-import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,9 +20,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,6 +40,7 @@ import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteSideEffect
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiEvent
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiState
+import kotlinx.coroutines.flow.collectLatest
 import co.kr.tnt.core.ui.R as coreR
 
 @Composable
@@ -53,10 +50,9 @@ internal fun TrainerInviteRoute(
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerInviteViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val clipboardManager = LocalClipboardManager.current
 
     TrainerInviteScreen(
         state = state,
@@ -68,12 +64,13 @@ internal fun TrainerInviteRoute(
     )
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collectLatest { effect ->
             when (effect) {
                 TrainerInviteSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerInviteSideEffect.NavigateToHome -> navigateToHome(true)
                 is TrainerInviteSideEffect.ShowToast -> snackbar.show(effect.message)
-                is TrainerInviteSideEffect.CopyToClipBoard -> copyToClipboard(context, effect.value)
+                is TrainerInviteSideEffect.CopyToClipBoard ->
+                    clipboardManager.setText(AnnotatedString(effect.value))
             }
         }
     }
@@ -201,14 +198,6 @@ internal fun TrainerInviteScreen(
                 }
             }
         }
-    }
-}
-
-private fun copyToClipboard(context: Context, text: String) {
-    val clipboardManager = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-    clipboardManager.setPrimaryClip(ClipData.newPlainText("copied code", text))
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        clipboardManager.clearPrimaryClip()
     }
 }
 

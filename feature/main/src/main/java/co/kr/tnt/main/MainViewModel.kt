@@ -21,6 +21,7 @@ internal class MainViewModel @Inject constructor(
     BaseViewModel<MainUiState, MainUiEvent, MainSideEffect>(MainUiState()) {
         override suspend fun handleEvent(event: MainUiEvent) {
             when (event) {
+                MainUiEvent.OnNotificationPermissionGrantChecked -> settingRepository.setEnablePushNotification(true)
                 MainUiEvent.OnNotificationPermissionRevoked -> settingRepository.setEnablePushNotification(false)
                 is MainUiEvent.OnGetMessagingTokenSucceeded -> {
                     viewModelScope.launch {

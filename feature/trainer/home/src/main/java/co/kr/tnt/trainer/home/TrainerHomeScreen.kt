@@ -94,7 +94,10 @@ internal fun TrainerHomeRoute(
                 TrainerHomeSideEffect.NavigateToNotification -> navigateToNotification()
                 TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession(state.selectedDay.toString())
                 TrainerHomeSideEffect.NavigateToInvite -> navigateToInvite(ScreenMode.CLOSE)
-                is TrainerHomeSideEffect.ShowToast -> toast.show(effect.message)
+                is TrainerHomeSideEffect.ShowToast -> toast.show(
+                    message = effect.message,
+                    icon = effect.type.iconRes,
+                )
             }
         }
     }

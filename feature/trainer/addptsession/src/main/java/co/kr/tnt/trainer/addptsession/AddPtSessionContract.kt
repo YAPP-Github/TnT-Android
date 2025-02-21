@@ -45,7 +45,7 @@ internal class AddPtSessionContract {
 
         val isEnableComplete: Boolean
             get() = selectedMember != null && selectedDate != null && selectedStartTime != null &&
-                selectedEndTime != null && isErrorTime.not()
+                selectedEndTime != null && isErrorTime.not() && isErrorMemo.not()
 
         enum class BottomSheetType {
             NONE,
