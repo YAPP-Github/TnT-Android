@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,7 +59,7 @@ fun TnTSnackbar(
             Icon(
                 painter = painterResource(icon),
                 contentDescription = null,
-                tint = TnTTheme.colors.neutralColors.Neutral50,
+                tint = Color.Unspecified,
                 modifier = Modifier.height(24.dp),
             )
         }
