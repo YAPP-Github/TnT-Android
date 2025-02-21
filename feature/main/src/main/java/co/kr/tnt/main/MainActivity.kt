@@ -74,7 +74,14 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     private fun CheckPermissionEffect() {
-        val notificationPermission = rememberMultiplePermissionsState(TnTPermission.NOTIFICATION.values)
+        val notificationPermission =
+            rememberMultiplePermissionsState(TnTPermission.NOTIFICATION.values) { permissionResult ->
+                val isGranted = permissionResult.values.all { it }
+
+                if (isGranted) {
+                    viewModel.setEvent(MainUiEvent.OnNotificationPermissionGrantChecked)
+                }
+            }
 
         LaunchedEffect(Unit) {
             if (notificationPermission.shouldShowRationale.not()) {

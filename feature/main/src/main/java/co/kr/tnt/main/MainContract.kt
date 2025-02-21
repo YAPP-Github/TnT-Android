@@ -12,6 +12,7 @@ internal class MainContract {
     ) : UiState
 
     sealed class MainUiEvent : UiEvent {
+        data object OnNotificationPermissionGrantChecked : MainUiEvent()
         data object OnNotificationPermissionRevoked : MainUiEvent()
         data class OnGetMessagingTokenSucceeded(val token: String) : MainUiEvent()
         data object OnGetMessagingTokenFailed : MainUiEvent()
