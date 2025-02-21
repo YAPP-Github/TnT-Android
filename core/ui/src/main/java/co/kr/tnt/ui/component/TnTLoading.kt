@@ -28,6 +28,7 @@ fun TnTLoading(modifier: Modifier) {
     ) {
         CircularProgressIndicator(
             color = TnTTheme.colors.redColors.Red500,
+            trackColor = TnTTheme.colors.neutralColors.Neutral300,
         )
     }
 }
