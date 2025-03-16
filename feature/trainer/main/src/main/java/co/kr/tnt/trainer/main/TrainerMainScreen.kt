@@ -93,7 +93,9 @@ private fun TrainerMainScreen(
                 navigateToModifyMyInfo = navController::navigateToTrainerModifyMyInfo,
                 navigateToWebView = navigateToWebView,
             ) {
-                trainerModifyMyInfo()
+                trainerModifyMyInfo(
+                    navigateToPrevious = navController::safePopBackStack,
+                )
             }
         }
     }
