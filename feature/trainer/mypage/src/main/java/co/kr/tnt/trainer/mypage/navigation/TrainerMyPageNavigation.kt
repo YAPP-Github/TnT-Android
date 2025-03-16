@@ -20,6 +20,7 @@ fun NavController.navigateToTrainerMyPage(
 fun NavGraphBuilder.trainerMyPageNavGraph(
     padding: PaddingValues,
     navigateToLogin: () -> Unit,
+    navigateToModifyMyInfo: () -> Unit,
     navigateToWebView: (String) -> Unit,
     myPageDestination: NavGraphBuilder.() -> Unit = { },
 ) {
@@ -28,6 +29,7 @@ fun NavGraphBuilder.trainerMyPageNavGraph(
             TrainerMyPageRoute(
                 padding = padding,
                 navigateToLogin = navigateToLogin,
+                navigateToModifyMyInfo = navigateToModifyMyInfo,
                 navigateToWebView = navigateToWebView,
             )
         }

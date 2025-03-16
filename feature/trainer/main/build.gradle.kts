@@ -15,6 +15,7 @@ dependencies {
     implementation(projects.feature.trainer.mypage)
     implementation(projects.feature.trainer.notification)
     implementation(projects.feature.trainer.addptsession)
+    implementation(projects.feature.trainer.modifymyinfo)
 
     implementation(libs.kotlinx.immutable)
 }

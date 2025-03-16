@@ -66,8 +66,12 @@ internal class TrainerMyPageViewModel @Inject constructor(
                 copy(dialogState = DialogState.DELETE_ACCOUNT_CONFIRM)
             }
 
-            TrainerMyPageUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
+            TrainerMyPageUiEvent.OnClickModifyMyInfo -> sendEffect(
+                TrainerMyPageSideEffect.NavigateToModifyMyInfo,
+            )
+
             TrainerMyPageUiEvent.OnClickDialogConfirm -> handleDialogConfirm()
+            TrainerMyPageUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
         }
     }
 

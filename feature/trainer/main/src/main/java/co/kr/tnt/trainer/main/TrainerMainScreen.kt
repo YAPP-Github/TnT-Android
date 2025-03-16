@@ -14,6 +14,8 @@ import co.kr.tnt.trainer.addptsession.navigation.navigateToAddPtSession
 import co.kr.tnt.trainer.feedback.navigation.trainerFeedbackNavGraph
 import co.kr.tnt.trainer.home.navigation.trainerHomeNavGraph
 import co.kr.tnt.trainer.members.navigation.trainerMembersNavGraph
+import co.kr.tnt.trainer.modifymyinfo.navigation.navigateToTrainerModifyMyInfo
+import co.kr.tnt.trainer.modifymyinfo.navigation.trainerModifyMyInfo
 import co.kr.tnt.trainer.mypage.navigation.trainerMyPageNavGraph
 import co.kr.tnt.trainer.notification.navigation.navigateToTrainerNotification
 import co.kr.tnt.trainer.notification.navigation.trainerNotification
@@ -88,8 +90,11 @@ private fun TrainerMainScreen(
             trainerMyPageNavGraph(
                 padding = innerPadding,
                 navigateToLogin = navigateToLogin,
+                navigateToModifyMyInfo = navController::navigateToTrainerModifyMyInfo,
                 navigateToWebView = navigateToWebView,
-            )
+            ) {
+                trainerModifyMyInfo()
+            }
         }
     }
 }

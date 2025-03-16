@@ -36,6 +36,9 @@ import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTSwitch
+import co.kr.tnt.designsystem.component.button.TnTTextButton
+import co.kr.tnt.designsystem.component.button.model.ButtonSize
+import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.User
@@ -66,6 +69,7 @@ import co.kr.tnt.core.ui.R as coreR
 internal fun TrainerMyPageRoute(
     padding: PaddingValues,
     navigateToLogin: () -> Unit,
+    navigateToModifyMyInfo: () -> Unit,
     navigateToWebView: (String) -> Unit,
     viewModel: TrainerMyPageViewModel = hiltViewModel(),
 ) {
@@ -89,6 +93,7 @@ internal fun TrainerMyPageRoute(
         onClickTermsOfService = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickTermsOfService) },
         onClickPrivacy = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickPrivacy) },
         onClickOpenSourceLicense = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickOpenSourceLicense) },
+        onClickModifyMyInfo = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickModifyMyInfo) },
         onClickLogout = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickLogout) },
         onClickDeleteAccount = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickDeleteAccount) },
     )
@@ -107,6 +112,7 @@ internal fun TrainerMyPageRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TrainerMyPageSideEffect.NavigateToLogin -> navigateToLogin()
+                TrainerMyPageSideEffect.NavigateToModifyMyInfo -> navigateToModifyMyInfo()
                 is TrainerMyPageSideEffect.NavigateToWebView -> navigateToWebView(effect.url)
                 is TrainerMyPageSideEffect.ShowToast -> toast.show(effect.message)
 
@@ -135,6 +141,7 @@ private fun TrainerMyPageScreen(
     onClickTermsOfService: () -> Unit,
     onClickPrivacy: () -> Unit,
     onClickOpenSourceLicense: () -> Unit,
+    onClickModifyMyInfo: () -> Unit,
     onClickLogout: () -> Unit,
     onClickDeleteAccount: () -> Unit,
 ) {
@@ -169,7 +176,14 @@ private fun TrainerMyPageScreen(
             style = TnTTheme.typography.h2,
             color = TnTTheme.colors.neutralColors.Neutral950,
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
+        TnTTextButton(
+            text = "개인정보 수정",
+            size = ButtonSize.Small,
+            type = ButtonType.Gray,
+            onClick = onClickModifyMyInfo,
+        )
+        Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -388,6 +402,7 @@ private fun TrainerMyPageScreenPreview() {
             onClickOpenSourceLicense = { },
             onClickLogout = { },
             onClickDeleteAccount = { },
+            onClickModifyMyInfo = { },
         )
     }
 }
