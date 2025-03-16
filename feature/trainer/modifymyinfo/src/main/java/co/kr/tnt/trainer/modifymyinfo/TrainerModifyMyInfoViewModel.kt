@@ -10,9 +10,16 @@ import javax.inject.Inject
 @HiltViewModel
 internal class TrainerModifyMyInfoViewModel @Inject constructor() :
     BaseViewModel<TrainerModifyMyInfoUiState, TrainerModifyMyInfoUiEvent, TrainerModifyMyInfoEffect>(
-        TrainerModifyMyInfoUiState,
+        TrainerModifyMyInfoUiState(),
     ) {
         override suspend fun handleEvent(event: TrainerModifyMyInfoUiEvent) {
-            // TODO
+            when (event) {
+                TrainerModifyMyInfoUiEvent.OnClickBack -> TODO()
+                TrainerModifyMyInfoUiEvent.OnClickComplete -> TODO()
+                is TrainerModifyMyInfoUiEvent.OnNameChange -> TODO()
+                is TrainerModifyMyInfoUiEvent.OnProfileImageSelect -> TODO()
+                TrainerModifyMyInfoUiEvent.OnClickProfileEdit -> TODO()
+                TrainerModifyMyInfoUiEvent.OnDismissDialog -> TODO()
+            }
         }
     }
