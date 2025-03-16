@@ -7,7 +7,7 @@ import java.io.File
 
 internal class TrainerModifyMyInfoContract {
     data class TrainerModifyMyInfoUiState(
-        val profileImage: String = "",
+        val profileImage: String? = null,
         val name: String = "",
         val dialogState: DialogState = DialogState.NONE,
     ) : UiState {
@@ -22,7 +22,7 @@ internal class TrainerModifyMyInfoContract {
         data object OnClickComplete : TrainerModifyMyInfoUiEvent
         data class OnNameChange(val name: String) : TrainerModifyMyInfoUiEvent
         data class OnProfileImageSelect(val image: File) : TrainerModifyMyInfoUiEvent
-        data object OnClickProfileEdit : TrainerModifyMyInfoUiEvent
+        data object OnClickDialogConfirm : TrainerModifyMyInfoUiEvent
         data object OnDismissDialog : TrainerModifyMyInfoUiEvent
     }
 
