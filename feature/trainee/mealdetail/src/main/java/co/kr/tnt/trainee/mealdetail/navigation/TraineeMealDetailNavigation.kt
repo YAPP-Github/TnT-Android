@@ -16,7 +16,7 @@ fun NavController.navigateToTraineeMealDetail(
     builder = navOptions,
 )
 
-fun NavGraphBuilder.traineeMealDetailScreen(
+fun NavGraphBuilder.traineeMealDetail(
     navigateToPrevious: () -> Unit,
 ) {
     composable<Route.TraineeMealDetail> { backstackEntry ->

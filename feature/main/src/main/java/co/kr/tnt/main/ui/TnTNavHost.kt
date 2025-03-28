@@ -15,9 +15,6 @@ import co.kr.tnt.trainee.connect.navigation.navigateToTraineeConnect
 import co.kr.tnt.trainee.connect.navigation.traineeConnectScreen
 import co.kr.tnt.trainee.main.navigation.navigateToTraineeMain
 import co.kr.tnt.trainee.main.navigation.traineeMainScreen
-import co.kr.tnt.trainee.mealdetail.navigation.navigateToTraineeMealDetail
-import co.kr.tnt.trainee.mealrecord.navigation.navigateToTraineeMealRecord
-import co.kr.tnt.trainee.mealrecord.navigation.traineeMealRecordScreen
 import co.kr.tnt.trainee.signup.navigation.navigateToTraineeSignUp
 import co.kr.tnt.trainee.signup.navigation.traineeSignUpScreen
 import co.kr.tnt.trainer.connect.navigation.navigateToTrainerConnect
@@ -89,9 +86,6 @@ fun TnTNavHost(
                 navigateToPrevious = navController::safePopBackStack,
                 navigateToHome = { navController.navigateToTraineeMain(clearBackStack = true) },
             )
-            traineeMealRecordScreen(
-                navigateToPrevious = navController::safePopBackStack,
-            )
             trainerMainScreen(
                 navigateToConnect = navController::navigateToTrainerConnect,
                 navigateToWebView = navController::navigateToWebView,
@@ -102,8 +96,6 @@ fun TnTNavHost(
                 navigateToConnect = navController::navigateToTraineeConnect,
                 navigateToWebView = navController::navigateToWebView,
                 navigateToLogin = { navController.navigateToLogin(clearBackStack = true) },
-                navigateToMealRecord = navController::navigateToTraineeMealRecord,
-                navigateToMealDetail = navController::navigateToTraineeMealDetail,
             )
             webViewScreen(
                 navigateToPrevious = navController::safePopBackStack,
