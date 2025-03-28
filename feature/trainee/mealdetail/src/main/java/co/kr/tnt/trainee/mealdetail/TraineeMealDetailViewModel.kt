@@ -7,9 +7,11 @@ import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailS
 import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailUiEvent
 import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailUiState
 import co.kr.tnt.ui.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 internal class TraineeMealDetailViewModel @Inject constructor(
     private val traineeRepository: TraineeRepository,
 ) :
