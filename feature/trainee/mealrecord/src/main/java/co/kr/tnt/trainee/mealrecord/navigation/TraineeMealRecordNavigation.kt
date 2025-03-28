@@ -6,7 +6,6 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import co.kr.tnt.navigation.Route
-import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailRoute
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordRoute
 
 fun NavController.navigateToTraineeMealRecord(
@@ -17,14 +16,6 @@ fun NavController.navigateToTraineeMealRecord(
     builder = navOptions,
 )
 
-fun NavController.navigateToTraineeMealRecordDetail(
-    id: Long,
-    navOptions: NavOptionsBuilder.() -> Unit = {},
-) = navigate(
-    route = Route.TraineeMealRecordDetail(id),
-    builder = navOptions,
-)
-
 fun NavGraphBuilder.traineeMealRecordScreen(
     navigateToPrevious: () -> Unit,
 ) {
@@ -32,15 +23,6 @@ fun NavGraphBuilder.traineeMealRecordScreen(
         backstackEntry.toRoute<Route.TraineeMealRecord>().apply {
             TraineeMealRecordRoute(
                 selectedDate = selectedDate,
-                navigateToPrevious = navigateToPrevious,
-            )
-        }
-    }
-
-    composable<Route.TraineeMealRecordDetail> { backstackEntry ->
-        backstackEntry.toRoute<Route.TraineeMealRecordDetail>().apply {
-            TraineeMealRecordDetailRoute(
-                mealId = id,
                 navigateToPrevious = navigateToPrevious,
             )
         }
