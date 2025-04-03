@@ -77,11 +77,15 @@ import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.component.TnTLoadingScreen
 import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.RecordChip
+import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.kizitonwose.calendar.compose.rememberCalendarState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -101,22 +105,30 @@ internal fun TraineeMealRecordRoute(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val dateFormatter = remember { DateFormatter() }
 
+    var imageFile by rememberSaveable { mutableStateOf<File?>(null) }
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(selectedDate) {
         viewModel.setEvent(
             TraineeMealRecordUiEvent.OnSelectMealDate(
-                dateFormatter.parse(
-                    selectedDate,
-                ),
+                dateFormatter.parse(selectedDate),
             ),
         )
+    }
+
+    LaunchedEffect(state.image) {
+        state.image?.let { uri ->
+            withContext(Dispatchers.IO) {
+                val file = uri.convertToAllowedImageFormat(context)
+                imageFile = file
+            }
+        }
     }
 
     TraineeMealRecordScreen(
         state = state,
         context = context,
-        onImageSelect = { uri ->
+        onSelectImage = { uri ->
             viewModel.setEvent(TraineeMealRecordUiEvent.OnSelectImage(imageUri = uri))
         },
         onClickDeleteImage = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickDeleteImage) },
@@ -137,7 +149,7 @@ internal fun TraineeMealRecordRoute(
         onClickBack = {
             viewModel.setEvent(TraineeMealRecordUiEvent.OnClickBack)
         },
-        onClickSaveButton = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickSave(context)) },
+        onClickSaveButton = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickSave(imageFile)) },
     )
 
     if (showBottomSheet) {
@@ -201,7 +213,7 @@ internal fun TraineeMealRecordRoute(
 private fun TraineeMealRecordScreen(
     state: TraineeMealRecordUiState,
     context: Context,
-    onImageSelect: (url: Uri) -> Unit,
+    onSelectImage: (url: Uri) -> Unit,
     onClickDeleteImage: () -> Unit,
     onClickDateSection: () -> Unit,
     onClickTimeSection: () -> Unit,
@@ -214,7 +226,7 @@ private fun TraineeMealRecordScreen(
 
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         if (uri != null) {
-            onImageSelect(uri)
+            onSelectImage(uri)
         }
     }
 
@@ -672,7 +684,7 @@ private fun TraineeMealRecordScreenPreview() {
                 memo = "",
             ),
             context = LocalContext.current,
-            onImageSelect = { },
+            onSelectImage = { },
             onClickDeleteImage = { },
             onClickDateSection = { },
             onClickTimeSection = { },

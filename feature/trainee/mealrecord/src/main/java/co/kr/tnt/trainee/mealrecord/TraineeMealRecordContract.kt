@@ -1,10 +1,10 @@
 package co.kr.tnt.trainee.mealrecord
 
-import android.content.Context
 import android.net.Uri
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -52,7 +52,7 @@ internal class TraineeMealRecordContract {
         data object OnClickCloseBottomSheet : TraineeMealRecordUiEvent
         data class OnSelectMealType(val mealType: String) : TraineeMealRecordUiEvent
         data class OnChangeMemo(val memo: String) : TraineeMealRecordUiEvent
-        data class OnClickSave(val context: Context) : TraineeMealRecordUiEvent
+        data class OnClickSave(val imageFile: File?) : TraineeMealRecordUiEvent
         data object OnClickBack : TraineeMealRecordUiEvent
         data object OnClickDialogConfirm : TraineeMealRecordUiEvent
         data object OnDismissDialog : TraineeMealRecordUiEvent
