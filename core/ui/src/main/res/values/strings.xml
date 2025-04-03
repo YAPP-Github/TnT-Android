@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="core_failed_to_server_request">서버 요청에 실패했어요</string>
+
     <string name="session_expired">세션이 만료되었어요</string>
     <string name="session_expired_description">장시간 미사용으로 로그인 화면으로 이동해요</string>
     

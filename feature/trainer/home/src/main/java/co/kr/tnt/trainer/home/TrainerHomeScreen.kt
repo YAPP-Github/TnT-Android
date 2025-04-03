@@ -76,6 +76,7 @@ internal fun TrainerHomeRoute(
     navigateToInvite: (ScreenMode) -> Unit,
 ) {
     val toast = LocalSnackbar.current
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerHomeScreen(
@@ -95,7 +96,7 @@ internal fun TrainerHomeRoute(
                 TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession(state.selectedDay.toString())
                 TrainerHomeSideEffect.NavigateToInvite -> navigateToInvite(ScreenMode.CLOSE)
                 is TrainerHomeSideEffect.ShowToast -> toast.show(
-                    message = effect.message,
+                    message = effect.message.asString(context),
                     icon = effect.type.iconRes,
                 )
             }
