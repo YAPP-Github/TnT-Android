@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +32,8 @@ import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import co.kr.tnt.core.ui.R as uiResource
 
@@ -41,9 +46,16 @@ internal fun TraineeSignUpCompletePage(
     BackHandler { onBackClick() }
 
     val context = LocalContext.current
-    val onClickComplete = {
-        val imageFile = state.image?.convertToAllowedImageFormat(context)
-        onNextClick(imageFile)
+    val completeState = remember { mutableStateOf(false) }
+
+    LaunchedEffect(completeState.value) {
+        if (completeState.value) {
+            val imageFile = withContext(Dispatchers.IO) {
+                state.image?.convertToAllowedImageFormat(context)
+            }
+            onNextClick(imageFile)
+            completeState.value = false
+        }
     }
 
     Scaffold(
@@ -87,7 +99,7 @@ internal fun TraineeSignUpCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
-                onClick = throttled { onClickComplete() },
+                onClick = throttled { completeState.value = true },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
