@@ -339,8 +339,8 @@ private fun Dialog(
                 content = "기록이 저장되지 않아요!",
                 leftButtonText = "취소",
                 rightButtonText = "확인",
-                onLeftButtonClick = onClickExit,
-                onRightButtonClick = onDismissDialog,
+                onLeftButtonClick = onDismissDialog,
+                onRightButtonClick = onClickExit,
                 onDismiss = onDismissDialog,
             )
         }
