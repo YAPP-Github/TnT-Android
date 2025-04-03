@@ -117,12 +117,10 @@ internal fun TraineeMealRecordRoute(
     }
 
     LaunchedEffect(state.image) {
-        state.image?.let { uri ->
-            withContext(Dispatchers.IO) {
-                val file = uri.convertToAllowedImageFormat(context)
-                imageFile = file
-            }
+        val file = withContext(Dispatchers.IO) {
+            state.image?.convertToAllowedImageFormat(context)
         }
+        imageFile = file
     }
 
     TraineeMealRecordScreen(
