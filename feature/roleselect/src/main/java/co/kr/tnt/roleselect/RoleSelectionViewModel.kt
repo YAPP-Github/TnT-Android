@@ -15,7 +15,7 @@ internal class RoleSelectionViewModel @Inject constructor() :
     ) {
         override suspend fun handleEvent(event: RoleSelectionUiEvent) {
             when (event) {
-                is RoleSelectionUiEvent.OnNextClick -> navigateToSignUp(event.role)
+                is RoleSelectionUiEvent.OnClickNext -> navigateToSignUp(event.role)
             }
         }
 
