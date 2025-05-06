@@ -77,7 +77,7 @@ internal fun TraineeMealDetailRoute(
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
 
-                TraineeMealDetailSideEffect.NavigateToHome -> TODO()
+                TraineeMealDetailSideEffect.NavigateToHome -> navigateToPrevious()
             }
         }
     }
