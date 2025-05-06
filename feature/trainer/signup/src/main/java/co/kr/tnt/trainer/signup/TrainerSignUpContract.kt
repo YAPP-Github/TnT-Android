@@ -23,10 +23,10 @@ internal class TrainerSignUpContract {
     }
 
     sealed interface TrainerSignUpUiEvent : UiEvent {
-        data class OnImageChange(val imageUri: Uri) : TrainerSignUpUiEvent
-        data class OnNameChange(val name: String) : TrainerSignUpUiEvent
-        data object OnNextClick : TrainerSignUpUiEvent
-        data object OnBackClick : TrainerSignUpUiEvent
+        data class OnChangeImage(val imageUri: Uri) : TrainerSignUpUiEvent
+        data class OnChangeName(val name: String) : TrainerSignUpUiEvent
+        data object OnClickNext : TrainerSignUpUiEvent
+        data object OnClickBack : TrainerSignUpUiEvent
         data class RequestSignUp(
             val context: Context,
             val imageUri: Uri?,

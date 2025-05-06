@@ -28,10 +28,10 @@ internal fun TrainerSignUpRoute(
 
     TrainerSignUpScreen(
         state = uiState,
-        onNameChange = { viewModel.setEvent(TrainerSignUpUiEvent.OnNameChange(it)) },
-        onProfileImageSelect = { viewModel.setEvent(TrainerSignUpUiEvent.OnImageChange(it)) },
-        onNextClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnNextClick) },
-        onBackClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnBackClick) },
+        onChangeName = { viewModel.setEvent(TrainerSignUpUiEvent.OnChangeName(it)) },
+        onSelectProfileImage = { viewModel.setEvent(TrainerSignUpUiEvent.OnChangeImage(it)) },
+        onClickNext = { viewModel.setEvent(TrainerSignUpUiEvent.OnClickNext) },
+        onClickBack = { viewModel.setEvent(TrainerSignUpUiEvent.OnClickBack) },
         onSubmitSignUp = { uri ->
             viewModel.setEvent(
                 TrainerSignUpUiEvent.RequestSignUp(
@@ -60,25 +60,25 @@ internal fun TrainerSignUpRoute(
 @Composable
 private fun TrainerSignUpScreen(
     state: TrainerSignUpUiState,
-    onProfileImageSelect: (Uri) -> Unit,
-    onNameChange: (String) -> Unit,
+    onSelectProfileImage: (Uri) -> Unit,
+    onChangeName: (String) -> Unit,
     onSubmitSignUp: (Uri?) -> Unit,
-    onNextClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onClickNext: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
     when (state.page) {
         TrainerSignUpContract.TrainerSignUpPage.ProfileSetUp -> TrainerProfileSetupPage(
             state = state,
-            onProfileImageSelect = onProfileImageSelect,
-            onNameChange = onNameChange,
-            onNextClick = onNextClick,
-            onBackClick = onBackClick,
+            onSelectProfileImage = onSelectProfileImage,
+            onChangeName = onChangeName,
+            onClickNext = onClickNext,
+            onClickBack = onClickBack,
         )
 
         TrainerSignUpContract.TrainerSignUpPage.SignUpComplete -> TrainerSignUpCompletePage(
             state = state,
-            onNextClick = onSubmitSignUp,
-            onBackClick = onBackClick,
+            onClickNext = onSubmitSignUp,
+            onClickBack = onClickBack,
         )
     }
 }
