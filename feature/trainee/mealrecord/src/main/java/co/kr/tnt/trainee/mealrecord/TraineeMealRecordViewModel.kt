@@ -1,13 +1,13 @@
-package co.kr.tnt.trainee.mealrecord.record
+package co.kr.tnt.trainee.mealrecord
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.DateFormatter
-import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordSideEffect
-import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiEvent
-import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState
-import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordSideEffect
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiEvent
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import dagger.hilt.android.lifecycle.HiltViewModel

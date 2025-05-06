@@ -1,27 +1,27 @@
-package co.kr.tnt.trainee.mealrecord.detail
+package co.kr.tnt.trainee.mealdetail
 
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.repository.TraineeRepository
-import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailSideEffect
-import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiEvent
-import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiState
+import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailSideEffect
+import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailUiEvent
+import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailUiState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class TraineeMealRecordDetailViewModel @Inject constructor(
+internal class TraineeMealDetailViewModel @Inject constructor(
     private val traineeRepository: TraineeRepository,
 ) :
-    BaseViewModel<TraineeMealRecordDetailUiState, TraineeMealRecordDetailUiEvent, TraineeMealRecordDetailSideEffect>(
-            TraineeMealRecordDetailUiState(),
+    BaseViewModel<TraineeMealDetailUiState, TraineeMealDetailUiEvent, TraineeMealDetailSideEffect>(
+            TraineeMealDetailUiState(),
         ) {
-        override suspend fun handleEvent(event: TraineeMealRecordDetailUiEvent) {
+        override suspend fun handleEvent(event: TraineeMealDetailUiEvent) {
             when (event) {
-                is TraineeMealRecordDetailUiEvent.LoadRecordDetail -> fetchRecordDetail(event.id)
-                TraineeMealRecordDetailUiEvent.OnClickMore -> {}
+                is TraineeMealDetailUiEvent.LoadMealDetail -> fetchRecordDetail(event.id)
+                TraineeMealDetailUiEvent.OnClickMore -> {}
             }
         }
 
@@ -39,7 +39,7 @@ internal class TraineeMealRecordDetailViewModel @Inject constructor(
                         )
                     }
                 }.onFailure {
-                    sendEffect(TraineeMealRecordDetailSideEffect.ShowToast("데이터 불러오기에 실패했어요"))
+                    sendEffect(TraineeMealDetailSideEffect.ShowToast("데이터 불러오기에 실패했어요"))
                 }
             }
         }

@@ -16,6 +16,7 @@ dependencies {
     implementation(projects.feature.trainee.main)
     implementation(projects.feature.trainee.signup)
     implementation(projects.feature.trainee.mealrecord)
+    implementation(projects.feature.trainee.mealdetail)
     implementation(projects.feature.trainer.signup)
     implementation(projects.feature.trainer.invite)
     implementation(projects.feature.trainer.connect)

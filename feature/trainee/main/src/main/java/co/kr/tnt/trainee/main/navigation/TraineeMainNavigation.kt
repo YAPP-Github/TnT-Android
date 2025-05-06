@@ -26,16 +26,12 @@ fun NavGraphBuilder.traineeMainScreen(
     navigateToConnect: (ScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
-    navigateToMealRecord: (selectedDate: String) -> Unit,
-    navigateToMealDetail: (id: Long) -> Unit,
 ) {
     composable<Route.TraineeMain> {
         TraineeMainRoute(
             navigateToConnect = navigateToConnect,
             navigateToLogin = navigateToLogin,
             navigateToWebView = navigateToWebView,
-            navigateToMealRecord = navigateToMealRecord,
-            navigateToMealDetail = navigateToMealDetail,
         )
     }
 }

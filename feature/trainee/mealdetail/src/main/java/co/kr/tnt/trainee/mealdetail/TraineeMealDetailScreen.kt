@@ -1,8 +1,10 @@
-package co.kr.tnt.trainee.mealrecord.detail
+package co.kr.tnt.trainee.mealdetail
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,57 +36,56 @@ import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.chip.TnTChip
-import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.utils.DateFormatter
-import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailSideEffect
-import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiEvent
-import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiState
+import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailSideEffect
+import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailUiEvent
+import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailUiState
 import co.kr.tnt.ui.coil.ResizeTransformation
 import co.kr.tnt.ui.model.RecordChip
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 
 @Composable
-internal fun TraineeMealRecordDetailRoute(
+internal fun TraineeMealDetailRoute(
     mealId: Long,
     navigateToPrevious: () -> Unit,
-    viewModel: TraineeMealRecordDetailViewModel = hiltViewModel(),
+    viewModel: TraineeMealDetailViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
-    val snackbar = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val context = LocalContext.current
     val dateFormatter = remember { DateFormatter() }
 
-    TraineeMealRecordDetailScreen(
+    TraineeMealDetailScreen(
         state = state,
         context = context,
         dateFormatter = dateFormatter,
-        onClickMore = { viewModel.setEvent(TraineeMealRecordDetailUiEvent.OnClickMore) },
+        onClickMore = { viewModel.setEvent(TraineeMealDetailUiEvent.OnClickMore) },
         onClickBack = navigateToPrevious,
     )
 
     LaunchedEffect(mealId) {
-        viewModel.setEvent(TraineeMealRecordDetailUiEvent.LoadRecordDetail(mealId))
+        viewModel.setEvent(TraineeMealDetailUiEvent.LoadMealDetail(mealId))
     }
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                TraineeMealRecordDetailSideEffect.NavigateToHome -> navigateToPrevious()
-                is TraineeMealRecordDetailSideEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeMealDetailSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+
+                TraineeMealDetailSideEffect.NavigateToHome -> navigateToPrevious()
             }
         }
     }
 }
 
 @Composable
-@Suppress("UnusedParameter")
-private fun TraineeMealRecordDetailScreen(
-    state: TraineeMealRecordDetailUiState,
+private fun TraineeMealDetailScreen(
+    state: TraineeMealDetailUiState,
     context: Context,
     dateFormatter: DateFormatter,
     onClickMore: () -> Unit,
@@ -109,6 +110,7 @@ private fun TraineeMealRecordDetailScreen(
                     Icon(
                         painter = painterResource(R.drawable.ic_more),
                         contentDescription = null,
+                        modifier = Modifier.clickable(onClick = onClickMore),
                     )
                 },
             )
@@ -181,12 +183,12 @@ private fun TraineeMealRecordDetailScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun TraineeMealRecordDetailPreview() {
+private fun TraineeMealDetailScreenPreview() {
     TnTTheme {
-        TraineeMealRecordDetailScreen(
-            state = TraineeMealRecordDetailUiState(
+        TraineeMealDetailScreen(
+            state = TraineeMealDetailUiState(
                 image = "image",
                 mealType = MealType.BREAKFAST,
                 memo = "오늘은 계란을 먹었습니다.",
