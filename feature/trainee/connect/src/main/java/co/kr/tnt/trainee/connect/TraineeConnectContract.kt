@@ -23,15 +23,15 @@ internal class TraineeConnectContract {
     ) : UiState
 
     sealed interface TraineeConnectUiEvent : UiEvent {
-        data class OnCodeValidateClick(val code: String) : TraineeConnectUiEvent
+        data class OnClickValidateCode(val code: String) : TraineeConnectUiEvent
         data class OnChangeInviteCode(val code: String) : TraineeConnectUiEvent
         data object OnChangeDialogState : TraineeConnectUiEvent
         data class OnChangeSessionStartDate(val date: LocalDate) : TraineeConnectUiEvent
         data class OnChangeCompletedSessionCount(val count: String) : TraineeConnectUiEvent
         data class OnChangeTotalSessionCount(val count: String) : TraineeConnectUiEvent
-        data object OnNextClick : TraineeConnectUiEvent
-        data object OnBackClick : TraineeConnectUiEvent
-        data object OnSkipClick : TraineeConnectUiEvent
+        data object OnClickNext : TraineeConnectUiEvent
+        data object OnClickBack : TraineeConnectUiEvent
+        data object OnClickSkip : TraineeConnectUiEvent
     }
 
     sealed interface TraineeConnectSideEffect : UiSideEffect {

@@ -26,17 +26,17 @@ internal fun TraineeConnectRoute(
     TraineeConnectScreen(
         state = state,
         screenMode = screenMode,
-        onBackClick = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
-        onNextClick = { viewModel.setEvent(TraineeConnectUiEvent.OnNextClick) },
-        onSkipClick = { viewModel.setEvent(TraineeConnectUiEvent.OnSkipClick) },
+        onClickBack = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
+        onClickNext = { viewModel.setEvent(TraineeConnectUiEvent.OnClickNext) },
+        onClickSkip = { viewModel.setEvent(TraineeConnectUiEvent.OnClickSkip) },
         onChangeInviteCode = { code ->
             viewModel.setEvent(TraineeConnectUiEvent.OnChangeInviteCode(code))
         },
-        onCodeValidationClick = { code ->
-            viewModel.setEvent(TraineeConnectUiEvent.OnCodeValidateClick(code))
+        onClickValidateCode = { code ->
+            viewModel.setEvent(TraineeConnectUiEvent.OnClickValidateCode(code))
         },
-        onCancelConnectClick = { viewModel.setEvent(TraineeConnectUiEvent.OnBackClick) },
-        onDismissPopUp = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
+        onClickCancelConnection = { viewModel.setEvent(TraineeConnectUiEvent.OnClickBack) },
+        onDismissDialog = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
         onChangeSessionStartDate = { date ->
             viewModel.setEvent(TraineeConnectUiEvent.OnChangeSessionStartDate(date))
         },
@@ -64,15 +64,15 @@ private fun TraineeConnectScreen(
     state: TraineeConnectUiState,
     screenMode: ScreenMode,
     onChangeInviteCode: (code: String) -> Unit,
-    onCodeValidationClick: (code: String) -> Unit,
-    onCancelConnectClick: () -> Unit,
-    onDismissPopUp: () -> Unit,
+    onClickValidateCode: (code: String) -> Unit,
+    onClickCancelConnection: () -> Unit,
+    onDismissDialog: () -> Unit,
     onChangeSessionStartDate: (date: LocalDate) -> Unit,
     onChangeCompletedSessionCount: (count: String) -> Unit,
     onChangeTotalSessionCount: (count: String) -> Unit,
-    onNextClick: () -> Unit,
-    onBackClick: () -> Unit,
-    onSkipClick: () -> Unit,
+    onClickNext: () -> Unit,
+    onClickBack: () -> Unit,
+    onClickSkip: () -> Unit,
 ) {
     when (state.page) {
         TraineeConnectPage.CodeEntry -> CodeEntryPage(
@@ -80,13 +80,13 @@ private fun TraineeConnectScreen(
             inputState = state.inviteCodeInputState,
             inviteCode = state.inviteCode,
             screenMode = screenMode,
-            onNextClick = onNextClick,
-            onBackClick = onBackClick,
-            onSkipClick = onSkipClick,
+            onClickNext = onClickNext,
+            onClickBack = onClickBack,
+            onClickSkip = onClickSkip,
             onChangeInviteCode = onChangeInviteCode,
-            onValidateClick = onCodeValidationClick,
-            onCancelClick = onCancelConnectClick,
-            onDismissPopup = onDismissPopUp,
+            onClickValidate = onClickValidateCode,
+            onClickCancel = onClickCancelConnection,
+            onDismissDialog = onDismissDialog,
         )
 
         TraineeConnectPage.PTSessionForm -> PTSessionFormPage(
@@ -98,8 +98,8 @@ private fun TraineeConnectScreen(
             onChangeSessionStartDate = onChangeSessionStartDate,
             onChangeCompletedSessionCount = onChangeCompletedSessionCount,
             onChangeTotalSessionCount = onChangeTotalSessionCount,
-            onNextClick = onNextClick,
-            onBackClick = onBackClick,
+            onClickNext = onClickNext,
+            onClickBack = onClickBack,
         )
 
         TraineeConnectPage.TraineeConnectComplete -> TraineeConnectCompletePage(
@@ -107,8 +107,8 @@ private fun TraineeConnectScreen(
             trainerImage = state.trainerImage,
             traineeName = state.traineeName,
             traineeImage = state.traineeImage,
-            onNextClick = onNextClick,
-            onBackClick = onBackClick,
+            onClickNext = onClickNext,
+            onClickBack = onClickBack,
         )
     }
 }

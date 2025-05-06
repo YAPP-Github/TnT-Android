@@ -42,10 +42,10 @@ internal fun TraineeConnectCompletePage(
     trainerImage: String,
     traineeName: String,
     traineeImage: String,
-    onNextClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onClickNext: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     val context = LocalContext.current
 
@@ -108,7 +108,7 @@ internal fun TraineeConnectCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
-                onClick = onNextClick,
+                onClick = onClickNext,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -162,8 +162,8 @@ private fun TraineeConnectCompletePagePreview() {
             trainerImage = "",
             traineeName = "김회원",
             traineeImage = "",
-            onNextClick = {},
-            onBackClick = {},
+            onClickNext = { },
+            onClickBack = { },
         )
     }
 }
