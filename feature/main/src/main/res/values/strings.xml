@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="network_error_check_environment">"네트워크 환경을 확인하신 후 앱을 재실행해주세요."</string>
+</resources>

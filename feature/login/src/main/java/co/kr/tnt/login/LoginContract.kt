@@ -8,6 +8,7 @@ import co.kr.tnt.login.model.TermState
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 
 internal class LoginContract {
     data class LoginUiState(
@@ -34,7 +35,7 @@ internal class LoginContract {
 
     sealed interface LoginSideEffect : UiSideEffect {
         data object ShowTermBottomSheet : LoginSideEffect
-        data class ShowToast(val message: String) : LoginSideEffect
+        data class ShowToast(val message: DisplayText) : LoginSideEffect
         data class NavigateToWebView(val url: String) : LoginSideEffect
         data class NavigateToHome(val userType: UserType) : LoginSideEffect
         data class NavigateToSignup(

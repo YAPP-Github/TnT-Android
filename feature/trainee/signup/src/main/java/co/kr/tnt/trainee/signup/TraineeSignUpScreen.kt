@@ -58,7 +58,7 @@ internal fun TraineeSignUpRoute(
             when (effect) {
                 TraineeSignUpEffect.NavigateToBack -> navigateToPrevious()
                 TraineeSignUpEffect.NavigateToConnect -> navigateToConnect()
-                is TraineeSignUpEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeSignUpEffect.ShowToast -> snackbar.show(effect.message.asString(context))
             }
         }
     }

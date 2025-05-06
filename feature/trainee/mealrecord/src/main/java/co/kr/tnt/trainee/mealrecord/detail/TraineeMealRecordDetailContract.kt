@@ -4,6 +4,7 @@ import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 import java.time.LocalDateTime
 
 internal class TraineeMealRecordDetailContract {
@@ -22,6 +23,6 @@ internal class TraineeMealRecordDetailContract {
 
     sealed interface TraineeMealRecordDetailSideEffect : UiSideEffect {
         data object NavigateToHome : TraineeMealRecordDetailSideEffect
-        data class ShowToast(val message: String) : TraineeMealRecordDetailSideEffect
+        data class ShowToast(val message: DisplayText) : TraineeMealRecordDetailSideEffect
     }
 }

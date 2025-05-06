@@ -158,7 +158,7 @@ internal fun TraineeHomeRoute(
                 }
 
                 TraineeHomeEffect.NavigateToConnect -> navigateToConnect()
-                is TraineeHomeEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeHomeEffect.ShowToast -> snackbar.show(effect.message.asString(context))
             }
         }
     }

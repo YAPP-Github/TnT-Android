@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.DateFormatter
+import co.kr.tnt.feature.trainee.mealrecord.R
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordSideEffect
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiEvent
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -112,7 +114,11 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                 }.onSuccess {
                     updateState { copy(dialogState = DialogState.COMPLETED) }
                 }.onFailure {
-                    sendEffect(TraineeMealRecordSideEffect.ShowToast("식단 기록에 실패했어요"))
+                    sendEffect(
+                        TraineeMealRecordSideEffect.ShowToast(
+                            DisplayText.Resource(R.string.failed_meal_record),
+                        ),
+                    )
                 }.also {
                     updateState { copy(isLoading = false) }
                 }

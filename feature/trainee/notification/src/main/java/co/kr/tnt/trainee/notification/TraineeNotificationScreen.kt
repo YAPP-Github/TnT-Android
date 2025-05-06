@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,6 +34,7 @@ internal fun TraineeNotificationRoute(
     navigateToPrevious: () -> Unit,
     viewModel: TraineeNotificationViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -45,7 +47,9 @@ internal fun TraineeNotificationRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TraineeNotificationContract.TraineeNotificationEffect.NavigateToPrevious -> navigateToPrevious()
-                is TraineeNotificationContract.TraineeNotificationEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeNotificationContract.TraineeNotificationEffect.ShowToast -> snackbar.show(
+                    effect.message.asString(context),
+                )
             }
         }
     }

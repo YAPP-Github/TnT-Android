@@ -5,6 +5,7 @@ import android.net.Uri
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 
 private const val MAX_LENGTH = 15
 
@@ -38,7 +39,7 @@ internal class TrainerSignUpContract {
     }
 
     sealed interface TrainerSignUpEffect : UiSideEffect {
-        data class ShowToast(val message: String) : TrainerSignUpEffect
+        data class ShowToast(val message: DisplayText) : TrainerSignUpEffect
         data object NavigateToBack : TrainerSignUpEffect
         data object NavigateToConnect : TrainerSignUpEffect
     }

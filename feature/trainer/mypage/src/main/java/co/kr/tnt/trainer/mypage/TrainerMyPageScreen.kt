@@ -119,7 +119,7 @@ internal fun TrainerMyPageRoute(
             when (effect) {
                 TrainerMyPageSideEffect.NavigateToLogin -> navigateToLogin()
                 is TrainerMyPageSideEffect.NavigateToWebView -> navigateToWebView(effect.url)
-                is TrainerMyPageSideEffect.ShowToast -> toast.show(effect.message)
+                is TrainerMyPageSideEffect.ShowToast -> toast.show(effect.message.asString(context))
 
                 is TrainerMyPageSideEffect.RequestPermission -> {
                     if (effect.isExplicitlyDenied) {

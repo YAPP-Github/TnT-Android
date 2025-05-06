@@ -190,7 +190,7 @@ internal fun TraineeMealRecordRoute(
             when (effect) {
                 TraineeMealRecordContract.TraineeMealRecordSideEffect.NavigateToHome -> navigateToPrevious()
                 is TraineeMealRecordContract.TraineeMealRecordSideEffect.ShowToast -> snackbar.show(
-                    effect.message,
+                    effect.message.asString(context),
                 )
             }
         }

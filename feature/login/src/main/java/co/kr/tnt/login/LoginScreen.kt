@@ -127,7 +127,7 @@ internal fun LoginRoute(
                     showBottomSheet = true
                 }
 
-                is LoginSideEffect.ShowToast -> snackbar.show(effect.message)
+                is LoginSideEffect.ShowToast -> snackbar.show(effect.message.asString(context))
 
                 is LoginSideEffect.NavigateToWebView -> {
                     navigateToWebView(effect.url)

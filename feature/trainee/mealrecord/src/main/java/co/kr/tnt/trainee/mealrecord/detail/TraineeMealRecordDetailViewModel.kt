@@ -1,12 +1,14 @@
 package co.kr.tnt.trainee.mealrecord.detail
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailSideEffect
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiEvent
 import co.kr.tnt.trainee.mealrecord.detail.TraineeMealRecordDetailContract.TraineeMealRecordDetailUiState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,7 +41,11 @@ internal class TraineeMealRecordDetailViewModel @Inject constructor(
                         )
                     }
                 }.onFailure {
-                    sendEffect(TraineeMealRecordDetailSideEffect.ShowToast("데이터 불러오기에 실패했어요"))
+                    sendEffect(
+                        TraineeMealRecordDetailSideEffect.ShowToast(
+                            DisplayText.Resource(core_failed_to_server_request),
+                        ),
+                    )
                 }
             }
         }

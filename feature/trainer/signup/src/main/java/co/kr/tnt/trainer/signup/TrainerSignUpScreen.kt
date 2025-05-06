@@ -51,7 +51,9 @@ internal fun TrainerSignUpRoute(
             when (effect) {
                 TrainerSignUpContract.TrainerSignUpEffect.NavigateToBack -> navigateToPrevious()
                 TrainerSignUpContract.TrainerSignUpEffect.NavigateToConnect -> navigateToInvite(ScreenMode.SKIP)
-                is TrainerSignUpContract.TrainerSignUpEffect.ShowToast -> snackbar.show(effect.message)
+                is TrainerSignUpContract.TrainerSignUpEffect.ShowToast -> snackbar.show(
+                    effect.message.asString(context),
+                )
             }
         }
     }

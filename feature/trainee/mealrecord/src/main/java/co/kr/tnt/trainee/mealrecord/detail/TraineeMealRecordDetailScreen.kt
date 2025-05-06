@@ -75,7 +75,7 @@ internal fun TraineeMealRecordDetailRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TraineeMealRecordDetailSideEffect.NavigateToHome -> navigateToPrevious()
-                is TraineeMealRecordDetailSideEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeMealRecordDetailSideEffect.ShowToast -> snackbar.show(effect.message.asString(context))
             }
         }
     }

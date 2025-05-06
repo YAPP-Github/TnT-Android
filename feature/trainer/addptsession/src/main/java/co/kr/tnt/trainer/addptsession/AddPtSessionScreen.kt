@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -92,6 +93,7 @@ internal fun AddPtSessionRoute(
     viewModel: AddPtSessionViewModel = hiltViewModel(),
     navigateToPrevious: () -> Unit,
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -182,7 +184,7 @@ internal fun AddPtSessionRoute(
                     showBottomSheet = false
                 }
 
-                is AddPtSessionSideEffect.ShowToast -> snackbar.show(effect.message)
+                is AddPtSessionSideEffect.ShowToast -> snackbar.show(effect.message.asString(context))
                 AddPtSessionSideEffect.NavigateToPrevious -> navigateToPrevious()
             }
         }

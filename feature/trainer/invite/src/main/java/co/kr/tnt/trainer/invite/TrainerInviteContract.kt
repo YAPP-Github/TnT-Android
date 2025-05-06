@@ -3,6 +3,7 @@ package co.kr.tnt.trainer.invite
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 
 internal class TrainerInviteContract {
     data class TrainerInviteUiState(
@@ -19,7 +20,7 @@ internal class TrainerInviteContract {
     sealed interface TrainerInviteSideEffect : UiSideEffect {
         data object NavigateToBack : TrainerInviteSideEffect
         data object NavigateToHome : TrainerInviteSideEffect
-        data class ShowToast(val message: String) : TrainerInviteSideEffect
+        data class ShowToast(val message: DisplayText) : TrainerInviteSideEffect
         data class CopyToClipBoard(val value: String) : TrainerInviteSideEffect
     }
 }

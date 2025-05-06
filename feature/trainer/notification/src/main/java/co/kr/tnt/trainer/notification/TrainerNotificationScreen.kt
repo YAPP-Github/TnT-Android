@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,6 +36,7 @@ internal fun TrainerNotificationRoute(
     navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
     viewModel: TrainerNotificationViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -53,7 +55,7 @@ internal fun TrainerNotificationRoute(
                     uiState.traineeId,
                 )
 
-                is TrainerNotificationEffect.ShowToast -> snackbar.show(effect.message)
+                is TrainerNotificationEffect.ShowToast -> snackbar.show(effect.message.asString(context))
             }
         }
     }

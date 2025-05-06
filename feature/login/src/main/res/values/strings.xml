@@ -15,4 +15,6 @@
     <string name="agree_all_terms_for_service">서비스 이용을 위해 아래 약관에 모두 동의합니다.</string>
     <string name="core_next">다음</string>
     <string name="see">보기</string>
+
+    <string name="failed_login_try_again">로그인에 실패하였습니다. 다시 시도해주세요.</string>
 </resources>

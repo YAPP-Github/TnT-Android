@@ -4,6 +4,7 @@ import co.kr.tnt.domain.model.User
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 
 internal class TrainerConnectContract {
     data class TrainerConnectUiState(
@@ -24,7 +25,7 @@ internal class TrainerConnectContract {
     sealed interface TrainerConnectSideEffect : UiSideEffect {
         data object NavigateToBack : TrainerConnectSideEffect
         data object NavigateToHome : TrainerConnectSideEffect
-        data class ShowToast(val message: String) : TrainerConnectSideEffect
+        data class ShowToast(val message: DisplayText) : TrainerConnectSideEffect
     }
 
     enum class TrainerConnectPage {

@@ -117,7 +117,7 @@ internal fun TraineeMyPageRoute(
             when (effect) {
                 TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(ScreenMode.BACK)
                 TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
-                is TraineeMyPageEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeMyPageEffect.ShowToast -> snackbar.show(effect.message.asString(context))
                 is TraineeMyPageEffect.NavigateToWebView -> navigateToWebView(effect.url)
                 is TraineeMyPageEffect.RequestPermission -> {
                     if (effect.isExplicitlyDenied) {

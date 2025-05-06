@@ -1,16 +1,19 @@
 package co.kr.tnt.trainee.mypage
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.repository.LoginRepository
 import co.kr.tnt.domain.repository.SettingRepository
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.AppUrls
+import co.kr.tnt.feature.trainee.mypage.R
 import co.kr.tnt.login.kakao.KakaoLoginSdk
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageEffect
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiEvent
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState
 import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -39,6 +42,7 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     isGrantedPermission = event.isGrantedPermission,
                     shouldShowRationale = event.shouldShowRationale,
                 )
+
                 TraineeMyPageUiEvent.OnClickTermsOfService -> sendEffect(
                     TraineeMyPageEffect.NavigateToWebView(AppUrls.TERMS_OF_SERVICE_URL),
                 )
@@ -70,7 +74,11 @@ internal class TraineeMyPageViewModel @Inject constructor(
                 }.onSuccess { user ->
                     updateState { copy(user = user) }
                 }.onFailure {
-                    sendEffect(TraineeMyPageEffect.ShowToast("서버 요청에 실패했어요."))
+                    sendEffect(
+                        TraineeMyPageEffect.ShowToast(
+                            DisplayText.Resource(core_failed_to_server_request),
+                        ),
+                    )
                 }
 
                 settingRepository.isEnablePushNotification()
@@ -142,7 +150,7 @@ internal class TraineeMyPageViewModel @Inject constructor(
                 }.onSuccess {
                     updateState { copy(dialogState = DialogState.LOGOUT) }
                 }.onFailure {
-                    sendEffect(TraineeMyPageEffect.ShowToast("로그아웃에 실패하였습니다."))
+                    sendEffect(TraineeMyPageEffect.ShowToast(DisplayText.Resource(R.string.failed_login)))
                 }.also {
                     updateState { copy(isLoading = false) }
                 }
@@ -158,7 +166,11 @@ internal class TraineeMyPageViewModel @Inject constructor(
                 }.onSuccess {
                     updateState { copy(dialogState = DialogState.DELETE_ACCOUNT) }
                 }.onFailure {
-                    sendEffect(TraineeMyPageEffect.ShowToast("탈퇴에 실패하였습니다."))
+                    sendEffect(
+                        TraineeMyPageEffect.ShowToast(
+                            DisplayText.Resource(R.string.failed_delete_account),
+                        ),
+                    )
                 }.also {
                     updateState { copy(isLoading = false) }
                 }

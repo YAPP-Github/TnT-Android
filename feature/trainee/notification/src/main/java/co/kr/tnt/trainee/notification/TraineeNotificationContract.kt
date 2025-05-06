@@ -4,6 +4,7 @@ import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
 import co.kr.tnt.ui.model.NotificationState
+import co.kr.tnt.ui.resource.DisplayText
 
 internal class TraineeNotificationContract {
     data class TraineeNotificationUiState(
@@ -15,7 +16,7 @@ internal class TraineeNotificationContract {
     }
 
     sealed interface TraineeNotificationEffect : UiSideEffect {
-        data class ShowToast(val message: String) : TraineeNotificationEffect
+        data class ShowToast(val message: DisplayText) : TraineeNotificationEffect
         data object NavigateToPrevious : TraineeNotificationEffect
     }
 }

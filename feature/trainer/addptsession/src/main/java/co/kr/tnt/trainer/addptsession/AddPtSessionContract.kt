@@ -4,6 +4,7 @@ import co.kr.tnt.domain.model.MemberInfo
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
@@ -82,7 +83,7 @@ internal class AddPtSessionContract {
     sealed interface AddPtSessionSideEffect : UiSideEffect {
         data object ShowBottomSheet : AddPtSessionSideEffect
         data object HideBottomSheet : AddPtSessionSideEffect
-        data class ShowToast(val message: String) : AddPtSessionSideEffect
+        data class ShowToast(val message: DisplayText) : AddPtSessionSideEffect
         data object NavigateToPrevious : AddPtSessionSideEffect
     }
 }

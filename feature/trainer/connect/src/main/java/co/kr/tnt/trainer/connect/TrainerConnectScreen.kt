@@ -3,6 +3,7 @@ package co.kr.tnt.trainer.connect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
@@ -19,6 +20,7 @@ internal fun TrainerConnectRoute(
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerConnectViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -37,7 +39,7 @@ internal fun TrainerConnectRoute(
             when (effect) {
                 TrainerConnectSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerConnectSideEffect.NavigateToHome -> navigateToHome(true)
-                is TrainerConnectSideEffect.ShowToast -> snackbar.show(effect.message)
+                is TrainerConnectSideEffect.ShowToast -> snackbar.show(effect.message.asString(context))
             }
         }
     }

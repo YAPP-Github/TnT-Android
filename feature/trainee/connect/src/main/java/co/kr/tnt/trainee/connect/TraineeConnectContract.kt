@@ -4,6 +4,7 @@ import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 import java.time.LocalDate
 
 internal class TraineeConnectContract {
@@ -37,7 +38,7 @@ internal class TraineeConnectContract {
     sealed interface TraineeConnectSideEffect : UiSideEffect {
         data object NavigateToBack : TraineeConnectSideEffect
         data object NavigateToHome : TraineeConnectSideEffect
-        data class ShowToast(val message: String) : TraineeConnectSideEffect
+        data class ShowToast(val message: DisplayText) : TraineeConnectSideEffect
     }
 
     enum class TraineeConnectPage {

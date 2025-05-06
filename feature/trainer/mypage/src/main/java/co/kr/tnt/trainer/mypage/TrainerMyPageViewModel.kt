@@ -1,16 +1,19 @@
 package co.kr.tnt.trainer.mypage
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.repository.LoginRepository
 import co.kr.tnt.domain.repository.SettingRepository
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.domain.utils.AppUrls
+import co.kr.tnt.feature.trainer.mypage.R
 import co.kr.tnt.login.kakao.KakaoLoginSdk
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageSideEffect
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiEvent
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,7 +34,7 @@ internal class TrainerMyPageViewModel @Inject constructor(
             }.onSuccess { user ->
                 updateState { copy(user = user) }
             }.onFailure {
-                sendEffect(TrainerMyPageSideEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(TrainerMyPageSideEffect.ShowToast(DisplayText.Resource(core_failed_to_server_request)))
             }
 
             settingRepository.isEnablePushNotification()
@@ -128,7 +131,11 @@ internal class TrainerMyPageViewModel @Inject constructor(
             }.onSuccess {
                 updateState { copy(dialogState = DialogState.LOGOUT) }
             }.onFailure {
-                sendEffect(TrainerMyPageSideEffect.ShowToast("로그아웃에 실패하였습니다."))
+                sendEffect(
+                    TrainerMyPageSideEffect.ShowToast(
+                        DisplayText.Resource(R.string.failed_logout),
+                    ),
+                )
             }.also {
                 updateState { copy(isLoading = false) }
             }
@@ -144,7 +151,7 @@ internal class TrainerMyPageViewModel @Inject constructor(
             }.onSuccess {
                 updateState { copy(dialogState = DialogState.DELETE_ACCOUNT) }
             }.onFailure {
-                sendEffect(TrainerMyPageSideEffect.ShowToast("탈퇴에 실패하였습니다."))
+                sendEffect(TrainerMyPageSideEffect.ShowToast(DisplayText.Resource(R.string.failed_delete_account)))
             }.also {
                 updateState { copy(isLoading = false) }
             }

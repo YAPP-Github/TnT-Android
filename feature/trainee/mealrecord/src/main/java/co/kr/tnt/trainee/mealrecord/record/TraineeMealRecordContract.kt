@@ -5,6 +5,7 @@ import android.net.Uri
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -60,6 +61,6 @@ internal class TraineeMealRecordContract {
 
     sealed interface TraineeMealRecordSideEffect : UiSideEffect {
         data object NavigateToHome : TraineeMealRecordSideEffect
-        data class ShowToast(val message: String) : TraineeMealRecordSideEffect
+        data class ShowToast(val message: DisplayText) : TraineeMealRecordSideEffect
     }
 }
