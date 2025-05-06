@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
@@ -12,6 +11,7 @@ import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpEffect
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpPage
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiEvent
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
+import java.io.File
 import java.time.LocalDate
 
 @Composable
@@ -24,7 +24,6 @@ internal fun TraineeSignUpRoute(
     navigateToConnect: () -> Unit,
     viewModel: TraineeSignUpViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -39,11 +38,10 @@ internal fun TraineeSignUpRoute(
         onCautionChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnCautionChange(it)) },
         onBackClick = { viewModel.setEvent(TraineeSignUpUiEvent.OnBackClick) },
         onNextClick = { viewModel.setEvent(TraineeSignUpUiEvent.OnNextClick) },
-        onSubmitSignUp = { uri ->
+        onSubmitSignUp = { file ->
             viewModel.setEvent(
                 TraineeSignUpUiEvent.RequestSignUp(
-                    context = context,
-                    imageUri = uri,
+                    imageFile = file,
                     id = authId,
                     email = email,
                     authType = authType,
@@ -67,14 +65,14 @@ internal fun TraineeSignUpRoute(
 @Composable
 private fun TraineeSignUpScreen(
     state: TraineeSignUpUiState,
-    onProfileImageSelect: (Uri) -> Unit,
-    onNameChange: (String) -> Unit,
-    onHeightChange: (String) -> Unit,
-    onWeightChange: (String) -> Unit,
-    onCautionChange: (String) -> Unit,
-    onBirthdayChange: (LocalDate) -> Unit,
-    onPurposeSelected: (String) -> Unit,
-    onSubmitSignUp: (Uri?) -> Unit,
+    onProfileImageSelect: (imageUri: Uri) -> Unit,
+    onNameChange: (name: String) -> Unit,
+    onHeightChange: (height: String) -> Unit,
+    onWeightChange: (weight: String) -> Unit,
+    onCautionChange: (caution: String) -> Unit,
+    onBirthdayChange: (birthday: LocalDate) -> Unit,
+    onPurposeSelected: (purpose: String) -> Unit,
+    onSubmitSignUp: (imageFile: File?) -> Unit,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
