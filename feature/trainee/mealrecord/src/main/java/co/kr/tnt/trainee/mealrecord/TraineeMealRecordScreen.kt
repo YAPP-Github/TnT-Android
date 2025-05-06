@@ -85,7 +85,6 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -102,10 +101,10 @@ internal fun TraineeMealRecordRoute(
 
     val context = LocalContext.current
     val snackbar = LocalSnackbar.current
+    val coroutineScope = rememberCoroutineScope()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val dateFormatter = remember { DateFormatter() }
 
-    var imageFile by rememberSaveable { mutableStateOf<File?>(null) }
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(selectedDate) {
@@ -114,13 +113,6 @@ internal fun TraineeMealRecordRoute(
                 dateFormatter.parse(selectedDate),
             ),
         )
-    }
-
-    LaunchedEffect(state.image) {
-        val file = withContext(Dispatchers.IO) {
-            state.image?.convertToAllowedImageFormat(context)
-        }
-        imageFile = file
     }
 
     TraineeMealRecordScreen(
@@ -147,7 +139,14 @@ internal fun TraineeMealRecordRoute(
         onClickBack = {
             viewModel.setEvent(TraineeMealRecordUiEvent.OnClickBack)
         },
-        onClickSaveButton = { viewModel.setEvent(TraineeMealRecordUiEvent.OnClickSave(imageFile)) },
+        onClickSaveButton = {
+            coroutineScope.launch {
+                val imageFile = withContext(Dispatchers.IO) {
+                    state.image?.convertToAllowedImageFormat(context)
+                }
+                viewModel.setEvent(TraineeMealRecordUiEvent.OnClickSave(imageFile))
+            }
+        },
     )
 
     if (showBottomSheet) {
