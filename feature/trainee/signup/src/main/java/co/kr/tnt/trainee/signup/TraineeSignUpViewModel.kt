@@ -25,15 +25,15 @@ internal class TraineeSignUpViewModel @Inject constructor(
     ) {
     override suspend fun handleEvent(event: TraineeSignUpUiEvent) {
         when (event) {
-            is TraineeSignUpUiEvent.OnImageChange -> updateProfileImage(event.imageUri)
-            is TraineeSignUpUiEvent.OnNameChange -> updateName(event.name)
-            is TraineeSignUpUiEvent.OnHeightChange -> updateHeight(event.height)
-            is TraineeSignUpUiEvent.OnWeightChange -> updateWeight(event.weight)
-            is TraineeSignUpUiEvent.OnBirthdayChange -> updateBirthday(event.birthday)
-            is TraineeSignUpUiEvent.OnPurposeSelected -> updateSelectedPurposes(event.purpose)
-            is TraineeSignUpUiEvent.OnCautionChange -> updateCaution(event.text)
-            TraineeSignUpUiEvent.OnBackClick -> navigateToBack()
-            TraineeSignUpUiEvent.OnNextClick -> navigateToNext()
+            is TraineeSignUpUiEvent.OnChangeImage -> updateProfileImage(event.imageUri)
+            is TraineeSignUpUiEvent.OnChangeName -> updateName(event.name)
+            is TraineeSignUpUiEvent.OnChangeHeight -> updateHeight(event.height)
+            is TraineeSignUpUiEvent.OnChangeWeight -> updateWeight(event.weight)
+            is TraineeSignUpUiEvent.OnChangeBirthday -> updateBirthday(event.birthday)
+            is TraineeSignUpUiEvent.OnSelectPurpose -> updatePurposes(event.purpose)
+            is TraineeSignUpUiEvent.OnChangeCaution -> updateCaution(event.text)
+            TraineeSignUpUiEvent.OnClickBack -> navigateToBack()
+            TraineeSignUpUiEvent.OnClickNext -> navigateToNext()
             is TraineeSignUpUiEvent.RequestSignUp -> signUp(
                 context = event.context,
                 imageUri = event.imageUri,
@@ -108,7 +108,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
         updateState { copy(birthday = birthday) }
     }
 
-    private fun updateSelectedPurposes(purpose: String) {
+    private fun updatePurposes(purpose: String) {
         val updatedPurposes = currentState.ptPurpose.orEmpty().toMutableList().apply {
             if (contains(purpose)) {
                 remove(purpose)

@@ -33,10 +33,10 @@ import co.kr.tnt.core.ui.R as uiResource
 @Composable
 internal fun TraineeSignUpCompletePage(
     state: TraineeSignUpUiState,
-    onBackClick: () -> Unit,
-    onNextClick: (Uri?) -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: (Uri?) -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     Scaffold(
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -79,7 +79,7 @@ internal fun TraineeSignUpCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
-                onClick = throttled { onNextClick(state.image) },
+                onClick = throttled { onClickNext(state.image) },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -95,8 +95,8 @@ internal fun TraineeSignUpCompletePage(
 private fun TraineeSignUpCompletePagePreview() {
     TnTTheme {
         TraineeSignUpCompletePage(
-            onBackClick = {},
-            onNextClick = {},
+            onClickBack = {},
+            onClickNext = {},
             state = TraineeSignUpUiState(name = "김회원"),
         )
     }

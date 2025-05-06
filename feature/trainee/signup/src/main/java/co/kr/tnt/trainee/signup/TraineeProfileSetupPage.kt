@@ -46,11 +46,11 @@ private const val MAX_LENGTH = 15
 internal fun TraineeProfileSetupPage(
     state: TraineeSignUpUiState,
     onProfileImageSelect: (Uri) -> Unit,
-    onNameChange: (String) -> Unit,
-    onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onChangeName: (String) -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: () -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     val context = LocalContext.current
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
@@ -66,7 +66,7 @@ internal fun TraineeProfileSetupPage(
     )
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onClickBack) },
         containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
@@ -103,7 +103,7 @@ internal fun TraineeProfileSetupPage(
                     title = stringResource(coreR.string.name),
                     value = state.name,
                     onValueChange = { newValue ->
-                        onNameChange(newValue)
+                        onChangeName(newValue)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
                     placeholder = stringResource(R.string.enter_your_name),
@@ -117,7 +117,7 @@ internal fun TraineeProfileSetupPage(
             TnTBottomButton(
                 text = stringResource(coreR.string.next),
                 enabled = state.name.isNotBlank() && state.isNameValid,
-                onClick = onNextClick,
+                onClick = onClickNext,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -130,10 +130,10 @@ private fun TraineeProfileSetupPagePreview() {
     TnTTheme {
         TraineeProfileSetupPage(
             state = TraineeSignUpUiState(),
-            onBackClick = {},
-            onNextClick = {},
+            onClickBack = {},
+            onClickNext = {},
             onProfileImageSelect = {},
-            onNameChange = {},
+            onChangeName = {},
         )
     }
 }
