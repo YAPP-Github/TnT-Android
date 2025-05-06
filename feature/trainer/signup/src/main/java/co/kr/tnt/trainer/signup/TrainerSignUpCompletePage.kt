@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,6 +31,7 @@ import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import co.kr.tnt.core.ui.R as uiResource
@@ -46,17 +45,7 @@ internal fun TrainerSignUpCompletePage(
     BackHandler { onBackClick() }
 
     val context = LocalContext.current
-    val completeState = remember { mutableStateOf(false) }
-
-    LaunchedEffect(completeState.value) {
-        if (completeState.value) {
-            val imageFile = withContext(Dispatchers.IO) {
-                state.image?.convertToAllowedImageFormat(context)
-            }
-            onNextClick(imageFile)
-            completeState.value = false
-        }
-    }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -99,7 +88,14 @@ internal fun TrainerSignUpCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.start),
-                onClick = throttled { completeState.value = true },
+                onClick = throttled {
+                    coroutineScope.launch {
+                        val imageFile = withContext(Dispatchers.IO) {
+                            state.image?.convertToAllowedImageFormat(context)
+                        }
+                        onNextClick(imageFile)
+                    }
+                },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
