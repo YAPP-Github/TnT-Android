@@ -28,6 +28,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_entered_wrong_text
+import co.kr.tnt.core.ui.R.string.core_height_label
+import co.kr.tnt.core.ui.R.string.core_height_unit
+import co.kr.tnt.core.ui.R.string.core_next
+import co.kr.tnt.core.ui.R.string.core_weight_label
+import co.kr.tnt.core.ui.R.string.core_weight_unit
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
@@ -39,7 +45,6 @@ import co.kr.tnt.ui.extensions.clearFocusOnTap
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun TraineeBasicInfoPage(
@@ -101,29 +106,29 @@ internal fun TraineeBasicInfoPage(
                         .padding(horizontal = 20.dp),
                 ) {
                     TnTLabeledTextField(
-                        title = stringResource(uiResource.string.height_label),
+                        title = stringResource(core_height_label),
                         value = state.height ?: "",
                         placeholder = "0",
                         isSingleLine = true,
                         showWarning = state.isHeightValid.not(),
-                        warningMessage = stringResource(uiResource.string.entered_wrong_text),
+                        warningMessage = stringResource(core_entered_wrong_text),
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
-                            UnitLabel(uiResource.string.height_unit)
+                            UnitLabel(core_height_unit)
                         },
                         onValueChange = onHeightChange,
                         modifier = Modifier.weight(1f),
                     )
                     TnTLabeledTextField(
-                        title = stringResource(uiResource.string.weight_label),
+                        title = stringResource(core_weight_label),
                         value = state.weight ?: "",
                         placeholder = "00.0",
                         isSingleLine = true,
                         showWarning = state.isWeightValid.not(),
-                        warningMessage = stringResource(uiResource.string.entered_wrong_text),
+                        warningMessage = stringResource(core_entered_wrong_text),
                         keyboardType = KeyboardType.Number,
                         trailingComponent = {
-                            UnitLabel(uiResource.string.weight_unit)
+                            UnitLabel(core_weight_unit)
                         },
                         onValueChange = onWeightChange,
                         modifier = Modifier.weight(1f),
@@ -131,7 +136,7 @@ internal fun TraineeBasicInfoPage(
                 }
             }
             TnTBottomButton(
-                text = stringResource(uiResource.string.next),
+                text = stringResource(core_next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = state.isBasicInfoValid,
                 onClick = onNextClick,

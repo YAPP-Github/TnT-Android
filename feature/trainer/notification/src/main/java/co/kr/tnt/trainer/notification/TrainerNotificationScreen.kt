@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.ui.R.string.core_no_recent_notifications
+import co.kr.tnt.core.ui.R.string.core_notification
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.notification.TnTNotification
 import co.kr.tnt.designsystem.component.notification.model.NotificationIcon
@@ -26,7 +28,6 @@ import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotific
 import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotificationUiEvent
 import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotificationUiState
 import co.kr.tnt.ui.model.NotificationState
-import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun TrainerNotificationRoute(
@@ -67,7 +68,7 @@ private fun TrainerNotificationScreen(
     Scaffold(
         topBar = {
             TnTTopBarWithBackButton(
-                title = stringResource(uiResource.string.notification),
+                title = stringResource(core_notification),
                 onBackClick = onBackClick,
                 showStoke = true,
             )
@@ -85,7 +86,7 @@ private fun TrainerNotificationScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = stringResource(uiResource.string.no_recent_notifications),
+                        text = stringResource(core_no_recent_notifications),
                         style = TnTTheme.typography.label1Medium,
                         color = TnTTheme.colors.neutralColors.Neutral400,
                     )

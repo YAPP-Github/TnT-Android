@@ -2,7 +2,16 @@ package co.kr.tnt.ui.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import co.kr.tnt.core.ui.R
+import co.kr.tnt.core.ui.R.string.core_exercise_back
+import co.kr.tnt.core.ui.R.string.core_exercise_cardio
+import co.kr.tnt.core.ui.R.string.core_exercise_lower_body
+import co.kr.tnt.core.ui.R.string.core_exercise_shoulder
+import co.kr.tnt.core.ui.R.string.core_exercise_upper_body
+import co.kr.tnt.core.ui.R.string.core_meal_breakfast
+import co.kr.tnt.core.ui.R.string.core_meal_dinner
+import co.kr.tnt.core.ui.R.string.core_meal_lunch
+import co.kr.tnt.core.ui.R.string.core_meal_snack
+import co.kr.tnt.core.ui.R.string.core_pt_session
 import co.kr.tnt.designsystem.component.chip.model.ChipStyle
 import co.kr.tnt.domain.model.RecordType
 
@@ -34,10 +43,10 @@ sealed interface RecordChip {
             return when (type) {
                 is RecordType.MealType -> {
                     val title = when (type) {
-                        RecordType.MealType.BREAKFAST -> stringResource(R.string.meal_breakfast)
-                        RecordType.MealType.LUNCH -> stringResource(R.string.meal_lunch)
-                        RecordType.MealType.DINNER -> stringResource(R.string.meal_dinner)
-                        RecordType.MealType.SNACK -> stringResource(R.string.meal_snack)
+                        RecordType.MealType.BREAKFAST -> stringResource(core_meal_breakfast)
+                        RecordType.MealType.LUNCH -> stringResource(core_meal_lunch)
+                        RecordType.MealType.DINNER -> stringResource(core_meal_dinner)
+                        RecordType.MealType.SNACK -> stringResource(core_meal_snack)
                     }
                     val emoji = when (type) {
                         RecordType.MealType.BREAKFAST -> "🌞"
@@ -50,11 +59,11 @@ sealed interface RecordChip {
 
                 is RecordType.ExerciseType -> {
                     val title = when (type) {
-                        RecordType.ExerciseType.UPPER_BODY -> stringResource(R.string.exercise_upper_body)
-                        RecordType.ExerciseType.LOWER_BODY -> stringResource(R.string.exercise_lower_body)
-                        RecordType.ExerciseType.BACK -> stringResource(R.string.exercise_back)
-                        RecordType.ExerciseType.SHOULDER -> stringResource(R.string.exercise_shoulder)
-                        RecordType.ExerciseType.CARDIO -> stringResource(R.string.exercise_cardio)
+                        RecordType.ExerciseType.UPPER_BODY -> stringResource(core_exercise_upper_body)
+                        RecordType.ExerciseType.LOWER_BODY -> stringResource(core_exercise_lower_body)
+                        RecordType.ExerciseType.BACK -> stringResource(core_exercise_back)
+                        RecordType.ExerciseType.SHOULDER -> stringResource(core_exercise_shoulder)
+                        RecordType.ExerciseType.CARDIO -> stringResource(core_exercise_cardio)
                     }
                     ExerciseChip(
                         title = title,
@@ -63,7 +72,7 @@ sealed interface RecordChip {
                 }
 
                 is RecordType.PTSessionType -> {
-                    val title = stringResource(R.string.pt_session, type.sessionCount)
+                    val title = stringResource(core_pt_session, type.sessionCount)
                     val emoji = "💪"
                     PTSessionChip(title, type.sessionCount, emoji, ChipStyle.BLUE)
                 }

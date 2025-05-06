@@ -25,6 +25,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_name
+import co.kr.tnt.core.ui.R.string.core_next
+import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
 import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
@@ -38,7 +41,6 @@ import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import co.kr.tnt.core.ui.R as coreR
 
 private const val MAX_LENGTH = 15
 
@@ -102,7 +104,7 @@ internal fun TrainerProfileSetupPage(
                 )
                 Spacer(Modifier.padding(top = 60.dp))
                 TnTLabeledTextFieldWithCounter(
-                    title = stringResource(coreR.string.name),
+                    title = stringResource(core_name),
                     value = state.name,
                     onValueChange = { newValue ->
                         onNameChange(newValue)
@@ -113,11 +115,11 @@ internal fun TrainerProfileSetupPage(
                     isSingleLine = true,
                     showWarning = state.isNameValid.not(),
                     isRequired = true,
-                    warningMessage = stringResource(coreR.string.text_length_and_format_warning, MAX_LENGTH),
+                    warningMessage = stringResource(core_text_length_and_format_warning, MAX_LENGTH),
                 )
             }
             TnTBottomButton(
-                text = stringResource(coreR.string.next),
+                text = stringResource(core_next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = state.name.isNotBlank() && state.isNameValid,
                 onClick = onNextClick,

@@ -14,14 +14,14 @@ sealed class TermState(
     data class TermsOfServiceState(
         override val isRequired: Boolean,
     ) : TermState(
-            titleRes = R.string.terms_of_service,
+            titleRes = R.string.core_terms_of_service,
             link = AppUrls.TERMS_OF_SERVICE_URL,
         )
 
     data class PrivacyPolicyState(
         override val isRequired: Boolean,
     ) : TermState(
-            titleRes = R.string.privacy_policy,
+            titleRes = R.string.core_privacy_policy,
             link = AppUrls.PRIVACY_POLICY_URL,
         )
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_start
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -28,7 +29,6 @@ import co.kr.tnt.ui.component.TnTLoadingScreen
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
-import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun TrainerSignUpCompletePage(
@@ -78,7 +78,7 @@ internal fun TrainerSignUpCompletePage(
                 )
             }
             TnTBottomButton(
-                text = stringResource(uiResource.string.start),
+                text = stringResource(core_start),
                 onClick = throttled { onNextClick(state.image) },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )

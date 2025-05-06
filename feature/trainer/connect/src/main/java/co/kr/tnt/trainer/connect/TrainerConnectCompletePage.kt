@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -96,7 +97,7 @@ internal fun TrainerConnectCompletePage(
                 }
             }
             TnTBottomButton(
-                text = stringResource(uiResource.string.next),
+                text = stringResource(core_next),
                 onClick = onNextClick,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )

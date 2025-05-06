@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
@@ -86,7 +87,6 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
-import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TraineeMealRecordRoute(
@@ -314,7 +314,7 @@ private fun Dialog(
             TnTSingleButtonPopupDialog(
                 title = "식단을 기록했어요!",
                 content = "내일도 기록해 주실 거죠?",
-                buttonText = stringResource(coreR.string.ok),
+                buttonText = stringResource(core_ok),
                 cancelable = false,
                 onButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
@@ -550,7 +550,7 @@ private fun CalendarBottomSheetContent(
             onClickDay = { newDate -> selectedDate = newDate },
         )
         TnTTextButton(
-            text = stringResource(coreR.string.ok),
+            text = stringResource(core_ok),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
@@ -647,7 +647,7 @@ private fun TimePickerBottomSheetContent(
         )
         Spacer(Modifier.height(40.dp))
         TnTTextButton(
-            text = stringResource(coreR.string.ok),
+            text = stringResource(core_ok),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),

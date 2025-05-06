@@ -3,7 +3,10 @@ package co.kr.tnt.ui.permission
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.os.Build
 import androidx.annotation.StringRes
-import co.kr.tnt.core.ui.R
+import co.kr.tnt.core.ui.R.string.core_alarm_permission_description
+import co.kr.tnt.core.ui.R.string.core_alarm_permission_permanently_description
+import co.kr.tnt.core.ui.R.string.core_alarm_permission_permanently_title
+import co.kr.tnt.core.ui.R.string.core_alarm_permission_title
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 
@@ -20,10 +23,10 @@ enum class TnTPermission(
         } else {
             emptyList()
         },
-        title = R.string.alarm_permission_title,
-        description = R.string.alarm_permission_description,
-        permanentlyDeniedTitle = R.string.alarm_permission_permanently_title,
-        permanentlyDeniedDescription = R.string.alarm_permission_permanently_description,
+        title = core_alarm_permission_title,
+        description = core_alarm_permission_description,
+        permanentlyDeniedTitle = core_alarm_permission_permanently_title,
+        permanentlyDeniedDescription = core_alarm_permission_permanently_description,
     ),
     ;
 

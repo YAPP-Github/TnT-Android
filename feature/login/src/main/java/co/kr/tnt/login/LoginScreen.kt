@@ -51,6 +51,7 @@ import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.LoginResult
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.login.R
+import co.kr.tnt.feature.login.R.string.core_next
 import co.kr.tnt.login.LoginContract.LoginSideEffect
 import co.kr.tnt.login.LoginContract.LoginUiEvent
 import co.kr.tnt.login.LoginContract.LoginUiState
@@ -289,7 +290,7 @@ private fun TermBottomSheetContent(
         }
         Spacer(modifier = Modifier.height(94.dp))
         TnTBottomButton(
-            text = stringResource(R.string.next),
+            text = stringResource(core_next),
             enabled = isAllTermChecked,
             onClick = onClickNext,
         )

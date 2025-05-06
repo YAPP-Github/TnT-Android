@@ -49,6 +49,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.core.ui.R.string.core_cancel
+import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
@@ -83,7 +85,6 @@ import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun AddPtSessionRoute(
@@ -709,7 +710,7 @@ private fun SheetConfirm(
     onClick: () -> Unit,
 ) {
     TnTTextButton(
-        text = stringResource(coreR.string.ok),
+        text = stringResource(core_ok),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
@@ -731,8 +732,8 @@ private fun Dialog(
             TnTIconPopupDialog(
                 title = "수업 등록을 취소할까요?",
                 content = "일정이 저장되지 않아요",
-                leftButtonText = stringResource(coreR.string.cancel),
-                rightButtonText = stringResource(coreR.string.ok),
+                leftButtonText = stringResource(core_cancel),
+                rightButtonText = stringResource(core_ok),
                 onLeftButtonClick = onDismissDialog,
                 onRightButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
@@ -743,7 +744,7 @@ private fun Dialog(
             TnTSingleButtonPopupDialog(
                 title = "수업 일정이 추가됐어요",
                 content = "등록된 일정은 트레이니에게도 표시돼요!",
-                buttonText = stringResource(coreR.string.ok),
+                buttonText = stringResource(core_ok),
                 cancelable = false,
                 onButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,

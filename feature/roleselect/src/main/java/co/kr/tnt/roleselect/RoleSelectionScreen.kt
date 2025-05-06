@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
@@ -36,7 +37,6 @@ import co.kr.tnt.feature.roleselect.R
 import co.kr.tnt.roleselect.RoleSelectionContract.RoleSelectionEffect
 import co.kr.tnt.roleselect.RoleSelectionContract.RoleSelectionUiEvent
 import co.kr.tnt.roleselect.model.RoleState
-import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun RoleSelectionRoute(
@@ -67,7 +67,7 @@ fun RoleSelectionScreen(
     Scaffold(
         bottomBar = {
             TnTBottomButton(
-                text = stringResource(uiResource.string.next),
+                text = stringResource(core_next),
                 enabled = true,
                 onClick = { onNextClick(selectedRole) },
                 modifier = Modifier.navigationBarsPadding(),
