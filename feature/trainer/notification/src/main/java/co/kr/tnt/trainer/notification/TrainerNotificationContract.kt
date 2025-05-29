@@ -14,7 +14,7 @@ internal class TrainerNotificationContract {
 
     sealed interface TrainerNotificationUiEvent : UiEvent {
         data object OnClickBack : TrainerNotificationUiEvent
-        data object OnLinkNotificationClick : TrainerNotificationUiEvent
+        data object OnClickConnectionNotice : TrainerNotificationUiEvent
     }
 
     sealed interface TrainerNotificationEffect : UiSideEffect {
