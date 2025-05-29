@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
@@ -12,6 +11,7 @@ import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpEffect
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpPage
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiEvent
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
+import java.io.File
 import java.time.LocalDate
 
 @Composable
@@ -24,14 +24,13 @@ internal fun TraineeSignUpRoute(
     navigateToConnect: () -> Unit,
     viewModel: TraineeSignUpViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TraineeSignUpScreen(
         state = uiState,
         onChangeName = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeName(it)) },
-        onProfileImageSelect = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeImage(it)) },
+        onSelectProfileImage = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeImage(it)) },
         onChangeHeight = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeHeight(it)) },
         onChangeWeight = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeWeight(it)) },
         onChangeBirthday = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeBirthday(it)) },
@@ -39,11 +38,10 @@ internal fun TraineeSignUpRoute(
         onChangeCaution = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeCaution(it)) },
         onClickBack = { viewModel.setEvent(TraineeSignUpUiEvent.OnClickBack) },
         onClickNext = { viewModel.setEvent(TraineeSignUpUiEvent.OnClickNext) },
-        onSubmitSignUp = { uri ->
+        onSubmitSignUp = { file ->
             viewModel.setEvent(
                 TraineeSignUpUiEvent.RequestSignUp(
-                    context = context,
-                    imageUri = uri,
+                    imageFile = file,
                     id = authId,
                     email = email,
                     authType = authType,
@@ -67,21 +65,21 @@ internal fun TraineeSignUpRoute(
 @Composable
 private fun TraineeSignUpScreen(
     state: TraineeSignUpUiState,
-    onProfileImageSelect: (Uri) -> Unit,
-    onChangeName: (String) -> Unit,
-    onChangeHeight: (String) -> Unit,
-    onChangeWeight: (String) -> Unit,
-    onChangeCaution: (String) -> Unit,
-    onChangeBirthday: (LocalDate) -> Unit,
-    onSelectPurpose: (String) -> Unit,
-    onSubmitSignUp: (Uri?) -> Unit,
+    onSelectProfileImage: (imageUri: Uri) -> Unit,
+    onChangeName: (name: String) -> Unit,
+    onChangeHeight: (height: String) -> Unit,
+    onChangeWeight: (weight: String) -> Unit,
+    onChangeCaution: (caution: String) -> Unit,
+    onChangeBirthday: (birthday: LocalDate) -> Unit,
+    onSelectPurpose: (purpose: String) -> Unit,
+    onSubmitSignUp: (imageFile: File?) -> Unit,
     onClickNext: () -> Unit,
     onClickBack: () -> Unit,
 ) {
     when (state.page) {
         TraineeSignUpPage.ProfileSetUp -> TraineeProfileSetupPage(
             state = state,
-            onProfileImageSelect = onProfileImageSelect,
+            onProfileImageSelect = onSelectProfileImage,
             onChangeName = onChangeName,
             onClickBack = onClickBack,
             onClickNext = onClickNext,
