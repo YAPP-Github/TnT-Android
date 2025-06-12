@@ -97,6 +97,9 @@ sealed interface Route {
     data object TraineeMyPage : Route
 
     @Serializable
+    data object TraineeModifyMyInfo : Route
+
+    @Serializable
     data object TraineeNotification : Route
 
     @Serializable
