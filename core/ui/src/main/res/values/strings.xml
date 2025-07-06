@@ -78,4 +78,7 @@
     <string name="core_logout_title">현재 계정을 로그아웃 할까요?</string>
     <string name="core_logout_content">언제든지 다시 로그인 할 수 있어요!</string>
     <string name="core_logout_complete_title">로그아웃이 완료되었어요</string>
+
+    <string name="core_length_warning">%d자 미만으로 입력해주세요.</string>
+    <string name="core_no_records_yet">아직 등록된 기록이 없어요</string>
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_member">내 회원</string>
+    <string name="invite_member">회원 초대하기</string>
+    <string name="no_connected_member_yet">아직 연결된 회원이 없어요</string>
+    <string name="press_add_button_to_add_member">추가 버튼을 눌러 회원을 추가해 보세요</string>
+</resources>

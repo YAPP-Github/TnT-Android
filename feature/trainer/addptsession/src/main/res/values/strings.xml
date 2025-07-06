@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fill_required_fields">필수 입력 항목을 모두 입력해주세요</string>
+    <string name="select_start_time">시작 시간 선택하기</string>
+    <string name="select_end_time">종료 시간 선택하기</string>
+    <string name="add_pt_session">수업 추가하기</string>
+    <string name="select_member">회원 선택</string>
+    <string name="insert_memeber">회원을 입력해주세요</string>
+    <string name="pt_date">PT 날짜</string>
+    <string name="insert_date">날짜를 입력해주세요</string>
+    <string name="when_to_have_pt">언제 수업할까요?</string>
+    <string name="schedule_registered_for_member">일정을 등록하면 회원에게도 일정이 등록돼요</string>
+    <string name="start_time">시작 시간</string>
+    <string name="end_time">종료 시간</string>
+    <string name="pt_time">수업 시간</string>
+    <string name="minute">+%1$s분</string>
+    <string name="total_pt_time">총 %1$s분 수업이에요</string>
+    <string name="write_memo">메모하기</string>
+    <string name="select_pt_date">PT 날짜 선택하기</string>
+    <string name="cancel_pt_registration">수업 등록을 취소할까요?</string>
+    <string name="schedule_will_not_be_saved">일정이 저장되지 않아요</string>
+    <string name="added_pt_schedule">수업 일정이 추가됐어요</string>
+    <string name="schedule_shown_to_trainee">등록된 일정은 트레이니에게도 표시돼요!</string>
+    <string name="total_prefix">"총 "</string>
+    <string name="minute_suffix">" 수업이에요"</string>
 </resources>

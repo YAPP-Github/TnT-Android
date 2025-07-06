@@ -211,7 +211,7 @@ private fun TextWithBackground(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
             Text(
-                text = text.ifEmpty { "미입력" },
+                text = text.ifEmpty { stringResource(R.string.not_entered) },
                 style = TnTTheme.typography.label1Medium,
                 color =
                     if (text.isEmpty()) {

@@ -186,12 +186,12 @@ private fun TrainerMyPageScreen(
             horizontalArrangement = Arrangement.Center,
         ) {
             ManagementMemberCount(
-                title = "관리 중인 회원",
+                title = stringResource(R.string.managing_member),
                 count = state.user.memberCounts.activeCount,
             )
             Spacer(modifier = Modifier.width(8.dp))
             ManagementMemberCount(
-                title = "함께 했던 회원",
+                title = stringResource(R.string.worked_together_member),
                 count = state.user.memberCounts.totalCount,
             )
         }

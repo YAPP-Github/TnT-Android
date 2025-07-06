@@ -7,4 +7,6 @@
     <string name="delete_account_complete_content">다음에 더 폭발적인 케미로 다시 만나요! 💣</string>
     <string name="failed_delete_account">탈퇴에 실패하였습니다.</string>
     <string name="failed_logout">로그아웃에 실패하였습니다.</string>
+    <string name="managing_member">관리 중인 회원</string>
+    <string name="worked_together_member">함께 했던 회원</string>
 </resources>
