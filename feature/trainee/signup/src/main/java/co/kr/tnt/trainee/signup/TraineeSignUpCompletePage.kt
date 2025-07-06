@@ -1,6 +1,5 @@
 package co.kr.tnt.trainee.signup
 
-import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,8 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
@@ -27,16 +30,33 @@ import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.ui.component.TnTLoadingScreen
 import co.kr.tnt.ui.model.DefaultUserProfile
+import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
 
 @Composable
 internal fun TraineeSignUpCompletePage(
     state: TraineeSignUpUiState,
     onBackClick: () -> Unit,
-    onNextClick: (Uri?) -> Unit,
+    onNextClick: (image: File?) -> Unit,
 ) {
     BackHandler { onBackClick() }
+
+    val context = LocalContext.current
+    val completeState = remember { mutableStateOf(false) }
+
+    LaunchedEffect(completeState.value) {
+        if (completeState.value) {
+            val imageFile = withContext(Dispatchers.IO) {
+                state.image?.convertToAllowedImageFormat(context)
+            }
+            onNextClick(imageFile)
+            completeState.value = false
+        }
+    }
 
     Scaffold(
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -79,7 +99,7 @@ internal fun TraineeSignUpCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(core_start),
-                onClick = throttled { onNextClick(state.image) },
+                onClick = throttled { completeState.value = true },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }

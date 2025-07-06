@@ -1,6 +1,5 @@
 package co.kr.tnt.trainer.signup
 
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
@@ -13,7 +12,6 @@ import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiEvent
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.resource.DisplayText
-import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,8 +31,7 @@ internal class TrainerSignUpViewModel @Inject constructor(
             TrainerSignUpUiEvent.OnNextClick -> navigateToNext()
             TrainerSignUpUiEvent.OnBackClick -> navigateToBack()
             is TrainerSignUpUiEvent.RequestSignUp -> signUp(
-                context = event.context,
-                imageUri = event.imageUri,
+                imageFile = event.imageFile,
                 id = event.id,
                 email = event.email,
                 authType = event.authType,
@@ -44,8 +41,7 @@ internal class TrainerSignUpViewModel @Inject constructor(
     }
 
     private fun signUp(
-        context: Context,
-        imageUri: Uri?,
+        imageFile: File?,
         id: String,
         email: String,
         authType: String,
@@ -53,11 +49,10 @@ internal class TrainerSignUpViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             updateState { copy(isLoading = true) }
-            val profileImageFile: File? = imageUri?.convertToAllowedImageFormat(context)
 
             runCatching {
                 signUpRepository.signUp(
-                    profileImage = profileImageFile,
+                    profileImage = imageFile,
                     user = User.Trainer(
                         id = id,
                         name = currentState.name,

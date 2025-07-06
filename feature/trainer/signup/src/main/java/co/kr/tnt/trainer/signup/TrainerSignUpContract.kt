@@ -1,11 +1,11 @@
 package co.kr.tnt.trainer.signup
 
-import android.content.Context
 import android.net.Uri
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
 import co.kr.tnt.ui.resource.DisplayText
+import java.io.File
 
 private const val MAX_LENGTH = 15
 
@@ -29,8 +29,7 @@ internal class TrainerSignUpContract {
         data object OnNextClick : TrainerSignUpUiEvent
         data object OnBackClick : TrainerSignUpUiEvent
         data class RequestSignUp(
-            val context: Context,
-            val imageUri: Uri?,
+            val imageFile: File?,
             val id: String,
             val email: String,
             val authType: String,

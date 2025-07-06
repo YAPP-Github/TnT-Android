@@ -1,6 +1,5 @@
 package co.kr.tnt.trainer.signup
 
-import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,8 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
@@ -27,16 +28,24 @@ import co.kr.tnt.feature.trainer.signup.R
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
 import co.kr.tnt.ui.component.TnTLoadingScreen
 import co.kr.tnt.ui.model.DefaultUserProfile
+import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 @Composable
 internal fun TrainerSignUpCompletePage(
     state: TrainerSignUpUiState,
     onBackClick: () -> Unit,
-    onNextClick: (Uri?) -> Unit,
+    onNextClick: (image: File?) -> Unit,
 ) {
     BackHandler { onBackClick() }
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -79,12 +88,18 @@ internal fun TrainerSignUpCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(core_start),
-                onClick = throttled { onNextClick(state.image) },
+                onClick = throttled {
+                    coroutineScope.launch {
+                        val imageFile = withContext(Dispatchers.IO) {
+                            state.image?.convertToAllowedImageFormat(context)
+                        }
+                        onNextClick(imageFile)
+                    }
+                },
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
     }
-
     if (state.isLoading) {
         TnTLoadingScreen()
     }

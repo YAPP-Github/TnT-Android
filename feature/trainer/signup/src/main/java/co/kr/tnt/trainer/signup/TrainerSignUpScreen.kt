@@ -4,13 +4,13 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiEvent
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
+import java.io.File
 
 @Composable
 internal fun TrainerSignUpRoute(
@@ -22,7 +22,6 @@ internal fun TrainerSignUpRoute(
     navigateToInvite: (ScreenMode) -> Unit,
     viewModel: TrainerSignUpViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -32,11 +31,10 @@ internal fun TrainerSignUpRoute(
         onProfileImageSelect = { viewModel.setEvent(TrainerSignUpUiEvent.OnImageChange(it)) },
         onNextClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnNextClick) },
         onBackClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnBackClick) },
-        onSubmitSignUp = { uri ->
+        onSubmitSignUp = { file ->
             viewModel.setEvent(
                 TrainerSignUpUiEvent.RequestSignUp(
-                    context = context,
-                    imageUri = uri,
+                    imageFile = file,
                     id = authId,
                     email = email,
                     authType = authType,
@@ -62,9 +60,9 @@ internal fun TrainerSignUpRoute(
 @Composable
 private fun TrainerSignUpScreen(
     state: TrainerSignUpUiState,
-    onProfileImageSelect: (Uri) -> Unit,
-    onNameChange: (String) -> Unit,
-    onSubmitSignUp: (Uri?) -> Unit,
+    onProfileImageSelect: (imageUri: Uri) -> Unit,
+    onNameChange: (name: String) -> Unit,
+    onSubmitSignUp: (imageFile: File?) -> Unit,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {

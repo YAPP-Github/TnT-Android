@@ -1,11 +1,11 @@
 package co.kr.tnt.trainee.signup
 
-import android.content.Context
 import android.net.Uri
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
 import co.kr.tnt.ui.resource.DisplayText
+import java.io.File
 import java.time.LocalDate
 
 private const val MAX_NAME_LENGTH = 15
@@ -68,8 +68,7 @@ internal class TraineeSignUpContract {
         data object OnNextClick : TraineeSignUpUiEvent
         data object OnBackClick : TraineeSignUpUiEvent
         data class RequestSignUp(
-            val context: Context,
-            val imageUri: Uri?,
+            val imageFile: File?,
             val id: String,
             val email: String,
             val authType: String,

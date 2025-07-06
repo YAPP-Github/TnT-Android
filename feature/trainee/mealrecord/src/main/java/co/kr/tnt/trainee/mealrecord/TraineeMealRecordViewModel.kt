@@ -1,17 +1,15 @@
-package co.kr.tnt.trainee.mealrecord.record
+package co.kr.tnt.trainee.mealrecord
 
-import android.content.Context
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.feature.trainee.mealrecord.R
-import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordSideEffect
-import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiEvent
-import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState
-import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordSideEffect
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiEvent
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState
+import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.resource.DisplayText
-import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
@@ -47,14 +45,13 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                 }
 
                 TraineeMealRecordUiEvent.OnClickCloseBottomSheet -> clearFocusState()
-
                 is TraineeMealRecordUiEvent.OnSelectMealType -> updateState {
                     copy(mealType = event.mealType).validateMealRecord()
                 }
 
                 is TraineeMealRecordUiEvent.OnChangeMemo -> updateMemo(event.memo)
                 TraineeMealRecordUiEvent.OnClickBack -> handleBackClick()
-                is TraineeMealRecordUiEvent.OnClickSave -> postMealRecord(event.context)
+                is TraineeMealRecordUiEvent.OnClickSave -> postMealRecord(event.imageFile)
                 TraineeMealRecordUiEvent.OnClickDialogConfirm -> {
                     updateState { copy(dialogState = DialogState.NONE) }
                     sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
@@ -92,18 +89,15 @@ internal class TraineeMealRecordViewModel @Inject constructor(
             }
         }
 
-        // TODO Context 제거
-        private fun postMealRecord(context: Context) {
+        private fun postMealRecord(imageFile: File?) {
             updateState { copy(isLoading = true) }
 
             val mealDateTime = dateFormatter.format(
                 LocalDateTime.of(currentState.date, currentState.time),
                 "yyyy-MM-dd'T'HH:mm:ss",
             )
-
             viewModelScope.launch {
                 val state = currentState
-                val imageFile: File? = state.image?.convertToAllowedImageFormat(context)
                 runCatching {
                     traineeRepository.postMealRecord(
                         mealImage = imageFile,
