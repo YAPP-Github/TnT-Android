@@ -36,6 +36,7 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
         override suspend fun handleEvent(event: TraineeMyPageUiEvent) {
             when (event) {
+                TraineeMyPageUiEvent.OnClickModifyMyInfo -> navigateToModifyMyInfo()
                 TraineeMyPageUiEvent.OnClickConnect -> navigateToConnect()
 
                 is TraineeMyPageUiEvent.OnToggleNotification -> handleToggleNotification(
@@ -87,6 +88,10 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     }
                     .launchIn(viewModelScope)
             }
+        }
+
+        private fun navigateToModifyMyInfo() {
+            sendEffect(TraineeMyPageEffect.NavigateToModifyMyInfo)
         }
 
         private fun navigateToConnect() {

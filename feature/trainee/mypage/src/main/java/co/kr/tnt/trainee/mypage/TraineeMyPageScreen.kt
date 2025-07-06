@@ -43,6 +43,9 @@ import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTSwitch
+import co.kr.tnt.designsystem.component.button.TnTTextButton
+import co.kr.tnt.designsystem.component.button.model.ButtonSize
+import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.User
@@ -71,6 +74,7 @@ import java.time.LocalDate
 @Composable
 internal fun TraineeMyPageRoute(
     padding: PaddingValues,
+    navigateToModifyMyInfo: () -> Unit,
     navigateToConnect: (ScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
@@ -86,6 +90,7 @@ internal fun TraineeMyPageRoute(
         state = uiState,
         padding = padding,
         appVersion = context.getAppVersion(),
+        onClickModifyMyInfo = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickModifyMyInfo) },
         onClickConnect = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickConnect) },
         onTogglePushNotification = {
             viewModel.setEvent(
@@ -115,6 +120,7 @@ internal fun TraineeMyPageRoute(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
+                TraineeMyPageEffect.NavigateToModifyMyInfo -> navigateToModifyMyInfo()
                 TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(ScreenMode.BACK)
                 TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
                 is TraineeMyPageEffect.ShowToast -> snackbar.show(effect.message.asString(context))
@@ -140,6 +146,7 @@ private fun TraineeMyPageScreen(
     state: TraineeMyPageUiState,
     padding: PaddingValues,
     appVersion: String,
+    onClickModifyMyInfo: () -> Unit,
     onClickConnect: () -> Unit,
     onTogglePushNotification: () -> Unit,
     onClickTermsOfService: () -> Unit,
@@ -178,7 +185,13 @@ private fun TraineeMyPageScreen(
             color = TnTTheme.colors.neutralColors.Neutral950,
             style = TnTTheme.typography.h2,
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
+        TnTTextButton(
+            text = stringResource(co.kr.tnt.core.ui.R.string.modifying_personal_info),
+            size = ButtonSize.Small,
+            type = ButtonType.Gray,
+            onClick = onClickModifyMyInfo,
+        )
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
@@ -346,6 +359,7 @@ private fun TraineeMyPageScreenPreview() {
             ),
             padding = PaddingValues(),
             appVersion = "1.0",
+            onClickModifyMyInfo = { },
             onClickConnect = { },
             onTogglePushNotification = { },
             onClickTermsOfService = { },
