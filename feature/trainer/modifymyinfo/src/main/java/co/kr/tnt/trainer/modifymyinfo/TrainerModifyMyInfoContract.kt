@@ -10,6 +10,7 @@ internal class TrainerModifyMyInfoContract {
         val profileImage: String? = null,
         val name: String = "",
         val dialogState: DialogState = DialogState.NONE,
+        val isEnableComplete: Boolean = false,
     ) : UiState {
         enum class DialogState {
             NONE,

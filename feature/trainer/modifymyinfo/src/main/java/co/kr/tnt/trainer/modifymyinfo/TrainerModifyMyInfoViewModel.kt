@@ -1,6 +1,7 @@
 package co.kr.tnt.trainer.modifymyinfo
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.trainer.modifymyinfo.TrainerModifyMyInfoContract.TrainerModifyMyInfoEffect
 import co.kr.tnt.trainer.modifymyinfo.TrainerModifyMyInfoContract.TrainerModifyMyInfoUiEvent
@@ -18,7 +19,7 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
     BaseViewModel<TrainerModifyMyInfoUiState, TrainerModifyMyInfoUiEvent, TrainerModifyMyInfoEffect>(
             TrainerModifyMyInfoUiState(),
         ) {
-        private var isUpdatedInfo = false
+        private var initializedInfo: User.Trainer? = null
 
         init {
             initMyInfo()
@@ -27,30 +28,53 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
         override suspend fun handleEvent(event: TrainerModifyMyInfoUiEvent) {
             when (event) {
                 TrainerModifyMyInfoUiEvent.OnClickBack -> {
-                    if (isUpdatedInfo) {
+                    if (
+                        checkUpdatedInfo(
+                            compareName = currentState.name,
+                            compareImage = currentState.profileImage,
+                        )
+                    ) {
                         updateState { copy(dialogState = DialogState.CONFIRM_EXIT) }
                         return
                     }
 
                     sendEffect(TrainerModifyMyInfoEffect.NavigateToPrevious)
                 }
+
                 TrainerModifyMyInfoUiEvent.OnClickComplete -> {
                     sendEffect(TrainerModifyMyInfoEffect.NavigateToPrevious)
                     // TODO API
                 }
 
                 is TrainerModifyMyInfoUiEvent.OnNameChange -> {
-                    isUpdatedInfo = true
-                    updateState { copy(name = event.name) }
+                    updateState {
+                        copy(
+                            name = event.name,
+                            isEnableComplete = checkUpdatedInfo(
+                                compareName = event.name,
+                                compareImage = currentState.profileImage,
+                            ),
+                        )
+                    }
                 }
+
                 is TrainerModifyMyInfoUiEvent.OnProfileImageSelect -> {
-                    isUpdatedInfo = true
-                    updateState { copy(profileImage = event.image.path) }
+                    updateState {
+                        copy(
+                            profileImage = event.image.path,
+                            isEnableComplete = checkUpdatedInfo(
+                                compareName = currentState.name,
+                                compareImage = event.image.path,
+                            ),
+                        )
+                    }
                 }
+
                 TrainerModifyMyInfoUiEvent.OnClickDialogConfirm -> {
                     updateState { copy(dialogState = DialogState.NONE) }
                     sendEffect(TrainerModifyMyInfoEffect.NavigateToPrevious)
                 }
+
                 TrainerModifyMyInfoUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
             }
         }
@@ -60,6 +84,8 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
                 runCatching {
                     trainerRepository.getMyInfo()
                 }.onSuccess { myInfo ->
+                    initializedInfo = myInfo
+
                     updateState {
                         copy(
                             name = myInfo.name,
@@ -72,4 +98,11 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
                 }
             }
         }
+
+        private fun checkUpdatedInfo(
+            compareName: String,
+            compareImage: String?,
+        ): Boolean = initializedInfo?.let {
+            it.name != compareName || it.image != compareImage
+        } ?: false
     }

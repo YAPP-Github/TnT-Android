@@ -146,6 +146,7 @@ private fun TrainerModifyMyInfoScreen(
             Spacer(modifier = Modifier.weight(1f))
             TnTBottomButton(
                 text = "완료",
+                enabled = state.isEnableComplete,
                 onClick = onClickComplete,
             )
         }
