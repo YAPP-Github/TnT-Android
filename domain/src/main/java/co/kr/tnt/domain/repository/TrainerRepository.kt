@@ -4,6 +4,7 @@ import co.kr.tnt.domain.model.MemberInfo
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSession
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
+import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
@@ -19,5 +20,11 @@ interface TrainerRepository {
         memo: String,
         traineeId: Long,
     )
+
     suspend fun postCompleteSession(ptSessionId: String)
+    suspend fun updateUserInfo(
+        newProfileImage: File?,
+        name: String,
+        isRemoveProfileImage: Boolean,
+    )
 }

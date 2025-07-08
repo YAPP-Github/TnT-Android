@@ -1,5 +1,7 @@
 package co.kr.data.repository
 
+import co.kr.data.network.model.UpdateUserInfoRequest
+import co.kr.data.network.model.enum.MemberType
 import co.kr.data.network.model.toDomain
 import co.kr.data.network.model.trainer.PtSessionRequest
 import co.kr.data.network.model.trainer.toDomain
@@ -7,10 +9,12 @@ import co.kr.data.network.source.TrainerRemoteDataSource
 import co.kr.data.network.source.UserRemoteDataSource
 import co.kr.tnt.domain.model.MemberInfo
 import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSession
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.domain.utils.DateFormatter
+import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
@@ -65,4 +69,17 @@ internal class TrainerRepositoryImpl @Inject constructor(
 
     override suspend fun postCompleteSession(ptSessionId: String) =
         trainerRemoteDataSource.putCompletePtSession(ptSessionId)
+
+    override suspend fun updateUserInfo(
+        newProfileImage: File?,
+        name: String,
+        isRemoveProfileImage: Boolean,
+    ) = trainerRemoteDataSource.putUserInfo(
+        profileImage = newProfileImage,
+        request = UpdateUserInfoRequest(
+            removeImage = isRemoveProfileImage,
+            memberType = MemberType.from(UserType.TRAINER),
+            name = name,
+        ),
+    )
 }

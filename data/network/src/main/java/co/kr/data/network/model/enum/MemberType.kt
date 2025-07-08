@@ -8,6 +8,16 @@ enum class MemberType {
     TRAINER,
     TRAINEE,
     UNREGISTERED,
+    ;
+
+    companion object {
+        fun from(userType: UserType): MemberType {
+            return when (userType) {
+                UserType.TRAINER -> TRAINER
+                UserType.TRAINEE -> TRAINEE
+            }
+        }
+    }
 }
 
 fun MemberType.toDomain(): UserType =
