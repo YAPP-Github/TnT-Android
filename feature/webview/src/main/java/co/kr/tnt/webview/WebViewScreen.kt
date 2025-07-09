@@ -16,7 +16,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 @Composable
 internal fun WebViewScreen(
     url: String,
-    onBackClick: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
     var webView: WebView? = null
 
@@ -24,7 +24,7 @@ internal fun WebViewScreen(
         if (webView?.canGoBack() == true) {
             webView?.goBack()
         } else {
-            onBackClick()
+            onClickBack()
         }
     }
 

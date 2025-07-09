@@ -35,7 +35,7 @@ internal class TraineeHomeViewModel @Inject constructor(
         when (event) {
             TraineeHomeUiEvent.OnScreen -> refresh()
             is TraineeHomeUiEvent.OnChangeVisibleMonth -> handleChangeVisibleMonth(event.yearMonth)
-            is TraineeHomeUiEvent.OnClickDay -> selectDate(event.date)
+            is TraineeHomeUiEvent.OnClickDay -> selectDay(event.date)
             is TraineeHomeUiEvent.OnClickPtSessionCard -> checkSessionRecord(event.ptSessionId)
             TraineeHomeUiEvent.OnClickExerciseRecord -> sendEffect(TraineeHomeEffect.NavigateToExerciseRecord)
             TraineeHomeUiEvent.OnClickMealRecord -> sendEffect(TraineeHomeEffect.NavigateToMealRecord)
@@ -93,7 +93,7 @@ internal class TraineeHomeViewModel @Inject constructor(
         // TODO: pt 수업 기록 확인 화면 이동
     }
 
-    private fun selectDate(date: LocalDate) {
+    private fun selectDay(date: LocalDate) {
         viewModelScope.launch {
             runCatching {
                 traineeRepository.getDailyRecord(date)
@@ -150,7 +150,7 @@ internal class TraineeHomeViewModel @Inject constructor(
     private fun refresh() {
         cachedMonthlyRecordState.clear()
         handleChangeVisibleMonth(currentState.selectedDay.yearMonth)
-        selectDate(currentState.selectedDay)
+        selectDay(currentState.selectedDay)
         showConnectDialog()
     }
 

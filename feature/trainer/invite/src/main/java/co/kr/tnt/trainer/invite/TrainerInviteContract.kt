@@ -10,10 +10,10 @@ internal class TrainerInviteContract {
     ) : UiState
 
     sealed interface TrainerInviteUiEvent : UiEvent {
-        data object OnRegenerateClick : TrainerInviteUiEvent
-        data class OnCodeClick(val code: String) : TrainerInviteUiEvent
-        data object OnBackClick : TrainerInviteUiEvent
-        data object OnSkipClick : TrainerInviteUiEvent
+        data object OnClickRegenerate : TrainerInviteUiEvent
+        data class OnClickCode(val code: String) : TrainerInviteUiEvent
+        data object OnClickBack : TrainerInviteUiEvent
+        data object OnClickSkip : TrainerInviteUiEvent
     }
 
     sealed interface TrainerInviteSideEffect : UiSideEffect {

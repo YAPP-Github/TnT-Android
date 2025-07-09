@@ -39,19 +39,19 @@ internal fun CodeEntryPage(
     inviteCode: String,
     inputState: InputState,
     screenMode: ScreenMode,
-    onSkipClick: () -> Unit,
-    onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onClickSkip: () -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: () -> Unit,
     onChangeInviteCode: (code: String) -> Unit,
-    onValidateClick: (code: String) -> Unit,
-    onCancelClick: () -> Unit,
-    onDismissPopup: () -> Unit,
+    onClickValidate: (code: String) -> Unit,
+    onClickCancel: () -> Unit,
+    onDismissDialog: () -> Unit,
 ) {
     BackHandler {
         when (screenMode) {
-            ScreenMode.BACK -> onBackClick()
-            ScreenMode.SKIP -> onSkipClick()
-            ScreenMode.CLOSE -> onBackClick()
+            ScreenMode.BACK -> onClickBack()
+            ScreenMode.SKIP -> onClickSkip()
+            ScreenMode.CLOSE -> onClickBack()
         }
     }
 
@@ -61,7 +61,7 @@ internal fun CodeEntryPage(
                 ScreenMode.BACK -> {
                     TnTTopBarWithBackButton(
                         title = stringResource(coreR.string.connect),
-                        onBackClick = onBackClick,
+                        onBackClick = onClickBack,
                     )
                 }
                 ScreenMode.SKIP -> {
@@ -72,9 +72,7 @@ internal fun CodeEntryPage(
                                 text = stringResource(coreR.string.skip),
                                 color = TnTTheme.colors.neutralColors.Neutral400,
                                 style = TnTTheme.typography.body2Medium,
-                                modifier = Modifier.clickable {
-                                    onSkipClick()
-                                },
+                                modifier = Modifier.clickable { onClickSkip() },
                             )
                         },
                     )
@@ -84,7 +82,7 @@ internal fun CodeEntryPage(
                         title = stringResource(coreR.string.connect),
                         trailingComponent = {
                             IconButton(
-                                onClick = onBackClick,
+                                onClick = onClickBack,
                             ) {
                                 Icon(
                                     painter = painterResource(uiResource.drawable.ic_delete),
@@ -119,7 +117,7 @@ internal fun CodeEntryPage(
                             text = stringResource(R.string.verification),
                             size = ButtonSize.Small,
                             enabled = inviteCode.isNotBlank(),
-                            onClick = { onValidateClick(inviteCode) },
+                            onClick = { onClickValidate(inviteCode) },
                         )
                     },
                 )
@@ -127,7 +125,7 @@ internal fun CodeEntryPage(
             TnTBottomButton(
                 text = stringResource(coreR.string.next),
                 enabled = inputState.isValid,
-                onClick = onNextClick,
+                onClick = onClickNext,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -139,9 +137,9 @@ internal fun CodeEntryPage(
             content = stringResource(R.string.warning_reconnect_needed),
             leftButtonText = stringResource(coreR.string.cancel),
             rightButtonText = stringResource(coreR.string.ok),
-            onLeftButtonClick = onCancelClick,
-            onRightButtonClick = onDismissPopup,
-            onDismiss = onDismissPopup,
+            onLeftButtonClick = onClickCancel,
+            onRightButtonClick = onDismissDialog,
+            onDismiss = onDismissDialog,
         )
     }
 }
@@ -155,13 +153,13 @@ private fun CodeEntryPagePreview() {
             inputState = InputState.FOCUS,
             inviteCode = "23A4SDA31",
             screenMode = ScreenMode.CLOSE,
-            onSkipClick = {},
-            onNextClick = {},
-            onValidateClick = {},
-            onChangeInviteCode = {},
-            onBackClick = {},
-            onDismissPopup = {},
-            onCancelClick = {},
+            onClickSkip = { },
+            onClickNext = { },
+            onClickBack = { },
+            onClickValidate = { },
+            onChangeInviteCode = { },
+            onDismissDialog = { },
+            onClickCancel = { },
         )
     }
 }

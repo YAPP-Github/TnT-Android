@@ -29,15 +29,15 @@ internal fun TraineeSignUpRoute(
 
     TraineeSignUpScreen(
         state = uiState,
-        onNameChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnNameChange(it)) },
-        onProfileImageSelect = { viewModel.setEvent(TraineeSignUpUiEvent.OnImageChange(it)) },
-        onHeightChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnHeightChange(it)) },
-        onWeightChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnWeightChange(it)) },
-        onBirthdayChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnBirthdayChange(it)) },
-        onPurposeSelected = { viewModel.setEvent(TraineeSignUpUiEvent.OnPurposeSelected(it)) },
-        onCautionChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnCautionChange(it)) },
-        onBackClick = { viewModel.setEvent(TraineeSignUpUiEvent.OnBackClick) },
-        onNextClick = { viewModel.setEvent(TraineeSignUpUiEvent.OnNextClick) },
+        onChangeName = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeName(it)) },
+        onSelectProfileImage = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeImage(it)) },
+        onChangeHeight = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeHeight(it)) },
+        onChangeWeight = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeWeight(it)) },
+        onChangeBirthday = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeBirthday(it)) },
+        onSelectPurpose = { viewModel.setEvent(TraineeSignUpUiEvent.OnSelectPurpose(it)) },
+        onChangeCaution = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeCaution(it)) },
+        onClickBack = { viewModel.setEvent(TraineeSignUpUiEvent.OnClickBack) },
+        onClickNext = { viewModel.setEvent(TraineeSignUpUiEvent.OnClickNext) },
         onSubmitSignUp = { file ->
             viewModel.setEvent(
                 TraineeSignUpUiEvent.RequestSignUp(
@@ -65,53 +65,53 @@ internal fun TraineeSignUpRoute(
 @Composable
 private fun TraineeSignUpScreen(
     state: TraineeSignUpUiState,
-    onProfileImageSelect: (imageUri: Uri) -> Unit,
-    onNameChange: (name: String) -> Unit,
-    onHeightChange: (height: String) -> Unit,
-    onWeightChange: (weight: String) -> Unit,
-    onCautionChange: (caution: String) -> Unit,
-    onBirthdayChange: (birthday: LocalDate) -> Unit,
-    onPurposeSelected: (purpose: String) -> Unit,
+    onSelectProfileImage: (imageUri: Uri) -> Unit,
+    onChangeName: (name: String) -> Unit,
+    onChangeHeight: (height: String) -> Unit,
+    onChangeWeight: (weight: String) -> Unit,
+    onChangeCaution: (caution: String) -> Unit,
+    onChangeBirthday: (birthday: LocalDate) -> Unit,
+    onSelectPurpose: (purpose: String) -> Unit,
     onSubmitSignUp: (imageFile: File?) -> Unit,
-    onNextClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onClickNext: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
     when (state.page) {
         TraineeSignUpPage.ProfileSetUp -> TraineeProfileSetupPage(
             state = state,
-            onProfileImageSelect = onProfileImageSelect,
-            onNameChange = onNameChange,
-            onBackClick = onBackClick,
-            onNextClick = onNextClick,
+            onProfileImageSelect = onSelectProfileImage,
+            onChangeName = onChangeName,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
 
         TraineeSignUpPage.BasicInfo -> TraineeBasicInfoPage(
             state = state,
-            onHeightChange = onHeightChange,
-            onWeightChange = onWeightChange,
-            onBirthdayChange = onBirthdayChange,
-            onBackClick = onBackClick,
-            onNextClick = onNextClick,
+            onChangeHeight = onChangeHeight,
+            onChangeWeight = onChangeWeight,
+            onChangeBirthday = onChangeBirthday,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
 
         TraineeSignUpPage.NoteForTrainer -> TraineeNoteForTrainerPage(
             caution = state.caution,
-            onCautionChange = onCautionChange,
-            onBackClick = onBackClick,
-            onNextClick = onNextClick,
+            onChangeCaution = onChangeCaution,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
 
         TraineeSignUpPage.PTPurpose -> TraineePTPurposePage(
             state = state,
-            onPurposeSelected = onPurposeSelected,
-            onBackClick = onBackClick,
-            onNextClick = onNextClick,
+            onSelectPurpose = onSelectPurpose,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
 
         TraineeSignUpPage.SignUpComplete -> TraineeSignUpCompletePage(
             state = state,
-            onBackClick = onBackClick,
-            onNextClick = onSubmitSignUp,
+            onClickBack = onClickBack,
+            onClickNext = onSubmitSignUp,
         )
     }
 }

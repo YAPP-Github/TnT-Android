@@ -45,18 +45,18 @@ private const val MAX_LENGTH = 15
 @Composable
 internal fun TrainerProfileSetupPage(
     state: TrainerSignUpUiState,
-    onProfileImageSelect: (Uri) -> Unit,
-    onNameChange: (String) -> Unit,
-    onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onSelectProfileImage: (Uri) -> Unit,
+    onChangeName: (String) -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: () -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     val context = LocalContext.current
 
     val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         if (uri != null) {
-            onProfileImageSelect(uri)
+            onSelectProfileImage(uri)
         }
     }
     val painter = rememberAsyncImagePainter(
@@ -67,7 +67,7 @@ internal fun TrainerProfileSetupPage(
     )
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onClickBack) },
         containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
@@ -105,7 +105,7 @@ internal fun TrainerProfileSetupPage(
                     title = stringResource(coreR.string.name),
                     value = state.name,
                     onValueChange = { newValue ->
-                        onNameChange(newValue)
+                        onChangeName(newValue)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
                     placeholder = stringResource(R.string.name_placeholder),
@@ -120,7 +120,7 @@ internal fun TrainerProfileSetupPage(
                 text = stringResource(coreR.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = state.name.isNotBlank() && state.isNameValid,
-                onClick = onNextClick,
+                onClick = onClickNext,
             )
         }
     }
@@ -132,10 +132,10 @@ private fun TrainerProfileSetupPagePreview() {
     TnTTheme {
         TrainerProfileSetupPage(
             state = TrainerSignUpUiState(),
-            onNameChange = {},
-            onProfileImageSelect = {},
-            onBackClick = {},
-            onNextClick = {},
+            onChangeName = {},
+            onSelectProfileImage = {},
+            onClickBack = {},
+            onClickNext = {},
         )
     }
 }

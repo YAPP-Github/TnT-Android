@@ -36,14 +36,14 @@ private const val COLUMNS_NUM = 2
 @Composable
 internal fun TraineePTPurposePage(
     state: TraineeSignUpUiState,
-    onPurposeSelected: (String) -> Unit,
-    onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onSelectPurpose: (String) -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: () -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onClickBack) },
         containerColor = TnTTheme.colors.commonColors.Common0,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -68,7 +68,7 @@ internal fun TraineePTPurposePage(
                             PurposeButton(
                                 text = purposeText,
                                 isSelected = state.ptPurpose?.contains(purposeText) == true,
-                                onClick = { onPurposeSelected(purposeText) },
+                                onClick = { onSelectPurpose(purposeText) },
                                 modifier = Modifier.weight(1f),
                             )
                         }
@@ -77,7 +77,7 @@ internal fun TraineePTPurposePage(
             }
             TnTBottomButton(
                 text = stringResource(uiResource.string.next),
-                onClick = onNextClick,
+                onClick = onClickNext,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -106,9 +106,9 @@ private fun TraineePTPurposePagePreview() {
     TnTTheme {
         TraineePTPurposePage(
             state = TraineeSignUpUiState(),
-            onBackClick = {},
-            onNextClick = {},
-            onPurposeSelected = {},
+            onClickBack = {},
+            onClickNext = {},
+            onSelectPurpose = {},
         )
     }
 }

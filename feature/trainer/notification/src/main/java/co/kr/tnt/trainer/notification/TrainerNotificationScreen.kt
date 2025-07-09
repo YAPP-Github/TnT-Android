@@ -39,8 +39,8 @@ internal fun TrainerNotificationRoute(
 
     TrainerNotificationScreen(
         state = uiState,
-        onBackClick = { viewModel.setEvent(TrainerNotificationUiEvent.OnBackClick) },
-        onLinkNotificationClick = { viewModel.setEvent(TrainerNotificationUiEvent.OnLinkNotificationClick) },
+        onClickBack = { viewModel.setEvent(TrainerNotificationUiEvent.OnClickBack) },
+        onClickConnectionNotice = { viewModel.setEvent(TrainerNotificationUiEvent.OnClickConnectionNotice) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -61,14 +61,14 @@ internal fun TrainerNotificationRoute(
 @Composable
 private fun TrainerNotificationScreen(
     state: TrainerNotificationUiState,
-    onBackClick: () -> Unit,
-    onLinkNotificationClick: () -> Unit,
+    onClickBack: () -> Unit,
+    onClickConnectionNotice: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             TnTTopBarWithBackButton(
                 title = stringResource(uiResource.string.notification),
-                onBackClick = onBackClick,
+                onBackClick = onClickBack,
                 showStoke = true,
             )
         },
@@ -102,7 +102,7 @@ private fun TrainerNotificationScreen(
                             time = notification.time,
                             isChecked = notification.isChecked,
                             onClick = if (notification.isClickable) {
-                                onLinkNotificationClick
+                                onClickConnectionNotice
                             } else {
                                 null
                             },
@@ -142,8 +142,8 @@ private fun TrainerNotificationScreenPreview() {
             ),
         )
         TrainerNotificationScreen(
-            onBackClick = {},
-            onLinkNotificationClick = {},
+            onClickBack = {},
+            onClickConnectionNotice = {},
             state = TrainerNotificationUiState(notifications = sampleNotifications),
         )
     }

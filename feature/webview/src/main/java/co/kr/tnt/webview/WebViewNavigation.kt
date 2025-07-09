@@ -22,7 +22,7 @@ fun NavGraphBuilder.webViewScreen(
         backstackEntry.toRoute<Route.WebView>().apply {
             WebViewScreen(
                 url = url,
-                onBackClick = navigateToPrevious,
+                onClickBack = navigateToPrevious,
             )
         }
     }

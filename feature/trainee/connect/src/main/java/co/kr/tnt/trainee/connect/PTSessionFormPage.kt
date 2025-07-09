@@ -51,10 +51,10 @@ internal fun PTSessionFormPage(
     onChangeSessionStartDate: (date: LocalDate) -> Unit,
     onChangeCompletedSessionCount: (count: String) -> Unit,
     onChangeTotalSessionCount: (count: String) -> Unit,
-    onNextClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onClickNext: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     val today = LocalDate.now()
 
@@ -84,7 +84,7 @@ internal fun PTSessionFormPage(
         topBar = {
             TnTTopBarWithBackButton(
                 title = stringResource(R.string.add_pt_info),
-                onBackClick = onBackClick,
+                onBackClick = onClickBack,
             )
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -210,7 +210,7 @@ internal fun PTSessionFormPage(
                 text = stringResource(uiResource.string.next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
-                onClick = throttled { onNextClick() },
+                onClick = throttled { onClickNext() },
             )
         }
     }
@@ -311,8 +311,8 @@ private fun PTSessionFormPagePreview() {
             completedSessionCount = "15",
             totalSessionCount = "10",
             isLoading = false,
-            onNextClick = { },
-            onBackClick = { },
+            onClickNext = { },
+            onClickBack = { },
             onChangeSessionStartDate = { },
             onChangeCompletedSessionCount = { },
             onChangeTotalSessionCount = { },

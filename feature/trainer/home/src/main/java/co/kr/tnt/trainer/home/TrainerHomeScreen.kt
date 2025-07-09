@@ -114,7 +114,7 @@ internal fun TrainerHomeRoute(
                 rightButtonText = stringResource(coreR.string.connect),
                 onLeftButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
                 onRightButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnConfirmConnectDialog) },
-                onCheckClick = { viewModel.setEvent(TrainerHomeUiEvent.OnChangeHideDialogOption) },
+                onClickCheck = { viewModel.setEvent(TrainerHomeUiEvent.OnChangeHideDialogOption) },
                 onDismiss = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
             )
         }
