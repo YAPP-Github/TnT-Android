@@ -8,13 +8,13 @@ import co.kr.data.network.model.trainer.toDomain
 import co.kr.data.network.source.TrainerRemoteDataSource
 import co.kr.data.network.source.UserRemoteDataSource
 import co.kr.tnt.domain.model.MemberInfo
+import co.kr.tnt.domain.model.ProfileImageUpdatePolicy
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSession
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.domain.utils.DateFormatter
-import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
@@ -71,15 +71,22 @@ internal class TrainerRepositoryImpl @Inject constructor(
         trainerRemoteDataSource.putCompletePtSession(ptSessionId)
 
     override suspend fun updateUserInfo(
-        newProfileImage: File?,
+        profileImageUpdatePolicy: ProfileImageUpdatePolicy,
         name: String,
-        isRemoveProfileImage: Boolean,
-    ) = trainerRemoteDataSource.putUserInfo(
-        profileImage = newProfileImage,
-        request = UpdateUserInfoRequest(
-            removeImage = isRemoveProfileImage,
-            memberType = MemberType.from(UserType.TRAINER),
-            name = name,
-        ),
-    )
+    ) {
+        val (profileImage, isRemoveProfileImage) = when (profileImageUpdatePolicy) {
+            is ProfileImageUpdatePolicy.Change -> profileImageUpdatePolicy.newProfileImage to false
+            ProfileImageUpdatePolicy.Keep -> null to false
+            ProfileImageUpdatePolicy.Remove -> null to true
+        }
+
+        trainerRemoteDataSource.putUserInfo(
+            profileImage = profileImage,
+            request = UpdateUserInfoRequest(
+                removeImage = isRemoveProfileImage,
+                memberType = MemberType.from(UserType.TRAINER),
+                name = name,
+            ),
+        )
+    }
 }

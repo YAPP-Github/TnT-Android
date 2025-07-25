@@ -1,6 +1,7 @@
 package co.kr.tnt.trainer.modifymyinfo
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.model.ProfileImageUpdatePolicy
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.trainer.modifymyinfo.TrainerModifyMyInfoContract.TrainerModifyMyInfoEffect
@@ -10,6 +11,7 @@ import co.kr.tnt.trainer.modifymyinfo.TrainerModifyMyInfoContract.TrainerModifyM
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +22,7 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
             TrainerModifyMyInfoUiState(),
         ) {
         private var initializedInfo: User.Trainer? = null
+        private var profileImageUpdatePolicy: ProfileImageUpdatePolicy = ProfileImageUpdatePolicy.Keep
 
         init {
             initMyInfo()
@@ -41,9 +44,19 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
                     sendEffect(TrainerModifyMyInfoEffect.NavigateToPrevious)
                 }
 
-                TrainerModifyMyInfoUiEvent.OnClickComplete -> {
-                    sendEffect(TrainerModifyMyInfoEffect.NavigateToPrevious)
-                    // TODO API
+                is TrainerModifyMyInfoUiEvent.OnClickComplete -> {
+                    viewModelScope.launch {
+                        runCatching {
+                            trainerRepository.updateUserInfo(
+                                profileImageUpdatePolicy = profileImageUpdatePolicy,
+                                name = currentState.name,
+                            )
+                        }.onSuccess {
+                            sendEffect(TrainerModifyMyInfoEffect.NavigateToPrevious)
+                        }.onFailure {
+                            sendEffect(TrainerModifyMyInfoEffect.ShowToast("서버 요청에 실패했어요"))
+                        }
+                    }
                 }
 
                 is TrainerModifyMyInfoUiEvent.OnNameChange -> {
@@ -59,6 +72,7 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
                 }
 
                 is TrainerModifyMyInfoUiEvent.OnProfileImageSelect -> {
+                    profileImageUpdatePolicy = ProfileImageUpdatePolicy.Change(File(event.image.path))
                     updateState {
                         copy(
                             profileImage = event.image.path,
