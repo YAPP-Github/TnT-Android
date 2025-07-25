@@ -8,7 +8,6 @@ import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
 import java.time.LocalDate
 
-private const val MAX_NAME_LENGTH = 15
 private const val MAX_HEIGHT_LENGTH = 3
 private const val MAX_WEIGHT_LENGTH = 5
 
