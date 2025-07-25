@@ -29,7 +29,7 @@ import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.IMAGE_MAX_SIZE
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.trainee.signup.component.ProgressSteps
@@ -39,8 +39,6 @@ import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import co.kr.tnt.core.ui.R as coreR
-
-private const val MAX_LENGTH = 15
 
 @Composable
 internal fun TraineeProfileSetupPage(
@@ -61,7 +59,7 @@ internal fun TraineeProfileSetupPage(
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context)
             .data(state.image)
-            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .transformations(ResizeTransformation(UserProfilePolicy.USER_IMAGE_MAX_SIZE))
             .build(),
     )
 
@@ -107,11 +105,14 @@ internal fun TraineeProfileSetupPage(
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
                     placeholder = stringResource(R.string.enter_your_name),
-                    maxLength = MAX_LENGTH,
+                    maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
                     isSingleLine = true,
                     showWarning = !state.isNameValid,
                     isRequired = true,
-                    warningMessage = stringResource(coreR.string.text_length_and_format_warning, MAX_LENGTH),
+                    warningMessage = stringResource(
+                        coreR.string.text_length_and_format_warning,
+                        UserProfilePolicy.USER_NAME_MAX_LENGTH,
+                    ),
                 )
             }
             TnTBottomButton(

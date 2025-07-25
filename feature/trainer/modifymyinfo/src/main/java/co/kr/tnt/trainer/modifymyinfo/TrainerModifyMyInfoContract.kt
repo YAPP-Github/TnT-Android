@@ -1,5 +1,6 @@
 package co.kr.tnt.trainer.modifymyinfo
 
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -12,6 +13,11 @@ internal class TrainerModifyMyInfoContract {
         val dialogState: DialogState = DialogState.NONE,
         val isEnableComplete: Boolean = false,
     ) : UiState {
+        val isNameValid
+            get() = name.isBlank() ||
+                name.matches(UserProfilePolicy.USER_NAME_REGEX) &&
+                name.length <= UserProfilePolicy.USER_NAME_MAX_LENGTH
+
         enum class DialogState {
             NONE,
             CONFIRM_EXIT,

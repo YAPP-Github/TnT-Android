@@ -67,7 +67,7 @@ import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.IMAGE_MAX_SIZE
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainee.mealrecord.record.TraineeMealRecordContract.TraineeMealRecordUiEvent
@@ -345,7 +345,7 @@ private fun MealImageSelector(
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context)
             .data(imageUri)
-            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .transformations(ResizeTransformation(UserProfilePolicy.USER_IMAGE_MAX_SIZE))
             .build(),
     )
     Column(

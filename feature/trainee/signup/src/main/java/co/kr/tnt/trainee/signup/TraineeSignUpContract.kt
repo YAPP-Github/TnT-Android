@@ -2,6 +2,7 @@ package co.kr.tnt.trainee.signup
 
 import android.content.Context
 import android.net.Uri
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
@@ -23,11 +24,10 @@ internal class TraineeSignUpContract {
         val caution: String? = "",
         val isLoading: Boolean = false,
     ) : UiState {
-        /**
-         * 입력 값을 검사해 한글/영어/공백만 허용하고 특수문자는 제거
-         */
-        private val nameRegex = Regex("^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣 ]+\$")
-        val isNameValid get() = name.isBlank() || name.matches(nameRegex) && name.length <= MAX_NAME_LENGTH
+        val isNameValid
+            get() = name.isBlank() ||
+                name.matches(UserProfilePolicy.USER_NAME_REGEX) &&
+                name.length <= UserProfilePolicy.USER_NAME_MAX_LENGTH
 
         /**
          * 키가 유효한 입력값인지 검사
