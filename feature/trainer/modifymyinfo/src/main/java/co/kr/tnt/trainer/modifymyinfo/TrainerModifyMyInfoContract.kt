@@ -13,7 +13,7 @@ internal class TrainerModifyMyInfoContract {
         val dialogState: DialogState = DialogState.NONE,
         val isEnableComplete: Boolean = false,
     ) : UiState {
-        val isNameValid
+        val isValidName
             get() = name.isBlank() ||
                 name.matches(UserProfilePolicy.USER_NAME_REGEX) &&
                 name.length <= UserProfilePolicy.USER_NAME_MAX_LENGTH

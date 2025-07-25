@@ -1,6 +1,7 @@
 package co.kr.tnt.trainer.modifymyinfo
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.domain.model.ProfileImageUpdatePolicy
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.TrainerRepository
@@ -32,9 +33,10 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
             when (event) {
                 TrainerModifyMyInfoUiEvent.OnClickBack -> {
                     if (
-                        checkUpdatedInfo(
-                            compareName = currentState.name,
-                            compareImage = currentState.profileImage,
+                        isUpdateInfo(
+                            initializedInfo = initializedInfo,
+                            name = currentState.name,
+                            image = currentState.profileImage,
                         )
                     ) {
                         updateState { copy(dialogState = DialogState.CONFIRM_EXIT) }
@@ -63,9 +65,10 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
                     updateState {
                         copy(
                             name = event.name,
-                            isEnableComplete = checkUpdatedInfo(
-                                compareName = event.name,
-                                compareImage = currentState.profileImage,
+                            isEnableComplete = isEnableModifyInfo(
+                                initializedInfo = initializedInfo,
+                                name = event.name,
+                                image = currentState.profileImage,
                             ),
                         )
                     }
@@ -76,9 +79,10 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
                     updateState {
                         copy(
                             profileImage = event.image.path,
-                            isEnableComplete = checkUpdatedInfo(
-                                compareName = currentState.name,
-                                compareImage = event.image.path,
+                            isEnableComplete = isEnableModifyInfo(
+                                initializedInfo = initializedInfo,
+                                name = currentState.name,
+                                image = event.image.path,
                             ),
                         )
                     }
@@ -113,10 +117,20 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
             }
         }
 
-        private fun checkUpdatedInfo(
-            compareName: String,
-            compareImage: String?,
-        ): Boolean = initializedInfo?.let {
-            it.name != compareName || it.image != compareImage
-        } ?: false
+        private fun isEnableModifyInfo(
+            initializedInfo: User.Trainer?,
+            name: String,
+            image: String?,
+        ): Boolean =
+            isUpdateInfo(initializedInfo, name, image) &&
+                name.isNotBlank() &&
+                name.matches(UserProfilePolicy.USER_NAME_REGEX) &&
+                name.length <= UserProfilePolicy.USER_NAME_MAX_LENGTH
+
+        private fun isUpdateInfo(
+            initializedInfo: User.Trainer?,
+            name: String,
+            image: String?,
+        ): Boolean =
+            initializedInfo?.let { it.name != name || it.image != image } ?: false
     }

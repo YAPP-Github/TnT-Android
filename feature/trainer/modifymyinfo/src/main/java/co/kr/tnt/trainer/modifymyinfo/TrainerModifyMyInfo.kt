@@ -23,12 +23,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.ui.R
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
-import co.kr.tnt.designsystem.component.TnTLabeledTextField
+import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.trainer.modifymyinfo.TrainerModifyMyInfoContract.TrainerModifyMyInfoEffect
 import co.kr.tnt.trainer.modifymyinfo.TrainerModifyMyInfoContract.TrainerModifyMyInfoUiEvent
 import co.kr.tnt.trainer.modifymyinfo.TrainerModifyMyInfoContract.TrainerModifyMyInfoUiState
@@ -133,15 +134,22 @@ private fun TrainerModifyMyInfoScreen(
                 },
             )
             Spacer(modifier = Modifier.height(48.dp))
-            TnTLabeledTextField(
-                title = "이름",
+            TnTLabeledTextFieldWithCounter(
+                title = stringResource(R.string.name),
                 value = state.name,
+                onValueChange = { newValue ->
+                    onNameChange(newValue)
+                },
+                modifier = Modifier.padding(horizontal = 20.dp),
+                placeholder = "이름을 입력해주세요.",
+                maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
                 isSingleLine = true,
+                showWarning = state.isValidName.not(),
                 isRequired = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                onValueChange = onNameChange,
+                warningMessage = stringResource(
+                    R.string.text_length_and_format_warning,
+                    UserProfilePolicy.USER_NAME_MAX_LENGTH,
+                ),
             )
             Spacer(modifier = Modifier.weight(1f))
             TnTBottomButton(
