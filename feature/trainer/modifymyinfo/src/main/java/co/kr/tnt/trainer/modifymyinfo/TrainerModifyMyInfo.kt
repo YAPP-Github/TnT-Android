@@ -38,6 +38,7 @@ import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun TrainerModifyMyInfoRoute(
@@ -75,7 +76,7 @@ internal fun TrainerModifyMyInfoRoute(
     }
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collectLatest { effect ->
             when (effect) {
                 TrainerModifyMyInfoEffect.NavigateToPrevious -> navigateToPrevious()
                 is TrainerModifyMyInfoEffect.ShowToast -> snackbar.show(effect.message)

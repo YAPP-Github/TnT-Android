@@ -11,6 +11,7 @@ import co.kr.tnt.trainer.modifymyinfo.TrainerModifyMyInfoContract.TrainerModifyM
 import co.kr.tnt.trainer.modifymyinfo.TrainerModifyMyInfoContract.TrainerModifyMyInfoUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
@@ -100,7 +101,7 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
         private fun initMyInfo() {
             viewModelScope.launch {
                 runCatching {
-                    trainerRepository.getMyInfo()
+                    trainerRepository.getMyInfo().first()
                 }.onSuccess { myInfo ->
                     initializedInfo = myInfo
 
@@ -112,7 +113,6 @@ internal class TrainerModifyMyInfoViewModel @Inject constructor(
                     }
                 }.onFailure {
                     sendEffect(TrainerModifyMyInfoEffect.ShowToast("서버 요청에 실패했어요"))
-                    sendEffect(TrainerModifyMyInfoEffect.NavigateToPrevious)
                 }
             }
         }

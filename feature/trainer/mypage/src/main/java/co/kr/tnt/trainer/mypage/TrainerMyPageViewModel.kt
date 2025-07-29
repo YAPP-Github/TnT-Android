@@ -12,6 +12,7 @@ import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState
 import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,13 +27,14 @@ internal class TrainerMyPageViewModel @Inject constructor(
 ) : BaseViewModel<TrainerMyPageUiState, TrainerMyPageUiEvent, TrainerMyPageSideEffect>(TrainerMyPageUiState()) {
     init {
         viewModelScope.launch {
-            runCatching {
-                trainerRepository.getMyInfo()
-            }.onSuccess { user ->
-                updateState { copy(user = user) }
-            }.onFailure {
-                sendEffect(TrainerMyPageSideEffect.ShowToast("서버 요청에 실패했어요"))
-            }
+            trainerRepository.getMyInfo()
+                .onEach { user ->
+                    updateState { copy(user = user) }
+                }
+                .catch {
+                    sendEffect(TrainerMyPageSideEffect.ShowToast("서버 요청에 실패했어요"))
+                }
+                .launchIn(viewModelScope)
 
             settingRepository.isEnablePushNotification()
                 .onEach { isEnablePushNotification ->

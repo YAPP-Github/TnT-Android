@@ -61,6 +61,7 @@ import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import kotlinx.coroutines.flow.collectLatest
 import co.kr.tnt.core.designsystem.R as designSystemR
 import co.kr.tnt.core.ui.R as coreR
 
@@ -109,7 +110,7 @@ internal fun TrainerMyPageRoute(
     }
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collectLatest { effect ->
             when (effect) {
                 TrainerMyPageSideEffect.NavigateToLogin -> navigateToLogin()
                 TrainerMyPageSideEffect.NavigateToModifyMyInfo -> navigateToModifyMyInfo()
@@ -119,7 +120,7 @@ internal fun TrainerMyPageRoute(
                 is TrainerMyPageSideEffect.RequestPermission -> {
                     if (effect.isExplicitlyDenied) {
                         context.moveToAppSetting()
-                        return@collect
+                        return@collectLatest
                     }
 
                     permissionState.launchMultiplePermissionRequest()
