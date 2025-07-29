@@ -1,6 +1,5 @@
 package co.kr.tnt.trainee.signup
 
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.domain.model.User
@@ -10,7 +9,6 @@ import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpPage
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiEvent
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.ui.base.BaseViewModel
-import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
@@ -25,18 +23,17 @@ internal class TraineeSignUpViewModel @Inject constructor(
     ) {
     override suspend fun handleEvent(event: TraineeSignUpUiEvent) {
         when (event) {
-            is TraineeSignUpUiEvent.OnImageChange -> updateProfileImage(event.imageUri)
-            is TraineeSignUpUiEvent.OnNameChange -> updateName(event.name)
-            is TraineeSignUpUiEvent.OnHeightChange -> updateHeight(event.height)
-            is TraineeSignUpUiEvent.OnWeightChange -> updateWeight(event.weight)
-            is TraineeSignUpUiEvent.OnBirthdayChange -> updateBirthday(event.birthday)
-            is TraineeSignUpUiEvent.OnPurposeSelected -> updateSelectedPurposes(event.purpose)
-            is TraineeSignUpUiEvent.OnCautionChange -> updateCaution(event.text)
-            TraineeSignUpUiEvent.OnBackClick -> navigateToBack()
-            TraineeSignUpUiEvent.OnNextClick -> navigateToNext()
+            is TraineeSignUpUiEvent.OnChangeImage -> updateProfileImage(event.imageUri)
+            is TraineeSignUpUiEvent.OnChangeName -> updateName(event.name)
+            is TraineeSignUpUiEvent.OnChangeHeight -> updateHeight(event.height)
+            is TraineeSignUpUiEvent.OnChangeWeight -> updateWeight(event.weight)
+            is TraineeSignUpUiEvent.OnChangeBirthday -> updateBirthday(event.birthday)
+            is TraineeSignUpUiEvent.OnSelectPurpose -> updatePurposes(event.purpose)
+            is TraineeSignUpUiEvent.OnChangeCaution -> updateCaution(event.text)
+            TraineeSignUpUiEvent.OnClickBack -> navigateToBack()
+            TraineeSignUpUiEvent.OnClickNext -> navigateToNext()
             is TraineeSignUpUiEvent.RequestSignUp -> signUp(
-                context = event.context,
-                imageUri = event.imageUri,
+                imageFile = event.imageFile,
                 id = event.id,
                 email = event.email,
                 authType = event.authType,
@@ -46,8 +43,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
     }
 
     private fun signUp(
-        context: Context,
-        imageUri: Uri?,
+        imageFile: File?,
         id: String,
         email: String,
         authType: String,
@@ -57,11 +53,9 @@ internal class TraineeSignUpViewModel @Inject constructor(
             updateState { copy(isLoading = true) }
 
             val state = currentState
-            val profileImageFile: File? = imageUri?.convertToAllowedImageFormat(context)
-
             runCatching {
                 signUpRepository.signUp(
-                    profileImage = profileImageFile,
+                    profileImage = imageFile,
                     user = User.Trainee(
                         id = id,
                         name = state.name,
@@ -108,7 +102,7 @@ internal class TraineeSignUpViewModel @Inject constructor(
         updateState { copy(birthday = birthday) }
     }
 
-    private fun updateSelectedPurposes(purpose: String) {
+    private fun updatePurposes(purpose: String) {
         val updatedPurposes = currentState.ptPurpose.orEmpty().toMutableList().apply {
             if (contains(purpose)) {
                 remove(purpose)

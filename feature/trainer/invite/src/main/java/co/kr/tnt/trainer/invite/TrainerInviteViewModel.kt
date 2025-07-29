@@ -18,11 +18,10 @@ internal class TrainerInviteViewModel @Inject constructor(
     ) {
     override suspend fun handleEvent(event: TrainerInviteUiEvent) {
         when (event) {
-            TrainerInviteUiEvent.OnRegenerateClick -> regenerateCode()
-            TrainerInviteUiEvent.OnRegenerateClick -> generateCode()
-            TrainerInviteUiEvent.OnBackClick -> navigateToBack()
-            TrainerInviteUiEvent.OnSkipClick -> navigateToHome()
-            is TrainerInviteUiEvent.OnCodeClick -> {
+            TrainerInviteUiEvent.OnClickRegenerate -> regenerateCode()
+            TrainerInviteUiEvent.OnClickBack -> navigateToBack()
+            TrainerInviteUiEvent.OnClickSkip -> navigateToHome()
+            is TrainerInviteUiEvent.OnClickCode -> {
                 sendEffect(TrainerInviteSideEffect.CopyToClipBoard(event.code))
                 sendEffect(TrainerInviteSideEffect.ShowToast("코드가 복사되었어요!"))
             }
@@ -40,7 +39,6 @@ internal class TrainerInviteViewModel @Inject constructor(
             }.onSuccess { result ->
                 updateState { copy(inviteCode = result.invitationCode) }
             }.onFailure {
-                // TODO 컴포넌트 사용
                 sendEffect(TrainerInviteSideEffect.ShowToast("서버 요청에 실패했어요"))
             }
         }
@@ -53,7 +51,6 @@ internal class TrainerInviteViewModel @Inject constructor(
             }.onSuccess { result ->
                 updateState { copy(inviteCode = result.invitationCode) }
             }.onFailure {
-                // TODO 컴포넌트 사용
                 sendEffect(TrainerInviteSideEffect.ShowToast("서버 요청에 실패했어요"))
             }
         }

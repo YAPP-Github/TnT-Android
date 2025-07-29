@@ -1,11 +1,11 @@
 package co.kr.tnt.trainee.signup
 
-import android.content.Context
 import android.net.Uri
 import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import java.io.File
 import java.time.LocalDate
 
 private const val MAX_HEIGHT_LENGTH = 3
@@ -56,18 +56,17 @@ internal class TraineeSignUpContract {
     }
 
     sealed interface TraineeSignUpUiEvent : UiEvent {
-        data class OnImageChange(val imageUri: Uri) : TraineeSignUpUiEvent
-        data class OnNameChange(val name: String) : TraineeSignUpUiEvent
-        data class OnHeightChange(val height: String) : TraineeSignUpUiEvent
-        data class OnWeightChange(val weight: String) : TraineeSignUpUiEvent
-        data class OnBirthdayChange(val birthday: LocalDate) : TraineeSignUpUiEvent
-        data class OnPurposeSelected(val purpose: String) : TraineeSignUpUiEvent
-        data class OnCautionChange(val text: String) : TraineeSignUpUiEvent
-        data object OnNextClick : TraineeSignUpUiEvent
-        data object OnBackClick : TraineeSignUpUiEvent
+        data class OnChangeImage(val imageUri: Uri) : TraineeSignUpUiEvent
+        data class OnChangeName(val name: String) : TraineeSignUpUiEvent
+        data class OnChangeHeight(val height: String) : TraineeSignUpUiEvent
+        data class OnChangeWeight(val weight: String) : TraineeSignUpUiEvent
+        data class OnChangeBirthday(val birthday: LocalDate) : TraineeSignUpUiEvent
+        data class OnSelectPurpose(val purpose: String) : TraineeSignUpUiEvent
+        data class OnChangeCaution(val text: String) : TraineeSignUpUiEvent
+        data object OnClickNext : TraineeSignUpUiEvent
+        data object OnClickBack : TraineeSignUpUiEvent
         data class RequestSignUp(
-            val context: Context,
-            val imageUri: Uri?,
+            val imageFile: File?,
             val id: String,
             val email: String,
             val authType: String,

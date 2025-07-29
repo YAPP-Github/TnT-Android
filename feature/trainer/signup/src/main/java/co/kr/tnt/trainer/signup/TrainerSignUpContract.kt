@@ -1,11 +1,11 @@
 package co.kr.tnt.trainer.signup
 
-import android.content.Context
 import android.net.Uri
 import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import java.io.File
 
 internal class TrainerSignUpContract {
     data class TrainerSignUpUiState(
@@ -21,13 +21,12 @@ internal class TrainerSignUpContract {
     }
 
     sealed interface TrainerSignUpUiEvent : UiEvent {
-        data class OnImageChange(val imageUri: Uri) : TrainerSignUpUiEvent
-        data class OnNameChange(val name: String) : TrainerSignUpUiEvent
-        data object OnNextClick : TrainerSignUpUiEvent
-        data object OnBackClick : TrainerSignUpUiEvent
+        data class OnChangeImage(val imageUri: Uri) : TrainerSignUpUiEvent
+        data class OnChangeName(val name: String) : TrainerSignUpUiEvent
+        data object OnClickNext : TrainerSignUpUiEvent
+        data object OnClickBack : TrainerSignUpUiEvent
         data class RequestSignUp(
-            val context: Context,
-            val imageUri: Uri?,
+            val imageFile: File?,
             val id: String,
             val email: String,
             val authType: String,

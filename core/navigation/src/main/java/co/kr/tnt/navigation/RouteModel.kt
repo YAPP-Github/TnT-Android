@@ -112,7 +112,7 @@ sealed interface Route {
     data class TraineeMealRecord(val selectedDate: String) : Route
 
     @Serializable
-    data class TraineeMealRecordDetail(val id: Long) : Route
+    data class TraineeMealDetail(val id: Long) : Route
 
     @Serializable
     data class WebView(val url: String) : Route

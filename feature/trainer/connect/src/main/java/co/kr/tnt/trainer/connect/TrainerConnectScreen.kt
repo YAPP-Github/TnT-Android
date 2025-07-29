@@ -28,8 +28,8 @@ internal fun TrainerConnectRoute(
 
     TrainerConnectScreen(
         state = state,
-        onBackClick = { viewModel.setEvent(TrainerConnectUiEvent.OnBackClick) },
-        onNextClick = { viewModel.setEvent(TrainerConnectUiEvent.OnNextClick) },
+        onClickBack = { viewModel.setEvent(TrainerConnectUiEvent.OnClickBack) },
+        onClickNext = { viewModel.setEvent(TrainerConnectUiEvent.OnClickNext) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -46,20 +46,20 @@ internal fun TrainerConnectRoute(
 @Composable
 private fun TrainerConnectScreen(
     state: TrainerConnectUiState,
-    onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: () -> Unit,
 ) {
     when (state.page) {
         TrainerConnectPage.TrainerConnectComplete -> TrainerConnectCompletePage(
             state = state,
-            onBackClick = onBackClick,
-            onNextClick = onNextClick,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
 
         TrainerConnectPage.TraineeProfile -> TraineeProfilePage(
             state = state,
-            onNextClick = onNextClick,
-            onBackClick = onBackClick,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
     }
 }

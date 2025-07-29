@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
@@ -12,6 +11,7 @@ import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpEffect
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpPage
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiEvent
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
+import java.io.File
 import java.time.LocalDate
 
 @Composable
@@ -24,26 +24,24 @@ internal fun TraineeSignUpRoute(
     navigateToConnect: () -> Unit,
     viewModel: TraineeSignUpViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TraineeSignUpScreen(
         state = uiState,
-        onNameChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnNameChange(it)) },
-        onProfileImageSelect = { viewModel.setEvent(TraineeSignUpUiEvent.OnImageChange(it)) },
-        onHeightChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnHeightChange(it)) },
-        onWeightChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnWeightChange(it)) },
-        onBirthdayChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnBirthdayChange(it)) },
-        onPurposeSelected = { viewModel.setEvent(TraineeSignUpUiEvent.OnPurposeSelected(it)) },
-        onCautionChange = { viewModel.setEvent(TraineeSignUpUiEvent.OnCautionChange(it)) },
-        onBackClick = { viewModel.setEvent(TraineeSignUpUiEvent.OnBackClick) },
-        onNextClick = { viewModel.setEvent(TraineeSignUpUiEvent.OnNextClick) },
-        onSubmitSignUp = { uri ->
+        onChangeName = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeName(it)) },
+        onSelectProfileImage = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeImage(it)) },
+        onChangeHeight = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeHeight(it)) },
+        onChangeWeight = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeWeight(it)) },
+        onChangeBirthday = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeBirthday(it)) },
+        onSelectPurpose = { viewModel.setEvent(TraineeSignUpUiEvent.OnSelectPurpose(it)) },
+        onChangeCaution = { viewModel.setEvent(TraineeSignUpUiEvent.OnChangeCaution(it)) },
+        onClickBack = { viewModel.setEvent(TraineeSignUpUiEvent.OnClickBack) },
+        onClickNext = { viewModel.setEvent(TraineeSignUpUiEvent.OnClickNext) },
+        onSubmitSignUp = { file ->
             viewModel.setEvent(
                 TraineeSignUpUiEvent.RequestSignUp(
-                    context = context,
-                    imageUri = uri,
+                    imageFile = file,
                     id = authId,
                     email = email,
                     authType = authType,
@@ -67,53 +65,53 @@ internal fun TraineeSignUpRoute(
 @Composable
 private fun TraineeSignUpScreen(
     state: TraineeSignUpUiState,
-    onProfileImageSelect: (Uri) -> Unit,
-    onNameChange: (String) -> Unit,
-    onHeightChange: (String) -> Unit,
-    onWeightChange: (String) -> Unit,
-    onCautionChange: (String) -> Unit,
-    onBirthdayChange: (LocalDate) -> Unit,
-    onPurposeSelected: (String) -> Unit,
-    onSubmitSignUp: (Uri?) -> Unit,
-    onNextClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onSelectProfileImage: (imageUri: Uri) -> Unit,
+    onChangeName: (name: String) -> Unit,
+    onChangeHeight: (height: String) -> Unit,
+    onChangeWeight: (weight: String) -> Unit,
+    onChangeCaution: (caution: String) -> Unit,
+    onChangeBirthday: (birthday: LocalDate) -> Unit,
+    onSelectPurpose: (purpose: String) -> Unit,
+    onSubmitSignUp: (imageFile: File?) -> Unit,
+    onClickNext: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
     when (state.page) {
         TraineeSignUpPage.ProfileSetUp -> TraineeProfileSetupPage(
             state = state,
-            onProfileImageSelect = onProfileImageSelect,
-            onNameChange = onNameChange,
-            onBackClick = onBackClick,
-            onNextClick = onNextClick,
+            onProfileImageSelect = onSelectProfileImage,
+            onChangeName = onChangeName,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
 
         TraineeSignUpPage.BasicInfo -> TraineeBasicInfoPage(
             state = state,
-            onHeightChange = onHeightChange,
-            onWeightChange = onWeightChange,
-            onBirthdayChange = onBirthdayChange,
-            onBackClick = onBackClick,
-            onNextClick = onNextClick,
+            onChangeHeight = onChangeHeight,
+            onChangeWeight = onChangeWeight,
+            onChangeBirthday = onChangeBirthday,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
 
         TraineeSignUpPage.NoteForTrainer -> TraineeNoteForTrainerPage(
             caution = state.caution,
-            onCautionChange = onCautionChange,
-            onBackClick = onBackClick,
-            onNextClick = onNextClick,
+            onChangeCaution = onChangeCaution,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
 
         TraineeSignUpPage.PTPurpose -> TraineePTPurposePage(
             state = state,
-            onPurposeSelected = onPurposeSelected,
-            onBackClick = onBackClick,
-            onNextClick = onNextClick,
+            onSelectPurpose = onSelectPurpose,
+            onClickBack = onClickBack,
+            onClickNext = onClickNext,
         )
 
         TraineeSignUpPage.SignUpComplete -> TraineeSignUpCompletePage(
             state = state,
-            onBackClick = onBackClick,
-            onNextClick = onSubmitSignUp,
+            onClickBack = onClickBack,
+            onClickNext = onSubmitSignUp,
         )
     }
 }

@@ -11,7 +11,7 @@ internal class TraineeNotificationContract {
     ) : UiState
 
     sealed interface TraineeNotificationUiEvent : UiEvent {
-        data object OnBackClick : TraineeNotificationUiEvent
+        data object OnClickBack : TraineeNotificationUiEvent
     }
 
     sealed interface TraineeNotificationEffect : UiSideEffect {

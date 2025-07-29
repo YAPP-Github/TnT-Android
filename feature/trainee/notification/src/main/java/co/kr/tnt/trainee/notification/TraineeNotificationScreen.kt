@@ -37,7 +37,7 @@ internal fun TraineeNotificationRoute(
 
     TraineeNotificationScreen(
         state = uiState,
-        onBackClick = { viewModel.setEvent(TraineeNotificationUiEvent.OnBackClick) },
+        onClickBack = { viewModel.setEvent(TraineeNotificationUiEvent.OnClickBack) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -53,13 +53,13 @@ internal fun TraineeNotificationRoute(
 @Composable
 private fun TraineeNotificationScreen(
     state: TraineeNotificationUiState,
-    onBackClick: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             TnTTopBarWithBackButton(
                 title = stringResource(uiResource.string.notification),
-                onBackClick = onBackClick,
+                onBackClick = onClickBack,
                 showStoke = true,
             )
         },
@@ -124,7 +124,7 @@ private fun TraineeNotificationScreenPreview() {
             ),
         )
         TraineeNotificationScreen(
-            onBackClick = {},
+            onClickBack = {},
             state = TraineeNotificationUiState(notifications = sampleNotifications),
         )
     }

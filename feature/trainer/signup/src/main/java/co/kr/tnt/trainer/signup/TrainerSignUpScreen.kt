@@ -4,13 +4,13 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiEvent
 import co.kr.tnt.trainer.signup.TrainerSignUpContract.TrainerSignUpUiState
+import java.io.File
 
 @Composable
 internal fun TrainerSignUpRoute(
@@ -22,21 +22,19 @@ internal fun TrainerSignUpRoute(
     navigateToInvite: (ScreenMode) -> Unit,
     viewModel: TrainerSignUpViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerSignUpScreen(
         state = uiState,
-        onNameChange = { viewModel.setEvent(TrainerSignUpUiEvent.OnNameChange(it)) },
-        onProfileImageSelect = { viewModel.setEvent(TrainerSignUpUiEvent.OnImageChange(it)) },
-        onNextClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnNextClick) },
-        onBackClick = { viewModel.setEvent(TrainerSignUpUiEvent.OnBackClick) },
-        onSubmitSignUp = { uri ->
+        onChangeName = { viewModel.setEvent(TrainerSignUpUiEvent.OnChangeName(it)) },
+        onSelectProfileImage = { viewModel.setEvent(TrainerSignUpUiEvent.OnChangeImage(it)) },
+        onClickNext = { viewModel.setEvent(TrainerSignUpUiEvent.OnClickNext) },
+        onClickBack = { viewModel.setEvent(TrainerSignUpUiEvent.OnClickBack) },
+        onSubmitSignUp = { file ->
             viewModel.setEvent(
                 TrainerSignUpUiEvent.RequestSignUp(
-                    context = context,
-                    imageUri = uri,
+                    imageFile = file,
                     id = authId,
                     email = email,
                     authType = authType,
@@ -60,25 +58,25 @@ internal fun TrainerSignUpRoute(
 @Composable
 private fun TrainerSignUpScreen(
     state: TrainerSignUpUiState,
-    onProfileImageSelect: (Uri) -> Unit,
-    onNameChange: (String) -> Unit,
-    onSubmitSignUp: (Uri?) -> Unit,
-    onNextClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onSelectProfileImage: (imageUri: Uri) -> Unit,
+    onChangeName: (name: String) -> Unit,
+    onSubmitSignUp: (imageFile: File?) -> Unit,
+    onClickNext: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
     when (state.page) {
         TrainerSignUpContract.TrainerSignUpPage.ProfileSetUp -> TrainerProfileSetupPage(
             state = state,
-            onProfileImageSelect = onProfileImageSelect,
-            onNameChange = onNameChange,
-            onNextClick = onNextClick,
-            onBackClick = onBackClick,
+            onSelectProfileImage = onSelectProfileImage,
+            onChangeName = onChangeName,
+            onClickNext = onClickNext,
+            onClickBack = onClickBack,
         )
 
         TrainerSignUpContract.TrainerSignUpPage.SignUpComplete -> TrainerSignUpCompletePage(
             state = state,
-            onNextClick = onSubmitSignUp,
-            onBackClick = onBackClick,
+            onClickNext = onSubmitSignUp,
+            onClickBack = onClickBack,
         )
     }
 }
