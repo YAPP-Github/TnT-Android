@@ -139,7 +139,7 @@ internal fun TraineeHomeRoute(
             rightButtonText = stringResource(core_connect),
             onLeftButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissDialog) },
             onRightButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnConfirmConnectDialog) },
-            onCheckClick = { viewModel.setEvent(TraineeHomeUiEvent.OnChangeHideDialogOption) },
+            onClickCheck = { viewModel.setEvent(TraineeHomeUiEvent.OnChangeHideDialogOption) },
             onDismiss = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissDialog) },
         )
     }

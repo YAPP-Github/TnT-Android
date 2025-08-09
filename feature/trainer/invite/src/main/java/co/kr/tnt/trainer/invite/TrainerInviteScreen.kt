@@ -60,10 +60,10 @@ internal fun TrainerInviteRoute(
     TrainerInviteScreen(
         state = state,
         screenMode = screenMode,
-        onRegenerateClick = { viewModel.setEvent(TrainerInviteUiEvent.OnRegenerateClick) },
-        onCodeClick = { code -> viewModel.setEvent(TrainerInviteUiEvent.OnCodeClick(code)) },
-        onBackClick = { viewModel.setEvent(TrainerInviteUiEvent.OnBackClick) },
-        onSkipClick = { viewModel.setEvent(TrainerInviteUiEvent.OnSkipClick) },
+        onClickRegenerate = { viewModel.setEvent(TrainerInviteUiEvent.OnClickRegenerate) },
+        onClickCode = { code -> viewModel.setEvent(TrainerInviteUiEvent.OnClickCode(code)) },
+        onClickBack = { viewModel.setEvent(TrainerInviteUiEvent.OnClickBack) },
+        onClickSkip = { viewModel.setEvent(TrainerInviteUiEvent.OnClickSkip) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -83,16 +83,16 @@ internal fun TrainerInviteRoute(
 internal fun TrainerInviteScreen(
     state: TrainerInviteUiState,
     screenMode: ScreenMode,
-    onCodeClick: (code: String) -> Unit,
-    onRegenerateClick: () -> Unit,
-    onBackClick: () -> Unit,
-    onSkipClick: () -> Unit,
+    onClickCode: (code: String) -> Unit,
+    onClickRegenerate: () -> Unit,
+    onClickBack: () -> Unit,
+    onClickSkip: () -> Unit,
 ) {
     BackHandler {
         when (screenMode) {
-            ScreenMode.BACK -> onBackClick()
-            ScreenMode.SKIP -> onSkipClick()
-            ScreenMode.CLOSE -> onBackClick()
+            ScreenMode.BACK -> onClickBack()
+            ScreenMode.SKIP -> onClickSkip()
+            ScreenMode.CLOSE -> onClickBack()
         }
     }
 
@@ -102,7 +102,7 @@ internal fun TrainerInviteScreen(
                 ScreenMode.BACK -> {
                     TnTTopBarWithBackButton(
                         title = stringResource(R.string.add_member),
-                        onBackClick = onBackClick,
+                        onBackClick = onClickBack,
                     )
                 }
 
@@ -115,7 +115,7 @@ internal fun TrainerInviteScreen(
                                 color = TnTTheme.colors.neutralColors.Neutral400,
                                 style = TnTTheme.typography.body2Medium,
                                 modifier = Modifier.clickable {
-                                    onSkipClick()
+                                    onClickSkip()
                                 },
                             )
                         },
@@ -127,7 +127,7 @@ internal fun TrainerInviteScreen(
                         title = stringResource(R.string.add_member),
                         trailingComponent = {
                             IconButton(
-                                onClick = onBackClick,
+                                onClick = onClickBack,
                             ) {
                                 Icon(
                                     painter = painterResource(co.kr.tnt.core.designsystem.R.drawable.ic_delete),
@@ -175,7 +175,7 @@ internal fun TrainerInviteScreen(
                                 color = TnTTheme.colors.neutralColors.Neutral600,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .clickable { onCodeClick(state.inviteCode) },
+                                    .clickable { onClickCode(state.inviteCode) },
                             )
                             HorizontalDivider(
                                 thickness = 1.dp,
@@ -193,7 +193,7 @@ internal fun TrainerInviteScreen(
                                     text = stringResource(R.string.code_reissue),
                                     size = ButtonSize.Small,
                                     type = ButtonType.Gray,
-                                    onClick = { onRegenerateClick() },
+                                    onClick = { onClickRegenerate() },
                                 )
                             },
                         )
@@ -210,10 +210,10 @@ private fun CodeGenerationPagePreview() {
     TnTTheme {
         TrainerInviteScreen(
             state = TrainerInviteUiState(),
-            onCodeClick = {},
-            onBackClick = {},
-            onSkipClick = {},
-            onRegenerateClick = {},
+            onClickCode = {},
+            onClickBack = {},
+            onClickSkip = {},
+            onClickRegenerate = {},
             screenMode = ScreenMode.SKIP,
         )
     }

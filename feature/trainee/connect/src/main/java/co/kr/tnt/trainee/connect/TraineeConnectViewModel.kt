@@ -26,25 +26,21 @@ internal class TraineeConnectViewModel @Inject constructor(
         ) {
         override suspend fun handleEvent(event: TraineeConnectUiEvent) {
             when (event) {
-                is TraineeConnectUiEvent.OnCodeValidateClick -> validateInviteCode(event.code)
-                is TraineeConnectUiEvent.OnChangeInviteCode -> handleChangeInviteCode(event.code)
+                is TraineeConnectUiEvent.OnClickValidateCode -> validateInviteCode(event.code)
+                is TraineeConnectUiEvent.OnChangeInviteCode -> handleInviteCodeChange(event.code)
                 is TraineeConnectUiEvent.OnChangeSessionStartDate -> updateState { copy(sessionStartDate = event.date) }
-                TraineeConnectUiEvent.OnChangeDialogState -> handleChangeDialogState()
+                TraineeConnectUiEvent.OnChangeDialogState -> handleDialogState()
                 is TraineeConnectUiEvent.OnChangeCompletedSessionCount -> updateState {
-                    copy(
-                        completedSessionCount = event.count,
-                    )
+                    copy(completedSessionCount = event.count)
                 }
 
                 is TraineeConnectUiEvent.OnChangeTotalSessionCount -> updateState {
-                    copy(
-                        totalSessionCount = event.count,
-                    )
+                    copy(totalSessionCount = event.count)
                 }
 
-                is TraineeConnectUiEvent.OnNextClick -> handleNextClick()
-                TraineeConnectUiEvent.OnBackClick -> navigateToBack()
-                TraineeConnectUiEvent.OnSkipClick -> navigateToHome()
+                is TraineeConnectUiEvent.OnClickNext -> handleNextClick()
+                TraineeConnectUiEvent.OnClickBack -> navigateToBack()
+                TraineeConnectUiEvent.OnClickSkip -> navigateToHome()
             }
         }
 
@@ -68,7 +64,7 @@ internal class TraineeConnectViewModel @Inject constructor(
             }
         }
 
-        private fun handleChangeInviteCode(inviteCode: String) {
+        private fun handleInviteCodeChange(inviteCode: String) {
             updateState {
                 copy(
                     inviteCode = inviteCode,
@@ -119,7 +115,7 @@ internal class TraineeConnectViewModel @Inject constructor(
 
         private fun navigateToBack() {
             if (currentState.page == TraineeConnectPage.firstPage) {
-                handleChangeDialogState()
+                handleDialogState()
                 sendEffect(TraineeConnectSideEffect.NavigateToBack)
                 return
             }
@@ -132,10 +128,11 @@ internal class TraineeConnectViewModel @Inject constructor(
             updateState { copy(page = TraineeConnectPage.getPreviousPage(currentState.page)) }
         }
 
-        private fun handleChangeDialogState() {
+        private fun handleDialogState() {
             if (currentState.inviteCodeInputState == VALID) {
                 updateState { copy(showDialog = !showDialog) }
             } else {
+                updateState { copy(showDialog = false) }
                 sendEffect(TraineeConnectSideEffect.NavigateToBack)
                 return
             }

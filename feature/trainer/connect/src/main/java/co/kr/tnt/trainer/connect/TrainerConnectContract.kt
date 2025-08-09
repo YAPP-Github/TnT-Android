@@ -18,8 +18,8 @@ internal class TrainerConnectContract {
             val trainerId: String,
             val traineeId: String,
         ) : TrainerConnectUiEvent
-        data object OnNextClick : TrainerConnectUiEvent
-        data object OnBackClick : TrainerConnectUiEvent
+        data object OnClickNext : TrainerConnectUiEvent
+        data object OnClickBack : TrainerConnectUiEvent
     }
 
     sealed interface TrainerConnectSideEffect : UiSideEffect {

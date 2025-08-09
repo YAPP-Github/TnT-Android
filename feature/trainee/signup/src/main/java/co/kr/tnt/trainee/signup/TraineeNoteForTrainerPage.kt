@@ -31,14 +31,14 @@ private const val MAX_LENGTH = 100
 @Composable
 internal fun TraineeNoteForTrainerPage(
     caution: String?,
-    onCautionChange: (String) -> Unit,
-    onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onChangeCaution: (String) -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: () -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onClickBack) },
         containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
@@ -60,7 +60,7 @@ internal fun TraineeNoteForTrainerPage(
                 TnTOutlinedTextField(
                     value = caution ?: "",
                     onValueChange = { newValue ->
-                        onCautionChange(newValue)
+                        onChangeCaution(newValue)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
                     isError = (caution?.length ?: 0) >= MAX_LENGTH,
@@ -72,7 +72,7 @@ internal fun TraineeNoteForTrainerPage(
                 text = stringResource(core_next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = (caution?.length ?: 0) < MAX_LENGTH,
-                onClick = onNextClick,
+                onClick = onClickNext,
             )
         }
     }
@@ -84,9 +84,9 @@ private fun TraineeNoteForTrainerPagePreview() {
     TnTTheme {
         TraineeNoteForTrainerPage(
             caution = "",
-            onBackClick = {},
-            onNextClick = {},
-            onCautionChange = {},
+            onClickBack = {},
+            onClickNext = {},
+            onChangeCaution = {},
         )
     }
 }

@@ -11,7 +11,7 @@ internal class RoleSelectionContract {
     ) : UiState
 
     sealed interface RoleSelectionUiEvent : UiEvent {
-        data class OnNextClick(val role: RoleState) : RoleSelectionUiEvent
+        data class OnClickNext(val role: RoleState) : RoleSelectionUiEvent
     }
 
     sealed interface RoleSelectionEffect : UiSideEffect {

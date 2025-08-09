@@ -49,19 +49,19 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun TraineeBasicInfoPage(
     state: TraineeSignUpUiState,
-    onHeightChange: (String) -> Unit,
-    onWeightChange: (String) -> Unit,
-    onBirthdayChange: (LocalDate) -> Unit,
-    onBackClick: () -> Unit,
-    onNextClick: () -> Unit,
+    onChangeHeight: (String) -> Unit,
+    onChangeWeight: (String) -> Unit,
+    onChangeBirthday: (LocalDate) -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: () -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     val context = LocalContext.current
     val today = LocalDate.now()
 
     Scaffold(
-        topBar = { TnTTopBarWithBackButton(onBackClick = onBackClick) },
+        topBar = { TnTTopBarWithBackButton(onBackClick = onClickBack) },
         containerColor = TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.clearFocusOnTap(),
     ) { innerPadding ->
@@ -91,7 +91,7 @@ internal fun TraineeBasicInfoPage(
                     context = context,
                     today = today,
                     selectedDate = state.birthday,
-                    onDateSelected = onBirthdayChange,
+                    onDateSelected = onChangeBirthday,
                 )
                 HorizontalDivider(
                     thickness = 1.dp,
@@ -116,7 +116,7 @@ internal fun TraineeBasicInfoPage(
                         trailingComponent = {
                             UnitLabel(core_height_unit)
                         },
-                        onValueChange = onHeightChange,
+                        onValueChange = onChangeHeight,
                         modifier = Modifier.weight(1f),
                     )
                     TnTLabeledTextField(
@@ -130,7 +130,7 @@ internal fun TraineeBasicInfoPage(
                         trailingComponent = {
                             UnitLabel(core_weight_unit)
                         },
-                        onValueChange = onWeightChange,
+                        onValueChange = onChangeWeight,
                         modifier = Modifier.weight(1f),
                     )
                 }
@@ -139,7 +139,7 @@ internal fun TraineeBasicInfoPage(
                 text = stringResource(core_next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = state.isBasicInfoValid,
-                onClick = onNextClick,
+                onClick = onClickNext,
             )
         }
     }
@@ -212,11 +212,11 @@ private fun TraineeBasicInfoPagePreview() {
     TnTTheme {
         TraineeBasicInfoPage(
             state = TraineeSignUpUiState(),
-            onBackClick = {},
-            onNextClick = {},
-            onHeightChange = {},
-            onWeightChange = {},
-            onBirthdayChange = {},
+            onClickBack = {},
+            onClickNext = {},
+            onChangeHeight = {},
+            onChangeWeight = {},
+            onChangeBirthday = {},
         )
     }
 }

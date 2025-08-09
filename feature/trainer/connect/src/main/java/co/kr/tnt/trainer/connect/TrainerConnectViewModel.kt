@@ -28,8 +28,8 @@ internal class TrainerConnectViewModel @Inject constructor(
                 event.traineeId,
             )
 
-            TrainerConnectUiEvent.OnNextClick -> navigateToNext()
-            TrainerConnectUiEvent.OnBackClick -> navigateToBack()
+            TrainerConnectUiEvent.OnClickNext -> navigateToNext()
+            TrainerConnectUiEvent.OnClickBack -> navigateToBack()
         }
     }
 

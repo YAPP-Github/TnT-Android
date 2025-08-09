@@ -32,7 +32,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 @Composable
 fun TnTCheckToggle(
     isChecked: Boolean = false,
-    onCheckClick: () -> Unit,
+    onClickCheck: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val icon = if (isChecked) {
@@ -47,7 +47,7 @@ fun TnTCheckToggle(
         modifier = modifier
             .size(24.dp)
             .clip(CircleShape)
-            .clickable(onClick = onCheckClick),
+            .clickable(onClick = onClickCheck),
     )
 }
 
@@ -96,7 +96,7 @@ private fun TnTCheckTogglePreview() {
 
         TnTCheckToggle(
             isChecked = isChecked,
-            onCheckClick = { isChecked = !isChecked },
+            onClickCheck = { isChecked = !isChecked },
         )
     }
 }

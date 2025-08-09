@@ -21,11 +21,10 @@ internal class TrainerInviteViewModel @Inject constructor(
     ) {
     override suspend fun handleEvent(event: TrainerInviteUiEvent) {
         when (event) {
-            TrainerInviteUiEvent.OnRegenerateClick -> regenerateCode()
-            TrainerInviteUiEvent.OnRegenerateClick -> generateCode()
-            TrainerInviteUiEvent.OnBackClick -> navigateToBack()
-            TrainerInviteUiEvent.OnSkipClick -> navigateToHome()
-            is TrainerInviteUiEvent.OnCodeClick -> {
+            TrainerInviteUiEvent.OnClickRegenerate -> regenerateCode()
+            TrainerInviteUiEvent.OnClickBack -> navigateToBack()
+            TrainerInviteUiEvent.OnClickSkip -> navigateToHome()
+            is TrainerInviteUiEvent.OnClickCode -> {
                 sendEffect(TrainerInviteSideEffect.CopyToClipBoard(event.code))
                 sendEffect(
                     TrainerInviteSideEffect.ShowToast(

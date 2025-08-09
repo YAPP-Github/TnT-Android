@@ -41,10 +41,10 @@ import co.kr.tnt.core.ui.R as uiResource
 @Composable
 internal fun TrainerConnectCompletePage(
     state: TrainerConnectUiState,
-    onNextClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: () -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
     val context = LocalContext.current
 
     Scaffold { innerPadding ->
@@ -98,7 +98,7 @@ internal fun TrainerConnectCompletePage(
             }
             TnTBottomButton(
                 text = stringResource(core_next),
-                onClick = onNextClick,
+                onClick = onClickNext,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
@@ -147,8 +147,8 @@ private fun TrainerConnectCompletePagePreview() {
     TnTTheme {
         TrainerConnectCompletePage(
             state = TrainerConnectUiState(),
-            onNextClick = {},
-            onBackClick = {},
+            onClickNext = {},
+            onClickBack = {},
         )
     }
 }

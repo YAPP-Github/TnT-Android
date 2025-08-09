@@ -39,10 +39,10 @@ import java.io.File
 @Composable
 internal fun TrainerSignUpCompletePage(
     state: TrainerSignUpUiState,
-    onBackClick: () -> Unit,
-    onNextClick: (image: File?) -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: (image: File?) -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -93,7 +93,7 @@ internal fun TrainerSignUpCompletePage(
                         val imageFile = withContext(Dispatchers.IO) {
                             state.image?.convertToAllowedImageFormat(context)
                         }
-                        onNextClick(imageFile)
+                        onClickNext(imageFile)
                     }
                 },
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -110,8 +110,8 @@ internal fun TrainerSignUpCompletePage(
 private fun TrainerSignUpCompletePagePreview() {
     TnTTheme {
         TrainerSignUpCompletePage(
-            onBackClick = {},
-            onNextClick = {},
+            onClickBack = {},
+            onClickNext = {},
             state = TrainerSignUpUiState(),
         )
     }

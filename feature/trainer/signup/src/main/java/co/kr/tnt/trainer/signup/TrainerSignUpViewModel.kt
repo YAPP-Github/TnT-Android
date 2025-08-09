@@ -26,10 +26,10 @@ internal class TrainerSignUpViewModel @Inject constructor(
     ) {
     override suspend fun handleEvent(event: TrainerSignUpUiEvent) {
         when (event) {
-            is TrainerSignUpUiEvent.OnImageChange -> setProfileImage(event.imageUri)
-            is TrainerSignUpUiEvent.OnNameChange -> setName(event.name)
-            TrainerSignUpUiEvent.OnNextClick -> navigateToNext()
-            TrainerSignUpUiEvent.OnBackClick -> navigateToBack()
+            is TrainerSignUpUiEvent.OnChangeImage -> setProfileImage(event.imageUri)
+            is TrainerSignUpUiEvent.OnChangeName -> setName(event.name)
+            TrainerSignUpUiEvent.OnClickNext -> navigateToNext()
+            TrainerSignUpUiEvent.OnClickBack -> navigateToBack()
             is TrainerSignUpUiEvent.RequestSignUp -> signUp(
                 imageFile = event.imageFile,
                 id = event.id,

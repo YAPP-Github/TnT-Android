@@ -41,7 +41,7 @@ fun TnTCheckToggleDialog(
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
     cancelable: Boolean = false,
-    onCheckClick: () -> Unit,
+    onClickCheck: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     Dialog(
@@ -88,7 +88,7 @@ fun TnTCheckToggleDialog(
                 ) {
                     TnTCheckToggle(
                         isChecked = isChecked,
-                        onCheckClick = onCheckClick,
+                        onClickCheck = onClickCheck,
                     )
                     Text(
                         text = checkToggleText,
@@ -96,7 +96,7 @@ fun TnTCheckToggleDialog(
                         color = TnTTheme.colors.neutralColors.Neutral500,
                         modifier = Modifier
                             .padding(start = 4.dp)
-                            .clickable(onClick = onCheckClick),
+                            .clickable(onClick = onClickCheck),
                     )
                 }
                 Row(
@@ -135,7 +135,7 @@ private fun TnTCheckToggleDialogPreview() {
             isChecked = isChecked,
             onLeftButtonClick = {},
             onRightButtonClick = {},
-            onCheckClick = { isChecked = !isChecked },
+            onClickCheck = { isChecked = !isChecked },
             leftButtonText = "다음에",
             rightButtonText = "연결하기",
             onDismiss = {},

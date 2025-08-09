@@ -45,7 +45,7 @@ internal fun RoleSelectionRoute(
     navigateToTrainerSignUp: () -> Unit,
 ) {
     RoleSelectionScreen(
-        onNextClick = { viewModel.setEvent(RoleSelectionUiEvent.OnNextClick(it)) },
+        onClickNext = { viewModel.setEvent(RoleSelectionUiEvent.OnClickNext(it)) },
     )
 
     LaunchedEffect(viewModel.effect) {
@@ -60,7 +60,7 @@ internal fun RoleSelectionRoute(
 
 @Composable
 fun RoleSelectionScreen(
-    onNextClick: (RoleState) -> Unit = {},
+    onClickNext: (RoleState) -> Unit = {},
 ) {
     var selectedRole by remember { mutableStateOf(RoleState.fromDomain(UserType.TRAINER)) }
 
@@ -69,7 +69,7 @@ fun RoleSelectionScreen(
             TnTBottomButton(
                 text = stringResource(core_next),
                 enabled = true,
-                onClick = { onNextClick(selectedRole) },
+                onClick = { onClickNext(selectedRole) },
                 modifier = Modifier.navigationBarsPadding(),
             )
         },
@@ -112,7 +112,11 @@ fun RoleSelectionScreen(
                     text = stringResource(RoleState.Trainer.textResId),
                     modifier = Modifier.weight(1f),
                     size = ButtonSize.Large,
-                    type = if (selectedRole == RoleState.Trainer) ButtonType.RedOutline else ButtonType.GrayOutline,
+                    type = if (selectedRole == RoleState.Trainer) {
+                        ButtonType.RedOutline
+                    } else {
+                        ButtonType.GrayOutline
+                    },
                     onClick = {
                         selectedRole = RoleState.Trainer
                     },
@@ -121,7 +125,11 @@ fun RoleSelectionScreen(
                     text = stringResource(RoleState.Trainee.textResId),
                     modifier = Modifier.weight(1f),
                     size = ButtonSize.Large,
-                    type = if (selectedRole == RoleState.Trainee) ButtonType.RedOutline else ButtonType.GrayOutline,
+                    type = if (selectedRole == RoleState.Trainee) {
+                        ButtonType.RedOutline
+                    } else {
+                        ButtonType.GrayOutline
+                    },
                     onClick = {
                         selectedRole = RoleState.Trainee
                     },
@@ -137,7 +145,7 @@ fun RoleSelectionScreen(
 private fun RoleScreenPreview() {
     TnTTheme {
         RoleSelectionScreen(
-            onNextClick = {},
+            onClickNext = { },
         )
     }
 }

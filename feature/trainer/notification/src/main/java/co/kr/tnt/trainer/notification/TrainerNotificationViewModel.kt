@@ -20,8 +20,8 @@ internal class TrainerNotificationViewModel @Inject constructor() :
 
         override suspend fun handleEvent(event: TrainerNotificationUiEvent) {
             when (event) {
-                TrainerNotificationUiEvent.OnBackClick -> navigateToBack()
-                TrainerNotificationUiEvent.OnLinkNotificationClick -> navigateToConnect()
+                TrainerNotificationUiEvent.OnClickBack -> navigateToBack()
+                TrainerNotificationUiEvent.OnClickConnectionNotice -> navigateToConnect()
             }
         }
 

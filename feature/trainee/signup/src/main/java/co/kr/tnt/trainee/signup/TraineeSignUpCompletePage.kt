@@ -40,10 +40,10 @@ import java.io.File
 @Composable
 internal fun TraineeSignUpCompletePage(
     state: TraineeSignUpUiState,
-    onBackClick: () -> Unit,
-    onNextClick: (image: File?) -> Unit,
+    onClickBack: () -> Unit,
+    onClickNext: (image: File?) -> Unit,
 ) {
-    BackHandler { onBackClick() }
+    BackHandler { onClickBack() }
 
     val context = LocalContext.current
     val completeState = remember { mutableStateOf(false) }
@@ -53,7 +53,7 @@ internal fun TraineeSignUpCompletePage(
             val imageFile = withContext(Dispatchers.IO) {
                 state.image?.convertToAllowedImageFormat(context)
             }
-            onNextClick(imageFile)
+            onClickNext(imageFile)
             completeState.value = false
         }
     }
@@ -115,8 +115,8 @@ internal fun TraineeSignUpCompletePage(
 private fun TraineeSignUpCompletePagePreview() {
     TnTTheme {
         TraineeSignUpCompletePage(
-            onBackClick = {},
-            onNextClick = {},
+            onClickBack = {},
+            onClickNext = {},
             state = TraineeSignUpUiState(name = "김회원"),
         )
     }
