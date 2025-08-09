@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
@@ -51,7 +52,6 @@ import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.LoginResult
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.login.R
-import co.kr.tnt.feature.login.R.string.core_next
 import co.kr.tnt.login.LoginContract.LoginSideEffect
 import co.kr.tnt.login.LoginContract.LoginUiEvent
 import co.kr.tnt.login.LoginContract.LoginUiState

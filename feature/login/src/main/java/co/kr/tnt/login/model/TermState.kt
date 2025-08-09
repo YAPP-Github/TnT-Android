@@ -1,9 +1,10 @@
 package co.kr.tnt.login.model
 
 import androidx.annotation.StringRes
+import co.kr.tnt.core.ui.R.string.core_privacy_policy
+import co.kr.tnt.core.ui.R.string.core_terms_of_service
 import co.kr.tnt.domain.model.Term
 import co.kr.tnt.domain.utils.AppUrls
-import co.kr.tnt.feature.login.R
 
 sealed class TermState(
     @StringRes val titleRes: Int,
@@ -14,14 +15,14 @@ sealed class TermState(
     data class TermsOfServiceState(
         override val isRequired: Boolean,
     ) : TermState(
-            titleRes = R.string.core_terms_of_service,
+            titleRes = core_terms_of_service,
             link = AppUrls.TERMS_OF_SERVICE_URL,
         )
 
     data class PrivacyPolicyState(
         override val isRequired: Boolean,
     ) : TermState(
-            titleRes = R.string.core_privacy_policy,
+            titleRes = core_privacy_policy,
             link = AppUrls.PRIVACY_POLICY_URL,
         )
 
