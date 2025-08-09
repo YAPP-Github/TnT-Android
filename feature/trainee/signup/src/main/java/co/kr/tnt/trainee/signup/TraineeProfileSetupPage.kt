@@ -24,6 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_name
+import co.kr.tnt.core.ui.R.string.core_next
+import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
 import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
@@ -38,7 +41,6 @@ import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.DefaultUserProfile
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TraineeProfileSetupPage(
@@ -98,7 +100,7 @@ internal fun TraineeProfileSetupPage(
                 )
                 Spacer(Modifier.padding(top = 60.dp))
                 TnTLabeledTextFieldWithCounter(
-                    title = stringResource(coreR.string.name),
+                    title = stringResource(core_name),
                     value = state.name,
                     onValueChange = { newValue ->
                         onChangeName(newValue)
@@ -110,13 +112,13 @@ internal fun TraineeProfileSetupPage(
                     showWarning = !state.isNameValid,
                     isRequired = true,
                     warningMessage = stringResource(
-                        coreR.string.text_length_and_format_warning,
+                        core_text_length_and_format_warning,
                         UserProfilePolicy.USER_NAME_MAX_LENGTH,
                     ),
                 )
             }
             TnTBottomButton(
-                text = stringResource(coreR.string.next),
+                text = stringResource(core_next),
                 enabled = state.name.isNotBlank() && state.isNameValid,
                 onClick = onClickNext,
                 modifier = Modifier.align(Alignment.BottomCenter),

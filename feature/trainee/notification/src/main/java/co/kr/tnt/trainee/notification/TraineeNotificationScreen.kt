@@ -13,10 +13,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.ui.R.string.core_no_recent_notifications
+import co.kr.tnt.core.ui.R.string.core_notification
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.notification.TnTNotification
 import co.kr.tnt.designsystem.component.notification.model.NotificationIcon
@@ -25,13 +28,13 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiEvent
 import co.kr.tnt.trainee.notification.TraineeNotificationContract.TraineeNotificationUiState
 import co.kr.tnt.ui.model.NotificationState
-import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun TraineeNotificationRoute(
     navigateToPrevious: () -> Unit,
     viewModel: TraineeNotificationViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -44,7 +47,9 @@ internal fun TraineeNotificationRoute(
         viewModel.effect.collect { effect ->
             when (effect) {
                 TraineeNotificationContract.TraineeNotificationEffect.NavigateToPrevious -> navigateToPrevious()
-                is TraineeNotificationContract.TraineeNotificationEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeNotificationContract.TraineeNotificationEffect.ShowToast -> snackbar.show(
+                    effect.message.asString(context),
+                )
             }
         }
     }
@@ -58,7 +63,7 @@ private fun TraineeNotificationScreen(
     Scaffold(
         topBar = {
             TnTTopBarWithBackButton(
-                title = stringResource(uiResource.string.notification),
+                title = stringResource(core_notification),
                 onBackClick = onClickBack,
                 showStoke = true,
             )
@@ -72,7 +77,7 @@ private fun TraineeNotificationScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = stringResource(uiResource.string.no_recent_notifications),
+                        text = stringResource(core_no_recent_notifications),
                         style = TnTTheme.typography.label1Medium,
                         color = TnTTheme.colors.neutralColors.Neutral400,
                     )

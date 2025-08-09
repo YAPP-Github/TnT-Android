@@ -27,6 +27,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.ui.R.string.core_app_push_notification
+import co.kr.tnt.core.ui.R.string.core_app_version
+import co.kr.tnt.core.ui.R.string.core_cancel
+import co.kr.tnt.core.ui.R.string.core_delete_account
+import co.kr.tnt.core.ui.R.string.core_logout
+import co.kr.tnt.core.ui.R.string.core_logout_complete_title
+import co.kr.tnt.core.ui.R.string.core_logout_content
+import co.kr.tnt.core.ui.R.string.core_logout_title
+import co.kr.tnt.core.ui.R.string.core_ok
+import co.kr.tnt.core.ui.R.string.core_open_source_license
+import co.kr.tnt.core.ui.R.string.core_privacy_policy
+import co.kr.tnt.core.ui.R.string.core_terms_of_service
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
@@ -54,7 +66,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import java.time.LocalDate
-import co.kr.tnt.core.ui.R as coreR
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -106,7 +117,7 @@ internal fun TraineeMyPageRoute(
             when (effect) {
                 TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(ScreenMode.BACK)
                 TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
-                is TraineeMyPageEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeMyPageEffect.ShowToast -> snackbar.show(effect.message.asString(context))
                 is TraineeMyPageEffect.NavigateToWebView -> navigateToWebView(effect.url)
                 is TraineeMyPageEffect.RequestPermission -> {
                     if (effect.isExplicitlyDenied) {
@@ -182,7 +193,7 @@ private fun TraineeMyPageScreen(
                 )
             }
             TnTMyPageButton(
-                text = stringResource(coreR.string.app_push_notification),
+                text = stringResource(core_app_push_notification),
                 verticalPadding = 12.dp,
                 enabled = false,
                 trailingComponent = {
@@ -199,17 +210,17 @@ private fun TraineeMyPageScreen(
                     .padding(vertical = 12.dp),
             ) {
                 TnTMyPageButton(
-                    text = stringResource(coreR.string.terms_of_service),
+                    text = stringResource(core_terms_of_service),
                     onClick = onClickTermsOfService,
                     verticalPadding = 8.dp,
                 )
                 TnTMyPageButton(
-                    text = stringResource(coreR.string.privacy_policy),
+                    text = stringResource(core_privacy_policy),
                     onClick = onClickPrivacy,
                     verticalPadding = 8.dp,
                 )
                 TnTMyPageButton(
-                    text = stringResource(coreR.string.app_version),
+                    text = stringResource(core_app_version),
                     verticalPadding = 12.dp,
                     enabled = false,
                     trailingComponent = {
@@ -221,7 +232,7 @@ private fun TraineeMyPageScreen(
                     },
                 )
                 TnTMyPageButton(
-                    text = stringResource(coreR.string.open_source_license),
+                    text = stringResource(core_open_source_license),
                     onClick = onClickOpenSource,
                     verticalPadding = 8.dp,
                 )
@@ -234,12 +245,12 @@ private fun TraineeMyPageScreen(
                     .padding(vertical = 12.dp),
             ) {
                 TnTMyPageButton(
-                    text = stringResource(coreR.string.logout),
+                    text = stringResource(core_logout),
                     onClick = onClickLogout,
                     verticalPadding = 8.dp,
                 )
                 TnTMyPageButton(
-                    text = stringResource(coreR.string.delete_account),
+                    text = stringResource(core_delete_account),
                     onClick = onClickDeleteAccount,
                     verticalPadding = 8.dp,
                 )
@@ -258,10 +269,10 @@ private fun Dialog(
         DialogState.NONE -> Unit
         DialogState.LOGOUT_CONFIRM -> {
             TnTIconPopupDialog(
-                title = stringResource(coreR.string.logout_title),
-                content = stringResource(coreR.string.logout_content),
-                leftButtonText = stringResource(coreR.string.cancel),
-                rightButtonText = stringResource(coreR.string.ok),
+                title = stringResource(core_logout_title),
+                content = stringResource(core_logout_content),
+                leftButtonText = stringResource(core_cancel),
+                rightButtonText = stringResource(core_ok),
                 onLeftButtonClick = onDismissDialog,
                 onRightButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
@@ -270,9 +281,9 @@ private fun Dialog(
 
         DialogState.LOGOUT -> {
             TnTSingleButtonPopupDialog(
-                title = stringResource(coreR.string.logout_complete_title),
-                content = stringResource(coreR.string.logout_content),
-                buttonText = stringResource(coreR.string.ok),
+                title = stringResource(core_logout_complete_title),
+                content = stringResource(core_logout_content),
+                buttonText = stringResource(core_ok),
                 cancelable = false,
                 onButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
@@ -283,8 +294,8 @@ private fun Dialog(
             TnTIconPopupDialog(
                 title = stringResource(R.string.delete_account_title),
                 content = stringResource(R.string.delete_account_content),
-                leftButtonText = stringResource(coreR.string.cancel),
-                rightButtonText = stringResource(coreR.string.ok),
+                leftButtonText = stringResource(core_cancel),
+                rightButtonText = stringResource(core_ok),
                 onLeftButtonClick = onDismissDialog,
                 onRightButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
@@ -295,7 +306,7 @@ private fun Dialog(
             TnTSingleButtonPopupDialog(
                 title = stringResource(R.string.delete_account_complete_title),
                 content = stringResource(R.string.delete_account_complete_content),
-                buttonText = stringResource(coreR.string.ok),
+                buttonText = stringResource(core_ok),
                 cancelable = false,
                 onButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,

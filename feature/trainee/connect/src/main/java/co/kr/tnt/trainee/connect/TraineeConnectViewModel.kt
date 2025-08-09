@@ -1,6 +1,7 @@
 package co.kr.tnt.trainee.connect
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
@@ -10,6 +11,7 @@ import co.kr.tnt.trainee.connect.model.InputState.FOCUS
 import co.kr.tnt.trainee.connect.model.InputState.INVALID
 import co.kr.tnt.trainee.connect.model.InputState.VALID
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -53,7 +55,11 @@ internal class TraineeConnectViewModel @Inject constructor(
                         updateState { copy(inviteCodeInputState = INVALID) }
                     }
                 }.onFailure {
-                    sendEffect(TraineeConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
+                    sendEffect(
+                        TraineeConnectSideEffect.ShowToast(
+                            DisplayText.Resource(core_failed_to_server_request),
+                        ),
+                    )
                 }
             }
         }
@@ -96,7 +102,11 @@ internal class TraineeConnectViewModel @Inject constructor(
                     }
                     navigateToNext()
                 }.onFailure {
-                    sendEffect(TraineeConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
+                    sendEffect(
+                        TraineeConnectSideEffect.ShowToast(
+                            DisplayText.Resource(core_failed_to_server_request),
+                        ),
+                    )
                 }.also {
                     updateState { copy(isLoading = false) }
                 }

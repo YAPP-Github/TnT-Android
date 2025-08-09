@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
@@ -126,7 +127,7 @@ internal fun LoginRoute(
                     showBottomSheet = true
                 }
 
-                is LoginSideEffect.ShowToast -> snackbar.show(effect.message)
+                is LoginSideEffect.ShowToast -> snackbar.show(effect.message.asString(context))
 
                 is LoginSideEffect.NavigateToWebView -> {
                     navigateToWebView(effect.url)
@@ -289,7 +290,7 @@ private fun TermBottomSheetContent(
         }
         Spacer(modifier = Modifier.height(94.dp))
         TnTBottomButton(
-            text = stringResource(R.string.next),
+            text = stringResource(core_next),
             enabled = isAllTermChecked,
             onClick = onClickNext,
         )

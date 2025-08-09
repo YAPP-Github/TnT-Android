@@ -5,13 +5,15 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.core.ui.R.string.core_ok
+import co.kr.tnt.core.ui.R.string.core_session_expired
+import co.kr.tnt.core.ui.R.string.core_session_expired_description
 import co.kr.tnt.designsystem.component.TnTIconSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.snackbar.TnTSnackbarLayout
 import co.kr.tnt.designsystem.snackbar.rememberSnackbarState
 import co.kr.tnt.login.navigation.navigateToLogin
-import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 fun TnTApp(
@@ -21,10 +23,10 @@ fun TnTApp(
 
     if (appState.showSessionExpiredDialog) {
         TnTIconSingleButtonPopupDialog(
-            title = stringResource(coreR.string.session_expired),
-            content = stringResource(coreR.string.session_expired_description),
+            title = stringResource(core_session_expired),
+            content = stringResource(core_session_expired_description),
             topIcon = painterResource(R.drawable.ic_round_warning),
-            buttonText = stringResource(coreR.string.ok),
+            buttonText = stringResource(core_ok),
             cancelable = false,
             onButtonClick = {
                 appState.dismissSessionDialog()

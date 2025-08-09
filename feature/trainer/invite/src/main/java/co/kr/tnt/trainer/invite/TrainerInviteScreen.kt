@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -28,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.ui.R.string.core_connect
+import co.kr.tnt.core.ui.R.string.core_skip
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
@@ -41,7 +44,6 @@ import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteSideEffect
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiEvent
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiState
 import kotlinx.coroutines.flow.collectLatest
-import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TrainerInviteRoute(
@@ -50,6 +52,7 @@ internal fun TrainerInviteRoute(
     navigateToHome: (Boolean) -> Unit,
     viewModel: TrainerInviteViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current
@@ -68,7 +71,7 @@ internal fun TrainerInviteRoute(
             when (effect) {
                 TrainerInviteSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerInviteSideEffect.NavigateToHome -> navigateToHome(true)
-                is TrainerInviteSideEffect.ShowToast -> snackbar.show(effect.message)
+                is TrainerInviteSideEffect.ShowToast -> snackbar.show(effect.message.asString(context))
                 is TrainerInviteSideEffect.CopyToClipBoard ->
                     clipboardManager.setText(AnnotatedString(effect.value))
             }
@@ -105,10 +108,10 @@ internal fun TrainerInviteScreen(
 
                 ScreenMode.SKIP -> {
                     TnTTopBar(
-                        title = stringResource(coreR.string.connect),
+                        title = stringResource(core_connect),
                         trailingComponent = {
                             Text(
-                                text = stringResource(coreR.string.skip),
+                                text = stringResource(core_skip),
                                 color = TnTTheme.colors.neutralColors.Neutral400,
                                 style = TnTTheme.typography.body2Medium,
                                 modifier = Modifier.clickable {

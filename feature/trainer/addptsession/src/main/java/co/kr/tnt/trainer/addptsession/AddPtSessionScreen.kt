@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,7 +49,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.core.designsystem.R.drawable.ic_arrow_down
+import co.kr.tnt.core.designsystem.R.drawable.ic_check_true
+import co.kr.tnt.core.designsystem.R.drawable.ic_delete
+import co.kr.tnt.core.designsystem.R.drawable.ic_red_clock
+import co.kr.tnt.core.ui.R.string.core_cancel
+import co.kr.tnt.core.ui.R.string.core_length_warning
+import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
@@ -69,6 +76,7 @@ import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.MemberInfo
 import co.kr.tnt.domain.utils.DateFormatter
+import co.kr.tnt.feature.trainer.addptsession.R
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffect
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState
@@ -83,7 +91,6 @@ import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun AddPtSessionRoute(
@@ -91,6 +98,7 @@ internal fun AddPtSessionRoute(
     viewModel: AddPtSessionViewModel = hiltViewModel(),
     navigateToPrevious: () -> Unit,
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -139,7 +147,7 @@ internal fun AddPtSessionRoute(
                     )
 
                     AddPtSessionUiState.BottomSheetType.SELECT_START_TIME -> TimePickerBottomSheetContent(
-                        title = "시작 시간 선택하기",
+                        title = stringResource(R.string.select_start_time),
                         selectedTime = state.selectedStartTime,
                         onDismissRequest = { showBottomSheet = false },
                         onClickConfirm = { selectTime ->
@@ -148,7 +156,7 @@ internal fun AddPtSessionRoute(
                     )
 
                     AddPtSessionUiState.BottomSheetType.SELECT_END_TIME -> TimePickerBottomSheetContent(
-                        title = "종료 시간 선택하기",
+                        title = stringResource(R.string.select_end_time),
                         selectedTime = state.selectedEndTime,
                         onDismissRequest = { showBottomSheet = false },
                         onClickConfirm = { selectTime ->
@@ -181,7 +189,7 @@ internal fun AddPtSessionRoute(
                     showBottomSheet = false
                 }
 
-                is AddPtSessionSideEffect.ShowToast -> snackbar.show(effect.message)
+                is AddPtSessionSideEffect.ShowToast -> snackbar.show(effect.message.asString(context))
                 AddPtSessionSideEffect.NavigateToPrevious -> navigateToPrevious()
             }
         }
@@ -206,7 +214,7 @@ private fun AddPtSessionScreen(
         topBar = {
             TnTTopBarWithBackButton(
                 modifier = Modifier.fillMaxWidth(),
-                title = "수업 추가하기",
+                title = stringResource(R.string.add_pt_session),
                 onBackClick = onClickBack,
                 showStoke = true,
             )
@@ -236,18 +244,18 @@ private fun AddPtSessionScreen(
                     Description()
                     Spacer(modifier = Modifier.height(48.dp))
                     Selector(
-                        title = "회원 선택",
+                        title = stringResource(R.string.select_member),
                         value = state.selectedMember?.traineeName ?: "",
-                        placeholder = "회원을 입력해주세요",
+                        placeholder = stringResource(R.string.insert_memeber),
                         onClick = onClickMember,
                     )
                     Spacer(modifier = Modifier.height(48.dp))
                     Selector(
-                        title = "PT 날짜",
+                        title = stringResource(R.string.pt_date),
                         value = state.selectedDate?.let { selectedDate ->
                             dateFormatter.format(selectedDate, "yyyy/MM/dd")
                         } ?: "",
-                        placeholder = "날짜를 입력해주세요",
+                        placeholder = stringResource(R.string.insert_date),
                         onClick = onClickDate,
                     )
                     Spacer(modifier = Modifier.height(48.dp))
@@ -295,13 +303,13 @@ private fun AddPtSessionScreen(
 @Composable
 private fun Description() {
     Text(
-        text = "언제 수업할까요?",
+        text = stringResource(R.string.when_to_have_pt),
         style = TnTTheme.typography.h2,
         color = TnTTheme.colors.neutralColors.Neutral950,
     )
     Spacer(modifier = Modifier.height(8.dp))
     Text(
-        text = "일정을 등록하면 회원에게도 일정이 등록돼요",
+        text = stringResource(R.string.schedule_registered_for_member),
         style = TnTTheme.typography.body2Medium,
         color = TnTTheme.colors.neutralColors.Neutral500,
     )
@@ -346,7 +354,7 @@ private fun Selector(
                 },
             trailingComponent = {
                 Icon(
-                    painter = painterResource(R.drawable.ic_arrow_down),
+                    painter = painterResource(ic_arrow_down),
                     contentDescription = null,
                     tint = TnTTheme.colors.neutralColors.Neutral400,
                 )
@@ -368,7 +376,7 @@ private fun TimeSelector(
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
         Selector(
-            title = "시작 시간",
+            title = stringResource(R.string.start_time),
             value = startTime?.let {
                 dateFormatter.format(it, "HH:mm")
             } ?: "",
@@ -390,7 +398,7 @@ private fun TimeSelector(
                 .align(Alignment.Bottom),
         )
         Selector(
-            title = "종료 시간",
+            title = stringResource(R.string.end_time),
             value = endTime?.let {
                 dateFormatter.format(it, "HH:mm")
             } ?: "",
@@ -408,7 +416,7 @@ private fun MinuteChips(
     onClickChip: (minute: Int) -> Unit,
 ) {
     Text(
-        text = "수업 시간",
+        text = stringResource(R.string.pt_time),
         style = TnTTheme.typography.body1Bold,
         color = TnTTheme.colors.neutralColors.Neutral900,
     )
@@ -444,7 +452,7 @@ private fun MinuteChip(
     onClick: (minute: Int) -> Unit,
 ) {
     TnTTextButton(
-        "+${minute}분",
+        stringResource(R.string.minute, minute),
         modifier = modifier,
         type = if (isSelected) ButtonType.RedOutline else ButtonType.GrayOutline,
         onClick = { onClick(minute) },
@@ -467,18 +475,18 @@ private fun TotalSessionMinute(
             ),
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_red_clock),
+            painter = painterResource(ic_red_clock),
             contentDescription = null,
             tint = Color.Unspecified,
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = buildAnnotatedString {
-                append("총 ")
+                append(stringResource(R.string.total_prefix))
                 withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                     append("${minute}분")
                 }
-                append(" 수업이에요")
+                append(stringResource(R.string.minute_suffix))
             },
             style = TnTTheme.typography.body2Medium,
             color = TnTTheme.colors.neutralColors.Neutral900,
@@ -493,7 +501,7 @@ private fun Memo(
     onValueChanged: (String) -> Unit,
 ) {
     Text(
-        text = "메모하기",
+        text = stringResource(R.string.write_memo),
         style = TnTTheme.typography.body1Bold,
         color = TnTTheme.colors.neutralColors.Neutral900,
     )
@@ -503,7 +511,7 @@ private fun Memo(
         onValueChange = onValueChanged,
         maxLength = 30,
         isError = isWarning,
-        warningMessage = "30자 미만으로 입력해주세요",
+        warningMessage = stringResource(core_length_warning, 30),
         modifier = Modifier.fillMaxWidth(),
     )
 }
@@ -520,7 +528,7 @@ private fun MembersBottomSheetContent(
         modifier = modifier.heightIn(max = 708.dp),
     ) {
         SheetTopBar(
-            title = "회원 선택하기",
+            title = stringResource(R.string.select_member),
             onDismissRequest = onDismissRequest,
         )
         LazyColumn {
@@ -564,7 +572,7 @@ private fun MemberItem(
         )
         if (isSelected) {
             Icon(
-                painter = painterResource(R.drawable.ic_check_true),
+                painter = painterResource(ic_check_true),
                 contentDescription = null,
                 tint = Color.Unspecified,
             )
@@ -596,7 +604,7 @@ private fun CalendarBottomSheetContent(
         verticalArrangement = Arrangement.Center,
     ) {
         SheetTopBar(
-            title = "PT 날짜 선택하기",
+            title = stringResource(R.string.select_pt_date),
             onDismissRequest = onDismissRequest,
         )
         Column(
@@ -695,7 +703,7 @@ private fun SheetTopBar(
                     .size(32.dp),
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_delete),
+                    painter = painterResource(ic_delete),
                     contentDescription = null,
                 )
             }
@@ -709,7 +717,7 @@ private fun SheetConfirm(
     onClick: () -> Unit,
 ) {
     TnTTextButton(
-        text = stringResource(coreR.string.ok),
+        text = stringResource(core_ok),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
@@ -729,10 +737,10 @@ private fun Dialog(
         DialogState.NONE -> Unit
         DialogState.CHECK_CANCEL_ADD -> {
             TnTIconPopupDialog(
-                title = "수업 등록을 취소할까요?",
-                content = "일정이 저장되지 않아요",
-                leftButtonText = stringResource(coreR.string.cancel),
-                rightButtonText = stringResource(coreR.string.ok),
+                title = stringResource(R.string.cancel_pt_registration),
+                content = stringResource(R.string.schedule_will_not_be_saved),
+                leftButtonText = stringResource(core_cancel),
+                rightButtonText = stringResource(core_ok),
                 onLeftButtonClick = onDismissDialog,
                 onRightButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
@@ -741,9 +749,9 @@ private fun Dialog(
 
         DialogState.SUCCESS_ADD -> {
             TnTSingleButtonPopupDialog(
-                title = "수업 일정이 추가됐어요",
-                content = "등록된 일정은 트레이니에게도 표시돼요!",
-                buttonText = stringResource(coreR.string.ok),
+                title = stringResource(R.string.added_pt_schedule),
+                content = stringResource(R.string.schedule_shown_to_trainee),
+                buttonText = stringResource(core_ok),
                 cancelable = false,
                 onButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,

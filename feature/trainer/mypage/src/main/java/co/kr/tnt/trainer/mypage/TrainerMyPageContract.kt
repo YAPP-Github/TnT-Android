@@ -4,6 +4,7 @@ import co.kr.tnt.domain.model.User
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 
 internal class TrainerMyPageContract {
     data class TrainerMyPageUiState(
@@ -44,6 +45,6 @@ internal class TrainerMyPageContract {
         data object NavigateToOpenSourceLicense : TrainerMyPageSideEffect
         data object NavigateToModifyMyInfo : TrainerMyPageSideEffect
         data class RequestPermission(val isExplicitlyDenied: Boolean) : TrainerMyPageSideEffect
-        data class ShowToast(val message: String) : TrainerMyPageSideEffect
+        data class ShowToast(val message: DisplayText) : TrainerMyPageSideEffect
     }
 }

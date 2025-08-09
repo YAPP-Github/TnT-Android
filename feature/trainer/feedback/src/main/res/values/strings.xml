@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feedback">피드백</string>
+    <string name="records_shown_when_trainee_sends">트레이니가 기록을 전송하면 여기에 표시돼요!</string>
+</resources>

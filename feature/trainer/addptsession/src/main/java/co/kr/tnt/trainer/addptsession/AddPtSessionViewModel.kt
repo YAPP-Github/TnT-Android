@@ -1,13 +1,16 @@
 package co.kr.tnt.trainer.addptsession
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.repository.TrainerRepository
+import co.kr.tnt.feature.trainer.addptsession.R
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionSideEffect
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiEvent
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState.BottomSheetType
 import co.kr.tnt.trainer.addptsession.AddPtSessionContract.AddPtSessionUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +28,11 @@ internal class AddPtSessionViewModel @Inject constructor(
             }.onSuccess { members ->
                 updateState { copy(members = members) }
             }.onFailure {
-                sendEffect(AddPtSessionSideEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(
+                    AddPtSessionSideEffect.ShowToast(
+                        DisplayText.Resource(core_failed_to_server_request),
+                    ),
+                )
             }
         }
     }
@@ -95,7 +102,11 @@ internal class AddPtSessionViewModel @Inject constructor(
 
     private fun postPtSession() {
         if (currentState.isEnableComplete.not()) {
-            sendEffect(AddPtSessionSideEffect.ShowToast("필수 입력 항목을 모두 입력해주세요"))
+            sendEffect(
+                AddPtSessionSideEffect.ShowToast(
+                    DisplayText.Resource(R.string.fill_required_fields),
+                ),
+            )
             return
         }
 
@@ -114,7 +125,12 @@ internal class AddPtSessionViewModel @Inject constructor(
             }.onSuccess {
                 updateState { copy(dialogState = DialogState.SUCCESS_ADD) }
             }.onFailure { throwable ->
-                sendEffect(AddPtSessionSideEffect.ShowToast(throwable.message ?: "서버 요청에 실패했어요"))
+                sendEffect(
+                    AddPtSessionSideEffect.ShowToast(
+                        throwable.message?.let(DisplayText::Plain)
+                            ?: DisplayText.Resource(core_failed_to_server_request),
+                    ),
+                )
             }.also {
                 updateState { copy(isLoading = false) }
             }

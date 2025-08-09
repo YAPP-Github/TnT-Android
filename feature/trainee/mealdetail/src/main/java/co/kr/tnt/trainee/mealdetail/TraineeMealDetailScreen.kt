@@ -1,7 +1,6 @@
 package co.kr.tnt.trainee.mealdetail
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +35,7 @@ import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.chip.TnTChip
+import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.domain.model.RecordType.MealType
@@ -56,6 +56,7 @@ internal fun TraineeMealDetailRoute(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val snackbar = LocalSnackbar.current
     val dateFormatter = remember { DateFormatter() }
 
     TraineeMealDetailScreen(
@@ -73,10 +74,7 @@ internal fun TraineeMealDetailRoute(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is TraineeMealDetailSideEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
-
+                is TraineeMealDetailSideEffect.ShowToast -> snackbar.show(effect.message.asString(context))
                 TraineeMealDetailSideEffect.NavigateToHome -> navigateToPrevious()
             }
         }

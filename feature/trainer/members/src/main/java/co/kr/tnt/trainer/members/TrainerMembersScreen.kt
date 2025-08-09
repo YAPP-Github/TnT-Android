@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,10 +28,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.core.designsystem.R.drawable.img_default
 import co.kr.tnt.designsystem.component.card.TnTMemberProfileCard
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.MemberInfo
+import co.kr.tnt.feature.trainer.members.R
 import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.members.TrainerMemberContract.TrainerMemberUiState
 import co.kr.tnt.ui.component.TnTCountTopBar
@@ -65,7 +67,7 @@ private fun TrainerMembersScreen(
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             TnTCountTopBar(
-                title = "내 회원",
+                title = stringResource(R.string.my_member),
                 count = state.memberList.size,
                 trailingComponent = {
                     MemberInviteButton(onClickInviteButton)
@@ -104,7 +106,7 @@ private fun MemberInviteButton(
         ),
     ) {
         Text(
-            text = "회원 초대하기",
+            text = stringResource(R.string.invite_member),
             color = TnTTheme.colors.neutralColors.Neutral600,
             style = TnTTheme.typography.label2Medium,
             overflow = TextOverflow.Ellipsis,
@@ -121,14 +123,14 @@ private fun EmptyMemberList(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "아직 연결된 회원이 없어요",
+            text = stringResource(R.string.no_connected_member_yet),
             color = TnTTheme.colors.neutralColors.Neutral600,
             style = TnTTheme.typography.body2Bold,
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text = "추가 버튼을 눌러 회원을 추가해 보세요",
+            text = stringResource(R.string.press_add_button_to_add_member),
             color = TnTTheme.colors.neutralColors.Neutral400,
             style = TnTTheme.typography.label1Medium,
             textAlign = TextAlign.Center,
@@ -141,8 +143,8 @@ private fun MemberList(member: MemberInfo) {
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(member.profileUrl)
-            .placeholder(R.drawable.img_default)
-            .error(R.drawable.img_default)
+            .placeholder(img_default)
+            .error(img_default)
             .build(),
     )
     // TODO : 회원 상세 페이지 연결 (배포 이후)

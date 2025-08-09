@@ -13,10 +13,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.ui.R.string.core_no_recent_notifications
+import co.kr.tnt.core.ui.R.string.core_notification
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.notification.TnTNotification
 import co.kr.tnt.designsystem.component.notification.model.NotificationIcon
@@ -26,7 +29,6 @@ import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotific
 import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotificationUiEvent
 import co.kr.tnt.trainer.notification.TrainerNotificationContract.TrainerNotificationUiState
 import co.kr.tnt.ui.model.NotificationState
-import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun TrainerNotificationRoute(
@@ -34,6 +36,7 @@ internal fun TrainerNotificationRoute(
     navigateToConnect: (trainerId: String, traineeId: String) -> Unit,
     viewModel: TrainerNotificationViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -52,7 +55,7 @@ internal fun TrainerNotificationRoute(
                     uiState.traineeId,
                 )
 
-                is TrainerNotificationEffect.ShowToast -> snackbar.show(effect.message)
+                is TrainerNotificationEffect.ShowToast -> snackbar.show(effect.message.asString(context))
             }
         }
     }
@@ -67,7 +70,7 @@ private fun TrainerNotificationScreen(
     Scaffold(
         topBar = {
             TnTTopBarWithBackButton(
-                title = stringResource(uiResource.string.notification),
+                title = stringResource(core_notification),
                 onBackClick = onClickBack,
                 showStoke = true,
             )
@@ -85,7 +88,7 @@ private fun TrainerNotificationScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = stringResource(uiResource.string.no_recent_notifications),
+                        text = stringResource(core_no_recent_notifications),
                         style = TnTTheme.typography.label1Medium,
                         color = TnTTheme.colors.neutralColors.Neutral400,
                     )

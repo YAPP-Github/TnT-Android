@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
@@ -24,6 +25,7 @@ internal fun TraineeSignUpRoute(
     navigateToConnect: () -> Unit,
     viewModel: TraineeSignUpViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val snackbar = LocalSnackbar.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -56,7 +58,7 @@ internal fun TraineeSignUpRoute(
             when (effect) {
                 TraineeSignUpEffect.NavigateToBack -> navigateToPrevious()
                 TraineeSignUpEffect.NavigateToConnect -> navigateToConnect()
-                is TraineeSignUpEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeSignUpEffect.ShowToast -> snackbar.show(effect.message.asString(context))
             }
         }
     }

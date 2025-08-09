@@ -38,7 +38,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.core.designsystem.R.drawable.ic_add
+import co.kr.tnt.core.designsystem.R.drawable.ic_fill_check_false
+import co.kr.tnt.core.designsystem.R.drawable.ic_fill_check_true
+import co.kr.tnt.core.designsystem.R.drawable.img_default
+import co.kr.tnt.core.ui.R.string.core_connect
+import co.kr.tnt.core.ui.R.string.core_do_not_see_for_three_days
+import co.kr.tnt.core.ui.R.string.core_next_time
 import co.kr.tnt.designsystem.component.TnTPopupDialog
 import co.kr.tnt.designsystem.component.button.TnTFabButton
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorMonthCalendar
@@ -50,6 +56,7 @@ import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.PtSession
 import co.kr.tnt.domain.utils.DateFormatter
+import co.kr.tnt.feature.trainer.home.R
 import co.kr.tnt.navigation.model.ScreenMode
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
@@ -65,7 +72,6 @@ import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
-import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TrainerHomeRoute(
@@ -76,6 +82,7 @@ internal fun TrainerHomeRoute(
     navigateToInvite: (ScreenMode) -> Unit,
 ) {
     val toast = LocalSnackbar.current
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     TrainerHomeScreen(
@@ -95,7 +102,7 @@ internal fun TrainerHomeRoute(
                 TrainerHomeSideEffect.NavigateToAddPtSession -> navigateToAddPtSession(state.selectedDay.toString())
                 TrainerHomeSideEffect.NavigateToInvite -> navigateToInvite(ScreenMode.CLOSE)
                 is TrainerHomeSideEffect.ShowToast -> toast.show(
-                    message = effect.message,
+                    message = effect.message.asString(context),
                     icon = effect.type.iconRes,
                 )
             }
@@ -106,12 +113,12 @@ internal fun TrainerHomeRoute(
         TrainerHomeUiState.DialogState.NONE -> Unit
         TrainerHomeUiState.DialogState.HOME_CONNECT -> {
             TnTCheckToggleDialog(
-                title = "회원을 연결해 주세요",
-                content = "연결하지 않을 경우 수업을 추가할 수 없어요\n초대 코드를 복사해 연결해주시겠어요?",
+                title = stringResource(R.string.please_connect_member),
+                content = stringResource(R.string.cannot_add_pt_without_connection),
                 isChecked = state.isDialogHiddenForThreeDays,
-                checkToggleText = stringResource(coreR.string.do_not_see_for_three_days),
-                leftButtonText = stringResource(coreR.string.next_time),
-                rightButtonText = stringResource(coreR.string.connect),
+                checkToggleText = stringResource(core_do_not_see_for_three_days),
+                leftButtonText = stringResource(core_next_time),
+                rightButtonText = stringResource(core_connect),
                 onLeftButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
                 onRightButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnConfirmConnectDialog) },
                 onClickCheck = { viewModel.setEvent(TrainerHomeUiEvent.OnChangeHideDialogOption) },
@@ -121,10 +128,10 @@ internal fun TrainerHomeRoute(
 
         TrainerHomeUiState.DialogState.ADD_PT_CONNECT -> {
             TnTPopupDialog(
-                title = "회원을 연결해 주세요",
-                content = "연결하지 않을 경우 수업을 추가할 수 없어요\n초대 코드를 복사해 연결해주시겠어요?",
-                leftButtonText = stringResource(coreR.string.next_time),
-                rightButtonText = stringResource(coreR.string.connect),
+                title = stringResource(R.string.please_connect_member),
+                content = stringResource(R.string.cannot_add_pt_without_connection),
+                leftButtonText = stringResource(core_next_time),
+                rightButtonText = stringResource(core_connect),
                 onLeftButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
                 onRightButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnConfirmConnectDialog) },
                 onDismiss = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
@@ -227,11 +234,11 @@ private fun TrainerHomeScreen(
                     bottom = 22.dp,
                     end = 28.dp,
                 ),
-            text = "수업 추가",
+            text = stringResource(R.string.add_pt_session),
             enabled = true,
             leadingComposable = {
                 Icon(
-                    painter = painterResource(R.drawable.ic_add),
+                    painter = painterResource(ic_add),
                     contentDescription = "add pt session",
                 )
             },
@@ -302,7 +309,7 @@ private fun DailyPtSessionTitle(
                 ) {
                     append(sessionCount.toString())
                 }
-                append("개의 수업이 있어요")
+                append(stringResource(R.string.pt_session_count_suffix))
             },
             style = TnTTheme.typography.label2Medium,
             color = TnTTheme.colors.neutralColors.Neutral800,
@@ -320,13 +327,13 @@ private fun EmptyPtSessions(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "아직 등록된 수업이 없어요.",
+            text = stringResource(R.string.no_pt_session_yet),
             style = TnTTheme.typography.body2Bold,
             color = TnTTheme.colors.neutralColors.Neutral600,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "추가 버튼을 눌러 PT 수업 일정을 추가해 보세요",
+            text = stringResource(R.string.press_add_button_to_add_pt_session),
             style = TnTTheme.typography.label1Medium,
             color = TnTTheme.colors.neutralColors.Neutral400,
         )
@@ -343,8 +350,8 @@ private fun PtSessionCard(
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(ptSession.traineeProfileUrl)
-            .placeholder(R.drawable.img_default)
-            .error(R.drawable.img_default)
+            .placeholder(img_default)
+            .error(img_default)
             .build(),
     )
 
@@ -367,9 +374,9 @@ private fun PtSessionCard(
                 .padding(4.dp),
             painter = painterResource(
                 if (ptSession.isCompleted) {
-                    R.drawable.ic_fill_check_true
+                    ic_fill_check_true
                 } else {
-                    R.drawable.ic_fill_check_false
+                    ic_fill_check_false
                 },
             ),
             contentDescription = null,
@@ -382,10 +389,10 @@ private fun PtSessionCard(
             TnTSessionRecordCard(
                 isTrainer = true,
                 name = traineeName,
-                tagText = "${round}회차 수업",
+                tagText = stringResource(R.string.pt_session_count, round),
                 startTime = dateFormatter.format(startTime, "a hh:mm"),
                 endTime = dateFormatter.format(endTime, "a hh:mm"),
-                defaultImage = painterResource(R.drawable.img_default),
+                defaultImage = painterResource(img_default),
                 profileImage = painter,
                 leadingEmoji = "\uD83D\uDCAA",
                 showSessionRecordCreation = false,

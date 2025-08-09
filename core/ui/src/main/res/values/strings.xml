@@ -1,78 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="session_expired">세션이 만료되었어요</string>
-    <string name="session_expired_description">장시간 미사용으로 로그인 화면으로 이동해요</string>
+    <string name="core_failed_to_server_request">서버 요청에 실패했어요</string>
+
+    <string name="core_session_expired">세션이 만료되었어요</string>
+    <string name="core_session_expired_description">장시간 미사용으로 로그인 화면으로 이동해요</string>
     
-    <string name="alarm_permission_title">TnT에서 알림을 보내고자 합니다.</string>
-    <string name="alarm_permission_description">해당 기기로 수업 일정 등 서비스 이용에 도움이 되는 안내 사항을 푸시 알림으로 보내드리겠습니다.
+    <string name="core_alarm_permission_title">TnT에서 알림을 보내고자 합니다.</string>
+    <string name="core_alarm_permission_description">해당 기기로 수업 일정 등 서비스 이용에 도움이 되는 안내 사항을 푸시 알림으로 보내드리겠습니다.
         \n앱 푸시 알림에 수신 동의 하시겠습니까?</string>
 
-    <string name="alarm_permission_permanently_title">TnT에서 알림 권한이 필요합니다.</string>
-    <string name="alarm_permission_permanently_description">수업 일정 및 중요한 공지 알림을 받기 위해 알림 권한이 필요합니다.\n설정에서 알림 권한을 활성화해주세요.</string>
+    <string name="core_alarm_permission_permanently_title">TnT에서 알림 권한이 필요합니다.</string>
+    <string name="core_alarm_permission_permanently_description">수업 일정 및 중요한 공지 알림을 받기 위해 알림 권한이 필요합니다.\n설정에서 알림 권한을 활성화해주세요.</string>
 
-    <string name="media_permission_title">프로필 사진 설정을 위해 사진 접근 권한이 필요해요</string>
-    <string name="media_permission_description">사진 추가는 프로필 말고도 운동과 식단 기록에도 사용돼요</string>
+    <string name="core_media_permission_title">프로필 사진 설정을 위해 사진 접근 권한이 필요해요</string>
+    <string name="core_media_permission_description">사진 추가는 프로필 말고도 운동과 식단 기록에도 사용돼요</string>
 
-    <string name="media_permission_permanently_title">프로필 사진 설정 권한 명시 거부</string>
-    <string name="media_permission_permanently_description">권한 설정을 위해 설정창으로 이동해주세요.</string>
-    <string name="close">닫기</string>
-    <string name="ok">확인</string>
-    <string name="move_to_setting">설정으로 이동</string>
+    <string name="core_media_permission_permanently_title">프로필 사진 설정 권한 명시 거부</string>
+    <string name="core_media_permission_permanently_description">권한 설정을 위해 설정창으로 이동해주세요.</string>
 
-    <string name="entered_wrong_text">잘못된 수치를 입력했어요</string>
-    <string name="text_length_and_format_warning">%s자 미만의 한글 또는 영문으로 입력해주세요</string>
+    <string name="core_close">닫기</string>
+    <string name="core_ok">확인</string>
+    <string name="core_move_to_setting">설정으로 이동</string>
 
-    <string name="trainee">트레이니</string>
-    <string name="trainer">트레이너</string>
+    <string name="core_entered_wrong_text">잘못된 수치를 입력했어요</string>
+    <string name="core_text_length_and_format_warning">%s자 미만의 한글 또는 영문으로 입력해주세요</string>
 
-    <string name="next">다음</string>
-    <string name="connect">연결하기</string>
-    <string name="start">시작하기</string>
-    <string name="skip">건너뛰기</string>
-    <string name="cancel">취소</string>
-    <string name="next_time">다음에</string>
+    <string name="core_trainee">트레이니</string>
+    <string name="core_trainer">트레이너</string>
 
-    <string name="name">이름</string>
-    <string name="age_label">나이</string>
-    <string name="height_label">키</string>
-    <string name="weight_label">체중</string>
-    <string name="age_unit">세</string>
-    <string name="height_unit">cm</string>
-    <string name="weight_unit">kg</string>
+    <string name="core_next">다음</string>
+    <string name="core_connect">연결하기</string>
+    <string name="core_start">시작하기</string>
+    <string name="core_skip">건너뛰기</string>
+    <string name="core_cancel">취소</string>
+    <string name="core_next_time">다음에</string>
 
-    <string name="notification">알림</string>
-    <string name="no_recent_notifications">최근 받은 알림이 없어요</string>
+    <string name="core_name">이름</string>
+    <string name="core_age_label">나이</string>
+    <string name="core_height_label">키</string>
+    <string name="core_weight_label">체중</string>
+    <string name="core_age_unit">세</string>
+    <string name="core_height_unit">cm</string>
+    <string name="core_weight_unit">kg</string>
+
+    <string name="core_notification">알림</string>
+    <string name="core_no_recent_notifications">최근 받은 알림이 없어요</string>
 
     <!--  Dialog  -->
-    <string name="do_not_see_for_three_days">3일 동안 보지 않기</string>
+    <string name="core_do_not_see_for_three_days">3일 동안 보지 않기</string>
 
     <!-- Meal -->
-    <string name="meal_breakfast">아침</string>
-    <string name="meal_lunch">점심</string>
-    <string name="meal_dinner">저녁</string>
-    <string name="meal_snack">간식</string>
+    <string name="core_meal_breakfast">아침</string>
+    <string name="core_meal_lunch">점심</string>
+    <string name="core_meal_dinner">저녁</string>
+    <string name="core_meal_snack">간식</string>
 
     <!-- Exercise -->
-    <string name="exercise_upper_body">상체 운동</string>
-    <string name="exercise_lower_body">하체 운동</string>
-    <string name="exercise_back">등 운동</string>
-    <string name="exercise_shoulder">어깨 운동</string>
-    <string name="exercise_cardio">유산소</string>
+    <string name="core_exercise_upper_body">상체 운동</string>
+    <string name="core_exercise_lower_body">하체 운동</string>
+    <string name="core_exercise_back">등 운동</string>
+    <string name="core_exercise_shoulder">어깨 운동</string>
+    <string name="core_exercise_cardio">유산소</string>
 
     <!-- PT Session -->
-    <string name="pt_session">%d회차 수업</string>
+    <string name="core_pt_session">%d회차 수업</string>
 
     <!--  MyPage  -->
-    <string name="modifying_personal_info">개인정보 수정</string>
-    <string name="app_push_notification">앱 푸시 알림</string>
-    <string name="terms_of_service">서비스 이용약관</string>
-    <string name="privacy_policy">개인정보 처리방침</string>
-    <string name="app_version">버전 정보</string>
-    <string name="open_source_license">오픈소스 라이선스</string>
-    <string name="logout">로그아웃</string>
-    <string name="delete_account">계정 탈퇴</string>
+    <string name="core_modifying_personal_info">개인정보 수정</string>
+    <string name="core_app_push_notification">앱 푸시 알림</string>
+    <string name="core_terms_of_service">서비스 이용약관</string>
+    <string name="core_privacy_policy">개인정보 처리방침</string>
+    <string name="core_app_version">버전 정보</string>
+    <string name="core_open_source_license">오픈소스 라이선스</string>
+    <string name="core_logout">로그아웃</string>
+    <string name="core_delete_account">계정 탈퇴</string>
 
-    <string name="logout_title">현재 계정을 로그아웃 할까요?</string>
-    <string name="logout_content">언제든지 다시 로그인 할 수 있어요!</string>
-    <string name="logout_complete_title">로그아웃이 완료되었어요</string>
+    <string name="core_logout_title">현재 계정을 로그아웃 할까요?</string>
+    <string name="core_logout_content">언제든지 다시 로그인 할 수 있어요!</string>
+    <string name="core_logout_complete_title">로그아웃이 완료되었어요</string>
+
+    <string name="core_length_warning">%d자 미만으로 입력해주세요.</string>
+    <string name="core_no_records_yet">아직 등록된 기록이 없어요</string>
 </resources>

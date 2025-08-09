@@ -18,6 +18,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_cancel
+import co.kr.tnt.core.ui.R.string.core_connect
+import co.kr.tnt.core.ui.R.string.core_next
+import co.kr.tnt.core.ui.R.string.core_ok
+import co.kr.tnt.core.ui.R.string.core_skip
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
@@ -31,7 +36,6 @@ import co.kr.tnt.trainee.connect.component.CodeTextField
 import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.core.designsystem.R as uiResource
-import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun CodeEntryPage(
@@ -60,16 +64,16 @@ internal fun CodeEntryPage(
             when (screenMode) {
                 ScreenMode.BACK -> {
                     TnTTopBarWithBackButton(
-                        title = stringResource(coreR.string.connect),
+                        title = stringResource(core_connect),
                         onBackClick = onClickBack,
                     )
                 }
                 ScreenMode.SKIP -> {
                     TnTTopBar(
-                        title = stringResource(coreR.string.connect),
+                        title = stringResource(core_connect),
                         trailingComponent = {
                             Text(
-                                text = stringResource(coreR.string.skip),
+                                text = stringResource(core_skip),
                                 color = TnTTheme.colors.neutralColors.Neutral400,
                                 style = TnTTheme.typography.body2Medium,
                                 modifier = Modifier.clickable { onClickSkip() },
@@ -79,7 +83,7 @@ internal fun CodeEntryPage(
                 }
                 ScreenMode.CLOSE -> {
                     TnTTopBar(
-                        title = stringResource(coreR.string.connect),
+                        title = stringResource(core_connect),
                         trailingComponent = {
                             IconButton(
                                 onClick = onClickBack,
@@ -123,7 +127,7 @@ internal fun CodeEntryPage(
                 )
             }
             TnTBottomButton(
-                text = stringResource(coreR.string.next),
+                text = stringResource(core_next),
                 enabled = inputState.isValid,
                 onClick = onClickNext,
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -135,8 +139,8 @@ internal fun CodeEntryPage(
         TnTIconPopupDialog(
             title = stringResource(R.string.stop_connecting_trainer),
             content = stringResource(R.string.warning_reconnect_needed),
-            leftButtonText = stringResource(coreR.string.cancel),
-            rightButtonText = stringResource(coreR.string.ok),
+            leftButtonText = stringResource(core_cancel),
+            rightButtonText = stringResource(core_ok),
             onLeftButtonClick = onClickCancel,
             onRightButtonClick = onDismissDialog,
             onDismiss = onDismissDialog,

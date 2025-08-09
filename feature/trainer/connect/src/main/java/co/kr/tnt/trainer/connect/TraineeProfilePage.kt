@@ -32,6 +32,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_age_label
+import co.kr.tnt.core.ui.R.string.core_age_unit
+import co.kr.tnt.core.ui.R.string.core_height_label
+import co.kr.tnt.core.ui.R.string.core_height_unit
+import co.kr.tnt.core.ui.R.string.core_start
+import co.kr.tnt.core.ui.R.string.core_weight_label
+import co.kr.tnt.core.ui.R.string.core_weight_unit
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -115,17 +122,17 @@ internal fun TraineeProfilePage(
                     Spacer(Modifier.height(32.dp))
                     val traineeInfo = listOfNotNull(
                         trainee.age?.let {
-                            stringResource(uiResource.string.age_label) to
-                                it.toString() + stringResource(uiResource.string.age_unit)
+                            stringResource(core_age_label) to
+                                it.toString() + stringResource(core_age_unit)
                         },
                         trainee.height?.let {
-                            stringResource(uiResource.string.height_label) to
-                                it.toString() + stringResource(uiResource.string.height_unit)
+                            stringResource(core_height_label) to
+                                it.toString() + stringResource(core_height_unit)
                         },
                         trainee.weight?.let {
-                            stringResource(uiResource.string.weight_label) to
+                            stringResource(core_weight_label) to
                                 it.toString()
-                                    .removeSuffix(".0") + stringResource(uiResource.string.weight_unit)
+                                    .removeSuffix(".0") + stringResource(core_weight_unit)
                         },
                     )
 
@@ -155,7 +162,7 @@ internal fun TraineeProfilePage(
                 Spacer(Modifier.height(24.dp))
             }
             TnTBottomButton(
-                text = stringResource(uiResource.string.start),
+                text = stringResource(core_start),
                 onClick = onClickNext,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
@@ -204,7 +211,7 @@ private fun TextWithBackground(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
             Text(
-                text = text.ifEmpty { "미입력" },
+                text = text.ifEmpty { stringResource(R.string.not_entered) },
                 style = TnTTheme.typography.label1Medium,
                 color =
                     if (text.isEmpty()) {
