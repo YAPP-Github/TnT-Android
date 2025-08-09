@@ -14,8 +14,12 @@ fun NavController.navigateToTraineeModifyMyInfo(
     builder = navOptions,
 )
 
-fun NavGraphBuilder.traineeModifyMyInfo() {
+fun NavGraphBuilder.traineeModifyMyInfo(
+    navigateToPrevious: () -> Unit,
+) {
     composable<Route.TraineeModifyMyInfo> {
-        TraineeModifyMyInfoRoute()
+        TraineeModifyMyInfoRoute(
+            navigateToPrevious = navigateToPrevious,
+        )
     }
 }

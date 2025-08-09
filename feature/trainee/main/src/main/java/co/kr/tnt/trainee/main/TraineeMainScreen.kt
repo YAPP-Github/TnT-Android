@@ -92,7 +92,9 @@ private fun TraineeMainScreen(
                 navigateToModifyMyInfo = navController::navigateToTraineeModifyMyInfo,
                 navigateToTraineeConnect = navigateToConnect,
             ) {
-                traineeModifyMyInfo()
+                traineeModifyMyInfo(
+                    navigateToPrevious = navController::safePopBackStack,
+                )
             }
         }
     }
