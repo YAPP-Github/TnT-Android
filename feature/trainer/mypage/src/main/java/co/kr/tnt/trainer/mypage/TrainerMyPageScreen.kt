@@ -40,6 +40,7 @@ import co.kr.tnt.core.ui.R.string.core_logout
 import co.kr.tnt.core.ui.R.string.core_logout_complete_title
 import co.kr.tnt.core.ui.R.string.core_logout_content
 import co.kr.tnt.core.ui.R.string.core_logout_title
+import co.kr.tnt.core.ui.R.string.core_modifying_personal_info
 import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.core.ui.R.string.core_open_source_license
 import co.kr.tnt.core.ui.R.string.core_privacy_policy
@@ -190,7 +191,7 @@ private fun TrainerMyPageScreen(
         )
         Spacer(Modifier.height(8.dp))
         TnTTextButton(
-            text = "개인정보 수정",
+            text = stringResource(core_modifying_personal_info),
             size = ButtonSize.Small,
             type = ButtonType.Gray,
             onClick = onClickModifyMyInfo,
