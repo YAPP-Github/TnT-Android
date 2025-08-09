@@ -21,7 +21,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.tnt.core.ui.R
+import co.kr.tnt.core.ui.R.string.core_cancel
+import co.kr.tnt.core.ui.R.string.core_complete
+import co.kr.tnt.core.ui.R.string.core_confirm_modify_info_exit
+import co.kr.tnt.core.ui.R.string.core_name
+import co.kr.tnt.core.ui.R.string.core_name_placeholder
+import co.kr.tnt.core.ui.R.string.core_ok
+import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
+import co.kr.tnt.core.ui.R.string.core_unsaved_changes_warning
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTProfileImage
@@ -64,10 +71,10 @@ internal fun TrainerModifyMyInfoRoute(
         DialogState.NONE -> Unit
         DialogState.CONFIRM_EXIT -> {
             TnTIconPopupDialog(
-                title = "정보 수정을 종료할까요?",
-                content = "수정 사항이 저장되지 않아요!",
-                leftButtonText = stringResource(R.string.cancel),
-                rightButtonText = stringResource(R.string.ok),
+                title = stringResource(core_confirm_modify_info_exit),
+                content = stringResource(core_unsaved_changes_warning),
+                leftButtonText = stringResource(core_cancel),
+                rightButtonText = stringResource(core_ok),
                 onLeftButtonClick = { viewModel.setEvent(TrainerModifyMyInfoUiEvent.OnDismissDialog) },
                 onRightButtonClick = { viewModel.setEvent(TrainerModifyMyInfoUiEvent.OnClickDialogConfirm) },
                 onDismiss = { viewModel.setEvent(TrainerModifyMyInfoUiEvent.OnDismissDialog) },
@@ -136,25 +143,25 @@ private fun TrainerModifyMyInfoScreen(
             )
             Spacer(modifier = Modifier.height(48.dp))
             TnTLabeledTextFieldWithCounter(
-                title = stringResource(R.string.name),
+                title = stringResource(core_name),
                 value = state.name,
                 onValueChange = { newValue ->
                     onNameChange(newValue)
                 },
                 modifier = Modifier.padding(horizontal = 20.dp),
-                placeholder = "이름을 입력해주세요.",
+                placeholder = stringResource(core_name_placeholder),
                 maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
                 isSingleLine = true,
                 showWarning = state.isValidName.not(),
                 isRequired = true,
                 warningMessage = stringResource(
-                    R.string.text_length_and_format_warning,
+                    core_text_length_and_format_warning,
                     UserProfilePolicy.USER_NAME_MAX_LENGTH,
                 ),
             )
             Spacer(modifier = Modifier.weight(1f))
             TnTBottomButton(
-                text = "완료",
+                text = stringResource(core_complete),
                 enabled = state.isEnableComplete,
                 onClick = onClickComplete,
             )

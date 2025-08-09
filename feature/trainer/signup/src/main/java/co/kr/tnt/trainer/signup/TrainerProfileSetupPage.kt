@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.ui.R.string.core_name
+import co.kr.tnt.core.ui.R.string.core_name_placeholder
 import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
 import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
@@ -108,7 +109,7 @@ internal fun TrainerProfileSetupPage(
                         onChangeName(newValue)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    placeholder = stringResource(R.string.name_placeholder),
+                    placeholder = stringResource(core_name_placeholder),
                     maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
                     isSingleLine = true,
                     showWarning = state.isNameValid.not(),
