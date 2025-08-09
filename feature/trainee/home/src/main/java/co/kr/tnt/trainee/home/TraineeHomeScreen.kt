@@ -53,7 +53,7 @@ import co.kr.tnt.designsystem.component.card.TnTRecordCard
 import co.kr.tnt.designsystem.component.card.TnTSessionRecordCard
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.IMAGE_MAX_SIZE
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.domain.model.DailyRecord
 import co.kr.tnt.domain.model.RecordType
 import co.kr.tnt.domain.model.RecordType.PTSessionType
@@ -344,7 +344,7 @@ private fun DailyPtSession(
         model = ImageRequest.Builder(context)
             .data(session.trainerImage)
             .placeholder(DefaultUserProfile.Trainer.image)
-            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .transformations(ResizeTransformation(UserProfilePolicy.USER_IMAGE_MAX_SIZE))
             .build(),
     )
 
@@ -399,7 +399,7 @@ private fun DailyRecords(
         model = ImageRequest.Builder(context)
             .data(record.recordImage)
             .placeholder(co.kr.tnt.core.designsystem.R.drawable.img_default)
-            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .transformations(ResizeTransformation(UserProfilePolicy.USER_IMAGE_MAX_SIZE))
             .build(),
     )
 

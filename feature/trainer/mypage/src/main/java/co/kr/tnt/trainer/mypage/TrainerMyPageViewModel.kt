@@ -15,6 +15,7 @@ import co.kr.tnt.trainer.mypage.TrainerMyPageContract.TrainerMyPageUiState.Dialo
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -29,13 +30,14 @@ internal class TrainerMyPageViewModel @Inject constructor(
 ) : BaseViewModel<TrainerMyPageUiState, TrainerMyPageUiEvent, TrainerMyPageSideEffect>(TrainerMyPageUiState()) {
     init {
         viewModelScope.launch {
-            runCatching {
-                trainerRepository.getMyInfo()
-            }.onSuccess { user ->
-                updateState { copy(user = user) }
-            }.onFailure {
-                sendEffect(TrainerMyPageSideEffect.ShowToast(DisplayText.Resource(core_failed_to_server_request)))
-            }
+            trainerRepository.getMyInfo()
+                .onEach { user ->
+                    updateState { copy(user = user) }
+                }
+                .catch {
+                    sendEffect(TrainerMyPageSideEffect.ShowToast(DisplayText.Resource(core_failed_to_server_request)))
+                }
+                .launchIn(viewModelScope)
 
             settingRepository.isEnablePushNotification()
                 .onEach { isEnablePushNotification ->
@@ -69,8 +71,12 @@ internal class TrainerMyPageViewModel @Inject constructor(
                 copy(dialogState = DialogState.DELETE_ACCOUNT_CONFIRM)
             }
 
-            TrainerMyPageUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
+            TrainerMyPageUiEvent.OnClickModifyMyInfo -> sendEffect(
+                TrainerMyPageSideEffect.NavigateToModifyMyInfo,
+            )
+
             TrainerMyPageUiEvent.OnClickDialogConfirm -> handleDialogConfirm()
+            TrainerMyPageUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
         }
     }
 

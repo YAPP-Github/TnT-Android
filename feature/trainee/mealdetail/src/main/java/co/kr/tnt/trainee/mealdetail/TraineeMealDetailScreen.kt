@@ -37,7 +37,7 @@ import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.chip.TnTChip
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.IMAGE_MAX_SIZE
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.trainee.mealdetail.TraineeMealDetailContract.TraineeMealDetailSideEffect
@@ -94,7 +94,7 @@ private fun TraineeMealDetailScreen(
         model = ImageRequest.Builder(context)
             .data(state.image)
             .placeholder(R.drawable.img_default)
-            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .transformations(ResizeTransformation(UserProfilePolicy.USER_IMAGE_MAX_SIZE))
             .build(),
     )
 

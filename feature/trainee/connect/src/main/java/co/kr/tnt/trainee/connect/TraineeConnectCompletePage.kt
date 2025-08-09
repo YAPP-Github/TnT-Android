@@ -28,7 +28,7 @@ import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.IMAGE_MAX_SIZE
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.ui.coil.ResizeTransformation
@@ -130,7 +130,7 @@ private fun ProfileSection(
             .data(image)
             .placeholder(defaultImage)
             .error(DefaultUserProfile.Trainer.image)
-            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+            .transformations(ResizeTransformation(UserProfilePolicy.USER_IMAGE_MAX_SIZE))
             .build(),
     )
     Column(

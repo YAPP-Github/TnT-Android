@@ -42,7 +42,7 @@ import co.kr.tnt.core.ui.R.string.core_weight_unit
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
-import co.kr.tnt.domain.IMAGE_MAX_SIZE
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.feature.trainer.connect.R
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
@@ -100,7 +100,7 @@ internal fun TraineeProfilePage(
                             .data(trainee.image)
                             .placeholder(DefaultUserProfile.Trainee.image)
                             .error(DefaultUserProfile.Trainee.image)
-                            .transformations(ResizeTransformation(IMAGE_MAX_SIZE))
+                            .transformations(ResizeTransformation(UserProfilePolicy.USER_IMAGE_MAX_SIZE))
                             .build(),
                     )
                     val defaultImage = painterResource(DefaultUserProfile.Trainee.image)

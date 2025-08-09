@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import co.kr.tnt.domain.IMAGE_MAX_SIZE
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.ui.extensions.toResizedByteArray
 import java.io.File
 
@@ -33,7 +33,7 @@ fun getRealPathFromUri(uri: Uri, context: Context): String? {
 
 fun Uri.convertToAllowedImageFormat(
     context: Context,
-    maxSizeInBytes: Int = IMAGE_MAX_SIZE,
+    maxSizeInBytes: Int = UserProfilePolicy.USER_IMAGE_MAX_SIZE,
 ): File {
     val inputStream = context.contentResolver.openInputStream(this)
     val bitmap = BitmapFactory.decodeStream(inputStream)

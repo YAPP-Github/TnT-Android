@@ -40,6 +40,7 @@ import co.kr.tnt.core.ui.R.string.core_logout
 import co.kr.tnt.core.ui.R.string.core_logout_complete_title
 import co.kr.tnt.core.ui.R.string.core_logout_content
 import co.kr.tnt.core.ui.R.string.core_logout_title
+import co.kr.tnt.core.ui.R.string.core_modifying_personal_info
 import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.core.ui.R.string.core_open_source_license
 import co.kr.tnt.core.ui.R.string.core_privacy_policy
@@ -48,6 +49,9 @@ import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTSwitch
+import co.kr.tnt.designsystem.component.button.TnTTextButton
+import co.kr.tnt.designsystem.component.button.model.ButtonSize
+import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.User
@@ -70,6 +74,7 @@ import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import kotlinx.coroutines.flow.collectLatest
 import co.kr.tnt.core.designsystem.R as designSystemR
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -77,6 +82,7 @@ import co.kr.tnt.core.designsystem.R as designSystemR
 internal fun TrainerMyPageRoute(
     padding: PaddingValues,
     navigateToLogin: () -> Unit,
+    navigateToModifyMyInfo: () -> Unit,
     navigateToWebView: (String) -> Unit,
     viewModel: TrainerMyPageViewModel = hiltViewModel(),
 ) {
@@ -100,6 +106,7 @@ internal fun TrainerMyPageRoute(
         onClickTermsOfService = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickTermsOfService) },
         onClickPrivacy = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickPrivacy) },
         onClickOpenSourceLicense = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickOpenSourceLicense) },
+        onClickModifyMyInfo = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickModifyMyInfo) },
         onClickLogout = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickLogout) },
         onClickDeleteAccount = { viewModel.setEvent(TrainerMyPageUiEvent.OnClickDeleteAccount) },
     )
@@ -115,16 +122,17 @@ internal fun TrainerMyPageRoute(
     }
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collectLatest { effect ->
             when (effect) {
                 TrainerMyPageSideEffect.NavigateToLogin -> navigateToLogin()
+                TrainerMyPageSideEffect.NavigateToModifyMyInfo -> navigateToModifyMyInfo()
                 is TrainerMyPageSideEffect.NavigateToWebView -> navigateToWebView(effect.url)
                 is TrainerMyPageSideEffect.ShowToast -> toast.show(effect.message.asString(context))
 
                 is TrainerMyPageSideEffect.RequestPermission -> {
                     if (effect.isExplicitlyDenied) {
                         context.moveToAppSetting()
-                        return@collect
+                        return@collectLatest
                     }
 
                     permissionState.launchMultiplePermissionRequest()
@@ -146,6 +154,7 @@ private fun TrainerMyPageScreen(
     onClickTermsOfService: () -> Unit,
     onClickPrivacy: () -> Unit,
     onClickOpenSourceLicense: () -> Unit,
+    onClickModifyMyInfo: () -> Unit,
     onClickLogout: () -> Unit,
     onClickDeleteAccount: () -> Unit,
 ) {
@@ -180,7 +189,14 @@ private fun TrainerMyPageScreen(
             style = TnTTheme.typography.h2,
             color = TnTTheme.colors.neutralColors.Neutral950,
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
+        TnTTextButton(
+            text = stringResource(core_modifying_personal_info),
+            size = ButtonSize.Small,
+            type = ButtonType.Gray,
+            onClick = onClickModifyMyInfo,
+        )
+        Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -399,6 +415,7 @@ private fun TrainerMyPageScreenPreview() {
             onClickOpenSourceLicense = { },
             onClickLogout = { },
             onClickDeleteAccount = { },
+            onClickModifyMyInfo = { },
         )
     }
 }

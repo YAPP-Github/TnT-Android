@@ -1,16 +1,23 @@
 package co.kr.data.repository
 
+import co.kr.data.network.model.UpdateUserInfoRequest
+import co.kr.data.network.model.enum.MemberType
 import co.kr.data.network.model.toDomain
 import co.kr.data.network.model.trainer.PtSessionRequest
 import co.kr.data.network.model.trainer.toDomain
 import co.kr.data.network.source.TrainerRemoteDataSource
 import co.kr.data.network.source.UserRemoteDataSource
 import co.kr.tnt.domain.model.MemberInfo
+import co.kr.tnt.domain.model.ProfileImageUpdatePolicy
 import co.kr.tnt.domain.model.User
+import co.kr.tnt.domain.model.UserType
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSession
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.domain.utils.DateFormatter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onStart
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
@@ -23,6 +30,8 @@ internal class TrainerRepositoryImpl @Inject constructor(
     private val trainerRemoteDataSource: TrainerRemoteDataSource,
     private val dateFormatter: DateFormatter,
 ) : TrainerRepository {
+    private val cacheUserInfo = MutableStateFlow(User.Trainer.EMPTY)
+
     override suspend fun getMonthlyPtSessionCounts(yearMonth: YearMonth): List<TrainerDailyPtSessionCount> =
         trainerRemoteDataSource.getMonthlyPtSessionCounts(
             year = yearMonth.year,
@@ -31,10 +40,13 @@ internal class TrainerRepositoryImpl @Inject constructor(
             response.toDomain(dateFormatter)
         }
 
-    override suspend fun getMyInfo(): User.Trainer {
-        val user = userRemoteDataSource.getMyInfo().toDomain(dateFormatter)
-        require(user is User.Trainer)
-        return user
+    override suspend fun getMyInfo(): Flow<User.Trainer> {
+        return cacheUserInfo
+            .onStart {
+                if (cacheUserInfo.value == User.Trainer.EMPTY) {
+                    cacheUserInfo.value = fetchUserInfo()
+                }
+            }
     }
 
     override suspend fun getDailyPtSessions(day: LocalDate): TrainerDailyPtSession =
@@ -65,4 +77,36 @@ internal class TrainerRepositoryImpl @Inject constructor(
 
     override suspend fun postCompleteSession(ptSessionId: String) =
         trainerRemoteDataSource.putCompletePtSession(ptSessionId)
+
+    override suspend fun updateUserInfo(
+        profileImageUpdatePolicy: ProfileImageUpdatePolicy,
+        name: String,
+    ) {
+        val (profileImage, isRemoveProfileImage) = when (profileImageUpdatePolicy) {
+            is ProfileImageUpdatePolicy.Change -> profileImageUpdatePolicy.newProfileImage to false
+            ProfileImageUpdatePolicy.Keep -> null to false
+            ProfileImageUpdatePolicy.Remove -> null to true
+        }
+
+        runCatching {
+            trainerRemoteDataSource.putUserInfo(
+                profileImage = profileImage,
+                request = UpdateUserInfoRequest(
+                    removeImage = isRemoveProfileImage,
+                    memberType = MemberType.from(UserType.TRAINER),
+                    name = name,
+                ),
+            )
+        }.onSuccess {
+            cacheUserInfo.value = fetchUserInfo()
+        }.onFailure { failure ->
+            throw failure
+        }
+    }
+
+    private suspend fun fetchUserInfo(): User.Trainer {
+        val user = userRemoteDataSource.getMyInfo().toDomain(dateFormatter)
+        require(user is User.Trainer)
+        return user
+    }
 }

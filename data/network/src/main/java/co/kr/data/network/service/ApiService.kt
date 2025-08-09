@@ -57,6 +57,13 @@ interface ApiService {
     @GET("/members")
     suspend fun getMyInfo(): UserResponse
 
+    @Multipart
+    @PUT("/members")
+    suspend fun putMyInfo(
+        @Part profileImage: MultipartBody.Part?,
+        @Part("request") request: RequestBody,
+    )
+
     // Connect
     @GET("/trainers/invitation-code")
     suspend fun getInviteCode(): InviteCodeResponse

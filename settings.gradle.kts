@@ -58,6 +58,7 @@ include(
     ":feature:trainer:mypage",
     ":feature:trainer:notification",
     ":feature:trainer:addptsession",
+    ":feature:trainer:modifymyinfo",
 )
 
 include(

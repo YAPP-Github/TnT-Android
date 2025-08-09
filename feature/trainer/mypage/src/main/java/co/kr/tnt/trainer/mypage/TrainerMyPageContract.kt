@@ -34,6 +34,7 @@ internal class TrainerMyPageContract {
         data object OnClickOpenSourceLicense : TrainerMyPageUiEvent
         data object OnClickLogout : TrainerMyPageUiEvent
         data object OnClickDeleteAccount : TrainerMyPageUiEvent
+        data object OnClickModifyMyInfo : TrainerMyPageUiEvent
         data object OnClickDialogConfirm : TrainerMyPageUiEvent
         data object OnDismissDialog : TrainerMyPageUiEvent
     }
@@ -42,6 +43,7 @@ internal class TrainerMyPageContract {
         data object NavigateToLogin : TrainerMyPageSideEffect
         data class NavigateToWebView(val url: String) : TrainerMyPageSideEffect
         data object NavigateToOpenSourceLicense : TrainerMyPageSideEffect
+        data object NavigateToModifyMyInfo : TrainerMyPageSideEffect
         data class RequestPermission(val isExplicitlyDenied: Boolean) : TrainerMyPageSideEffect
         data class ShowToast(val message: DisplayText) : TrainerMyPageSideEffect
     }
