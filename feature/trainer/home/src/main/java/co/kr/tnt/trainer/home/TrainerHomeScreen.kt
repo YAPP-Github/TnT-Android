@@ -42,9 +42,12 @@ import co.kr.tnt.core.designsystem.R.drawable.ic_add
 import co.kr.tnt.core.designsystem.R.drawable.ic_fill_check_false
 import co.kr.tnt.core.designsystem.R.drawable.ic_fill_check_true
 import co.kr.tnt.core.designsystem.R.drawable.img_default
+import co.kr.tnt.core.ui.R.string.core_cancel
 import co.kr.tnt.core.ui.R.string.core_connect
 import co.kr.tnt.core.ui.R.string.core_do_not_see_for_three_days
 import co.kr.tnt.core.ui.R.string.core_next_time
+import co.kr.tnt.core.ui.R.string.core_ok
+import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTPopupDialog
 import co.kr.tnt.designsystem.component.button.TnTFabButton
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorWeekCalendar
@@ -58,6 +61,7 @@ import co.kr.tnt.domain.model.PtSession
 import co.kr.tnt.domain.utils.DateFormatter
 import co.kr.tnt.feature.trainer.home.R
 import co.kr.tnt.navigation.model.ScreenMode
+import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeDialog
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
@@ -109,9 +113,9 @@ internal fun TrainerHomeRoute(
         }
     }
 
-    when (state.dialogState) {
-        TrainerHomeUiState.DialogState.NONE -> Unit
-        TrainerHomeUiState.DialogState.HOME_CONNECT -> {
+    when (val dialogState = state.dialogState) {
+        TrainerHomeDialog.None -> Unit
+        TrainerHomeDialog.HomeConnect -> {
             TnTCheckToggleDialog(
                 title = stringResource(R.string.please_connect_member),
                 content = stringResource(R.string.cannot_add_pt_without_connection),
@@ -126,7 +130,7 @@ internal fun TrainerHomeRoute(
             )
         }
 
-        TrainerHomeUiState.DialogState.ADD_PT_CONNECT -> {
+        TrainerHomeDialog.AddPtConnect -> {
             TnTPopupDialog(
                 title = stringResource(R.string.please_connect_member),
                 content = stringResource(R.string.cannot_add_pt_without_connection),
@@ -134,6 +138,22 @@ internal fun TrainerHomeRoute(
                 rightButtonText = stringResource(core_connect),
                 onLeftButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
                 onRightButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnConfirmConnectDialog) },
+                onDismiss = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
+            )
+        }
+
+        is TrainerHomeDialog.EarlyPtCompletion -> {
+            TnTIconPopupDialog(
+                title = stringResource(R.string.pt_early_completion_title),
+                content = stringResource(R.string.pt_early_completion_message),
+                leftButtonText = stringResource(core_cancel),
+                rightButtonText = stringResource(core_ok),
+                onLeftButtonClick = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
+                onRightButtonClick = {
+                    viewModel.setEvent(
+                        TrainerHomeUiEvent.OnConfirmEarlyPtCompletion(dialogState.ptSession),
+                    )
+                },
                 onDismiss = { viewModel.setEvent(TrainerHomeUiEvent.OnDismissDialog) },
             )
         }
