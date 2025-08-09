@@ -67,6 +67,14 @@
     <!-- PT Session -->
     <string name="core_pt_session">%d회차 수업</string>
 
+    <!-- PT Purpose -->
+    <string name="core_loss_weight">체중 감량</string>
+    <string name="core_strength_improvement">근력 향상</string>
+    <string name="core_health_care">건강 관리</string>
+    <string name="core_flexibility">유연성 향상</string>
+    <string name="core_body_profile">바디프로필</string>
+    <string name="core_posture_correction">자세 교정</string>
+
     <!--  MyPage  -->
     <string name="core_modifying_personal_info">개인정보 수정</string>
     <string name="core_app_push_notification">앱 푸시 알림</string>

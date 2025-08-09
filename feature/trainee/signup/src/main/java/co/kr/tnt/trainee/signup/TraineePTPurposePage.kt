@@ -27,7 +27,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.trainee.signup.component.ProgressSteps
-import co.kr.tnt.trainee.signup.model.PTPurpose
+import co.kr.tnt.trainee.signup.model.TraineePtPurpose
 
 private const val ROW_NUM = 3
 private const val COLUMNS_NUM = 2
@@ -63,7 +63,7 @@ internal fun TraineePTPurposePage(
                         maxLines = ROW_NUM,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        PTPurpose.entries.forEach { purpose ->
+                        TraineePtPurpose.entries.forEach { purpose ->
                             val purposeText = stringResource(purpose.textResId)
                             PurposeButton(
                                 text = purposeText,

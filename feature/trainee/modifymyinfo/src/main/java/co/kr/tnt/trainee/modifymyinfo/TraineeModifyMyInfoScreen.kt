@@ -12,6 +12,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,12 +50,16 @@ import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
+import co.kr.tnt.designsystem.component.button.TnTTextButton
+import co.kr.tnt.designsystem.component.button.model.ButtonSize
+import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.modifymyinfo.R
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoEffect
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiEvent
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiState
+import co.kr.tnt.trainee.modifymyinfo.model.TraineePtPurpose
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import coil.compose.rememberAsyncImagePainter
@@ -64,6 +70,8 @@ import java.time.format.DateTimeFormatter
 
 private const val MAX_NAME_LENGTH = 15
 private const val MAX_CAUTION_LENGTH = 100
+private const val ROW_NUM = 3
+private const val COLUMNS_NUM = 2
 
 @Composable
 internal fun TraineeModifyMyInfoRoute(
@@ -93,7 +101,9 @@ internal fun TraineeModifyMyInfoRoute(
         onCautionChange = { caution ->
             viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnCautionChange(caution))
         },
-        onPurposeSelected = { TODO() },
+        onPurposeSelected = { purpose ->
+            viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnPurposeSelected(purpose))
+        },
         onBackClick = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnBackClick) },
         onNextClick = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnNextClick) },
     )
@@ -108,6 +118,7 @@ internal fun TraineeModifyMyInfoRoute(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TraineeModifyMyInfoScreen(
     state: TraineeModifyMyInfoUiState,
@@ -254,7 +265,25 @@ private fun TraineeModifyMyInfoScreen(
                         color = TnTTheme.colors.neutralColors.Neutral900,
                     )
                     Spacer(Modifier.padding(top = 12.dp))
-                    // TODO PTPurpose 다시 생각
+                    Column {
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            maxItemsInEachRow = COLUMNS_NUM,
+                            maxLines = ROW_NUM,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            TraineePtPurpose.entries.forEach { purpose ->
+                                val purposeText = stringResource(purpose.textResId)
+                                PurposeButton(
+                                    text = purposeText,
+                                    isSelected = state.ptPurpose?.contains(purposeText) == true,
+                                    onClick = { onPurposeSelected(purposeText) },
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
+                        }
+                    }
                 }
                 Column {
                     Text(
@@ -337,6 +366,22 @@ private fun UnitLabel(stringResId: Int) {
         text = stringResource(stringResId),
         style = TnTTheme.typography.body1Medium,
         color = TnTTheme.colors.neutralColors.Neutral400,
+    )
+}
+
+@Composable
+fun PurposeButton(
+    text: String,
+    isSelected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    TnTTextButton(
+        text = text,
+        modifier = modifier,
+        size = ButtonSize.XLarge,
+        type = if (isSelected) ButtonType.RedOutline else ButtonType.GrayOutline,
+        onClick = onClick,
     )
 }
 
