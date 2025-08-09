@@ -3,6 +3,7 @@ package co.kr.tnt.trainee.modifymyinfo
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 
 internal class TraineeModifyMyInfoContract {
     data object TraineeModifyMyInfoUiState : UiState
@@ -10,6 +11,6 @@ internal class TraineeModifyMyInfoContract {
     data object TraineeModifyMyInfoUiEvent : UiEvent
 
     sealed interface TraineeModifyMyInfoEffect : UiSideEffect {
-        data class ShowToast(val message: String) : TraineeModifyMyInfoEffect
+        data class ShowToast(val message: DisplayText) : TraineeModifyMyInfoEffect
     }
 }
