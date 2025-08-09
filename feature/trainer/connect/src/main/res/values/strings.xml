@@ -5,4 +5,5 @@
     <string name="trainee_who_will_be_with">함께할 트레이니는 이런 분이에요!</string>
     <string name="purpose_of_pt">PT 목표</string>
     <string name="caution">주의사항</string>
+    <string name="not_entered">미입력</string>
 </resources>

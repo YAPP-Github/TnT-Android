@@ -4,6 +4,7 @@ import co.kr.tnt.navigation.Route
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 
 internal class MainContract {
     data class MainUiState(
@@ -19,6 +20,6 @@ internal class MainContract {
     }
 
     sealed interface MainSideEffect : UiSideEffect {
-        data class ShowToast(val message: String) : MainSideEffect
+        data class ShowToast(val message: DisplayText) : MainSideEffect
     }
 }

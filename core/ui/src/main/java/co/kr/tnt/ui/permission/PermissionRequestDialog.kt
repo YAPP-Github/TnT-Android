@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import co.kr.tnt.core.ui.R
+import co.kr.tnt.core.ui.R.string.core_close
+import co.kr.tnt.core.ui.R.string.core_move_to_setting
+import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.designsystem.component.TnTPopupDialog
 import co.kr.tnt.designsystem.theme.TnTTheme
 
@@ -32,12 +34,12 @@ fun PermissionRequestDialog(
                 permission.description
             },
         ),
-        leftButtonText = stringResource(R.string.close),
+        leftButtonText = stringResource(core_close),
         rightButtonText = stringResource(
             if (isPermanentlyDenied) {
-                R.string.move_to_setting
+                core_move_to_setting
             } else {
-                R.string.ok
+                core_ok
             },
         ),
         onLeftButtonClick = onDismiss,

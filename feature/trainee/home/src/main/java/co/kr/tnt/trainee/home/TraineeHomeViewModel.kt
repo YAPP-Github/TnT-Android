@@ -1,6 +1,7 @@
 package co.kr.tnt.trainee.home
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
 import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.domain.repository.TraineeRepository
@@ -8,6 +9,7 @@ import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeEffect
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiEvent
 import co.kr.tnt.trainee.home.TraineeHomeContract.TraineeHomeUiState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
@@ -64,7 +66,11 @@ internal class TraineeHomeViewModel @Inject constructor(
                     updateMonthlyRecordStatus(mergedData)
                 }
             }.onFailure {
-                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
+                sendEffect(
+                    TraineeHomeEffect.ShowToast(
+                        DisplayText.Resource(core_failed_to_server_request),
+                    ),
+                )
             }
         }
     }
@@ -106,7 +112,11 @@ internal class TraineeHomeViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
+                sendEffect(
+                    TraineeHomeEffect.ShowToast(
+                        DisplayText.Resource(core_failed_to_server_request),
+                    ),
+                )
             }
         }
     }
@@ -166,7 +176,11 @@ internal class TraineeHomeViewModel @Inject constructor(
                     return@launch
                 }
             }.onFailure {
-                sendEffect(TraineeHomeEffect.ShowToast("서버 요청에 실패했어요."))
+                sendEffect(
+                    TraineeHomeEffect.ShowToast(
+                        DisplayText.Resource(core_failed_to_server_request),
+                    ),
+                )
             }
 
             val lastHiddenDate = connectRepository.getExplicitDeniedConnectDate().firstOrNull()

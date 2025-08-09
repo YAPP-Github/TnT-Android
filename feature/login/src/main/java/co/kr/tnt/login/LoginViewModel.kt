@@ -1,14 +1,17 @@
 package co.kr.tnt.login
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.model.AuthType
 import co.kr.tnt.domain.model.LoginResult
 import co.kr.tnt.domain.repository.LoginRepository
+import co.kr.tnt.feature.login.R
 import co.kr.tnt.login.LoginContract.LoginSideEffect
 import co.kr.tnt.login.LoginContract.LoginUiEvent
 import co.kr.tnt.login.LoginContract.LoginUiState
 import co.kr.tnt.login.model.TermState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +31,11 @@ internal class LoginViewModel @Inject constructor(
 
             is LoginUiEvent.OnAuthFail -> {
                 if (event.throwable !is LoginException.CancelException) {
-                    sendEffect(LoginSideEffect.ShowToast("로그인에 실패하였습니다. 다시 시도해주세요."))
+                    sendEffect(
+                        LoginSideEffect.ShowToast(
+                            DisplayText.Resource(R.string.failed_login_try_again),
+                        ),
+                    )
                 }
             }
 
@@ -67,8 +74,11 @@ internal class LoginViewModel @Inject constructor(
                 clearAllChecks()
                 sendEffect(LoginSideEffect.ShowTermBottomSheet)
             }.onFailure {
-                // TODO resource
-                sendEffect(LoginSideEffect.ShowToast("알 수 없는 오류가 발생했습니다. 다시 시도해주세요."))
+                sendEffect(
+                    LoginSideEffect.ShowToast(
+                        DisplayText.Resource(core_failed_to_server_request),
+                    ),
+                )
             }
         }
     }
@@ -106,7 +116,11 @@ internal class LoginViewModel @Inject constructor(
             sendEffect(LoginSideEffect.NavigateToSignup(loginResult, messagingToken))
             this@LoginViewModel.loginResult = null
         } ?: run {
-            sendEffect(LoginSideEffect.ShowToast("로그인에 실패하였습니다. 다시 시도해주세요."))
+            sendEffect(
+                LoginSideEffect.ShowToast(
+                    DisplayText.Resource(R.string.failed_login_try_again),
+                ),
+            )
         }
     }
 }

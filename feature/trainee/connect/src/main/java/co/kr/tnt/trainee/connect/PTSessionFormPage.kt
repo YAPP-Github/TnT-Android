@@ -26,6 +26,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_entered_wrong_text
+import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
@@ -37,7 +39,6 @@ import co.kr.tnt.ui.utils.throttled
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import co.kr.tnt.core.ui.R as uiResource
 
 private const val MAX_COUNT = 99
 
@@ -159,7 +160,7 @@ internal fun PTSessionFormPage(
                         )
                         Text(
                             text = if (showCompletedSessionWarning || showTotalSessionWarning) {
-                                stringResource(uiResource.string.entered_wrong_text)
+                                stringResource(core_entered_wrong_text)
                             } else {
                                 ""
                             },
@@ -195,7 +196,7 @@ internal fun PTSessionFormPage(
                         )
                         Text(
                             text = if (showTotalSessionWarning || showCompletedSessionWarning) {
-                                stringResource(uiResource.string.entered_wrong_text)
+                                stringResource(core_entered_wrong_text)
                             } else {
                                 ""
                             },
@@ -207,7 +208,7 @@ internal fun PTSessionFormPage(
                 }
             }
             TnTBottomButton(
-                text = stringResource(uiResource.string.next),
+                text = stringResource(core_next),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enabled = isFormValid,
                 onClick = throttled { onClickNext() },

@@ -41,6 +41,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.ui.R.string.core_connect
+import co.kr.tnt.core.ui.R.string.core_do_not_see_for_three_days
+import co.kr.tnt.core.ui.R.string.core_next_time
 import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.calendar.TnTIndicatorWeekCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
@@ -75,7 +78,6 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
-import co.kr.tnt.core.ui.R as coreR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,9 +134,9 @@ internal fun TraineeHomeRoute(
             title = stringResource(R.string.please_connect_trainer),
             content = stringResource(R.string.connect_dialog_warning),
             isChecked = uiState.isDialogHiddenForThreeDays,
-            checkToggleText = stringResource(coreR.string.do_not_see_for_three_days),
-            leftButtonText = stringResource(coreR.string.next_time),
-            rightButtonText = stringResource(coreR.string.connect),
+            checkToggleText = stringResource(core_do_not_see_for_three_days),
+            leftButtonText = stringResource(core_next_time),
+            rightButtonText = stringResource(core_connect),
             onLeftButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnDismissDialog) },
             onRightButtonClick = { viewModel.setEvent(TraineeHomeUiEvent.OnConfirmConnectDialog) },
             onClickCheck = { viewModel.setEvent(TraineeHomeUiEvent.OnChangeHideDialogOption) },
@@ -156,7 +158,7 @@ internal fun TraineeHomeRoute(
                 }
 
                 TraineeHomeEffect.NavigateToConnect -> navigateToConnect()
-                is TraineeHomeEffect.ShowToast -> snackbar.show(effect.message)
+                is TraineeHomeEffect.ShowToast -> snackbar.show(effect.message.asString(context))
             }
         }
     }

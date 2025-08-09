@@ -12,4 +12,7 @@
     <string name="delete_account_content">운동 및 식단 기록에 대한 데이터가 사라져요!</string>
     <string name="delete_account_complete_title">계정 탈퇴가 완료되었어요</string>
     <string name="delete_account_complete_content">다음에 더 폭발적인 케미로 다시 만나요! 💣</string>
+
+    <string name="failed_login">로그아웃에 실패하였습니다.</string>
+    <string name="failed_delete_account">탈퇴에 실패하였습니다.</string>
 </resources>

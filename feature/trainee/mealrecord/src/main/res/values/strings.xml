@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="failed_meal_record">식단 기록에 실패했어요</string>
+    <string name="meal_record">식단 기록</string>
+    <string name="recorded_meal">식단을 기록했어요!</string>
+    <string name="will_you_record_tomorrow_too">내일도 기록해 주실 거죠?</string>
+    <string name="exit_meal_recording">식단 기록을 종료할까요?</string>
+    <string name="record_will_not_be_saved">기록이 저장되지 않아요!</string>
+    <string name="add_todays_meal">오늘 먹은 식단을 추가해보세요</string>
+    <string name="meal_date">식사 날짜</string>
+    <string name="meal_time">식사 시간</string>
+    <string name="category">분류</string>
+    <string name="wirte_memo">메모하기</string>
+    <string name="enter_meal_info">식단에 대한 정보를 입력해주세요!</string>
+    <string name="select_meal_date">식단 날짜 선택하기</string>
+    <string name="select_meal_time">식단 시간 선택하기</string>
+</resources>

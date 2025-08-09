@@ -2,6 +2,7 @@ package co.kr.tnt.trainee.signup
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.repository.SignUpRepository
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpEffect
@@ -9,6 +10,7 @@ import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpPage
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiEvent
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
@@ -75,7 +77,11 @@ internal class TraineeSignUpViewModel @Inject constructor(
             }.onSuccess {
                 sendEffect(TraineeSignUpEffect.NavigateToConnect)
             }.onFailure {
-                sendEffect(TraineeSignUpEffect.ShowToast("서버 요청에 실패했어요."))
+                sendEffect(
+                    TraineeSignUpEffect.ShowToast(
+                        DisplayText.Resource(core_failed_to_server_request),
+                    ),
+                )
             }.also {
                 updateState { copy(isLoading = false) }
             }

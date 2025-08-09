@@ -49,7 +49,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.tnt.core.designsystem.R
+import co.kr.tnt.core.designsystem.R.drawable.ic_close
+import co.kr.tnt.core.designsystem.R.drawable.ic_image
+import co.kr.tnt.core.designsystem.R.drawable.ic_overlay_close
+import co.kr.tnt.core.ui.R.string.core_cancel
+import co.kr.tnt.core.ui.R.string.core_length_warning
+import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
@@ -70,6 +75,7 @@ import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.IMAGE_MAX_SIZE
 import co.kr.tnt.domain.model.RecordType.MealType
 import co.kr.tnt.domain.utils.DateFormatter
+import co.kr.tnt.feature.trainee.mealrecord.R
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiEvent
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState
 import co.kr.tnt.trainee.mealrecord.TraineeMealRecordContract.TraineeMealRecordUiState.DialogState
@@ -89,7 +95,6 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
-import co.kr.tnt.core.ui.R as coreR
 
 @Composable
 internal fun TraineeMealRecordRoute(
@@ -199,7 +204,7 @@ internal fun TraineeMealRecordRoute(
             when (effect) {
                 TraineeMealRecordContract.TraineeMealRecordSideEffect.NavigateToHome -> navigateToPrevious()
                 is TraineeMealRecordContract.TraineeMealRecordSideEffect.ShowToast -> snackbar.show(
-                    effect.message,
+                    effect.message.asString(context),
                 )
             }
         }
@@ -231,7 +236,7 @@ private fun TraineeMealRecordScreen(
         containerColor = TnTTheme.colors.commonColors.Common0,
         topBar = {
             TnTTopBarWithBackButton(
-                title = "식단 기록",
+                title = stringResource(R.string.meal_record),
                 onBackClick = onClickBack,
                 showStoke = true,
             )
@@ -321,9 +326,9 @@ private fun Dialog(
         DialogState.NONE -> Unit
         DialogState.COMPLETED -> {
             TnTSingleButtonPopupDialog(
-                title = "식단을 기록했어요!",
-                content = "내일도 기록해 주실 거죠?",
-                buttonText = stringResource(coreR.string.ok),
+                title = stringResource(R.string.recorded_meal),
+                content = stringResource(R.string.will_you_record_tomorrow_too),
+                buttonText = stringResource(core_ok),
                 cancelable = false,
                 onButtonClick = onClickConfirm,
                 onDismiss = onDismissDialog,
@@ -332,12 +337,12 @@ private fun Dialog(
 
         DialogState.EXIT -> {
             TnTIconPopupDialog(
-                title = "식단 기록을 종료할까요?",
-                content = "기록이 저장되지 않아요!",
-                leftButtonText = "취소",
-                rightButtonText = "확인",
-                onLeftButtonClick = onDismissDialog,
-                onRightButtonClick = onClickExit,
+                title = stringResource(R.string.exit_meal_recording),
+                content = stringResource(R.string.record_will_not_be_saved),
+                leftButtonText = stringResource(core_cancel),
+                rightButtonText = stringResource(core_ok),
+                onLeftButtonClick = onClickExit,
+                onRightButtonClick = onDismissDialog,
                 onDismiss = onDismissDialog,
             )
         }
@@ -374,11 +379,11 @@ private fun MealImageSelector(
         ) {
             if (imageUri == null) {
                 Image(
-                    painter = painterResource(R.drawable.ic_image),
+                    painter = painterResource(ic_image),
                     contentDescription = null,
                 )
                 Text(
-                    text = "오늘 먹은 식단을 추가해보세요",
+                    text = stringResource(R.string.add_todays_meal),
                     color = TnTTheme.colors.neutralColors.Neutral400,
                     style = TnTTheme.typography.body2Medium,
                 )
@@ -395,7 +400,7 @@ private fun MealImageSelector(
                         modifier = Modifier.align(Alignment.TopEnd),
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_overlay_close),
+                            painter = painterResource(ic_overlay_close),
                             contentDescription = null,
                             tint = Color.Unspecified,
                         )
@@ -414,7 +419,7 @@ private fun MealDate(
     onClick: () -> Unit,
 ) {
     TnTSelectableTextField(
-        title = "식사 날짜",
+        title = stringResource(R.string.meal_date),
         value = dateFormatter.format(date, "yyyy/MM/dd"),
         onValueChange = { },
         isRequired = true,
@@ -432,7 +437,7 @@ private fun MealTime(
 ) {
     val now = LocalTime.now()
     TnTSelectableTextField(
-        title = "식사 시간",
+        title = stringResource(R.string.meal_time),
         value = time?.let { dateFormatter.format(it, "HH:mm") } ?: "",
         onValueChange = { },
         isRequired = true,
@@ -459,7 +464,7 @@ private fun MealTypes(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = "분류",
+                text = stringResource(R.string.category),
                 style = TnTTheme.typography.body1Bold,
                 color = TnTTheme.colors.neutralColors.Neutral900,
             )
@@ -500,7 +505,7 @@ private fun MealMemo(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = "메모하기",
+                text = stringResource(R.string.wirte_memo),
                 style = TnTTheme.typography.body1Bold,
                 color = TnTTheme.colors.neutralColors.Neutral900,
             )
@@ -516,10 +521,10 @@ private fun MealMemo(
             onValueChange = { newValue ->
                 onValueChange(newValue)
             },
-            placeholder = "식단에 대한 정보를 입력해주세요!",
+            placeholder = stringResource(R.string.enter_meal_info),
             maxLength = 100,
             isError = state.showWarning,
-            warningMessage = "100자 미만으로 입력해주세요",
+            warningMessage = stringResource(core_length_warning, 100),
         )
     }
 }
@@ -542,13 +547,13 @@ private fun CalendarBottomSheetContent(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "식단 날짜 선택하기",
+                text = stringResource(R.string.select_meal_date),
                 color = TnTTheme.colors.neutralColors.Neutral900,
                 style = TnTTheme.typography.h3,
                 modifier = Modifier.weight(1f),
             )
             Icon(
-                painter = painterResource(R.drawable.ic_close),
+                painter = painterResource(ic_close),
                 contentDescription = null,
                 modifier = Modifier.clickable(onClick = onClickClose),
             )
@@ -559,7 +564,7 @@ private fun CalendarBottomSheetContent(
             onClickDay = { newDate -> selectedDate = newDate },
         )
         TnTTextButton(
-            text = stringResource(coreR.string.ok),
+            text = stringResource(core_ok),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
@@ -633,13 +638,13 @@ private fun TimePickerBottomSheetContent(
             modifier = Modifier.padding(20.dp),
         ) {
             Text(
-                text = "식단 시간 선택하기",
+                text = stringResource(R.string.select_meal_time),
                 color = TnTTheme.colors.neutralColors.Neutral900,
                 style = TnTTheme.typography.h3,
                 modifier = Modifier.weight(1f),
             )
             Icon(
-                painter = painterResource(R.drawable.ic_close),
+                painter = painterResource(ic_close),
                 contentDescription = null,
                 modifier = Modifier.clickable(onClick = onClickClose),
             )
@@ -656,7 +661,7 @@ private fun TimePickerBottomSheetContent(
         )
         Spacer(Modifier.height(40.dp))
         TnTTextButton(
-            text = stringResource(coreR.string.ok),
+            text = stringResource(core_ok),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pt_completed">PT 수업을 완료했어요</string>
+    <string name="please_connect_member">회원을 연결해 주세요</string>
+    <string name="cannot_add_pt_without_connection">연결하지 않을 경우 수업을 추가할 수 없어요\n초대 코드를 복사해 연결해주시겠어요?</string>
+    <string name="add_pt_session">수업 추가</string>
+    <string name="pt_session_count_suffix">개의 수업이 있어요</string>
+    <string name="no_pt_session_yet">아직 등록된 수업이 없어요.</string>
+    <string name="press_add_button_to_add_pt_session">추가 버튼을 눌러 PT 수업 일정을 추가해 보세요</string>
+    <string name="pt_session_count">%1$s회차 수업</string>
+</resources>

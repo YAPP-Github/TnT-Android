@@ -1,6 +1,7 @@
 package co.kr.tnt.trainer.connect
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainer.TrainerManagementMemberCount
 import co.kr.tnt.domain.repository.ConnectRepository
@@ -9,6 +10,7 @@ import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectSideEffect
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiEvent
 import co.kr.tnt.trainer.connect.TrainerConnectContract.TrainerConnectUiState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -62,7 +64,7 @@ internal class TrainerConnectViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                sendEffect(TrainerConnectSideEffect.ShowToast("서버 요청에 실패했어요"))
+                sendEffect(TrainerConnectSideEffect.ShowToast(DisplayText.Resource(core_failed_to_server_request)))
             }
         }
     }

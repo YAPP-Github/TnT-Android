@@ -4,6 +4,7 @@ import android.net.Uri
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 import java.io.File
 import java.time.LocalDate
 
@@ -76,7 +77,7 @@ internal class TraineeSignUpContract {
     }
 
     sealed interface TraineeSignUpEffect : UiSideEffect {
-        data class ShowToast(val message: String) : TraineeSignUpEffect
+        data class ShowToast(val message: DisplayText) : TraineeSignUpEffect
         data object NavigateToBack : TraineeSignUpEffect
         data object NavigateToConnect : TraineeSignUpEffect
     }

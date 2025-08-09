@@ -1,16 +1,19 @@
 package co.kr.tnt.trainer.home
 
 import androidx.lifecycle.viewModelScope
+import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.model.PtSession
 import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.domain.repository.TrainerRepository
+import co.kr.tnt.feature.trainer.home.R
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.model.SnackbarType
+import co.kr.tnt.ui.resource.DisplayText
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -77,7 +80,11 @@ internal class TrainerHomeViewModel @Inject constructor(
 
                         results.forEach(::updateMonthlyPtSessionCounts)
                     }.onFailure {
-                        sendEffect(TrainerHomeSideEffect.ShowToast("서버 요청에 실패했어요"))
+                        sendEffect(
+                            TrainerHomeSideEffect.ShowToast(
+                                DisplayText.Resource(core_failed_to_server_request),
+                            ),
+                        )
                     }
                 }
             }
@@ -97,7 +104,11 @@ internal class TrainerHomeViewModel @Inject constructor(
                     updateState { copy(selectedDayPtSessions = selectedDayPtSessions) }
                 }.onFailure {
                     updateState { copy(selectedDayPtSessions = null) }
-                    sendEffect(TrainerHomeSideEffect.ShowToast("서버 요청에 실패했어요"))
+                    sendEffect(
+                        TrainerHomeSideEffect.ShowToast(
+                            DisplayText.Resource(core_failed_to_server_request),
+                        ),
+                    )
                 }
             }
         }
@@ -120,12 +131,18 @@ internal class TrainerHomeViewModel @Inject constructor(
                     getDailyPtSessions(currentState.selectedDay)
                     sendEffect(
                         TrainerHomeSideEffect.ShowToast(
-                            message = "PT 수업을 완료했어요",
+                            message = DisplayText.Resource(R.string.pt_completed),
                             type = SnackbarType.SUCCESS,
                         ),
                     )
                 }.onFailure { throwable ->
-                    sendEffect(TrainerHomeSideEffect.ShowToast(throwable.message ?: "서버 요청에 실패했어요"))
+                    sendEffect(
+                        TrainerHomeSideEffect.ShowToast(
+                            throwable.message?.let { message ->
+                                DisplayText.Plain(message)
+                            } ?: DisplayText.Resource(core_failed_to_server_request),
+                        ),
+                    )
                 }
             }
         }
@@ -140,7 +157,7 @@ internal class TrainerHomeViewModel @Inject constructor(
                         updateState { copy(selectedDayPtSessions = cachedDailyPtSession[day]) }
                     }
                 }.onFailure {
-                    sendEffect(TrainerHomeSideEffect.ShowToast("서버 요청에 실패했어요"))
+                    sendEffect(TrainerHomeSideEffect.ShowToast(DisplayText.Resource(core_failed_to_server_request)))
                 }
             }
         }

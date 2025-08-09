@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
@@ -27,7 +28,6 @@ import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
 import co.kr.tnt.trainee.signup.component.ProgressSteps
 import co.kr.tnt.trainee.signup.model.PTPurpose
-import co.kr.tnt.core.ui.R as uiResource
 
 private const val ROW_NUM = 3
 private const val COLUMNS_NUM = 2
@@ -76,7 +76,7 @@ internal fun TraineePTPurposePage(
                 }
             }
             TnTBottomButton(
-                text = stringResource(uiResource.string.next),
+                text = stringResource(core_next),
                 onClick = onClickNext,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )

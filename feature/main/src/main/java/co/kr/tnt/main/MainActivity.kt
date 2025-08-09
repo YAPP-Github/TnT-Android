@@ -63,7 +63,11 @@ class MainActivity : ComponentActivity() {
                 viewModel.effect.collect { effect ->
                     when (effect) {
                         is MainContract.MainSideEffect.ShowToast -> {
-                            Toast.makeText(this@MainActivity, effect.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@MainActivity,
+                                effect.message.asString(this@MainActivity),
+                                Toast.LENGTH_SHORT,
+                            ).show()
                         }
                     }
                 }

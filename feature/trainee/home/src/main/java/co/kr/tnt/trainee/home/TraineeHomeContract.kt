@@ -6,6 +6,7 @@ import co.kr.tnt.domain.model.trainee.TraineePtSession
 import co.kr.tnt.ui.base.UiEvent
 import co.kr.tnt.ui.base.UiSideEffect
 import co.kr.tnt.ui.base.UiState
+import co.kr.tnt.ui.resource.DisplayText
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -36,6 +37,6 @@ internal class TraineeHomeContract {
         data object NavigateToConnect : TraineeHomeEffect
         data object NavigateToExerciseRecord : TraineeHomeEffect
         data object NavigateToMealRecord : TraineeHomeEffect
-        data class ShowToast(val message: String) : TraineeHomeEffect
+        data class ShowToast(val message: DisplayText) : TraineeHomeEffect
     }
 }

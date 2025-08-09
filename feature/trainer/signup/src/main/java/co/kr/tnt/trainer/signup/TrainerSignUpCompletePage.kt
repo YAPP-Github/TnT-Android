@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.ui.R.string.core_start
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -34,7 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import co.kr.tnt.core.ui.R as uiResource
 
 @Composable
 internal fun TrainerSignUpCompletePage(
@@ -87,7 +87,7 @@ internal fun TrainerSignUpCompletePage(
                 )
             }
             TnTBottomButton(
-                text = stringResource(uiResource.string.start),
+                text = stringResource(core_start),
                 onClick = throttled {
                     coroutineScope.launch {
                         val imageFile = withContext(Dispatchers.IO) {
