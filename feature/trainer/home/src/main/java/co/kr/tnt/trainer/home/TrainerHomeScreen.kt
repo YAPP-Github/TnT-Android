@@ -47,10 +47,10 @@ import co.kr.tnt.core.ui.R.string.core_do_not_see_for_three_days
 import co.kr.tnt.core.ui.R.string.core_next_time
 import co.kr.tnt.designsystem.component.TnTPopupDialog
 import co.kr.tnt.designsystem.component.button.TnTFabButton
-import co.kr.tnt.designsystem.component.calendar.TnTIndicatorMonthCalendar
+import co.kr.tnt.designsystem.component.calendar.TnTIndicatorWeekCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayIndicatorState
 import co.kr.tnt.designsystem.component.calendar.model.DayState
-import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
+import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleYearMonth
 import co.kr.tnt.designsystem.component.card.TnTSessionRecordCard
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -66,8 +66,8 @@ import co.kr.tnt.ui.component.TnTHomeTopBar
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.kizitonwose.calendar.compose.CalendarState
-import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
+import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -153,15 +153,14 @@ private fun TrainerHomeScreen(
     onClickAddPtSession: () -> Unit,
     onClickPtSessionComplete: (PtSession) -> Unit,
 ) {
-    val now = remember { YearMonth.now() }
-    val calendarState = rememberCalendarState(
-        firstVisibleMonth = now,
+    val weekCalendarState = rememberWeekCalendarState(
         firstDayOfWeek = DayOfWeek.SUNDAY,
-        startMonth = now.minusYears(10),
-        endMonth = now.plusYears(10),
+        firstVisibleWeekDate = state.selectedDay,
+        startDate = state.selectedDay.minusYears(10),
+        endDate = state.selectedDay.plusYears(10),
     )
     val coroutineScope = rememberCoroutineScope()
-    val visibleMonth = rememberMostVisibleMonth(calendarState)
+    var visibleMonth = rememberMostVisibleYearMonth(weekCalendarState)
     val dateFormatter = remember { DateFormatter() }
 
     Box(modifier = Modifier.padding(padding)) {
@@ -181,27 +180,32 @@ private fun TrainerHomeScreen(
                         onClickNotification = onClickNotification,
                         onClickSelectorPrevious = {
                             coroutineScope.launch {
-                                calendarState.animateScrollToMonth(visibleMonth.minusMonths(1))
+                                val previousWeek = weekCalendarState.firstVisibleWeek.days.first().date.minusWeeks(1)
+                                visibleMonth = YearMonth.from(previousWeek)
+                                weekCalendarState.animateScrollToWeek(previousWeek)
                             }
                         },
                         onClickSelectorNext = {
                             coroutineScope.launch {
-                                calendarState.animateScrollToMonth(visibleMonth.plusMonths(1))
+                                val nextWeek =
+                                    weekCalendarState.firstVisibleWeek.days.first().date.plusWeeks(1)
+                                visibleMonth = YearMonth.from(nextWeek)
+                                weekCalendarState.animateScrollToWeek(nextWeek)
                             }
                         },
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Calendar(
                         modifier = Modifier.background(color = TnTTheme.colors.commonColors.Common0),
-                        calendarState = calendarState,
+                        weekCalendarState = weekCalendarState,
                         selectedDay = state.selectedDay,
                         dailyPtSessionCount = state.dailyPtSessionCount,
                         onClickDay = onClickDay,
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
                 Column {
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                     DailyPtSessionTitle(
                         day = state.selectedDay,
                         sessionCount = state.selectedDayPtSessions?.size ?: 0,
@@ -253,16 +257,14 @@ private fun TrainerHomeScreen(
 
 @Composable
 private fun Calendar(
-    calendarState: CalendarState,
+    weekCalendarState: WeekCalendarState,
     selectedDay: LocalDate,
     dailyPtSessionCount: Map<LocalDate, Int>,
     onClickDay: (date: LocalDate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TnTIndicatorMonthCalendar(
-        modifier = modifier,
-        state = calendarState,
-        onClickDay = onClickDay,
+    TnTIndicatorWeekCalendar(
+        state = weekCalendarState,
         dayState = { day -> DayState(isSelected = day == selectedDay) },
         indicatorState = { day ->
             val count = dailyPtSessionCount[day] ?: 0
@@ -273,6 +275,8 @@ private fun Calendar(
                 showText = count != 0,
             )
         },
+        onClickDay = onClickDay,
+        modifier = modifier.background(TnTTheme.colors.commonColors.Common0),
     )
 }
 
