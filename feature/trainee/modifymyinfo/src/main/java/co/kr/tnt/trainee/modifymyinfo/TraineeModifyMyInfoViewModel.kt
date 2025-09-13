@@ -19,7 +19,7 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor() :
 
         override suspend fun handleEvent(event: TraineeModifyMyInfoUiEvent) {
             when (event) {
-                TraineeModifyMyInfoUiEvent.OnDeleteProfileImage -> TODO()
+                TraineeModifyMyInfoUiEvent.OnDeleteProfileImage -> deleteProfileImage()
                 is TraineeModifyMyInfoUiEvent.OnProfileImageSelect -> {
                     profileImageUpdatePolicy = ProfileImageUpdatePolicy.Change(File(event.image.path))
                     updateProfileImage(event.image.path)
@@ -69,6 +69,10 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor() :
 
         private fun updateProfileImage(image: String) {
             updateState { copy(profileImage = image) }
+        }
+
+        private fun deleteProfileImage() {
+            updateState { copy(profileImage = null) }
         }
 
         private fun navigateToBack() {

@@ -19,16 +19,22 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -49,6 +55,7 @@ import co.kr.tnt.core.ui.R.string.core_weight_label
 import co.kr.tnt.core.ui.R.string.core_weight_unit
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
+import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
@@ -76,6 +83,7 @@ private const val MAX_CAUTION_LENGTH = 100
 private const val ROW_NUM = 3
 private const val COLUMNS_NUM = 2
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TraineeModifyMyInfoRoute(
     viewModel: TraineeModifyMyInfoViewModel = hiltViewModel(),
@@ -85,12 +93,12 @@ internal fun TraineeModifyMyInfoRoute(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbar = LocalSnackbar.current
 
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+
     TraineeModifyMyInfoScreen(
         state = state,
-        onProfileImageSelect = { uri ->
-            val profileImageFile = uri.convertToAllowedImageFormat(context)
-            viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnProfileImageSelect(profileImageFile))
-        },
+        onClickEditImage = { showBottomSheet = true },
         onChangeName = { name -> viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnChangeName(name)) },
         onChangeBirthday = { birthday ->
             viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnChangeBirthday(birthday))
@@ -111,6 +119,28 @@ internal fun TraineeModifyMyInfoRoute(
         onClickNext = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnClickNext) },
     )
 
+    if (showBottomSheet) {
+        TnTModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = {
+                showBottomSheet = false
+            },
+            content = {
+                EditImageBottomSheetContent(
+                    onClickDelete = {
+                        viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnDeleteProfileImage)
+                        showBottomSheet = false
+                    },
+                    onClickAlbum = { uri ->
+                        val profileImageFile = uri.convertToAllowedImageFormat(context)
+                        viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnProfileImageSelect(profileImageFile))
+                        showBottomSheet = false
+                    },
+                )
+            },
+        )
+    }
+
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
@@ -125,7 +155,7 @@ internal fun TraineeModifyMyInfoRoute(
 @Composable
 private fun TraineeModifyMyInfoScreen(
     state: TraineeModifyMyInfoUiState,
-    onProfileImageSelect: (uri: Uri) -> Unit,
+    onClickEditImage: () -> Unit,
     onChangeName: (name: String) -> Unit,
     onChangeBirthday: (birthday: LocalDate) -> Unit,
     onChangeHeight: (height: String) -> Unit,
@@ -139,10 +169,6 @@ private fun TraineeModifyMyInfoScreen(
 
     val context = LocalContext.current
     val today = LocalDate.now()
-
-    val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
-        uri?.let(onProfileImageSelect)
-    }
 
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -177,13 +203,7 @@ private fun TraineeModifyMyInfoScreen(
                         .padding(vertical = 12.dp),
                     defaultImage = painterResource(DefaultUserProfile.Trainee.image),
                     image = painter,
-                    onEditClick = {
-                        pickMediaLauncher.launch(
-                            PickVisualMediaRequest(
-                                mediaType = PickVisualMedia.ImageOnly,
-                            ),
-                        )
-                    },
+                    onEditClick = { onClickEditImage() },
                 )
                 Spacer(Modifier.padding(top = 32.dp))
                 Column(
@@ -317,6 +337,47 @@ private fun TraineeModifyMyInfoScreen(
 }
 
 @Composable
+private fun EditImageBottomSheetContent(
+    onClickDelete: () -> Unit,
+    onClickAlbum: (uri: Uri) -> Unit,
+) {
+    val pickMediaLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
+        uri?.let(onClickAlbum)
+    }
+
+    Column(
+        modifier = Modifier.padding(horizontal = 20.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.delete_image),
+            modifier = Modifier
+                .padding(vertical = 4.dp)
+                .clickable(onClick = onClickDelete),
+            style = TnTTheme.typography.h4,
+            color = TnTTheme.colors.neutralColors.Neutral600,
+        )
+        Spacer(Modifier.height(12.dp))
+        Text(
+            text = stringResource(R.string.select_image_from_album),
+            modifier = Modifier
+                .padding(vertical = 4.dp)
+                .clickable(
+                    onClick = {
+                        pickMediaLauncher.launch(
+                            PickVisualMediaRequest(
+                                mediaType = PickVisualMedia.ImageOnly,
+                            ),
+                        )
+                    },
+                ),
+            style = TnTTheme.typography.h4,
+            color = TnTTheme.colors.neutralColors.Neutral600,
+        )
+        Spacer(Modifier.height(54.dp))
+    }
+}
+
+@Composable
 private fun BirthdayPicker(
     modifier: Modifier = Modifier,
     context: Context,
@@ -355,7 +416,8 @@ private fun BirthdayPicker(
             },
     ) {
         Text(
-            text = selectedDate?.format(dateFormatter) ?: stringResource(R.string.birthday_placeholder),
+            text = selectedDate?.format(dateFormatter)
+                ?: stringResource(R.string.birthday_placeholder),
             color = if (selectedDate == null) {
                 TnTTheme.colors.neutralColors.Neutral400
             } else {
@@ -398,7 +460,7 @@ private fun TraineeModifyMyScreenPreview() {
     TnTTheme {
         TraineeModifyMyInfoScreen(
             state = TraineeModifyMyInfoUiState(name = "김회원"),
-            onProfileImageSelect = { },
+            onClickEditImage = { },
             onChangeName = { },
             onChangeBirthday = { },
             onChangeHeight = { },
@@ -407,6 +469,17 @@ private fun TraineeModifyMyScreenPreview() {
             onChangeCaution = { },
             onClickBack = { },
             onClickNext = { },
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ModifyMyInfoBottomSheetContentPreview() {
+    TnTTheme {
+        EditImageBottomSheetContent(
+            onClickDelete = { },
+            onClickAlbum = { },
         )
     }
 }
