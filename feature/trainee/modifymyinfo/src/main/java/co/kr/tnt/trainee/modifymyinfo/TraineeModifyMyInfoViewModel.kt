@@ -19,19 +19,20 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor() :
 
         override suspend fun handleEvent(event: TraineeModifyMyInfoUiEvent) {
             when (event) {
-                TraineeModifyMyInfoUiEvent.OnBackClick -> navigateToBack()
+                TraineeModifyMyInfoUiEvent.OnDeleteProfileImage -> TODO()
                 is TraineeModifyMyInfoUiEvent.OnProfileImageSelect -> {
                     profileImageUpdatePolicy = ProfileImageUpdatePolicy.Change(File(event.image.path))
                     updateProfileImage(event.image.path)
                 }
 
-                is TraineeModifyMyInfoUiEvent.OnNameChange -> updateName(event.name)
-                is TraineeModifyMyInfoUiEvent.OnBirthdayChange -> updateBirthday(event.birthday)
-                is TraineeModifyMyInfoUiEvent.OnHeightChange -> updateHeight(event.height)
-                is TraineeModifyMyInfoUiEvent.OnWeightChange -> updateWeight(event.weight)
-                is TraineeModifyMyInfoUiEvent.OnPurposeSelected -> updateSelectedPurposes(event.purpose)
-                is TraineeModifyMyInfoUiEvent.OnCautionChange -> updateCaution(event.text)
-                TraineeModifyMyInfoUiEvent.OnNextClick -> navigateToBack()
+                is TraineeModifyMyInfoUiEvent.OnChangeName -> updateName(event.name)
+                is TraineeModifyMyInfoUiEvent.OnChangeBirthday -> updateBirthday(event.birthday)
+                is TraineeModifyMyInfoUiEvent.OnChangeHeight -> updateHeight(event.height)
+                is TraineeModifyMyInfoUiEvent.OnChangeWeight -> updateWeight(event.weight)
+                is TraineeModifyMyInfoUiEvent.OnSelectPurpose -> updateSelectedPurposes(event.purpose)
+                is TraineeModifyMyInfoUiEvent.OnChangeCaution -> updateCaution(event.text)
+                TraineeModifyMyInfoUiEvent.OnClickBack -> navigateToBack()
+                TraineeModifyMyInfoUiEvent.OnClickNext -> navigateToBack()
             }
         }
 

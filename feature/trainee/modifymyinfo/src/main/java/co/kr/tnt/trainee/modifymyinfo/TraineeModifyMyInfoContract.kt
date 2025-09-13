@@ -53,15 +53,16 @@ internal class TraineeModifyMyInfoContract {
     }
 
     sealed interface TraineeModifyMyInfoUiEvent : UiEvent {
+        data object OnDeleteProfileImage : TraineeModifyMyInfoUiEvent
         data class OnProfileImageSelect(val image: File) : TraineeModifyMyInfoUiEvent
-        data class OnNameChange(val name: String) : TraineeModifyMyInfoUiEvent
-        data class OnHeightChange(val height: String) : TraineeModifyMyInfoUiEvent
-        data class OnWeightChange(val weight: String) : TraineeModifyMyInfoUiEvent
-        data class OnBirthdayChange(val birthday: LocalDate) : TraineeModifyMyInfoUiEvent
-        data class OnPurposeSelected(val purpose: String) : TraineeModifyMyInfoUiEvent
-        data class OnCautionChange(val text: String) : TraineeModifyMyInfoUiEvent
-        data object OnBackClick : TraineeModifyMyInfoUiEvent
-        data object OnNextClick : TraineeModifyMyInfoUiEvent
+        data class OnChangeName(val name: String) : TraineeModifyMyInfoUiEvent
+        data class OnChangeHeight(val height: String) : TraineeModifyMyInfoUiEvent
+        data class OnChangeWeight(val weight: String) : TraineeModifyMyInfoUiEvent
+        data class OnChangeBirthday(val birthday: LocalDate) : TraineeModifyMyInfoUiEvent
+        data class OnSelectPurpose(val purpose: String) : TraineeModifyMyInfoUiEvent
+        data class OnChangeCaution(val text: String) : TraineeModifyMyInfoUiEvent
+        data object OnClickBack : TraineeModifyMyInfoUiEvent
+        data object OnClickNext : TraineeModifyMyInfoUiEvent
     }
 
     sealed interface TraineeModifyMyInfoEffect : UiSideEffect {

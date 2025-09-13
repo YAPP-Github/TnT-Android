@@ -4,6 +4,6 @@
 
     <string name="birthday_label">생년월일</string>
     <string name="birthday_placeholder">2001/01/01</string>
-    <string name="caution_that_trainer_must_know">트레이너가 알아야 할 주의사항</string>
+    <string name="edit_caution_that_trainer_must_know">트레이너가 알아야 할 주의사항</string>
     <string name="caution_length_overflow">100자 미만으로 입력해주세요</string>
 </resources>
