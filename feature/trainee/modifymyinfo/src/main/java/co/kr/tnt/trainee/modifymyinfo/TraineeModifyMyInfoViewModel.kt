@@ -4,6 +4,7 @@ import co.kr.tnt.domain.model.ProfileImageUpdatePolicy
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoEffect
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiEvent
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiState
+import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
@@ -31,6 +32,11 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor() :
                 is TraineeModifyMyInfoUiEvent.OnChangeWeight -> updateWeight(event.weight)
                 is TraineeModifyMyInfoUiEvent.OnSelectPurpose -> updateSelectedPurposes(event.purpose)
                 is TraineeModifyMyInfoUiEvent.OnChangeCaution -> updateCaution(event.text)
+                TraineeModifyMyInfoUiEvent.OnClickDialogConfirm -> {
+                    updateState { copy(dialogState = DialogState.NONE) }
+                    sendEffect(TraineeModifyMyInfoEffect.NavigateToBack)
+                }
+                TraineeModifyMyInfoUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
                 TraineeModifyMyInfoUiEvent.OnClickBack -> navigateToBack()
                 TraineeModifyMyInfoUiEvent.OnClickComplete -> updateUserInfo()
             }
@@ -81,6 +87,8 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor() :
         }
 
         private fun navigateToBack() {
-            sendEffect(TraineeModifyMyInfoEffect.NavigateToBack)
+            // TODO 수정된 항목 있나 확인 후, 있을 때만 dialog 띄우기
+            updateState { copy(dialogState = DialogState.CONFIRM_EXIT) }
+            return
         }
     }

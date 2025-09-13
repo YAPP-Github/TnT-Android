@@ -47,14 +47,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.tnt.core.ui.R.string.core_complete
+import co.kr.tnt.core.ui.R.string.core_confirm_modify_info_exit
 import co.kr.tnt.core.ui.R.string.core_entered_wrong_text
 import co.kr.tnt.core.ui.R.string.core_height_label
 import co.kr.tnt.core.ui.R.string.core_height_unit
 import co.kr.tnt.core.ui.R.string.core_name
 import co.kr.tnt.core.ui.R.string.core_name_placeholder
 import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
+import co.kr.tnt.core.ui.R.string.core_unsaved_changes_warning
 import co.kr.tnt.core.ui.R.string.core_weight_label
 import co.kr.tnt.core.ui.R.string.core_weight_unit
+import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTModalBottomSheet
@@ -71,6 +74,7 @@ import co.kr.tnt.feature.trainee.modifymyinfo.R
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoEffect
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiEvent
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiState
+import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiState.DialogState
 import co.kr.tnt.trainee.modifymyinfo.model.TraineePtPurpose
 import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.DefaultUserProfile
@@ -143,6 +147,21 @@ internal fun TraineeModifyMyInfoRoute(
                 )
             },
         )
+    }
+
+    when (state.dialogState) {
+        DialogState.NONE -> Unit
+        DialogState.CONFIRM_EXIT -> {
+            TnTIconPopupDialog(
+                title = stringResource(core_confirm_modify_info_exit),
+                content = stringResource(core_unsaved_changes_warning),
+                leftButtonText = stringResource(R.string.end),
+                rightButtonText = stringResource(R.string.keep_edit),
+                onLeftButtonClick = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnClickDialogConfirm) },
+                onRightButtonClick = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnDismissDialog) },
+                onDismiss = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnClickDialogConfirm) },
+            )
+        }
     }
 
     LaunchedEffect(viewModel.effect) {

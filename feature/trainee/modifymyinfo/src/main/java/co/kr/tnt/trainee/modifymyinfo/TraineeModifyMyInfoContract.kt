@@ -20,6 +20,7 @@ internal class TraineeModifyMyInfoContract {
         val weight: String? = null,
         val ptPurpose: List<String>? = emptyList(),
         val caution: String? = "",
+        val dialogState: DialogState = DialogState.NONE,
         val isEnableComplete: Boolean = false,
     ) : UiState {
         val isNameValid
@@ -50,6 +51,10 @@ internal class TraineeModifyMyInfoContract {
                     weight.length <= MAX_WEIGHT_LENGTH
             )
 
+        enum class DialogState {
+            NONE,
+            CONFIRM_EXIT,
+        }
         // TODO 완료 버튼 활성화 조건 만들기
     }
 
@@ -62,6 +67,8 @@ internal class TraineeModifyMyInfoContract {
         data class OnChangeBirthday(val birthday: LocalDate) : TraineeModifyMyInfoUiEvent
         data class OnSelectPurpose(val purpose: String) : TraineeModifyMyInfoUiEvent
         data class OnChangeCaution(val text: String) : TraineeModifyMyInfoUiEvent
+        data object OnDismissDialog : TraineeModifyMyInfoUiEvent
+        data object OnClickDialogConfirm : TraineeModifyMyInfoUiEvent
         data object OnClickBack : TraineeModifyMyInfoUiEvent
         data object OnClickComplete : TraineeModifyMyInfoUiEvent
     }

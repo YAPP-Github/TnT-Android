@@ -9,4 +9,7 @@
 
     <string name="delete_image">삭제하기</string>
     <string name="select_image_from_album">앨범에서 사진 선택</string>
+
+    <string name="end">종료</string>
+    <string name="keep_edit">계속 수정</string>
 </resources>
