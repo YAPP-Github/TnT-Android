@@ -20,6 +20,7 @@ internal class TraineeModifyMyInfoContract {
         val weight: String? = null,
         val ptPurpose: List<String>? = emptyList(),
         val caution: String? = "",
+        val isEnableComplete: Boolean = false,
     ) : UiState {
         val isNameValid
             get() = name.isBlank() ||
@@ -62,7 +63,7 @@ internal class TraineeModifyMyInfoContract {
         data class OnSelectPurpose(val purpose: String) : TraineeModifyMyInfoUiEvent
         data class OnChangeCaution(val text: String) : TraineeModifyMyInfoUiEvent
         data object OnClickBack : TraineeModifyMyInfoUiEvent
-        data object OnClickNext : TraineeModifyMyInfoUiEvent
+        data object OnClickComplete : TraineeModifyMyInfoUiEvent
     }
 
     sealed interface TraineeModifyMyInfoEffect : UiSideEffect {

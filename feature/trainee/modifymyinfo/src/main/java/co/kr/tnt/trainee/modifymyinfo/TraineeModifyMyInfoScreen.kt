@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -45,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.ui.R.string.core_complete
 import co.kr.tnt.core.ui.R.string.core_entered_wrong_text
 import co.kr.tnt.core.ui.R.string.core_height_label
 import co.kr.tnt.core.ui.R.string.core_height_unit
@@ -59,6 +61,7 @@ import co.kr.tnt.designsystem.component.TnTModalBottomSheet
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
+import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
@@ -72,6 +75,7 @@ import co.kr.tnt.trainee.modifymyinfo.model.TraineePtPurpose
 import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
+import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import java.time.LocalDate
@@ -116,7 +120,7 @@ internal fun TraineeModifyMyInfoRoute(
             viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnSelectPurpose(purpose))
         },
         onClickBack = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnClickBack) },
-        onClickNext = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnClickNext) },
+        onClickComplete = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnClickComplete) },
     )
 
     if (showBottomSheet) {
@@ -163,7 +167,7 @@ private fun TraineeModifyMyInfoScreen(
     onSelectPurpose: (purpose: String) -> Unit,
     onChangeCaution: (caution: String) -> Unit,
     onClickBack: () -> Unit,
-    onClickNext: () -> Unit,
+    onClickComplete: () -> Unit,
 ) {
     BackHandler { onClickBack() }
 
@@ -183,6 +187,16 @@ private fun TraineeModifyMyInfoScreen(
             TnTTopBarWithBackButton(
                 title = stringResource(R.string.modifying_my_info),
                 onBackClick = onClickBack,
+            )
+        },
+        bottomBar = {
+            TnTBottomButton(
+                text = stringResource(core_complete),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
+                enabled = state.isEnableComplete,
+                onClick = throttled { onClickComplete() },
             )
         },
         containerColor = TnTTheme.colors.commonColors.Common0,
@@ -468,7 +482,7 @@ private fun TraineeModifyMyScreenPreview() {
             onSelectPurpose = { },
             onChangeCaution = { },
             onClickBack = { },
-            onClickNext = { },
+            onClickComplete = { },
         )
     }
 }

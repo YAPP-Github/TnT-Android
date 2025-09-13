@@ -32,7 +32,7 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor() :
                 is TraineeModifyMyInfoUiEvent.OnSelectPurpose -> updateSelectedPurposes(event.purpose)
                 is TraineeModifyMyInfoUiEvent.OnChangeCaution -> updateCaution(event.text)
                 TraineeModifyMyInfoUiEvent.OnClickBack -> navigateToBack()
-                TraineeModifyMyInfoUiEvent.OnClickNext -> navigateToBack()
+                TraineeModifyMyInfoUiEvent.OnClickComplete -> updateUserInfo()
             }
         }
 
@@ -73,6 +73,11 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor() :
 
         private fun deleteProfileImage() {
             updateState { copy(profileImage = null) }
+        }
+
+        private fun updateUserInfo() {
+            // TODO 수정 api 호출
+            sendEffect(TraineeModifyMyInfoEffect.NavigateToBack)
         }
 
         private fun navigateToBack() {
