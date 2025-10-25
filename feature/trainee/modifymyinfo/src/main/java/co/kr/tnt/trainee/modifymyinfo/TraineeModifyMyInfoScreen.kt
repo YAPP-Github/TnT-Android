@@ -159,7 +159,7 @@ internal fun TraineeModifyMyInfoRoute(
                 rightButtonText = stringResource(R.string.keep_edit),
                 onLeftButtonClick = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnClickDialogConfirm) },
                 onRightButtonClick = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnDismissDialog) },
-                onDismiss = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnClickDialogConfirm) },
+                onDismiss = { viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnDismissDialog) },
             )
         }
     }
@@ -253,7 +253,7 @@ private fun TraineeModifyMyInfoScreen(
                         placeholder = stringResource(core_name_placeholder),
                         maxLength = MAX_NAME_LENGTH,
                         isSingleLine = true,
-                        showWarning = !state.isNameValid,
+                        showWarning = state.isNameValid.not(),
                         isRequired = true,
                         warningMessage = stringResource(
                             core_text_length_and_format_warning,
