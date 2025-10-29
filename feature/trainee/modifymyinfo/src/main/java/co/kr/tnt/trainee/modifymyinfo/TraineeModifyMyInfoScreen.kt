@@ -54,6 +54,7 @@ import co.kr.tnt.core.ui.R.string.core_height_unit
 import co.kr.tnt.core.ui.R.string.core_name
 import co.kr.tnt.core.ui.R.string.core_name_placeholder
 import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
+import co.kr.tnt.core.ui.R.string.core_text_length_warning
 import co.kr.tnt.core.ui.R.string.core_unsaved_changes_warning
 import co.kr.tnt.core.ui.R.string.core_weight_label
 import co.kr.tnt.core.ui.R.string.core_weight_unit
@@ -70,6 +71,7 @@ import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
+import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.feature.trainee.modifymyinfo.R
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoEffect
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiEvent
@@ -86,8 +88,6 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-private const val MAX_NAME_LENGTH = 15
-private const val MAX_CAUTION_LENGTH = 100
 private const val ROW_NUM = 3
 private const val COLUMNS_NUM = 2
 
@@ -251,13 +251,13 @@ private fun TraineeModifyMyInfoScreen(
                         },
                         modifier = Modifier.padding(horizontal = 20.dp),
                         placeholder = stringResource(core_name_placeholder),
-                        maxLength = MAX_NAME_LENGTH,
+                        maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
                         isSingleLine = true,
                         showWarning = state.isNameValid.not(),
                         isRequired = true,
                         warningMessage = stringResource(
                             core_text_length_and_format_warning,
-                            MAX_NAME_LENGTH,
+                            UserProfilePolicy.USER_NAME_MAX_LENGTH,
                         ),
                     )
                     Column {
@@ -357,9 +357,12 @@ private fun TraineeModifyMyInfoScreen(
                             onValueChange = { newValue ->
                                 onChangeCaution(newValue)
                             },
-                            isError = (state.caution?.length ?: 0) >= MAX_CAUTION_LENGTH,
-                            warningMessage = stringResource(R.string.caution_length_overflow),
-                            maxLength = 100,
+                            isError = state.isCautionNoteValid.not(),
+                            warningMessage = stringResource(
+                                core_text_length_warning,
+                                UserProfilePolicy.USER_CAUTION_MAX_LENGTH,
+                            ),
+                            maxLength = UserProfilePolicy.USER_CAUTION_MAX_LENGTH,
                         )
                     }
                 }

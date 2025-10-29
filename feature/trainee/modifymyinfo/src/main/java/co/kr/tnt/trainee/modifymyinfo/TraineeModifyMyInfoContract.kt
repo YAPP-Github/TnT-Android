@@ -8,9 +8,6 @@ import co.kr.tnt.ui.resource.DisplayText
 import java.io.File
 import java.time.LocalDate
 
-private const val MAX_HEIGHT_LENGTH = 3
-private const val MAX_WEIGHT_LENGTH = 5
-
 internal class TraineeModifyMyInfoContract {
     data class TraineeModifyMyInfoUiState(
         val profileImage: String? = null,
@@ -24,38 +21,33 @@ internal class TraineeModifyMyInfoContract {
         val isEnableComplete: Boolean = false,
     ) : UiState {
         val isNameValid
-            get() = name.isBlank() ||
+            get() = name.isNotBlank() &&
                 name.matches(UserProfilePolicy.USER_NAME_REGEX) &&
                 name.length <= UserProfilePolicy.USER_NAME_MAX_LENGTH
 
-        /**
-         * 키가 유효한 입력값인지 검사
-         * 형식: 정수 3자
-         */
         val isHeightValid
             get() = height.isNullOrBlank() || (
                 height.toIntOrNull() != null &&
-                    !height.startsWith("0") &&
-                    height.length <= MAX_HEIGHT_LENGTH
+                    height.startsWith("0").not() &&
+                    height.length <= UserProfilePolicy.USER_HEIGHT_MAX_LENGTH
             )
 
-        /**
-         * 몸무게가 유효한 입력값인지 검사
-         * 형식: 5자 이하의 실수 (000, 00, 00.0, 000.0)
-         */
-        private val weightRegex = Regex("^(\\d{1,3}(\\.\\d)?)?\$")
         val isWeightValid
             get() = weight.isNullOrBlank() || (
-                weight.matches(weightRegex) &&
-                    !weight.startsWith("0") &&
-                    weight.length <= MAX_WEIGHT_LENGTH
+                weight.matches(UserProfilePolicy.USER_WEIGHT_REGEX) &&
+                    weight.startsWith("0").not() &&
+                    weight.length <= UserProfilePolicy.USER_WEIGHT_MAX_LENGTH
+            )
+
+        val isCautionNoteValid
+            get() = caution.isNullOrBlank() || (
+                caution.length < UserProfilePolicy.USER_CAUTION_MAX_LENGTH
             )
 
         enum class DialogState {
             NONE,
             CONFIRM_EXIT,
         }
-        // TODO 완료 버튼 활성화 조건 만들기
     }
 
     sealed interface TraineeModifyMyInfoUiEvent : UiEvent {

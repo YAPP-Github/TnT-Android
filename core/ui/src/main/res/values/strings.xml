@@ -25,6 +25,7 @@
 
     <string name="core_entered_wrong_text">잘못된 수치를 입력했어요</string>
     <string name="core_text_length_and_format_warning">%s자 미만의 한글 또는 영문으로 입력해주세요</string>
+    <string name="core_text_length_warning">%s자 미만으로 입력해주세요</string>
 
     <string name="core_trainee">트레이니</string>
     <string name="core_trainer">트레이너</string>
