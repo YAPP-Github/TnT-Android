@@ -84,6 +84,36 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor(
             }
         }
 
+        private fun updateProfileImage(image: String) {
+            updateState { copy(profileImage = image) }
+            isEnableModifyInfo(initializedInfo)
+        }
+
+        private fun deleteProfileImage() {
+            updateState { copy(profileImage = null) }
+            isEnableModifyInfo(initializedInfo)
+        }
+
+        private fun updateName(name: String) {
+            updateState { copy(name = name) }
+            isEnableModifyInfo(initializedInfo)
+        }
+
+        private fun updateBirthday(birthday: LocalDate) {
+            updateState { copy(birthday = birthday) }
+            isEnableModifyInfo(initializedInfo)
+        }
+
+        private fun updateHeight(height: String) {
+            updateState { copy(height = height) }
+            isEnableModifyInfo(initializedInfo)
+        }
+
+        private fun updateWeight(weight: String) {
+            updateState { copy(weight = weight) }
+            isEnableModifyInfo(initializedInfo)
+        }
+
         private fun updateSelectedPurposes(purpose: String) {
             val updatedPurposes = currentState.ptPurpose.orEmpty().toMutableList().apply {
                 if (contains(purpose)) {
@@ -93,34 +123,12 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor(
                 }
             }
             updateState { copy(ptPurpose = updatedPurposes) }
+            isEnableModifyInfo(initializedInfo)
         }
 
         private fun updateCaution(caution: String) {
             updateState { copy(caution = caution) }
-        }
-
-        private fun updateHeight(height: String) {
-            updateState { copy(height = height) }
-        }
-
-        private fun updateWeight(weight: String) {
-            updateState { copy(weight = weight) }
-        }
-
-        private fun updateBirthday(birthday: LocalDate) {
-            updateState { copy(birthday = birthday) }
-        }
-
-        private fun updateName(name: String) {
-            updateState { copy(name = name) }
-        }
-
-        private fun updateProfileImage(image: String) {
-            updateState { copy(profileImage = image) }
-        }
-
-        private fun deleteProfileImage() {
-            updateState { copy(profileImage = null) }
+            isEnableModifyInfo(initializedInfo)
         }
 
         private fun updateUserInfo() {
@@ -146,6 +154,24 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor(
             }
 
             sendEffect(TraineeModifyMyInfoEffect.NavigateToBack)
+        }
+
+        private fun isEnableModifyInfo(initializedInfo: User.Trainee?) {
+            val isEnable = isUpdateInfo(
+                initializedInfo,
+                currentState.name,
+                currentState.profileImage,
+                currentState.birthday,
+                currentState.height?.toIntOrNull(),
+                currentState.weight?.toDoubleOrNull(),
+                currentState.ptPurpose,
+                currentState.caution,
+            ) && currentState.isNameValid &&
+                currentState.isWeightValid &&
+                currentState.isWeightValid &&
+                currentState.isCautionNoteValid
+
+            updateState { copy(isEnableComplete = isEnable) }
         }
 
         private fun isUpdateInfo(
