@@ -12,5 +12,5 @@ data class UpdateUserInfoRequest(
     val height: Double? = null,
     val weight: Double? = null,
     val cautionNote: String? = null,
-    val goalContents: List<String>? = null,
+    val ptGoals: List<String>? = null,
 )
