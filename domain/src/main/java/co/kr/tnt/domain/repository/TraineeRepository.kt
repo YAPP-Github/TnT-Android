@@ -1,5 +1,6 @@
 package co.kr.tnt.domain.repository
 
+import co.kr.tnt.domain.model.ProfileImageUpdatePolicy
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecord
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
@@ -23,4 +24,8 @@ interface TraineeRepository {
     suspend fun getMealRecord(
         dietId: Long,
     ): TraineeMealRecordDetail
+    suspend fun updateUserInfo(
+        profileImageUpdatePolicy: ProfileImageUpdatePolicy,
+        userInfo: User.Trainee,
+    )
 }

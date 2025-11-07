@@ -34,4 +34,11 @@ class TraineeRemoteDataSource @Inject constructor(
     suspend fun getMealRecord(dietId: Long) = networkHandler {
         apiService.getMealRecord(dietId)
     }
+
+    suspend fun putUserInfo(
+        profileImage: MultipartBody.Part?,
+        request: RequestBody,
+    ) = networkHandler {
+        apiService.putMyInfo(profileImage, request)
+    }
 }

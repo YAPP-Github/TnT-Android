@@ -1,10 +1,13 @@
 package co.kr.data.repository
 
+import co.kr.data.network.model.UpdateUserInfoRequest
+import co.kr.data.network.model.enum.MemberType
 import co.kr.data.network.model.toDomain
 import co.kr.data.network.model.trainee.MealRecordRequest
 import co.kr.data.network.model.trainee.toDomain
 import co.kr.data.network.source.TraineeRemoteDataSource
 import co.kr.data.network.source.UserRemoteDataSource
+import co.kr.tnt.domain.model.ProfileImageUpdatePolicy
 import co.kr.tnt.domain.model.User
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecord
 import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
@@ -82,4 +85,39 @@ internal class TraineeRepositoryImpl @Inject constructor(
 
     override suspend fun getMealRecord(dietId: Long): TraineeMealRecordDetail =
         traineeRemoteDataSource.getMealRecord(dietId).toDomain(dateFormatter)
+
+    override suspend fun updateUserInfo(
+        profileImageUpdatePolicy: ProfileImageUpdatePolicy,
+        userInfo: User.Trainee,
+    ) {
+        val (profileImage, isRemoveProfileImage) = when (profileImageUpdatePolicy) {
+            is ProfileImageUpdatePolicy.Change -> profileImageUpdatePolicy.newProfileImage to false
+            ProfileImageUpdatePolicy.Keep -> null to false
+            ProfileImageUpdatePolicy.Remove -> null to true
+        }
+        val imagePart = profileImage?.let {
+            val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("dietImage", it.name, requestFile)
+        }
+        val selectedDate = userInfo.birthday?.let { dateFormatter.format(it, "yyyy-MM-dd") }
+
+        val request = UpdateUserInfoRequest(
+            removeImage = isRemoveProfileImage,
+            memberType = MemberType.TRAINEE,
+            name = userInfo.name,
+            birthDay = selectedDate,
+            height = userInfo.height?.toDouble(),
+            weight = userInfo.weight,
+            cautionNote = userInfo.caution,
+            ptGoals = userInfo.ptPurpose,
+        )
+        val requestBody = json
+            .encodeToString(request)
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        traineeRemoteDataSource.putUserInfo(
+            profileImage = imagePart,
+            request = requestBody,
+        )
+    }
 }
