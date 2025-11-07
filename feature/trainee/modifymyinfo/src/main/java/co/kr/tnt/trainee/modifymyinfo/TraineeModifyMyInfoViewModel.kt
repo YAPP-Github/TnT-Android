@@ -33,7 +33,11 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor(
 
         override suspend fun handleEvent(event: TraineeModifyMyInfoUiEvent) {
             when (event) {
-                TraineeModifyMyInfoUiEvent.OnDeleteProfileImage -> deleteProfileImage()
+                TraineeModifyMyInfoUiEvent.OnDeleteProfileImage -> {
+                    profileImageUpdatePolicy = ProfileImageUpdatePolicy.Remove
+                    deleteProfileImage()
+                }
+
                 is TraineeModifyMyInfoUiEvent.OnProfileImageSelect -> {
                     profileImageUpdatePolicy = ProfileImageUpdatePolicy.Change(File(event.image.path))
                     updateProfileImage(event.image.path)
@@ -132,8 +136,34 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor(
         }
 
         private fun updateUserInfo() {
-            // TODO 수정 api 호출
-            sendEffect(TraineeModifyMyInfoEffect.NavigateToBack)
+            viewModelScope.launch {
+                updateState { copy(isLoading = true) }
+                val userInfo = User.Trainee.EMPTY
+                runCatching {
+                    traineeRepository.updateUserInfo(
+                        profileImageUpdatePolicy = profileImageUpdatePolicy,
+                        userInfo = userInfo.copy(
+                            name = currentState.name,
+                            image = currentState.profileImage,
+                            birthday = currentState.birthday,
+                            weight = currentState.weight?.toDoubleOrNull(),
+                            height = currentState.height?.toIntOrNull(),
+                            ptPurpose = currentState.ptPurpose,
+                            caution = currentState.caution,
+                        ),
+                    )
+                }.onSuccess {
+                    sendEffect(TraineeModifyMyInfoEffect.NavigateToBack)
+                }.onFailure {
+                    sendEffect(
+                        TraineeModifyMyInfoEffect.ShowToast(
+                            DisplayText.Resource(core_failed_to_server_request),
+                        ),
+                    )
+                }.also {
+                    updateState { copy(isLoading = false) }
+                }
+            }
         }
 
         private fun navigateToBack() {

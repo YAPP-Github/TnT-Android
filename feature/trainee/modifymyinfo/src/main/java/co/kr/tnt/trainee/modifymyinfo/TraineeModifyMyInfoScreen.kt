@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -78,12 +79,14 @@ import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyM
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiState
 import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyMyInfoUiState.DialogState
 import co.kr.tnt.trainee.modifymyinfo.model.TraineePtPurpose
+import co.kr.tnt.ui.component.TnTLoadingScreen
 import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.ui.model.DefaultUserProfile
 import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -99,6 +102,7 @@ internal fun TraineeModifyMyInfoRoute(
 ) {
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val coroutineScope = rememberCoroutineScope()
     val snackbar = LocalSnackbar.current
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -140,9 +144,11 @@ internal fun TraineeModifyMyInfoRoute(
                         showBottomSheet = false
                     },
                     onClickAlbum = { uri ->
-                        val profileImageFile = uri.convertToAllowedImageFormat(context)
-                        viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnProfileImageSelect(profileImageFile))
-                        showBottomSheet = false
+                        coroutineScope.launch {
+                            val profileImageFile = uri.convertToAllowedImageFormat(context)
+                            viewModel.setEvent(TraineeModifyMyInfoUiEvent.OnProfileImageSelect(profileImageFile))
+                            showBottomSheet = false
+                        }
                     },
                 )
             },
@@ -369,6 +375,10 @@ private fun TraineeModifyMyInfoScreen(
                 Spacer(Modifier.padding(top = 32.dp))
             }
         }
+    }
+
+    if (state.isLoading) {
+        TnTLoadingScreen()
     }
 }
 

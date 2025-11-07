@@ -19,6 +19,7 @@ internal class TraineeModifyMyInfoContract {
         val caution: String? = "",
         val dialogState: DialogState = DialogState.NONE,
         val isEnableComplete: Boolean = false,
+        val isLoading: Boolean = false,
     ) : UiState {
         val isNameValid
             get() = name.isNotBlank() &&
