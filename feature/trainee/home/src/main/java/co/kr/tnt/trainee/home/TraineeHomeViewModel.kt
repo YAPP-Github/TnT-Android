@@ -12,6 +12,7 @@ import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.resource.DisplayText
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -166,10 +167,10 @@ internal class TraineeHomeViewModel @Inject constructor(
 
     private fun showConnectDialog() {
         val currentDateTime = LocalDateTime.now()
-
+        // TODO 트레이너 연결 반영
         viewModelScope.launch {
             runCatching {
-                traineeRepository.getMyInfo()
+                traineeRepository.getMyInfo().first()
             }.onSuccess { result ->
                 updateState { copy(isConnected = result.isConnected) }
                 if (result.isConnected) {

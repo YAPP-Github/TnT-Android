@@ -14,11 +14,13 @@ import co.kr.tnt.domain.model.trainee.TraineeDailyRecordStatus
 import co.kr.tnt.domain.model.trainee.TraineeMealRecordDetail
 import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.domain.utils.DateFormatter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
@@ -33,10 +35,15 @@ internal class TraineeRepositoryImpl @Inject constructor(
     private val dateFormatter: DateFormatter,
     private val json: Json,
 ) : TraineeRepository {
-    override suspend fun getMyInfo(): User.Trainee {
-        val user = userRemoteDataSource.getMyInfo().toDomain(dateFormatter)
-        require(user is User.Trainee)
-        return user
+    private val cacheUserInfo = MutableStateFlow(User.Trainee.EMPTY)
+
+    override suspend fun getMyInfo(): Flow<User.Trainee> {
+        return cacheUserInfo
+            .onStart {
+                if (cacheUserInfo.value == User.Trainee.EMPTY) {
+                    cacheUserInfo.value = fetchUserInfo()
+                }
+            }
     }
 
     override suspend fun getWeeklyRecordedDate(
@@ -70,17 +77,14 @@ internal class TraineeRepositoryImpl @Inject constructor(
             dietType = mealType,
             memo = memo,
         )
-        val requestBody = mealRecordRequest.toRequestBody()
+        val requestBody = json
+            .encodeToString(mealRecordRequest)
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         traineeRemoteDataSource.postMealRecord(
             dietImage = imagePart,
             request = requestBody,
         )
-    }
-
-    private fun MealRecordRequest.toRequestBody(): RequestBody {
-        val jsonString = json.encodeToString(this)
-        return jsonString.toRequestBody("application/json".toMediaTypeOrNull())
     }
 
     override suspend fun getMealRecord(dietId: Long): TraineeMealRecordDetail =
@@ -115,9 +119,21 @@ internal class TraineeRepositoryImpl @Inject constructor(
             .encodeToString(request)
             .toRequestBody("application/json".toMediaTypeOrNull())
 
-        traineeRemoteDataSource.putUserInfo(
-            profileImage = imagePart,
-            request = requestBody,
-        )
+        runCatching {
+            traineeRemoteDataSource.putUserInfo(
+                profileImage = imagePart,
+                request = requestBody,
+            )
+        }.onSuccess {
+            cacheUserInfo.value = fetchUserInfo()
+        }.onFailure { failure ->
+            throw failure
+        }
+    }
+
+    private suspend fun fetchUserInfo(): User.Trainee {
+        val user = userRemoteDataSource.getMyInfo().toDomain(dateFormatter)
+        require(user is User.Trainee)
+        return user
     }
 }

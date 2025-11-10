@@ -15,6 +15,7 @@ import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState.Dialo
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -70,17 +71,19 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
         private fun loadUserData() {
             viewModelScope.launch {
-                runCatching {
-                    traineeRepository.getMyInfo()
-                }.onSuccess { user ->
-                    updateState { copy(user = user) }
-                }.onFailure {
-                    sendEffect(
-                        TraineeMyPageEffect.ShowToast(
-                            DisplayText.Resource(core_failed_to_server_request),
-                        ),
-                    )
-                }
+                traineeRepository.getMyInfo()
+                    .onEach { user ->
+                        updateState { copy(user = user) }
+                    }.catch {
+                        sendEffect(
+                            TraineeMyPageEffect.ShowToast(
+                                DisplayText.Resource(
+                                    core_failed_to_server_request,
+                                ),
+                            ),
+                        )
+                    }
+                    .launchIn(viewModelScope)
 
                 settingRepository.isEnablePushNotification()
                     .onEach { isEnablePushNotification ->

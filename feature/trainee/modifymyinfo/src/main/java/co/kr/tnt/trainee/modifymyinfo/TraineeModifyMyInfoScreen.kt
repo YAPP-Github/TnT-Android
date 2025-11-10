@@ -86,6 +86,7 @@ import co.kr.tnt.ui.utils.convertToAllowedImageFormat
 import co.kr.tnt.ui.utils.throttled
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
@@ -171,7 +172,7 @@ internal fun TraineeModifyMyInfoRoute(
     }
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collectLatest { effect ->
             when (effect) {
                 TraineeModifyMyInfoEffect.NavigateToBack -> navigateToPrevious()
                 is TraineeModifyMyInfoEffect.ShowToast -> snackbar.show(effect.message.asString(context))

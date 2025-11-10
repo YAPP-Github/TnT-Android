@@ -71,6 +71,7 @@ import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -98,7 +99,9 @@ internal fun TraineeMyPageRoute(
         onTogglePushNotification = {
             viewModel.setEvent(
                 TraineeMyPageUiEvent.OnToggleNotification(
-                    isGrantedPermission = TnTPermission.NOTIFICATION.isRequireGranted(permissionState),
+                    isGrantedPermission = TnTPermission.NOTIFICATION.isRequireGranted(
+                        permissionState,
+                    ),
                     shouldShowRationale = permissionState.shouldShowRationale,
                 ),
             )
@@ -121,7 +124,7 @@ internal fun TraineeMyPageRoute(
     }
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collectLatest { effect ->
             when (effect) {
                 TraineeMyPageEffect.NavigateToModifyMyInfo -> navigateToModifyMyInfo()
                 TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(ScreenMode.BACK)
@@ -131,9 +134,8 @@ internal fun TraineeMyPageRoute(
                 is TraineeMyPageEffect.RequestPermission -> {
                     if (effect.isExplicitlyDenied) {
                         context.moveToAppSetting()
-                        return@collect
+                        return@collectLatest
                     }
-
                     permissionState.launchMultiplePermissionRequest()
                 }
 

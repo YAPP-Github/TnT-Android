@@ -12,6 +12,7 @@ import co.kr.tnt.trainee.modifymyinfo.TraineeModifyMyInfoContract.TraineeModifyM
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDate
@@ -63,7 +64,7 @@ internal class TraineeModifyMyInfoViewModel @Inject constructor(
         private fun loadUserInfo() {
             viewModelScope.launch {
                 runCatching {
-                    traineeRepository.getMyInfo()
+                    traineeRepository.getMyInfo().first()
                 }.onSuccess { user ->
                     initializedInfo = user
 
