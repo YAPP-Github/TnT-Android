@@ -16,7 +16,7 @@ data class Trainee(
     val traineeProfileImageUrl: String,
     val cautionNote: String?,
     val height: Double?,
-    val ptGoal: String,
+    val ptGoals: List<String>,
     val traineeAge: Int?,
     val weight: Double?,
 )
@@ -38,6 +38,6 @@ fun ConnectedTraineeResponse.toDomain(): ConnectedResult =
         age = trainee.traineeAge,
         height = trainee.height,
         weight = trainee.weight,
-        ptGoal = trainee.ptGoal,
+        ptGoals = trainee.ptGoals,
         cautionNote = trainee.cautionNote,
     )
