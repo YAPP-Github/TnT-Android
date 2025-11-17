@@ -55,7 +55,10 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                     sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
                 }
 
-                TraineeMealRecordUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
+                TraineeMealRecordUiEvent.OnDismissDialog -> {
+                    updateState { copy(dialogState = DialogState.NONE) }
+                    sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
+                }
             }
         }
 
