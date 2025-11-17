@@ -59,7 +59,6 @@ import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTOutlinedTextField
-import co.kr.tnt.designsystem.component.TnTSelectableTextField
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.TnTWheelTimePicker
@@ -70,6 +69,7 @@ import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
 import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
+import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField2
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
@@ -132,7 +132,6 @@ internal fun TraineeMealRecordRoute(
             showBottomSheet = true
         },
         onClickTimeSection = {
-            viewModel.setEvent(TraineeMealRecordUiEvent.OnClickMealTime)
             showBottomSheet = true
         },
         onSelectMealType = { type ->
@@ -286,13 +285,11 @@ private fun TraineeMealRecordScreen(
                 ) {
                     MealDate(
                         date = state.date,
-                        focusState = state.isDateFieldFocused,
                         dateFormatter = dateFormatter,
                         onClick = onClickDateSection,
                     )
                     MealTime(
                         time = state.time,
-                        focusState = state.isTimeFieldFocused,
                         dateFormatter = dateFormatter,
                         onClick = onClickTimeSection,
                     )
@@ -304,7 +301,7 @@ private fun TraineeMealRecordScreen(
                         state = state,
                         onValueChange = onChangeMemo,
                     )
-                    Spacer(Modifier.height(64.dp))
+                    Spacer(Modifier.height(36.dp))
                 }
             }
         }
@@ -414,36 +411,30 @@ private fun MealImageSelector(
 @Composable
 private fun MealDate(
     date: LocalDate,
-    focusState: Boolean,
     dateFormatter: DateFormatter,
     onClick: () -> Unit,
 ) {
-    TnTSelectableTextField(
+    TnTSelectableLabeledTextField2(
         title = stringResource(R.string.meal_date),
         value = dateFormatter.format(date, "yyyy/MM/dd"),
-        onValueChange = { },
-        isRequired = true,
-        shouldClearFocus = focusState.not(),
-        onClick = onClick,
+        showRequiredTitleBadge = true,
+        onClickTextField = onClick,
     )
 }
 
 @Composable
 private fun MealTime(
     time: LocalTime?,
-    focusState: Boolean,
     dateFormatter: DateFormatter,
     onClick: () -> Unit,
 ) {
     val now = LocalTime.now()
-    TnTSelectableTextField(
+    TnTSelectableLabeledTextField2(
         title = stringResource(R.string.meal_time),
         value = time?.let { dateFormatter.format(it, "HH:mm") } ?: "",
-        onValueChange = { },
-        isRequired = true,
+        showRequiredTitleBadge = true,
         placeholder = dateFormatter.format(now, "HH:mm"),
-        shouldClearFocus = focusState.not(),
-        onClick = onClick,
+        onClickTextField = onClick,
     )
 }
 

@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.ui.R.string.core_name
 import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
-import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField2
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.feature.trainee.signup.R
@@ -99,7 +99,7 @@ internal fun TraineeProfileSetupPage(
                     },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
-                TnTLabeledTextFieldWithCounter(
+                TnTLabeledTextField2(
                     title = stringResource(core_name),
                     value = state.name,
                     onValueChange = { newValue ->
@@ -108,9 +108,8 @@ internal fun TraineeProfileSetupPage(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     placeholder = stringResource(R.string.enter_your_name),
                     maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
-                    isSingleLine = true,
-                    showWarning = !state.isNameValid,
-                    isRequired = true,
+                    isWarning = !state.isNameValid,
+                    showRequiredTitleBadge = true,
                     warningMessage = stringResource(
                         core_text_length_and_format_warning,
                         UserProfilePolicy.USER_NAME_MAX_LENGTH,

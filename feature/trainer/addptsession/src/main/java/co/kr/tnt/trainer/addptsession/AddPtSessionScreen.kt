@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -59,9 +58,7 @@ import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
-import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
-import co.kr.tnt.designsystem.component.TnTTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.TnTWheelTimePicker
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
@@ -72,6 +69,9 @@ import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
 import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField2
+import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField2
+import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.MemberInfo
@@ -324,44 +324,25 @@ private fun Selector(
     modifier: Modifier = Modifier,
     isWarning: Boolean = false,
 ) {
-    val focusManager = LocalFocusManager.current
-
-    Column(modifier = modifier) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = title,
-                style = TnTTheme.typography.body1Bold,
-                color = TnTTheme.colors.neutralColors.Neutral900,
+    TnTSelectableLabeledTextField2(
+        title = title,
+        showRequiredTitleBadge = true,
+        value = value,
+        isWarning = isWarning,
+        placeholder = placeholder,
+        modifier = modifier,
+        trailing = {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(end = 8.dp),
+                painter = painterResource(ic_arrow_down),
+                contentDescription = null,
+                tint = TnTTheme.colors.neutralColors.Neutral400,
             )
-            Text(
-                text = "*",
-                style = TnTTheme.typography.body1Bold,
-                color = TnTTheme.colors.redColors.Red500,
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        TnTTextField(
-            value = value,
-            enabled = false,
-            isSingleLine = true,
-            showWarning = isWarning,
-            placeholder = placeholder,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    focusManager.clearFocus()
-                    onClick()
-                },
-            trailingComponent = {
-                Icon(
-                    painter = painterResource(ic_arrow_down),
-                    contentDescription = null,
-                    tint = TnTTheme.colors.neutralColors.Neutral400,
-                )
-            },
-            onValueChange = { },
-        )
-    }
+        },
+        onClickTextField = onClick,
+    )
 }
 
 @Composable
@@ -500,19 +481,15 @@ private fun Memo(
     isWarning: Boolean,
     onValueChanged: (String) -> Unit,
 ) {
-    Text(
-        text = stringResource(R.string.write_memo),
-        style = TnTTheme.typography.body1Bold,
-        color = TnTTheme.colors.neutralColors.Neutral900,
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    TnTOutlinedTextField(
+    TnTLabeledTextField2(
+        title = stringResource(R.string.write_memo),
         value = value,
         onValueChange = onValueChanged,
-        maxLength = 30,
-        isError = isWarning,
-        warningMessage = stringResource(core_length_warning, 30),
         modifier = Modifier.fillMaxWidth(),
+        size = TnTTextFieldSize.LARGE,
+        maxLength = 30,
+        isWarning = isWarning,
+        warningMessage = stringResource(core_length_warning, 30),
     )
 }
 

@@ -30,10 +30,10 @@ import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
 import co.kr.tnt.core.ui.R.string.core_unsaved_changes_warning
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
-import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField2
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
@@ -142,7 +142,7 @@ private fun TrainerModifyMyInfoScreen(
                 },
             )
             Spacer(modifier = Modifier.height(48.dp))
-            TnTLabeledTextFieldWithCounter(
+            TnTLabeledTextField2(
                 title = stringResource(core_name),
                 value = state.name,
                 onValueChange = { newValue ->
@@ -151,13 +151,13 @@ private fun TrainerModifyMyInfoScreen(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 placeholder = stringResource(core_name_placeholder),
                 maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
-                isSingleLine = true,
-                showWarning = state.isValidName.not(),
-                isRequired = true,
+                isWarning = state.isValidName.not(),
+                showRequiredTitleBadge = true,
                 warningMessage = stringResource(
                     core_text_length_and_format_warning,
                     UserProfilePolicy.USER_NAME_MAX_LENGTH,
                 ),
+                requestFocusOnStart = true,
             )
             Spacer(modifier = Modifier.weight(1f))
             TnTBottomButton(

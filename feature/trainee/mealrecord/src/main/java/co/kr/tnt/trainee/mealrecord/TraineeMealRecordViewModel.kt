@@ -36,11 +36,9 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                     ).validateMealRecord()
                 }
 
-                is TraineeMealRecordUiEvent.OnClickMealTime -> updateState { copy(isTimeFieldFocused = true) }
                 is TraineeMealRecordUiEvent.OnSelectMealTime -> updateState {
                     copy(
                         time = event.time,
-                        isTimeFieldFocused = false,
                     ).validateMealRecord()
                 }
 
@@ -65,7 +63,6 @@ internal class TraineeMealRecordViewModel @Inject constructor(
             updateState {
                 copy(
                     isDateFieldFocused = false,
-                    isTimeFieldFocused = false,
                 )
             }
         }

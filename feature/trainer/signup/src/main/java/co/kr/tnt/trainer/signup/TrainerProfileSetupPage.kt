@@ -29,10 +29,10 @@ import co.kr.tnt.core.ui.R.string.core_name
 import co.kr.tnt.core.ui.R.string.core_name_placeholder
 import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
-import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField2
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.feature.trainer.signup.R
@@ -102,7 +102,7 @@ internal fun TrainerProfileSetupPage(
                     },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
-                TnTLabeledTextFieldWithCounter(
+                TnTLabeledTextField2(
                     title = stringResource(core_name),
                     value = state.name,
                     onValueChange = { newValue ->
@@ -111,9 +111,8 @@ internal fun TrainerProfileSetupPage(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     placeholder = stringResource(core_name_placeholder),
                     maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
-                    isSingleLine = true,
-                    showWarning = state.isNameValid.not(),
-                    isRequired = true,
+                    isWarning = state.isNameValid.not(),
+                    showRequiredTitleBadge = true,
                     warningMessage = stringResource(
                         core_text_length_and_format_warning,
                         UserProfilePolicy.USER_NAME_MAX_LENGTH,

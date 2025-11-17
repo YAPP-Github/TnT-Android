@@ -18,7 +18,6 @@ internal class TraineeMealRecordContract {
         val mealType: String = "",
         val memo: String = "",
         val isDateFieldFocused: Boolean = false,
-        val isTimeFieldFocused: Boolean = false,
         val isMealRecordValid: Boolean = false,
         val showWarning: Boolean = false,
         val dialogState: DialogState = DialogState.NONE,
@@ -48,7 +47,6 @@ internal class TraineeMealRecordContract {
         data object OnClickDeleteImage : TraineeMealRecordUiEvent
         data object OnClickMealDate : TraineeMealRecordUiEvent
         data class OnSelectMealDate(val date: LocalDate) : TraineeMealRecordUiEvent
-        data object OnClickMealTime : TraineeMealRecordUiEvent
         data class OnSelectMealTime(val time: LocalTime) : TraineeMealRecordUiEvent
         data object OnClickCloseBottomSheet : TraineeMealRecordUiEvent
         data class OnSelectMealType(val mealType: String) : TraineeMealRecordUiEvent
