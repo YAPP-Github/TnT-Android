@@ -32,7 +32,7 @@ import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 
 @Composable
-fun TnTLabeledTextField2(
+fun TnTLabeledTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -68,7 +68,7 @@ fun TnTLabeledTextField2(
             }
             Spacer(modifier = Modifier.height(8.dp))
         }
-        TnTTextField2(
+        TnTTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
@@ -136,7 +136,7 @@ fun TnTLabeledTextFieldWithTextButton(
     trailingButtonEnabled: Boolean = true,
     onClickTextField: (() -> Unit)? = null,
 ) {
-    TnTLabeledTextField2(
+    TnTLabeledTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
@@ -172,7 +172,7 @@ fun TnTLabeledTextFieldWithTextButton(
 @Composable
 private fun TnTLabeledTextField2EmptyPreview() {
     TnTTheme {
-        TnTLabeledTextField2(
+        TnTLabeledTextField(
             title = "이름",
             value = "",
             onValueChange = {},
@@ -185,7 +185,7 @@ private fun TnTLabeledTextField2EmptyPreview() {
 @Composable
 private fun TnTLabeledTextField2WithTextPreview() {
     TnTTheme {
-        TnTLabeledTextField2(
+        TnTLabeledTextField(
             title = "이름",
             value = "홍길동",
             onValueChange = {},
@@ -198,7 +198,7 @@ private fun TnTLabeledTextField2WithTextPreview() {
 @Composable
 private fun TnTLabeledTextField2RequiredPreview() {
     TnTTheme {
-        TnTLabeledTextField2(
+        TnTLabeledTextField(
             title = "이름",
             value = "",
             onValueChange = {},
@@ -212,7 +212,7 @@ private fun TnTLabeledTextField2RequiredPreview() {
 @Composable
 private fun TnTLabeledTextField2ErrorPreview() {
     TnTTheme {
-        TnTLabeledTextField2(
+        TnTLabeledTextField(
             title = "이름",
             value = "잘못된 입력",
             onValueChange = {},
@@ -228,7 +228,7 @@ private fun TnTLabeledTextField2ErrorPreview() {
 @Composable
 private fun TnTLabeledTextField2LargePreview() {
     TnTTheme {
-        TnTLabeledTextField2(
+        TnTLabeledTextField(
             title = "메모",
             value = "여러 줄의 텍스트를\n입력할 수 있습니다.",
             onValueChange = {},
@@ -244,7 +244,7 @@ private fun TnTLabeledTextField2WithCounterEmptyPreview() {
     TnTTheme {
         var text by remember { mutableStateOf("") }
 
-        TnTLabeledTextField2(
+        TnTLabeledTextField(
             title = "닉네임",
             value = text,
             onValueChange = { text = it },
@@ -260,7 +260,7 @@ private fun TnTLabeledTextField2WithCounterTextPreview() {
     TnTTheme {
         var text by remember { mutableStateOf("홍길동") }
 
-        TnTLabeledTextField2(
+        TnTLabeledTextField(
             title = "닉네임",
             value = text,
             onValueChange = { text = it },
@@ -277,7 +277,7 @@ private fun TnTLabeledTextField2WithCounterErrorPreview() {
     TnTTheme {
         var text by remember { mutableStateOf("매우 긴 닉네임 매우 긴 닉네임") }
 
-        TnTLabeledTextField2(
+        TnTLabeledTextField(
             title = "닉네임",
             value = text,
             onValueChange = { text = it },
@@ -317,14 +317,14 @@ private fun TnTLabeledTextField2AllStatesPreview() {
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             Text("Basic", style = TnTTheme.typography.body1Bold)
-            TnTLabeledTextField2(
+            TnTLabeledTextField(
                 title = "이름",
                 value = "홍길동",
                 onValueChange = {},
             )
 
             Text("Required", style = TnTTheme.typography.body1Bold)
-            TnTLabeledTextField2(
+            TnTLabeledTextField(
                 title = "이메일",
                 value = "",
                 onValueChange = {},
@@ -332,7 +332,7 @@ private fun TnTLabeledTextField2AllStatesPreview() {
             )
 
             Text("Error with message", style = TnTTheme.typography.body1Bold)
-            TnTLabeledTextField2(
+            TnTLabeledTextField(
                 title = "전화번호",
                 value = "잘못된 형식",
                 onValueChange = {},
@@ -342,7 +342,7 @@ private fun TnTLabeledTextField2AllStatesPreview() {
             )
 
             Text("With Counter", style = TnTTheme.typography.body1Bold)
-            TnTLabeledTextField2(
+            TnTLabeledTextField(
                 title = "닉네임",
                 value = "홍길동",
                 onValueChange = {},
@@ -361,7 +361,7 @@ private fun TnTLabeledTextField2AllStatesPreview() {
             )
 
             Text("Large size", style = TnTTheme.typography.body1Bold)
-            TnTLabeledTextField2(
+            TnTLabeledTextField(
                 title = "메모",
                 value = "여러 줄의\n텍스트 입력",
                 onValueChange = {},

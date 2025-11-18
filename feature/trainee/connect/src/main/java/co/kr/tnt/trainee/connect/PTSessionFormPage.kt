@@ -30,8 +30,8 @@ import co.kr.tnt.core.ui.R.string.core_entered_wrong_text
 import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
-import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField2
-import co.kr.tnt.designsystem.component.textfield.TnTTextField2
+import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField
+import co.kr.tnt.designsystem.component.textfield.TnTTextField
 import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.utils.DateFormatter
@@ -114,7 +114,7 @@ internal fun PTSessionFormPage(
                     modifier = Modifier.padding(horizontal = 24.dp),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
-                TnTSelectableLabeledTextField2(
+                TnTSelectableLabeledTextField(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     value = sessionStartDate?.let {
                         dateFormatter.format(
@@ -195,7 +195,7 @@ internal fun PTSessionFormPage(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        TnTTextField2(
+                        TnTTextField(
                             value = completedSessionCount,
                             placeholder = "0",
                             isWarning = showCompletedSessionWarning || showTotalSessionWarning,
@@ -216,7 +216,7 @@ internal fun PTSessionFormPage(
                             color = TnTTheme.colors.neutralColors.Neutral600,
                             style = TnTTheme.typography.body1Medium,
                         )
-                        TnTTextField2(
+                        TnTTextField(
                             value = totalSessionCount,
                             placeholder = "0",
                             isWarning = showTotalSessionWarning || showCompletedSessionWarning,

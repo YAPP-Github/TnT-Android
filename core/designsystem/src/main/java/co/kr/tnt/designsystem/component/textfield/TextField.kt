@@ -40,7 +40,7 @@ import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldType
 import co.kr.tnt.designsystem.theme.TnTTheme
 
 @Composable
-fun TnTTextField2(
+fun TnTTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -215,7 +215,7 @@ private class TextFieldStateProvider : PreviewParameterProvider<TextFieldPreview
 
 @Preview(name = "TextField", showBackground = true)
 @Composable
-private fun TnTTextField2Preview(
+private fun TnTTextFieldPreview(
     @PreviewParameter(TextFieldStateProvider::class) state: TextFieldPreviewState,
 ) {
     TnTTheme {
@@ -228,7 +228,7 @@ private fun TnTTextField2Preview(
                 style = TnTTheme.typography.body2Medium,
                 color = TnTTheme.colors.neutralColors.Neutral600,
             )
-            TnTTextField2(
+            TnTTextField(
                 value = state.value,
                 onValueChange = {},
                 size = state.size,

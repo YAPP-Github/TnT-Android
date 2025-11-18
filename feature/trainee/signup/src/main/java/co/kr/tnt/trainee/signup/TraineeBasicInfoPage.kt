@@ -32,8 +32,8 @@ import co.kr.tnt.core.ui.R.string.core_weight_label
 import co.kr.tnt.core.ui.R.string.core_weight_unit
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
-import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField2
-import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField2
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField
+import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField
 import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
@@ -78,7 +78,7 @@ internal fun TraineeBasicInfoPage(
                     subTitle = stringResource(R.string.basic_info_for_trainer),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
-                TnTSelectableLabeledTextField2(
+                TnTSelectableLabeledTextField(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     value = state.birthday?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
                         ?: stringResource(R.string.birthday_placeholder),
@@ -113,7 +113,7 @@ internal fun TraineeBasicInfoPage(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
                 ) {
-                    TnTLabeledTextField2(
+                    TnTLabeledTextField(
                         title = stringResource(core_height_label),
                         value = state.height ?: "",
                         placeholder = "0",
@@ -129,7 +129,7 @@ internal fun TraineeBasicInfoPage(
                         onValueChange = onChangeHeight,
                         modifier = Modifier.weight(1f),
                     )
-                    TnTLabeledTextField2(
+                    TnTLabeledTextField(
                         title = stringResource(core_weight_label),
                         value = state.weight ?: "",
                         placeholder = "00.0",

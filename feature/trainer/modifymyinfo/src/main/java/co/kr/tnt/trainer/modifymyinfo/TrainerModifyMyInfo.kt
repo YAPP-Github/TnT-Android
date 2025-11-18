@@ -33,7 +33,7 @@ import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
-import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField2
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
@@ -142,7 +142,7 @@ private fun TrainerModifyMyInfoScreen(
                 },
             )
             Spacer(modifier = Modifier.height(48.dp))
-            TnTLabeledTextField2(
+            TnTLabeledTextField(
                 title = stringResource(core_name),
                 value = state.name,
                 onValueChange = { newValue ->

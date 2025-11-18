@@ -69,7 +69,7 @@ import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
 import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
-import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField2
+import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
@@ -414,7 +414,7 @@ private fun MealDate(
     dateFormatter: DateFormatter,
     onClick: () -> Unit,
 ) {
-    TnTSelectableLabeledTextField2(
+    TnTSelectableLabeledTextField(
         title = stringResource(R.string.meal_date),
         value = dateFormatter.format(date, "yyyy/MM/dd"),
         showRequiredTitleBadge = true,
@@ -429,7 +429,7 @@ private fun MealTime(
     onClick: () -> Unit,
 ) {
     val now = LocalTime.now()
-    TnTSelectableLabeledTextField2(
+    TnTSelectableLabeledTextField(
         title = stringResource(R.string.meal_time),
         value = time?.let { dateFormatter.format(it, "HH:mm") } ?: "",
         showRequiredTitleBadge = true,

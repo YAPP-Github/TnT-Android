@@ -69,8 +69,8 @@ import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
 import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
-import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField2
-import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField2
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField
+import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField
 import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
@@ -324,7 +324,7 @@ private fun Selector(
     modifier: Modifier = Modifier,
     isWarning: Boolean = false,
 ) {
-    TnTSelectableLabeledTextField2(
+    TnTSelectableLabeledTextField(
         title = title,
         showRequiredTitleBadge = true,
         value = value,
@@ -481,7 +481,7 @@ private fun Memo(
     isWarning: Boolean,
     onValueChanged: (String) -> Unit,
 ) {
-    TnTLabeledTextField2(
+    TnTLabeledTextField(
         title = stringResource(R.string.write_memo),
         value = value,
         onValueChange = onValueChanged,

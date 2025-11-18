@@ -30,7 +30,7 @@ import co.kr.tnt.core.ui.R.string.core_text_length_and_format_warning
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
-import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField2
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.feature.trainee.signup.R
@@ -99,7 +99,7 @@ internal fun TraineeProfileSetupPage(
                     },
                 )
                 Spacer(Modifier.padding(top = 60.dp))
-                TnTLabeledTextField2(
+                TnTLabeledTextField(
                     title = stringResource(core_name),
                     value = state.name,
                     onValueChange = { newValue ->

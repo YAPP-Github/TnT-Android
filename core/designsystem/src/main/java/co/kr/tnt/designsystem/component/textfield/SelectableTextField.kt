@@ -25,7 +25,7 @@ import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 
 @Composable
-fun TnTSelectableTextField2(
+fun TnTSelectableTextField(
     value: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -43,7 +43,7 @@ fun TnTSelectableTextField2(
         }
     }
 
-    TnTTextField2(
+    TnTTextField(
         value = value,
         onValueChange = { },
         modifier = modifier,
@@ -63,7 +63,7 @@ fun TnTSelectableTextField2(
 }
 
 @Composable
-fun TnTSelectableLabeledTextField2(
+fun TnTSelectableLabeledTextField(
     value: String,
     onClickTextField: () -> Unit,
     modifier: Modifier = Modifier,
@@ -75,7 +75,7 @@ fun TnTSelectableLabeledTextField2(
     warningMessage: String? = null,
     trailing: @Composable (RowScope.() -> Unit)? = null,
 ) {
-    TnTLabeledTextField2(
+    TnTLabeledTextField(
         value = value,
         onValueChange = { },
         modifier = modifier,
@@ -113,7 +113,7 @@ fun TnTSelectableLabeledTextFieldWithTextButton(
     trailingButtonSize: ButtonSize = ButtonSize.Small,
     trailingButtonType: ButtonType = ButtonType.Primary,
 ) {
-    TnTSelectableLabeledTextField2(
+    TnTSelectableLabeledTextField(
         value = value,
         onClickTextField = onClickTextField,
         modifier = modifier,
@@ -161,20 +161,20 @@ private fun TnTSelectableTextField2AllStatesPreview() {
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             Text("Empty", style = TnTTheme.typography.body1Bold)
-            TnTSelectableTextField2(
+            TnTSelectableTextField(
                 value = "",
                 onClick = {},
                 placeholder = "선택해주세요",
             )
 
             Text("Selected", style = TnTTheme.typography.body1Bold)
-            TnTSelectableTextField2(
+            TnTSelectableTextField(
                 value = "2025/01/15",
                 onClick = {},
             )
 
             Text("Labeled - Required", style = TnTTheme.typography.body1Bold)
-            TnTSelectableLabeledTextField2(
+            TnTSelectableLabeledTextField(
                 value = "",
                 onClickTextField = {},
                 title = "날짜",
@@ -183,7 +183,7 @@ private fun TnTSelectableTextField2AllStatesPreview() {
             )
 
             Text("Labeled - Selected", style = TnTTheme.typography.body1Bold)
-            TnTSelectableLabeledTextField2(
+            TnTSelectableLabeledTextField(
                 value = "09:00",
                 onClickTextField = {},
                 title = "시간",
@@ -191,7 +191,7 @@ private fun TnTSelectableTextField2AllStatesPreview() {
             )
 
             Text("Labeled - Warning", style = TnTTheme.typography.body1Bold)
-            TnTSelectableLabeledTextField2(
+            TnTSelectableLabeledTextField(
                 value = "",
                 onClickTextField = {},
                 title = "식사 유형",
