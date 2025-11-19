@@ -12,8 +12,10 @@ import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.resource.DisplayText
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
@@ -162,28 +164,32 @@ internal class TraineeHomeViewModel @Inject constructor(
         cachedMonthlyRecordState.clear()
         handleChangeVisibleMonth(currentState.selectedDay.yearMonth)
         selectDay(currentState.selectedDay)
-        showConnectDialog()
+        getUserInfo()
+    }
+
+    private fun getUserInfo() {
+        viewModelScope.launch {
+            traineeRepository.getMyInfo()
+                .onEach { user ->
+                    updateState { copy(isConnected = user.isConnected) }
+                    if (user.isConnected.not()) {
+                        showConnectDialog()
+                    }
+                }
+                .catch {
+                    sendEffect(
+                        TraineeHomeEffect.ShowToast(
+                            DisplayText.Resource(core_failed_to_server_request),
+                        ),
+                    )
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     private fun showConnectDialog() {
         val currentDateTime = LocalDateTime.now()
-        // TODO 트레이너 연결 반영
         viewModelScope.launch {
-            runCatching {
-                traineeRepository.getMyInfo().first()
-            }.onSuccess { result ->
-                updateState { copy(isConnected = result.isConnected) }
-                if (result.isConnected) {
-                    return@launch
-                }
-            }.onFailure {
-                sendEffect(
-                    TraineeHomeEffect.ShowToast(
-                        DisplayText.Resource(core_failed_to_server_request),
-                    ),
-                )
-            }
-
             val lastHiddenDate = connectRepository.getExplicitDeniedConnectDate().firstOrNull()
             val isHidden = lastHiddenDate != null &&
                 Duration.between(lastHiddenDate, currentDateTime).toHours() < DIALOG_HIDE_DURATION_HOURS
