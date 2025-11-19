@@ -125,7 +125,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
                 request = requestBody,
             )
         }.onSuccess {
-            cacheUserInfo.value = fetchUserInfo()
+            refreshCachedUserInfo()
         }.onFailure { failure ->
             throw failure
         }
@@ -135,5 +135,13 @@ internal class TraineeRepositoryImpl @Inject constructor(
         val user = userRemoteDataSource.getMyInfo().toDomain(dateFormatter)
         require(user is User.Trainee)
         return user
+    }
+
+    override suspend fun refreshCachedUserInfo() {
+        cacheUserInfo.value = fetchUserInfo()
+    }
+
+    override suspend fun clearCachedUserInfo() {
+        cacheUserInfo.value = User.Trainee.EMPTY
     }
 }

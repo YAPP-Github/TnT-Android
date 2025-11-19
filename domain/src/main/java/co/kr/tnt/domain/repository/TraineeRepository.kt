@@ -29,4 +29,6 @@ interface TraineeRepository {
         profileImageUpdatePolicy: ProfileImageUpdatePolicy,
         userInfo: User.Trainee,
     )
+    suspend fun refreshCachedUserInfo()
+    suspend fun clearCachedUserInfo()
 }
