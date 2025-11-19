@@ -59,9 +59,7 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
                 TraineeMyPageUiEvent.OnClickLogout -> updateState { copy(dialogState = DialogState.LOGOUT_CONFIRM) }
                 TraineeMyPageUiEvent.OnClickDeleteAccount -> updateState {
-                    copy(
-                        dialogState = DialogState.DELETE_ACCOUNT_CONFIRM,
-                    )
+                    copy(dialogState = DialogState.DELETE_ACCOUNT_CONFIRM)
                 }
 
                 TraineeMyPageUiEvent.OnClickDialogConfirm -> handleDialogConfirm()
@@ -134,12 +132,14 @@ internal class TraineeMyPageViewModel @Inject constructor(
                 DialogState.LOGOUT -> {
                     updateState { copy(dialogState = DialogState.NONE) }
                     sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                    clearCachedUserInfo()
                 }
 
                 DialogState.DELETE_ACCOUNT_CONFIRM -> withdraw()
                 DialogState.DELETE_ACCOUNT -> {
                     updateState { copy(dialogState = DialogState.NONE) }
                     sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                    clearCachedUserInfo()
                 }
 
                 DialogState.SHOULD_ALLOW_PERMISSION -> {
@@ -182,6 +182,12 @@ internal class TraineeMyPageViewModel @Inject constructor(
                 }.also {
                     updateState { copy(isLoading = false) }
                 }
+            }
+        }
+
+        private fun clearCachedUserInfo() {
+            viewModelScope.launch {
+                traineeRepository.clearCachedUserInfo()
             }
         }
     }
