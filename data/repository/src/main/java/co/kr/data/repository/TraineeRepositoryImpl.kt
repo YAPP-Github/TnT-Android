@@ -101,7 +101,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
         }
         val imagePart = profileImage?.let {
             val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("dietImage", it.name, requestFile)
+            MultipartBody.Part.createFormData("profileImage", it.name, requestFile)
         }
         val selectedDate = userInfo.birthday?.let { dateFormatter.format(it, "yyyy-MM-dd") }
 
@@ -109,7 +109,7 @@ internal class TraineeRepositoryImpl @Inject constructor(
             removeImage = isRemoveProfileImage,
             memberType = MemberType.TRAINEE,
             name = userInfo.name,
-            birthDay = selectedDate,
+            birthday = selectedDate,
             height = userInfo.height?.toDouble(),
             weight = userInfo.weight,
             cautionNote = userInfo.caution,
