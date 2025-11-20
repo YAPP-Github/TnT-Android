@@ -80,8 +80,8 @@ internal fun TraineeBasicInfoPage(
                 Spacer(Modifier.padding(top = 48.dp))
                 TnTSelectableLabeledTextField(
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    value = state.birthday?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
-                        ?: stringResource(R.string.birthday_placeholder),
+                    value = state.birthday?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) ?: "",
+                    placeholder = stringResource(R.string.birthday_placeholder),
                     onClickTextField = {
                         DatePickerDialog(
                             context,
