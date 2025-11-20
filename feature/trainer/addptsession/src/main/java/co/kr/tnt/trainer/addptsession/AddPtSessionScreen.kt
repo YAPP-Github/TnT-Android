@@ -242,14 +242,14 @@ private fun AddPtSessionScreen(
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Description()
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                     Selector(
                         title = stringResource(R.string.select_member),
                         value = state.selectedMember?.traineeName ?: "",
                         placeholder = stringResource(R.string.insert_memeber),
                         onClick = onClickMember,
                     )
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(32.dp))
                     Selector(
                         title = stringResource(R.string.pt_date),
                         value = state.selectedDate?.let { selectedDate ->
@@ -258,7 +258,7 @@ private fun AddPtSessionScreen(
                         placeholder = stringResource(R.string.insert_date),
                         onClick = onClickDate,
                     )
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(32.dp))
                     TimeSelector(
                         startTime = state.selectedStartTime,
                         endTime = state.selectedEndTime,
@@ -268,7 +268,7 @@ private fun AddPtSessionScreen(
                         isWarning = state.isErrorTime,
                     )
                     if (state.selectedStartTime != null && state.selectedEndTime == null) {
-                        Spacer(modifier = Modifier.height(48.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
                         MinuteChips(
                             selectedMinute = state.totalSessionMinute ?: 0,
                             onClickChip = onClickMinuteChip,
@@ -280,7 +280,7 @@ private fun AddPtSessionScreen(
                             minute = totalSessionMinute,
                         )
                     }
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(32.dp))
                     Memo(
                         value = state.memo,
                         isWarning = state.isErrorMemo,
@@ -484,6 +484,7 @@ private fun Memo(
     TnTLabeledTextField(
         title = stringResource(R.string.write_memo),
         value = value,
+        placeholder = stringResource(R.string.memo_for_pt_session),
         onValueChange = onValueChanged,
         modifier = Modifier.fillMaxWidth(),
         size = TnTTextFieldSize.LARGE,
