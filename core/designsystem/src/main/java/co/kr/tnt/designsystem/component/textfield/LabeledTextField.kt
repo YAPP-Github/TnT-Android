@@ -20,11 +20,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import co.kr.tnt.core.designsystem.R
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
@@ -100,7 +98,7 @@ fun TnTLabeledTextField(
                 if (maxLength != null) {
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        text = stringResource(R.string.text_counter, value.length, maxLength),
+                        text = "${value.length} / $maxLength",
                         style = TnTTheme.typography.label1Medium,
                         color = when {
                             isWarning -> TnTTheme.colors.redColors.Red500
