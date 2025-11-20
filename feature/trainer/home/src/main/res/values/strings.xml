@@ -8,4 +8,6 @@
     <string name="no_pt_session_yet">아직 등록된 수업이 없어요.</string>
     <string name="press_add_button_to_add_pt_session">추가 버튼을 눌러 PT 수업 일정을 추가해 보세요</string>
     <string name="pt_session_count">%1$s회차 수업</string>
+    <string name="pt_early_completion_title">수업을 기록하시겠어요?</string>
+    <string name="pt_early_completion_message">아직 수업 시간이 지나지 않았어요</string>
 </resources>
