@@ -58,7 +58,6 @@ import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.designsystem.component.TnTBottomSheetDialog
 import co.kr.tnt.designsystem.component.TnTDivider
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
-import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.TnTWheelTimePicker
@@ -69,7 +68,9 @@ import co.kr.tnt.designsystem.component.calendar.TnTCalendarSelector
 import co.kr.tnt.designsystem.component.calendar.TnTMonthCalendar
 import co.kr.tnt.designsystem.component.calendar.model.DayState
 import co.kr.tnt.designsystem.component.calendar.utils.rememberMostVisibleMonth
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField
+import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
@@ -491,30 +492,15 @@ private fun MealMemo(
     onValueChange: (String) -> Unit,
 ) {
     Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = stringResource(R.string.wirte_memo),
-                style = TnTTheme.typography.body1Bold,
-                color = TnTTheme.colors.neutralColors.Neutral900,
-            )
-            Text(
-                text = "*",
-                style = TnTTheme.typography.body1Bold,
-                color = TnTTheme.colors.redColors.Red500,
-            )
-        }
-        Spacer(Modifier.height(10.dp))
-        TnTOutlinedTextField(
+        TnTLabeledTextField(
+            title = stringResource(R.string.wirte_memo),
             value = state.memo,
-            onValueChange = { newValue ->
-                onValueChange(newValue)
-            },
+            onValueChange = onValueChange,
+            showRequiredTitleBadge = true,
+            size = TnTTextFieldSize.LARGE,
             placeholder = stringResource(R.string.enter_meal_info),
             maxLength = 100,
-            isError = state.showWarning,
+            isWarning = state.showWarning,
             warningMessage = stringResource(core_length_warning, 100),
         )
     }
