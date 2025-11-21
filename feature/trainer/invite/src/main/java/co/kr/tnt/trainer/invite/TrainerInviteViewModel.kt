@@ -8,6 +8,7 @@ import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteSideEffect
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiEvent
 import co.kr.tnt.trainer.invite.TrainerInviteContract.TrainerInviteUiState
 import co.kr.tnt.ui.base.BaseViewModel
+import co.kr.tnt.ui.model.SnackbarType
 import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,7 +29,8 @@ internal class TrainerInviteViewModel @Inject constructor(
                 sendEffect(TrainerInviteSideEffect.CopyToClipBoard(event.code))
                 sendEffect(
                     TrainerInviteSideEffect.ShowToast(
-                        DisplayText.Resource(R.string.code_is_copied),
+                        message = DisplayText.Resource(R.string.code_is_copied),
+                        type = SnackbarType.SUCCESS,
                     ),
                 )
             }
