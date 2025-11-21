@@ -17,7 +17,7 @@ data class SignUpRequest(
     val birthday: String? = null,
     val height: Double? = null,
     val weight: Double? = null,
-    val goalContents: List<String>? = null,
+    val ptGoals: List<String>? = null,
     val cautionNote: String? = "",
 )
 
@@ -34,7 +34,7 @@ fun User.toSignUpRequest(
             birthday = null,
             height = null,
             weight = null,
-            goalContents = null,
+            ptGoals = null,
             cautionNote = null,
             socialType = socialType,
             socialId = socialId,
@@ -51,7 +51,7 @@ fun User.toSignUpRequest(
             birthday = birthday?.toString(),
             height = height?.toDouble(),
             weight = weight,
-            goalContents = ptPurpose,
+            ptGoals = ptPurpose,
             cautionNote = caution?.ifBlank { null },
             socialType = socialType,
             socialId = socialId,

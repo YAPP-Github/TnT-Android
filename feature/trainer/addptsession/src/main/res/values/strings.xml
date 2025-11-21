@@ -23,4 +23,5 @@
     <string name="schedule_shown_to_trainee">등록된 일정은 트레이니에게도 표시돼요!</string>
     <string name="total_prefix">"총 "</string>
     <string name="minute_suffix">" 수업이에요"</string>
+    <string name="memo_for_pt_session">PT 수업에서 기억해야 할 것을 메모해보세요</string>
 </resources>

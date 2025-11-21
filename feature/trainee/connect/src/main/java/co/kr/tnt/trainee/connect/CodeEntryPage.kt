@@ -27,12 +27,10 @@ import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTTopBar
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
-import co.kr.tnt.designsystem.component.button.TnTTextButton
-import co.kr.tnt.designsystem.component.button.model.ButtonSize
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextFieldWithTextButton
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.connect.R
 import co.kr.tnt.navigation.model.ScreenMode
-import co.kr.tnt.trainee.connect.component.CodeTextField
 import co.kr.tnt.trainee.connect.model.InputState
 import co.kr.tnt.ui.extensions.clearFocusOnTap
 import co.kr.tnt.core.designsystem.R as uiResource
@@ -68,6 +66,7 @@ internal fun CodeEntryPage(
                         onBackClick = onClickBack,
                     )
                 }
+
                 ScreenMode.SKIP -> {
                     TnTTopBar(
                         title = stringResource(core_connect),
@@ -81,6 +80,7 @@ internal fun CodeEntryPage(
                         },
                     )
                 }
+
                 ScreenMode.CLOSE -> {
                     TnTTopBar(
                         title = stringResource(core_connect),
@@ -111,20 +111,37 @@ internal fun CodeEntryPage(
                     modifier = Modifier.padding(horizontal = 24.dp),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
-                CodeTextField(
-                    value = inviteCode,
-                    onValueChange = onChangeInviteCode,
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    isCodeValid = inputState,
-                    trailingComponent = {
-                        TnTTextButton(
-                            text = stringResource(R.string.verification),
-                            size = ButtonSize.Small,
-                            enabled = inviteCode.isNotBlank(),
-                            onClick = { onClickValidate(inviteCode) },
+                Column {
+                    TnTLabeledTextFieldWithTextButton(
+                        value = inviteCode,
+                        onValueChange = onChangeInviteCode,
+                        trailingButtonTitle = stringResource(R.string.verification),
+                        onClickTrailingButton = { onClickValidate(inviteCode) },
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp),
+                        title = stringResource(R.string.my_invite_code),
+                        showRequiredTitleBadge = true,
+                        placeholder = stringResource(R.string.enter_the_code),
+                        isWarning = inputState == InputState.INVALID,
+                        warningMessage = if (inputState == InputState.INVALID) {
+                            stringResource(R.string.verification_fail)
+                        } else {
+                            null
+                        },
+                        trailingButtonEnabled = inviteCode.isNotBlank(),
+                    )
+                    if (inputState == InputState.VALID) {
+                        Text(
+                            text = stringResource(R.string.verification_success),
+                            style = TnTTheme.typography.body2Medium,
+                            color = TnTTheme.colors.blueColors.Blue500,
+                            modifier = Modifier.padding(
+                                start = 20.dp,
+                                top = 6.dp,
+                            ),
                         )
-                    },
-                )
+                    }
+                }
             }
             TnTBottomButton(
                 text = stringResource(core_next),

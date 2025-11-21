@@ -1,9 +1,7 @@
 package co.kr.tnt.trainee.signup
 
 import android.app.DatePickerDialog
-import android.content.Context
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +14,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import co.kr.tnt.core.ui.R.string.core_entered_wrong_text
@@ -34,9 +30,11 @@ import co.kr.tnt.core.ui.R.string.core_height_unit
 import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.core.ui.R.string.core_weight_label
 import co.kr.tnt.core.ui.R.string.core_weight_unit
-import co.kr.tnt.designsystem.component.TnTLabeledTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField
+import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField
+import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.feature.trainee.signup.R
 import co.kr.tnt.trainee.signup.TraineeSignUpContract.TraineeSignUpUiState
@@ -80,23 +78,33 @@ internal fun TraineeBasicInfoPage(
                     subTitle = stringResource(R.string.basic_info_for_trainer),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
-                Text(
-                    text = stringResource(R.string.birthday_label),
-                    color = TnTTheme.colors.neutralColors.Neutral900,
-                    style = TnTTheme.typography.body1Bold,
-                    modifier = Modifier.padding(start = 20.dp, bottom = 8.dp),
-                )
-                BirthdayPicker(
+                TnTSelectableLabeledTextField(
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    context = context,
-                    today = today,
-                    selectedDate = state.birthday,
-                    onDateSelected = onChangeBirthday,
-                )
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = TnTTheme.colors.neutralColors.Neutral200,
-                    modifier = Modifier.padding(horizontal = 20.dp),
+                    value = state.birthday?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) ?: "",
+                    placeholder = stringResource(R.string.birthday_placeholder),
+                    onClickTextField = {
+                        DatePickerDialog(
+                            context,
+                            { _, selectedYear, selectedMonth, selectedDay ->
+                                val newDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
+                                onChangeBirthday(newDate)
+                            },
+                            state.birthday?.year ?: today.year,
+                            (state.birthday?.monthValue?.minus(1)) ?: (today.monthValue - 1),
+                            state.birthday?.dayOfMonth ?: today.dayOfMonth,
+                        )
+                            .apply {
+                                // 오늘 이후는 선택 불가능
+                                datePicker.maxDate =
+                                    today
+                                        .atStartOfDay(ZoneId.systemDefault())
+                                        .toInstant()
+                                        .toEpochMilli()
+                            }
+                            .show()
+                    },
+                    title = stringResource(R.string.birthday_label),
+                    size = TnTTextFieldSize.SMALL,
                 )
                 Spacer(Modifier.padding(top = 48.dp))
                 Row(
@@ -109,12 +117,14 @@ internal fun TraineeBasicInfoPage(
                         title = stringResource(core_height_label),
                         value = state.height ?: "",
                         placeholder = "0",
-                        isSingleLine = true,
-                        showWarning = state.isHeightValid.not(),
+                        isWarning = state.isHeightValid.not(),
                         warningMessage = stringResource(core_entered_wrong_text),
                         keyboardType = KeyboardType.Number,
-                        trailingComponent = {
-                            UnitLabel(core_height_unit)
+                        trailing = {
+                            UnitLabel(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                stringResId = core_height_unit,
+                            )
                         },
                         onValueChange = onChangeHeight,
                         modifier = Modifier.weight(1f),
@@ -123,12 +133,14 @@ internal fun TraineeBasicInfoPage(
                         title = stringResource(core_weight_label),
                         value = state.weight ?: "",
                         placeholder = "00.0",
-                        isSingleLine = true,
-                        showWarning = state.isWeightValid.not(),
+                        isWarning = state.isWeightValid.not(),
                         warningMessage = stringResource(core_entered_wrong_text),
                         keyboardType = KeyboardType.Number,
-                        trailingComponent = {
-                            UnitLabel(core_weight_unit)
+                        trailing = {
+                            UnitLabel(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                stringResId = core_weight_unit,
+                            )
                         },
                         onValueChange = onChangeWeight,
                         modifier = Modifier.weight(1f),
@@ -146,60 +158,12 @@ internal fun TraineeBasicInfoPage(
 }
 
 @Composable
-private fun BirthdayPicker(
+private fun UnitLabel(
     modifier: Modifier = Modifier,
-    context: Context,
-    today: LocalDate,
-    selectedDate: LocalDate?,
-    onDateSelected: (LocalDate) -> Unit,
+    stringResId: Int,
 ) {
-    val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
-    val date = selectedDate ?: LocalDate.of(2001, 1, 1)
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-                DatePickerDialog(
-                    context,
-                    { _, selectedYear, selectedMonth, selectedDay ->
-                        val newDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
-                        onDateSelected(newDate)
-                    },
-                    date.year,
-                    date.monthValue - 1,
-                    date.dayOfMonth,
-                )
-                    .apply {
-                        // 오늘 이후는 선택 불가능
-                        val todayMillis = today
-                            .atStartOfDay(ZoneId.systemDefault())
-                            .toInstant()
-                            .toEpochMilli()
-
-                        datePicker.maxDate = todayMillis - 1
-                    }
-                    .show()
-            },
-    ) {
-        Text(
-            text = selectedDate?.format(dateFormatter)
-                ?: stringResource(R.string.birthday_placeholder),
-            color = if (selectedDate == null) {
-                TnTTheme.colors.neutralColors.Neutral400
-            } else {
-                TnTTheme.colors.neutralColors.Neutral600
-            },
-            style = TnTTheme.typography.body1Medium,
-            textAlign = TextAlign.Start,
-        )
-    }
-}
-
-@Composable
-private fun UnitLabel(stringResId: Int) {
     Text(
+        modifier = modifier.padding(end = 12.dp),
         text = stringResource(stringResId),
         style = TnTTheme.typography.body1Medium,
         color = TnTTheme.colors.neutralColors.Neutral400,
