@@ -28,7 +28,7 @@ internal fun TraineeConnectRoute(
     TraineeConnectScreen(
         state = state,
         screenMode = screenMode,
-        onClickBack = { viewModel.setEvent(TraineeConnectUiEvent.OnChangeDialogState) },
+        onClickBack = { viewModel.setEvent(TraineeConnectUiEvent.OnClickBack) },
         onClickNext = { viewModel.setEvent(TraineeConnectUiEvent.OnClickNext) },
         onClickSkip = { viewModel.setEvent(TraineeConnectUiEvent.OnClickSkip) },
         onChangeInviteCode = { code ->

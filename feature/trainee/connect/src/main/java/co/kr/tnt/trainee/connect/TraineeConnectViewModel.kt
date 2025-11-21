@@ -87,7 +87,7 @@ internal class TraineeConnectViewModel @Inject constructor(
                 runCatching {
                     currentState.run {
                         connectRepository.connectRequest(
-                            invitationCode = inviteCode,
+                            invitationCode = inviteCode.trim(),
                             startDate = (sessionStartDate ?: LocalDate.now()).toString(),
                             completedSession = completedSessionCount.toInt(),
                             totalSession = totalSessionCount.toInt(),

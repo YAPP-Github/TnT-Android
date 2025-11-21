@@ -17,11 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.kr.tnt.core.designsystem.R.string.placeholder_content_input
 import co.kr.tnt.core.ui.R.string.core_next
 import co.kr.tnt.core.ui.R.string.core_text_length_warning
-import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField
+import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
 import co.kr.tnt.feature.trainee.signup.R
@@ -58,13 +60,13 @@ internal fun TraineeNoteForTrainerPage(
                     subTitle = stringResource(R.string.let_the_trainer_know),
                 )
                 Spacer(Modifier.padding(top = 48.dp))
-                TnTOutlinedTextField(
+                TnTLabeledTextField(
                     value = state.caution ?: "",
-                    onValueChange = { newValue ->
-                        onChangeCaution(newValue)
-                    },
+                    onValueChange = onChangeCaution,
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    isError = state.isCautionNoteValid.not(),
+                    size = TnTTextFieldSize.LARGE,
+                    placeholder = stringResource(placeholder_content_input),
+                    isWarning = state.isCautionNoteValid.not(),
                     warningMessage = stringResource(
                         core_text_length_warning,
                         UserProfilePolicy.USER_CAUTION_MAX_LENGTH,

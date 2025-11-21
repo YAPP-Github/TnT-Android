@@ -8,6 +8,6 @@ data class ConnectedResult(
     val age: Int?,
     val height: Double?,
     val weight: Double?,
-    val ptGoal: String,
+    val ptGoals: List<String>,
     val cautionNote: String?,
 )

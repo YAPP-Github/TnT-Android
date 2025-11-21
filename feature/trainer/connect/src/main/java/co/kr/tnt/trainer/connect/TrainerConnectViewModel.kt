@@ -57,7 +57,7 @@ internal class TrainerConnectViewModel @Inject constructor(
                             age = result.age,
                             weight = result.weight,
                             height = result.height?.toInt(),
-                            ptPurpose = listOf(result.ptGoal),
+                            ptPurpose = result.ptGoals,
                             caution = result.cautionNote,
                             isConnected = true,
                         ),

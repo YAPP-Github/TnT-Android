@@ -36,11 +36,9 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                     ).validateMealRecord()
                 }
 
-                is TraineeMealRecordUiEvent.OnClickMealTime -> updateState { copy(isTimeFieldFocused = true) }
                 is TraineeMealRecordUiEvent.OnSelectMealTime -> updateState {
                     copy(
                         time = event.time,
-                        isTimeFieldFocused = false,
                     ).validateMealRecord()
                 }
 
@@ -57,7 +55,10 @@ internal class TraineeMealRecordViewModel @Inject constructor(
                     sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
                 }
 
-                TraineeMealRecordUiEvent.OnDismissDialog -> updateState { copy(dialogState = DialogState.NONE) }
+                TraineeMealRecordUiEvent.OnDismissDialog -> {
+                    updateState { copy(dialogState = DialogState.NONE) }
+                    sendEffect(TraineeMealRecordSideEffect.NavigateToHome)
+                }
             }
         }
 
@@ -65,7 +66,6 @@ internal class TraineeMealRecordViewModel @Inject constructor(
             updateState {
                 copy(
                     isDateFieldFocused = false,
-                    isTimeFieldFocused = false,
                 )
             }
         }

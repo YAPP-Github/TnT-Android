@@ -7,10 +7,10 @@ import co.kr.tnt.domain.model.trainer.TrainerDailyPtSessionCount
 import co.kr.tnt.domain.repository.ConnectRepository
 import co.kr.tnt.domain.repository.TrainerRepository
 import co.kr.tnt.feature.trainer.home.R
+import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeDialog
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeSideEffect
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiEvent
 import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState
-import co.kr.tnt.trainer.home.TrainerHomeContract.TrainerHomeUiState.DialogState
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.model.SnackbarType
 import co.kr.tnt.ui.resource.DisplayText
@@ -51,8 +51,11 @@ internal class TrainerHomeViewModel @Inject constructor(
                 is TrainerHomeUiEvent.OnChangeVisibleMonth -> getMonthlySessionCounts(event.yearMonth)
                 is TrainerHomeUiEvent.OnClickDay -> selectDay(event.day)
                 TrainerHomeUiEvent.OnClickAddPtSession -> showConnectDialog(false)
-
-                is TrainerHomeUiEvent.OnClickPtSessionComplete -> completePtSession(event.ptSession)
+                is TrainerHomeUiEvent.OnClickPtSessionComplete -> completePtSessionIfStartTimeBeforeNow(event.ptSession)
+                is TrainerHomeUiEvent.OnConfirmEarlyPtCompletion -> {
+                    completePtSession(event.ptSession)
+                    updateState { copy(dialogState = TrainerHomeDialog.None) }
+                }
                 TrainerHomeUiEvent.OnChangeHideDialogOption -> toggleDialogHiddenState()
                 TrainerHomeUiEvent.OnConfirmConnectDialog -> handleDialogConfirm()
                 TrainerHomeUiEvent.OnDismissDialog -> dismissDialog()
@@ -123,6 +126,15 @@ internal class TrainerHomeViewModel @Inject constructor(
             updateState { copy(dailyPtSessionCount = updatedDailyPtSessionCount) }
         }
 
+        private fun completePtSessionIfStartTimeBeforeNow(ptSession: PtSession) {
+            if (LocalDateTime.now().isBefore(ptSession.startTime)) {
+                updateState { copy(dialogState = TrainerHomeDialog.EarlyPtCompletion(ptSession)) }
+                return
+            }
+
+            completePtSession(ptSession)
+        }
+
         private fun completePtSession(ptSession: PtSession) {
             viewModelScope.launch {
                 runCatching {
@@ -178,7 +190,7 @@ internal class TrainerHomeViewModel @Inject constructor(
                     trainerRepository.getActiveMembers()
                 }.onSuccess { result ->
                     if (result.isNotEmpty()) {
-                        updateState { copy(dialogState = DialogState.NONE) }
+                        updateState { copy(dialogState = TrainerHomeDialog.None) }
                         if (triggeredByHome.not()) {
                             sendEffect(TrainerHomeSideEffect.NavigateToAddPtSession)
                         }
@@ -191,9 +203,9 @@ internal class TrainerHomeViewModel @Inject constructor(
                     Duration.between(lastHiddenDate, currentDateTime).toHours() < DIALOG_HIDE_DURATION_HOURS
 
                 if (isHidden.not() && triggeredByHome) {
-                    updateState { copy(dialogState = DialogState.HOME_CONNECT) }
+                    updateState { copy(dialogState = TrainerHomeDialog.HomeConnect) }
                 } else if (triggeredByHome.not()) {
-                    updateState { copy(dialogState = DialogState.ADD_PT_CONNECT) }
+                    updateState { copy(dialogState = TrainerHomeDialog.AddPtConnect) }
                 }
             }
         }
@@ -207,12 +219,15 @@ internal class TrainerHomeViewModel @Inject constructor(
                 updateCurrentDateTime()
             }
             val effect = when (currentState.dialogState) {
-                DialogState.HOME_CONNECT -> TrainerHomeSideEffect.NavigateToInvite
-                DialogState.ADD_PT_CONNECT -> TrainerHomeSideEffect.NavigateToInvite
+                TrainerHomeDialog.HomeConnect -> TrainerHomeSideEffect.NavigateToInvite
+                TrainerHomeDialog.AddPtConnect -> TrainerHomeSideEffect.NavigateToInvite
                 else -> return
             }
             updateState {
-                copy(dialogState = DialogState.NONE, isDialogHiddenForThreeDays = false)
+                copy(
+                    dialogState = TrainerHomeDialog.None,
+                    isDialogHiddenForThreeDays = false,
+                )
             }
             sendEffect(effect)
         }
@@ -230,7 +245,7 @@ internal class TrainerHomeViewModel @Inject constructor(
             }
             updateState {
                 copy(
-                    dialogState = DialogState.NONE,
+                    dialogState = TrainerHomeDialog.None,
                     isDialogHiddenForThreeDays = false,
                 )
             }
