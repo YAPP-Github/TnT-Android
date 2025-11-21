@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -37,16 +36,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.tnt.core.designsystem.R.string.placeholder_content_input
 import co.kr.tnt.core.ui.R.string.core_complete
 import co.kr.tnt.core.ui.R.string.core_confirm_modify_info_exit
 import co.kr.tnt.core.ui.R.string.core_entered_wrong_text
@@ -60,16 +60,16 @@ import co.kr.tnt.core.ui.R.string.core_unsaved_changes_warning
 import co.kr.tnt.core.ui.R.string.core_weight_label
 import co.kr.tnt.core.ui.R.string.core_weight_unit
 import co.kr.tnt.designsystem.component.TnTIconPopupDialog
-import co.kr.tnt.designsystem.component.TnTLabeledTextField
-import co.kr.tnt.designsystem.component.TnTLabeledTextFieldWithCounter
 import co.kr.tnt.designsystem.component.TnTModalBottomSheet
-import co.kr.tnt.designsystem.component.TnTOutlinedTextField
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTTopBarWithBackButton
 import co.kr.tnt.designsystem.component.button.TnTBottomButton
 import co.kr.tnt.designsystem.component.button.TnTTextButton
 import co.kr.tnt.designsystem.component.button.model.ButtonSize
 import co.kr.tnt.designsystem.component.button.model.ButtonType
+import co.kr.tnt.designsystem.component.textfield.TnTLabeledTextField
+import co.kr.tnt.designsystem.component.textfield.TnTSelectableLabeledTextField
+import co.kr.tnt.designsystem.component.textfield.model.TnTTextFieldSize
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.UserProfilePolicy
@@ -250,79 +250,65 @@ private fun TraineeModifyMyInfoScreen(
                     verticalArrangement = Arrangement.spacedBy(48.dp),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    TnTLabeledTextFieldWithCounter(
+                    TnTLabeledTextField(
                         title = stringResource(core_name),
                         value = state.name,
-                        onValueChange = { newValue ->
-                            onChangeName(newValue)
-                        },
+                        onValueChange = onChangeName,
                         modifier = Modifier.padding(horizontal = 20.dp),
                         placeholder = stringResource(core_name_placeholder),
-                        maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
-                        isSingleLine = true,
-                        showWarning = state.isNameValid.not(),
-                        isRequired = true,
+                        size = TnTTextFieldSize.SMALL,
+                        isWarning = state.isNameValid.not(),
                         warningMessage = stringResource(
                             core_text_length_and_format_warning,
                             UserProfilePolicy.USER_NAME_MAX_LENGTH,
                         ),
+                        maxLength = UserProfilePolicy.USER_NAME_MAX_LENGTH,
+                        showRequiredTitleBadge = true,
                     )
-                    Column {
-                        Text(
-                            text = stringResource(R.string.birthday_label),
-                            color = TnTTheme.colors.neutralColors.Neutral900,
-                            style = TnTTheme.typography.body1Bold,
-                            modifier = Modifier.padding(start = 20.dp, bottom = 8.dp),
+                    BirthdayPicker(
+                        state = state,
+                        context = context,
+                        today = today,
+                        onChangeBirthday = onChangeBirthday,
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                    ) {
+                        TnTLabeledTextField(
+                            title = stringResource(core_height_label),
+                            value = state.height ?: "",
+                            placeholder = "0",
+                            isWarning = state.isHeightValid.not(),
+                            warningMessage = stringResource(core_entered_wrong_text),
+                            keyboardType = KeyboardType.Number,
+                            trailing = {
+                                UnitLabel(
+                                    modifier = Modifier.align(Alignment.CenterVertically),
+                                    stringResId = core_height_unit,
+                                )
+                            },
+                            onValueChange = onChangeHeight,
+                            modifier = Modifier.weight(1f),
                         )
-                        BirthdayPicker(
-                            modifier = Modifier.padding(horizontal = 20.dp),
-                            context = context,
-                            today = today,
-                            selectedDate = state.birthday,
-                            onDateSelected = onChangeBirthday,
+                        TnTLabeledTextField(
+                            title = stringResource(core_weight_label),
+                            value = state.weight ?: "",
+                            placeholder = "00.0",
+                            isWarning = state.isWeightValid.not(),
+                            warningMessage = stringResource(core_entered_wrong_text),
+                            keyboardType = KeyboardType.Number,
+                            trailing = {
+                                UnitLabel(
+                                    modifier = Modifier.align(Alignment.CenterVertically),
+                                    stringResId = core_weight_unit,
+                                )
+                            },
+                            onValueChange = onChangeWeight,
+                            modifier = Modifier.weight(1f),
                         )
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = TnTTheme.colors.neutralColors.Neutral200,
-                            modifier = Modifier.padding(horizontal = 20.dp),
-                        )
-                    }
-                    Column {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp),
-                        ) {
-                            TnTLabeledTextField(
-                                title = stringResource(core_height_label),
-                                value = state.height ?: "",
-                                placeholder = "0",
-                                isSingleLine = true,
-                                showWarning = state.isHeightValid.not(),
-                                warningMessage = stringResource(core_entered_wrong_text),
-                                keyboardType = KeyboardType.Number,
-                                trailingComponent = {
-                                    UnitLabel(core_height_unit)
-                                },
-                                onValueChange = onChangeHeight,
-                                modifier = Modifier.weight(1f),
-                            )
-                            TnTLabeledTextField(
-                                title = stringResource(core_weight_label),
-                                value = state.weight ?: "",
-                                placeholder = "00.0",
-                                isSingleLine = true,
-                                showWarning = state.isWeightValid.not(),
-                                warningMessage = stringResource(core_entered_wrong_text),
-                                keyboardType = KeyboardType.Number,
-                                trailingComponent = {
-                                    UnitLabel(core_weight_unit)
-                                },
-                                onValueChange = onChangeWeight,
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
                     }
                     Column(Modifier.padding(horizontal = 20.dp)) {
                         Text(
@@ -351,27 +337,20 @@ private fun TraineeModifyMyInfoScreen(
                             }
                         }
                     }
-                    Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                        Text(
-                            text = stringResource(R.string.edit_caution_that_trainer_must_know),
-                            modifier = Modifier.fillMaxWidth(),
-                            style = TnTTheme.typography.body1Bold,
-                            color = TnTTheme.colors.neutralColors.Neutral900,
-                        )
-                        Spacer(Modifier.padding(top = 8.dp))
-                        TnTOutlinedTextField(
-                            value = state.caution ?: "",
-                            onValueChange = { newValue ->
-                                onChangeCaution(newValue)
-                            },
-                            isError = state.isCautionNoteValid.not(),
-                            warningMessage = stringResource(
-                                core_text_length_warning,
-                                UserProfilePolicy.USER_CAUTION_MAX_LENGTH,
-                            ),
-                            maxLength = UserProfilePolicy.USER_CAUTION_MAX_LENGTH,
-                        )
-                    }
+                    TnTLabeledTextField(
+                        title = stringResource(R.string.edit_caution_that_trainer_must_know),
+                        value = state.caution ?: "",
+                        onValueChange = onChangeCaution,
+                        modifier = Modifier.padding(horizontal = 20.dp),
+                        size = TnTTextFieldSize.LARGE,
+                        placeholder = stringResource(placeholder_content_input),
+                        isWarning = state.isCautionNoteValid.not(),
+                        warningMessage = stringResource(
+                            core_text_length_warning,
+                            UserProfilePolicy.USER_CAUTION_MAX_LENGTH,
+                        ),
+                        maxLength = UserProfilePolicy.USER_CAUTION_MAX_LENGTH,
+                    )
                 }
                 Spacer(Modifier.padding(top = 32.dp))
             }
@@ -426,59 +405,48 @@ private fun EditImageBottomSheetContent(
 
 @Composable
 private fun BirthdayPicker(
-    modifier: Modifier = Modifier,
+    state: TraineeModifyMyInfoUiState,
     context: Context,
     today: LocalDate,
-    selectedDate: LocalDate?,
-    onDateSelected: (LocalDate) -> Unit,
+    onChangeBirthday: (birthday: LocalDate) -> Unit,
 ) {
-    val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
-    val date = selectedDate ?: LocalDate.of(2001, 1, 1)
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-                DatePickerDialog(
-                    context,
-                    { _, selectedYear, selectedMonth, selectedDay ->
-                        val newDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
-                        onDateSelected(newDate)
-                    },
-                    date.year,
-                    date.monthValue - 1,
-                    date.dayOfMonth,
-                )
-                    .apply {
-                        // 오늘 이후는 선택 불가능
-                        val todayMillis = today
+    TnTSelectableLabeledTextField(
+        modifier = Modifier.padding(horizontal = 20.dp),
+        value = state.birthday?.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) ?: "",
+        placeholder = stringResource(R.string.birthday_placeholder),
+        onClickTextField = {
+            DatePickerDialog(
+                context,
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    val newDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
+                    onChangeBirthday(newDate)
+                },
+                state.birthday?.year ?: 2001,
+                (state.birthday?.monthValue?.minus(1)) ?: 0,
+                state.birthday?.dayOfMonth ?: 1,
+            )
+                .apply {
+                    // 오늘 이후는 선택 불가능
+                    datePicker.maxDate =
+                        today
                             .atStartOfDay(ZoneId.systemDefault())
                             .toInstant()
                             .toEpochMilli()
-
-                        datePicker.maxDate = todayMillis - 1
-                    }
-                    .show()
-            },
-    ) {
-        Text(
-            text = selectedDate?.format(dateFormatter)
-                ?: stringResource(R.string.birthday_placeholder),
-            color = if (selectedDate == null) {
-                TnTTheme.colors.neutralColors.Neutral400
-            } else {
-                TnTTheme.colors.neutralColors.Neutral600
-            },
-            style = TnTTheme.typography.body1Medium,
-            textAlign = TextAlign.Start,
-        )
-    }
+                }
+                .show()
+        },
+        title = stringResource(R.string.birthday_label),
+        size = TnTTextFieldSize.SMALL,
+    )
 }
 
 @Composable
-private fun UnitLabel(stringResId: Int) {
+private fun UnitLabel(
+    modifier: Modifier = Modifier,
+    stringResId: Int,
+) {
     Text(
+        modifier = modifier.padding(end = 12.dp),
         text = stringResource(stringResId),
         style = TnTTheme.typography.body1Medium,
         color = TnTTheme.colors.neutralColors.Neutral400,
