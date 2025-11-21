@@ -94,6 +94,7 @@ import java.time.format.DateTimeFormatter
 
 private const val ROW_NUM = 3
 private const val COLUMNS_NUM = 2
+private val DEFAULT_DATE = LocalDate.of(2000, 1, 1)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -421,9 +422,9 @@ private fun BirthdayPicker(
                     val newDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
                     onChangeBirthday(newDate)
                 },
-                state.birthday?.year ?: 2001,
-                (state.birthday?.monthValue?.minus(1)) ?: 0,
-                state.birthday?.dayOfMonth ?: 1,
+                state.birthday?.year ?: DEFAULT_DATE.year,
+                (state.birthday?.monthValue?.minus(1)) ?: (DEFAULT_DATE.monthValue - 1),
+                state.birthday?.dayOfMonth ?: DEFAULT_DATE.dayOfMonth,
             )
                 .apply {
                     // 오늘 이후는 선택 불가능
