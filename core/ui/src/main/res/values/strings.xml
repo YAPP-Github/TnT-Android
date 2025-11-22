@@ -25,6 +25,7 @@
 
     <string name="core_entered_wrong_text">잘못된 수치를 입력했어요</string>
     <string name="core_text_length_and_format_warning">%s자 미만의 한글 또는 영문으로 입력해주세요</string>
+    <string name="core_text_length_warning">%s자 미만으로 입력해주세요</string>
 
     <string name="core_trainee">트레이니</string>
     <string name="core_trainer">트레이너</string>
@@ -67,6 +68,14 @@
     <!-- PT Session -->
     <string name="core_pt_session">%d회차 수업</string>
 
+    <!-- PT Purpose -->
+    <string name="core_loss_weight">체중 감량</string>
+    <string name="core_strength_improvement">근력 향상</string>
+    <string name="core_health_care">건강 관리</string>
+    <string name="core_flexibility">유연성 향상</string>
+    <string name="core_body_profile">바디프로필</string>
+    <string name="core_posture_correction">자세 교정</string>
+
     <!--  MyPage  -->
     <string name="core_modifying_personal_info">개인정보 수정</string>
     <string name="core_app_push_notification">앱 푸시 알림</string>
@@ -80,6 +89,10 @@
     <string name="core_logout_title">현재 계정을 로그아웃 할까요?</string>
     <string name="core_logout_content">언제든지 다시 로그인 할 수 있어요!</string>
     <string name="core_logout_complete_title">로그아웃이 완료되었어요</string>
+
+    <string name="core_delete_account_title">계정을 탈퇴할까요?</string>
+    <string name="core_delete_account_complete_title">계정 탈퇴가 완료되었어요</string>
+    <string name="core_delete_account_complete_content">다음에 더 폭발적인 케미로 다시 만나요! 💣</string>
 
     <string name="core_length_warning">%d자 미만으로 입력해주세요.</string>
     <string name="core_no_records_yet">아직 등록된 기록이 없어요</string>

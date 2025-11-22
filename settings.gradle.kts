@@ -70,4 +70,5 @@ include(
     ":feature:trainee:notification",
     ":feature:trainee:mealrecord",
     ":feature:trainee:mealdetail",
+    ":feature:trainee:modifymyinfo",
 )

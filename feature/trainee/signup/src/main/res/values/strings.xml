@@ -11,16 +11,9 @@
 
     <string name="tell_purpose_of_pt">PT를 받는 목적에 대해\n알려주세요!</string>
     <string name="multiple_choices_available">다중 선택이 가능해요.</string>
-    <string name="loss_weight">체중 감량</string>
-    <string name="strength_improvement">근력 향상</string>
-    <string name="health_care">건강 관리</string>
-    <string name="flexibility">유연성 향상</string>
-    <string name="body_profile">바디프로필</string>
-    <string name="posture_correction">자세 교정</string>
 
     <string name="caution_that_trainer_must_know">트레이너가 꼭 알아야 할\n주의사항이 있나요?</string>
     <string name="let_the_trainer_know">트레이너에게 알려드릴게요.</string>
-    <string name="text_length_overflow">100자 미만으로 입력해주세요</string>
 
     <string name="nice_to_meet_you_trainee">만나서 반가워요\n%s 트레이니님!</string>
     <string name="chemistry_boom_with_trainer">트레이너와 함께\n케미를 터뜨려보세요! 🧨</string>

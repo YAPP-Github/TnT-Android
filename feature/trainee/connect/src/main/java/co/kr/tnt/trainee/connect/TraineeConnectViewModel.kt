@@ -3,6 +3,7 @@ package co.kr.tnt.trainee.connect
 import androidx.lifecycle.viewModelScope
 import co.kr.tnt.core.ui.R.string.core_failed_to_server_request
 import co.kr.tnt.domain.repository.ConnectRepository
+import co.kr.tnt.domain.repository.TraineeRepository
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectPage
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectSideEffect
 import co.kr.tnt.trainee.connect.TraineeConnectContract.TraineeConnectUiEvent
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class TraineeConnectViewModel @Inject constructor(
     private val connectRepository: ConnectRepository,
+    private val traineeRepository: TraineeRepository,
 ) :
     BaseViewModel<TraineeConnectUiState, TraineeConnectUiEvent, TraineeConnectSideEffect>(
             TraineeConnectUiState(),
@@ -100,6 +102,7 @@ internal class TraineeConnectViewModel @Inject constructor(
                             traineeImage = result.traineeImage,
                         )
                     }
+                    refreshCachedUserInfo()
                     navigateToNext()
                 }.onFailure {
                     sendEffect(
@@ -110,6 +113,12 @@ internal class TraineeConnectViewModel @Inject constructor(
                 }.also {
                     updateState { copy(isLoading = false) }
                 }
+            }
+        }
+
+        private fun refreshCachedUserInfo() {
+            viewModelScope.launch {
+                traineeRepository.refreshCachedUserInfo()
             }
         }
 

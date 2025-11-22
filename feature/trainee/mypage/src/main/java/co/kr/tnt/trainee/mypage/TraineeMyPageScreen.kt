@@ -31,10 +31,13 @@ import co.kr.tnt.core.ui.R.string.core_app_push_notification
 import co.kr.tnt.core.ui.R.string.core_app_version
 import co.kr.tnt.core.ui.R.string.core_cancel
 import co.kr.tnt.core.ui.R.string.core_delete_account
+import co.kr.tnt.core.ui.R.string.core_delete_account_complete_content
+import co.kr.tnt.core.ui.R.string.core_delete_account_title
 import co.kr.tnt.core.ui.R.string.core_logout
 import co.kr.tnt.core.ui.R.string.core_logout_complete_title
 import co.kr.tnt.core.ui.R.string.core_logout_content
 import co.kr.tnt.core.ui.R.string.core_logout_title
+import co.kr.tnt.core.ui.R.string.core_modifying_personal_info
 import co.kr.tnt.core.ui.R.string.core_ok
 import co.kr.tnt.core.ui.R.string.core_open_source_license
 import co.kr.tnt.core.ui.R.string.core_privacy_policy
@@ -43,6 +46,9 @@ import co.kr.tnt.designsystem.component.TnTIconPopupDialog
 import co.kr.tnt.designsystem.component.TnTProfileImage
 import co.kr.tnt.designsystem.component.TnTSingleButtonPopupDialog
 import co.kr.tnt.designsystem.component.TnTSwitch
+import co.kr.tnt.designsystem.component.button.TnTTextButton
+import co.kr.tnt.designsystem.component.button.model.ButtonSize
+import co.kr.tnt.designsystem.component.button.model.ButtonType
 import co.kr.tnt.designsystem.snackbar.LocalSnackbar
 import co.kr.tnt.designsystem.theme.TnTTheme
 import co.kr.tnt.domain.model.User
@@ -65,12 +71,14 @@ import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun TraineeMyPageRoute(
     padding: PaddingValues,
+    navigateToModifyMyInfo: () -> Unit,
     navigateToConnect: (ScreenMode) -> Unit,
     navigateToLogin: () -> Unit,
     navigateToWebView: (url: String) -> Unit,
@@ -86,11 +94,14 @@ internal fun TraineeMyPageRoute(
         state = uiState,
         padding = padding,
         appVersion = context.getAppVersion(),
+        onClickModifyMyInfo = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickModifyMyInfo) },
         onClickConnect = { viewModel.setEvent(TraineeMyPageUiEvent.OnClickConnect) },
         onTogglePushNotification = {
             viewModel.setEvent(
                 TraineeMyPageUiEvent.OnToggleNotification(
-                    isGrantedPermission = TnTPermission.NOTIFICATION.isRequireGranted(permissionState),
+                    isGrantedPermission = TnTPermission.NOTIFICATION.isRequireGranted(
+                        permissionState,
+                    ),
                     shouldShowRationale = permissionState.shouldShowRationale,
                 ),
             )
@@ -113,8 +124,9 @@ internal fun TraineeMyPageRoute(
     }
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collectLatest { effect ->
             when (effect) {
+                TraineeMyPageEffect.NavigateToModifyMyInfo -> navigateToModifyMyInfo()
                 TraineeMyPageEffect.NavigateToConnect -> navigateToConnect(ScreenMode.BACK)
                 TraineeMyPageEffect.NavigateToLogin -> navigateToLogin()
                 is TraineeMyPageEffect.ShowToast -> snackbar.show(effect.message.asString(context))
@@ -122,9 +134,8 @@ internal fun TraineeMyPageRoute(
                 is TraineeMyPageEffect.RequestPermission -> {
                     if (effect.isExplicitlyDenied) {
                         context.moveToAppSetting()
-                        return@collect
+                        return@collectLatest
                     }
-
                     permissionState.launchMultiplePermissionRequest()
                 }
 
@@ -140,6 +151,7 @@ private fun TraineeMyPageScreen(
     state: TraineeMyPageUiState,
     padding: PaddingValues,
     appVersion: String,
+    onClickModifyMyInfo: () -> Unit,
     onClickConnect: () -> Unit,
     onTogglePushNotification: () -> Unit,
     onClickTermsOfService: () -> Unit,
@@ -178,7 +190,13 @@ private fun TraineeMyPageScreen(
             color = TnTTheme.colors.neutralColors.Neutral950,
             style = TnTTheme.typography.h2,
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
+        TnTTextButton(
+            text = stringResource(core_modifying_personal_info),
+            size = ButtonSize.Small,
+            type = ButtonType.Gray,
+            onClick = onClickModifyMyInfo,
+        )
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
@@ -292,7 +310,7 @@ private fun Dialog(
 
         DialogState.DELETE_ACCOUNT_CONFIRM -> {
             TnTIconPopupDialog(
-                title = stringResource(R.string.delete_account_title),
+                title = stringResource(core_delete_account_title),
                 content = stringResource(R.string.delete_account_content),
                 leftButtonText = stringResource(core_cancel),
                 rightButtonText = stringResource(core_ok),
@@ -304,8 +322,8 @@ private fun Dialog(
 
         DialogState.DELETE_ACCOUNT -> {
             TnTSingleButtonPopupDialog(
-                title = stringResource(R.string.delete_account_complete_title),
-                content = stringResource(R.string.delete_account_complete_content),
+                title = stringResource(core_delete_account_title),
+                content = stringResource(core_delete_account_complete_content),
                 buttonText = stringResource(core_ok),
                 cancelable = false,
                 onButtonClick = onClickConfirm,
@@ -346,6 +364,7 @@ private fun TraineeMyPageScreenPreview() {
             ),
             padding = PaddingValues(),
             appVersion = "1.0",
+            onClickModifyMyInfo = { },
             onClickConnect = { },
             onTogglePushNotification = { },
             onClickTermsOfService = { },

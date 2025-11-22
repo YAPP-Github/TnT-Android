@@ -36,6 +36,9 @@ import co.kr.tnt.core.ui.R.string.core_app_push_notification
 import co.kr.tnt.core.ui.R.string.core_app_version
 import co.kr.tnt.core.ui.R.string.core_cancel
 import co.kr.tnt.core.ui.R.string.core_delete_account
+import co.kr.tnt.core.ui.R.string.core_delete_account_complete_content
+import co.kr.tnt.core.ui.R.string.core_delete_account_complete_title
+import co.kr.tnt.core.ui.R.string.core_delete_account_title
 import co.kr.tnt.core.ui.R.string.core_logout
 import co.kr.tnt.core.ui.R.string.core_logout_complete_title
 import co.kr.tnt.core.ui.R.string.core_logout_content
@@ -358,7 +361,7 @@ private fun Dialog(
 
         DialogState.DELETE_ACCOUNT_CONFIRM -> {
             TnTIconPopupDialog(
-                title = stringResource(R.string.delete_account_title),
+                title = stringResource(core_delete_account_title),
                 content = stringResource(R.string.delete_account_content),
                 leftButtonText = stringResource(core_cancel),
                 rightButtonText = stringResource(core_ok),
@@ -370,8 +373,8 @@ private fun Dialog(
 
         DialogState.DELETE_ACCOUNT -> {
             TnTSingleButtonPopupDialog(
-                title = stringResource(R.string.delete_account_complete_title),
-                content = stringResource(R.string.delete_account_complete_content),
+                title = stringResource(core_delete_account_complete_title),
+                content = stringResource(core_delete_account_complete_content),
                 buttonText = stringResource(core_ok),
                 cancelable = false,
                 onButtonClick = onClickConfirm,

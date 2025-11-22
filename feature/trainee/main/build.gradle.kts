@@ -14,6 +14,7 @@ dependencies {
     implementation(projects.feature.trainee.notification)
     implementation(projects.feature.trainee.mealrecord)
     implementation(projects.feature.trainee.mealdetail)
+    implementation(projects.feature.trainee.modifymyinfo)
 
     implementation(libs.kotlinx.immutable)
 }

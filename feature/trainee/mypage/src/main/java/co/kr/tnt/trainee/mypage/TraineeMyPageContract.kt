@@ -30,6 +30,7 @@ internal class TraineeMyPageContract {
             val shouldShowRationale: Boolean,
         ) : TraineeMyPageUiEvent
 
+        data object OnClickModifyMyInfo : TraineeMyPageUiEvent
         data object OnClickConnect : TraineeMyPageUiEvent
         data object OnClickTermsOfService : TraineeMyPageUiEvent
         data object OnClickPrivacy : TraineeMyPageUiEvent
@@ -42,6 +43,7 @@ internal class TraineeMyPageContract {
 
     sealed interface TraineeMyPageEffect : UiSideEffect {
         data class ShowToast(val message: DisplayText) : TraineeMyPageEffect
+        data object NavigateToModifyMyInfo : TraineeMyPageEffect
         data object NavigateToConnect : TraineeMyPageEffect
         data object NavigateToLogin : TraineeMyPageEffect
         data class NavigateToWebView(val url: String) : TraineeMyPageEffect

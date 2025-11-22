@@ -73,6 +73,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -145,7 +146,7 @@ internal fun TraineeHomeRoute(
     }
 
     LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collectLatest { effect ->
             when (effect) {
                 TraineeHomeEffect.NavigateToExerciseRecord -> {
                     showBottomSheet = false

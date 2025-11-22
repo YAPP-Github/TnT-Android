@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="modifying_my_info">내 정보 수정</string>
+
+    <string name="birthday_label">생년월일</string>
+    <string name="birthday_placeholder">2001/01/01</string>
+    <string name="edit_caution_that_trainer_must_know">트레이너가 알아야 할 주의사항</string>
+
+    <string name="delete_image">삭제하기</string>
+    <string name="select_image_from_album">앨범에서 사진 선택</string>
+
+    <string name="end">종료</string>
+    <string name="keep_edit">계속 수정</string>
+</resources>

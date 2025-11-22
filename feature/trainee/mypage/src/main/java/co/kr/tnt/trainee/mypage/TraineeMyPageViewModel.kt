@@ -15,6 +15,7 @@ import co.kr.tnt.trainee.mypage.TraineeMyPageContract.TraineeMyPageUiState.Dialo
 import co.kr.tnt.ui.base.BaseViewModel
 import co.kr.tnt.ui.resource.DisplayText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
         override suspend fun handleEvent(event: TraineeMyPageUiEvent) {
             when (event) {
+                TraineeMyPageUiEvent.OnClickModifyMyInfo -> navigateToModifyMyInfo()
                 TraineeMyPageUiEvent.OnClickConnect -> navigateToConnect()
 
                 is TraineeMyPageUiEvent.OnToggleNotification -> handleToggleNotification(
@@ -57,9 +59,7 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
                 TraineeMyPageUiEvent.OnClickLogout -> updateState { copy(dialogState = DialogState.LOGOUT_CONFIRM) }
                 TraineeMyPageUiEvent.OnClickDeleteAccount -> updateState {
-                    copy(
-                        dialogState = DialogState.DELETE_ACCOUNT_CONFIRM,
-                    )
+                    copy(dialogState = DialogState.DELETE_ACCOUNT_CONFIRM)
                 }
 
                 TraineeMyPageUiEvent.OnClickDialogConfirm -> handleDialogConfirm()
@@ -69,17 +69,19 @@ internal class TraineeMyPageViewModel @Inject constructor(
 
         private fun loadUserData() {
             viewModelScope.launch {
-                runCatching {
-                    traineeRepository.getMyInfo()
-                }.onSuccess { user ->
-                    updateState { copy(user = user) }
-                }.onFailure {
-                    sendEffect(
-                        TraineeMyPageEffect.ShowToast(
-                            DisplayText.Resource(core_failed_to_server_request),
-                        ),
-                    )
-                }
+                traineeRepository.getMyInfo()
+                    .onEach { user ->
+                        updateState { copy(user = user) }
+                    }.catch {
+                        sendEffect(
+                            TraineeMyPageEffect.ShowToast(
+                                DisplayText.Resource(
+                                    core_failed_to_server_request,
+                                ),
+                            ),
+                        )
+                    }
+                    .launchIn(viewModelScope)
 
                 settingRepository.isEnablePushNotification()
                     .onEach { isEnablePushNotification ->
@@ -87,6 +89,10 @@ internal class TraineeMyPageViewModel @Inject constructor(
                     }
                     .launchIn(viewModelScope)
             }
+        }
+
+        private fun navigateToModifyMyInfo() {
+            sendEffect(TraineeMyPageEffect.NavigateToModifyMyInfo)
         }
 
         private fun navigateToConnect() {
@@ -126,12 +132,14 @@ internal class TraineeMyPageViewModel @Inject constructor(
                 DialogState.LOGOUT -> {
                     updateState { copy(dialogState = DialogState.NONE) }
                     sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                    clearCachedUserInfo()
                 }
 
                 DialogState.DELETE_ACCOUNT_CONFIRM -> withdraw()
                 DialogState.DELETE_ACCOUNT -> {
                     updateState { copy(dialogState = DialogState.NONE) }
                     sendEffect(TraineeMyPageEffect.NavigateToLogin)
+                    clearCachedUserInfo()
                 }
 
                 DialogState.SHOULD_ALLOW_PERMISSION -> {
@@ -174,6 +182,12 @@ internal class TraineeMyPageViewModel @Inject constructor(
                 }.also {
                     updateState { copy(isLoading = false) }
                 }
+            }
+        }
+
+        private fun clearCachedUserInfo() {
+            viewModelScope.launch {
+                traineeRepository.clearCachedUserInfo()
             }
         }
     }

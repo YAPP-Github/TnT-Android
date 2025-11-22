@@ -66,7 +66,10 @@ internal fun TrainerInviteRoute(
             when (effect) {
                 TrainerInviteSideEffect.NavigateToBack -> navigateToPrevious()
                 TrainerInviteSideEffect.NavigateToHome -> navigateToHome(true)
-                is TrainerInviteSideEffect.ShowToast -> snackbar.show(effect.message.asString(context))
+                is TrainerInviteSideEffect.ShowToast -> snackbar.show(
+                    message = effect.message.asString(context),
+                    icon = effect.type.iconRes,
+                )
                 is TrainerInviteSideEffect.CopyToClipBoard ->
                     clipboardManager.setText(AnnotatedString(effect.value))
             }

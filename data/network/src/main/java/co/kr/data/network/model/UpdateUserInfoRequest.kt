@@ -8,7 +8,7 @@ data class UpdateUserInfoRequest(
     val removeImage: Boolean,
     val memberType: MemberType,
     val name: String,
-    val birthDay: String? = null,
+    val birthday: String? = null,
     val height: Double? = null,
     val weight: Double? = null,
     val cautionNote: String? = null,

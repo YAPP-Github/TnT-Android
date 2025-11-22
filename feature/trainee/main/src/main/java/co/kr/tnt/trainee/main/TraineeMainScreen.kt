@@ -15,6 +15,8 @@ import co.kr.tnt.trainee.mealdetail.navigation.navigateToTraineeMealDetail
 import co.kr.tnt.trainee.mealdetail.navigation.traineeMealDetail
 import co.kr.tnt.trainee.mealrecord.navigation.navigateToTraineeMealRecord
 import co.kr.tnt.trainee.mealrecord.navigation.traineeMealRecord
+import co.kr.tnt.trainee.modifymyinfo.navigation.navigateToTraineeModifyMyInfo
+import co.kr.tnt.trainee.modifymyinfo.navigation.traineeModifyMyInfo
 import co.kr.tnt.trainee.mypage.navigation.traineeMyPageNavGraph
 import co.kr.tnt.trainee.notification.navigation.navigateToTraineeNotification
 import co.kr.tnt.trainee.notification.navigation.traineeNotification
@@ -49,7 +51,8 @@ private fun TraineeMainScreen(
     val navController = state.navController
 
     Scaffold(
-        containerColor = state.currentMainTab?.containerColor?.invoke() ?: TnTTheme.colors.commonColors.Common0,
+        containerColor = state.currentMainTab?.containerColor?.invoke()
+            ?: TnTTheme.colors.commonColors.Common0,
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             TnTBottomBar(
@@ -86,8 +89,13 @@ private fun TraineeMainScreen(
                 padding = innerPadding,
                 navigateToLogin = navigateToLogin,
                 navigateToWebView = navigateToWebView,
+                navigateToModifyMyInfo = navController::navigateToTraineeModifyMyInfo,
                 navigateToTraineeConnect = navigateToConnect,
-            )
+            ) {
+                traineeModifyMyInfo(
+                    navigateToPrevious = navController::safePopBackStack,
+                )
+            }
         }
     }
 }
