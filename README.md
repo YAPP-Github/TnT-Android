@@ -2,9 +2,7 @@
 
 > 트레이너, 트레이니를 위한 PT 통합 관리 서비스
 
-<img width="1200" height="801" alt="TnT 1" src="https://github.com/user-attachments/assets/7f6441fb-82bb-4967-8d8f-7f1fcced6790" />
-
-<img width="2267" height="3792" alt="TnT 2" src="https://github.com/user-attachments/assets/b9b6fa22-a53a-4e16-9ca1-613ede2fa925" />
+<img width="2267" alt="TnT 2" src="https://github.com/user-attachments/assets/ce3d3242-8d7d-4b0d-a4b5-565d65ce9cc5" />
 
 ## 🛠️ Spec
 - `Clean Architecture`
@@ -115,7 +113,8 @@ App
 │       ├── mypage/  
 │       ├── notification/  
 │       ├── mealrecord/  
-│       └── mealdetail/  
+│       ├── mealdetail/
+│       └── modifymyinfo/
 └── gradle/  
     └── libs.versions.toml         
 ```
